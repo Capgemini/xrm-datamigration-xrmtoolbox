@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Capgemini.Xrm.DataMigration.Engine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.1.1.0\lib\net452\Capgemini.Xrm.DataMigration.Engine.dll</HintPath>
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.1.2.0\lib\net452\Capgemini.Xrm.DataMigration.Engine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2017.5.14, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
@@ -229,7 +229,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
   <Target Name="AfterBuild">
     <MakeDir Directories="$(OutDir)Plugins" Condition="!Exists('$(OutDir)Plugins')" />
     <ItemGroup>
@@ -260,6 +259,4 @@
     <!--Now lets delete the files that are not used by our plugin-->
     <Delete Files="@(FilesToDelete)" />
   </Target>
-
-  
 </Project>

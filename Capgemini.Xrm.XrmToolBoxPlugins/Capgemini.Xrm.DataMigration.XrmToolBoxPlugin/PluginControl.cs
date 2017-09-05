@@ -311,12 +311,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     ProcessesToDeactivate = _dataMigrationSettings.ImportConfig != null ? _dataMigrationSettings.ImportConfig.ProcessesToDeactivate : null
                 };
 
-                IFileStoreReaderConfig readerConfig = new FileStoreReaderConfig
-                {
-                    JsonFolderPath = importConfig.JsonFolderPath,
-                    FilePrefix = importConfig.FilePrefix
-                };
-
                 if (nudMaxThreads.Value > 1 && !string.IsNullOrWhiteSpace(_dataMigrationSettings.TargetConnectionString))
                 {
                     _logger.Info("Starting MultiThreaded Processing, using " + nudMaxThreads.Value + " threads");
@@ -330,7 +324,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         _logger.Info("New connection created to " + _dataMigrationSettings.TargetServiceClient.ConnectedOrgFriendlyName);
                     }
 
-                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, repos, readerConfig, importConfig, _tokenSource.Token);
+                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, repos, importConfig, _tokenSource.Token);
                     fileExporter.MigrateData();
 
                 }
@@ -338,7 +332,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     _logger.Info("Starting Single Threaded processing, you must configure connection string for multithreaded processing adn set up max threads to more than 1");
                     EntityRepository entityRepo = new EntityRepository(orgService, new CrmRetryExecutor(new PollyFluentPolicy()));
-                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, entityRepo, readerConfig, importConfig, _tokenSource.Token);
+                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, entityRepo, importConfig, _tokenSource.Token);
                     fileExporter.MigrateData();
                 }
 
