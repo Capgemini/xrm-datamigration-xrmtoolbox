@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Capgemini.Xrm.DataMigration.Engine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.1.4.0\lib\net452\Capgemini.Xrm.DataMigration.Engine.dll</HintPath>
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.1.5.0\lib\net452\Capgemini.Xrm.DataMigration.Engine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="McTools.Xrm.Connection, Version=1.2017.5.14, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
@@ -144,6 +144,12 @@
     <Compile Include="Forms\FilterEditor.Designer.cs">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MappingListLookup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MappingListLookup.Designer.cs">
+      <DependentUpon>MappingListLookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +188,9 @@
     <EmbeddedResource Include="Forms\FilterEditor.resx">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MappingListLookup.resx">
+      <DependentUpon>MappingListLookup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MappingList.resx">
       <DependentUpon>MappingList.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,7 +204,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\tsbCloseThisTab.Image.png" />
   </ItemGroup>
   <ItemGroup>

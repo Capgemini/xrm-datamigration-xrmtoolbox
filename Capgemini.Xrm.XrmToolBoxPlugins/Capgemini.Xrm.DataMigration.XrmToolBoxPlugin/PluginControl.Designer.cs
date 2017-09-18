@@ -135,6 +135,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.loadFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.topCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.batchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pageSize)).BeginInit();
@@ -1125,6 +1126,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tsbtRetrieveEntities,
             this.toolStripSeparator5,
             this.tsbtMappings,
+            this.toolStripButton1,
             this.toolStripSeparator4,
             this.tsbtFilters,
             this.toolStripSeparator3,
@@ -1289,6 +1291,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.loadAllToolStripMenuItem.Text = "Load All";
             this.loadAllToolStripMenuItem.Click += new System.EventHandler(this.loadAllToolStripMenuItem_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Mapping;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(123, 22);
+            this.toolStripButton1.Text = "Lookup Mappings";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // PluginControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1435,5 +1446,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadAllToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbShowSystemAttributes;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

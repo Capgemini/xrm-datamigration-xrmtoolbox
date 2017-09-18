@@ -79,6 +79,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             {
                 AttributeMetadataTypeResult = "status";
             }
+            else if (AttributeMetadataType.Equals("Owner"))
+            {
+                AttributeMetadataTypeResult = "entityreference";
+            }
             else
                 MessageBox.Show("Missing mapping for " + AttributeMetadataType);
         }

@@ -16,6 +16,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 
         public static List<EntityMetadata> RetrieveEntities(IOrganizationService oService)
         {
+            EntityMetadataCache.Clear();
+
             List<EntityMetadata> entities = new List<EntityMetadata>();
 
             RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
@@ -40,6 +42,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 
             return entities;
         }
+
         public static EntityMetadata RetrieveEntities(string logicalName, IOrganizationService oService)
         {
             try
