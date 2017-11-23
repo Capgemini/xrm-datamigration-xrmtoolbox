@@ -258,7 +258,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 OneEntityPerBatch = _dataMigrationSettings.ExportConfig == null || _dataMigrationSettings.ExportConfig.OneEntityPerBatch,
 
             };
-
+            
             if (_dataMigrationSettings.ExportConfig != null)
             {
                 exportConfig.LookupMapping = _dataMigrationSettings.ExportConfig.LookupMapping;
@@ -1192,7 +1192,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         if (relationshipName == relationship.IntersectEntityName)
                         {
-                            StoreCrmEntityRelationShipData(relationship, relationshipList);
+                            StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList);
                         }
                     }
                 }
@@ -1200,14 +1200,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             crmEntity.CrmRelationships = relationshipList.ToArray();
         }
 
-        private void StoreCrmEntityRelationShipData(ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
+        private void StoreCrmEntityRelationShipData(CrmEntity crmEntity, ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
         {
             CrmRelationship crmRelationShip = new CrmRelationship();
             crmRelationShip.RelatedEntityName = relationship.IntersectEntityName;
             crmRelationShip.ManyToMany = true;
             crmRelationShip.IsReflexive = relationship.IsCustomizable.Value;
-            crmRelationShip.TargetEntityPrimaryKey = relationship.Entity2IntersectAttribute;
-            crmRelationShip.TargetEntityName = relationship.Entity2LogicalName;
+            crmRelationShip.TargetEntityPrimaryKey = crmEntity.PrimaryIdField == relationship.Entity2IntersectAttribute? relationship.Entity1IntersectAttribute : relationship.Entity2IntersectAttribute;
+            crmRelationShip.TargetEntityName = crmEntity.Name == relationship.Entity2LogicalName ? relationship.Entity1LogicalName : relationship.Entity2LogicalName;
             crmRelationShip.RelationshipName = relationship.IntersectEntityName;
             relationshipList.Add(crmRelationShip);
         }

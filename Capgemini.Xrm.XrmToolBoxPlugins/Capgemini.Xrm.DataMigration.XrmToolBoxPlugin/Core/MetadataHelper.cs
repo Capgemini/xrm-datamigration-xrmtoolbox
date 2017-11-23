@@ -20,6 +20,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 
             List<EntityMetadata> entities = new List<EntityMetadata>();
 
+            if (oService == null)
+            {
+                //no connection!
+                return entities;
+            }
+
             RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
             {
                 RetrieveAsIfPublished = true,
