@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
@@ -18,6 +12,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private static Color HC_COMMENT = Color.GreenYellow;
         private static Color HC_INNERTEXT = Color.Black;
         public string QueryString { get; set; }
+
         public string Filter
         {
             get
@@ -83,7 +78,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                     rtb.Select(st + 1, en - st - 1);
                     rtb.SelectionColor = HC_COMMENT;
                     continue;
-
                 }
                 String nodeText = str.Substring(st + 1, en - st - 1);
 
@@ -121,6 +115,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                                 state = 1;
                             }
                             break;
+
                         case 1:
                             if (Char.IsWhiteSpace(nodeText, i))
                             {
@@ -129,6 +124,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                                 state = 2;
                             }
                             break;
+
                         case 2:
                             if (!Char.IsWhiteSpace(nodeText, i))
                             {
@@ -145,6 +141,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                                 state = 4;
                             }
                             break;
+
                         case 4:
                             if (nodeText[i] == '"' && !inString)
                                 state = 2;

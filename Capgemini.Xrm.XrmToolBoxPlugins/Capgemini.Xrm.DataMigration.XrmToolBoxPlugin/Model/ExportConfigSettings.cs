@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class ExportConfigSettings
+    internal class ExportConfigSettings
     {
         #region Public Properties
+
         public String JsonFilePath { get; set; }
         public String JsonFilePathLoad { get; set; }
         public Dictionary<string, string> Filter { get; set; }
@@ -18,7 +17,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public String SuccessValidationMessage { get; set; }
         public Boolean FailedValidationLoading { get; set; }
         public String SuccessValidationMessageLoading { get; set; }
-        #endregion
+
+        #endregion Public Properties
 
         public void Validate()
         {
@@ -29,8 +29,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 FailedValidation = true;
                 message.AppendLine("Export config file path is empty");
             }
-                      FailedValidationMessage = message.ToString();
+            FailedValidationMessage = message.ToString();
         }
+
         public void ValidateSuccess()
         {
             if (FailedValidation == false)
@@ -38,6 +39,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 SuccessValidationMessage = "Successfully created json file";
             }
         }
+
         public void ValidateLoading()
         {
             FailedValidationLoading = false;

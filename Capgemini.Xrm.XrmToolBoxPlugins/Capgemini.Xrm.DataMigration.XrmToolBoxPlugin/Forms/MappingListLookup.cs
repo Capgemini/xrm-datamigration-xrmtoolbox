@@ -3,15 +3,9 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
-using static Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.SettingFileHandler;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 {
@@ -30,7 +24,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             InitializeComponent();
 
             this.Column1.Items.AddRange(_metCache.Select(e => e.LogicalName).OrderBy(n => n).ToArray());
-
         }
 
         public void RefreshMappingList()
@@ -64,7 +57,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             {
                 foreach (var m2 in m.Value)
                 {
-
                     var vals = new object[3] { m.Key.ToString(), m2.Key.ToString(), m2.Value[0].ToString() };
                     dgvMappings.Rows.Add(vals);
 
@@ -75,11 +67,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                 }
             }
         }
+
         private void dgvMappings_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             var blank = new object[3] { null, null, null };
             e.Row.SetValues(blank);
         }
+
         private void dgvMappings_CellValidating(object sender, DataGridViewCellValidatingEventArgs arg)
         {
             //if (!String.IsNullOrWhiteSpace(arg.FormattedValue.ToString()))
@@ -113,7 +107,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             var fields = entitymeta.Attributes.Select(a => a.LogicalName).ToArray();
 
             (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
-
         }
 
         private void ValidateEntitytColumn(int rowIndex, string newValue)
@@ -133,12 +126,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void dgvMappings_SelectionChanged(object sender, EventArgs e)
         {
-
         }
 
         private void dgvMappings_CellValueChanged(object sender, DataGridViewCellEventArgs arg)
         {
-
             //if (arg.ColumnIndex == 0)
             //{
             //    DataGridViewComboBoxCell cell = dgvMappings.Rows[arg.RowIndex].Cells[0] as DataGridViewComboBoxCell;
@@ -169,7 +160,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             {
                 dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
 
-
                 if (cell.FormattedValue != null && !string.IsNullOrWhiteSpace(cell.FormattedValue.ToString()))
                 {
                     if (cell.ColumnIndex == 0)
@@ -179,8 +169,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                         dgvMappings.Rows[cell.RowIndex].Cells[2].Value = null;
                         ValidateEntitytColumn(cell.RowIndex, newValue);
                         dgvMappings.CurrentCell = dgvMappings.Rows[cell.RowIndex].Cells[1];
-
-
                     }
                     else if (cell.ColumnIndex == 1)
                     {
@@ -188,7 +176,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                         var newValue = cell.FormattedValue.ToString();
                         ValidateLookupColumn(cell.RowIndex, newValue);
                         dgvMappings.CurrentCell = dgvMappings.Rows[cell.RowIndex].Cells[2];
-
                     }
                     else if (cell.ColumnIndex == 2)
                     {

@@ -2,15 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
     public static class SettingFileHandler
     {
-
         public static bool GetConfigData(out Settings config)
         {
             var allok = SettingsManager.Instance.TryLoad<Settings>(typeof(PluginControl), out config);
@@ -19,6 +16,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 
             return allok;
         }
+
         public static bool SaveConfigData(Settings config)
         {
             try
@@ -31,9 +29,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                 return false;
             }
         }
+
         public class Item<K, V>
         {
-            public Item() { }
+            public Item()
+            {
+            }
 
             public Item(K key, V value)
             {
@@ -49,6 +50,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
         public class Settings
         {
             private List<Item<Guid, Organisations>> _Organisations;
+
             public List<Item<Guid, Organisations>> Organisations
             {
                 get { return _Organisations; }
@@ -80,6 +82,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             }
 
             private List<Item<string, int>> _Sortcolumns;
+
             public List<Item<string, int>> Sortcolumns
             {
                 get { return _Sortcolumns; }
@@ -87,6 +90,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             }
 
             private List<Item<EntityReference, EntityReference>> _Mappings;
+
             public List<Item<EntityReference, EntityReference>> Mappings
             {
                 get { return _Mappings; }
@@ -94,6 +98,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             }
 
             private List<Item<string, EntitySettings>> _Entities;
+
             public List<Item<string, EntitySettings>> Entities
             {
                 get { return _Entities; }
@@ -129,4 +134,3 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
         }
     }
 }
-

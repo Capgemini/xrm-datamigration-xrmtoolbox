@@ -1,22 +1,18 @@
-﻿using Capgemini.Xrm.DataMigration.Core.EntitySchema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class DeserializationSettings
+    internal class DeserializationSettings
     {
         #region Public Properties
         public string XmlFolderPath { get; set; }
         public bool FailedValidation { get; set; }
         public string FailedValidationMessage { get; set; }
 
-        #endregion
+        #endregion Public Properties
 
         #region
+
         public void Validate()
         {
             FailedValidation = false;
@@ -28,6 +24,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             }
             FailedValidationMessage = stringBuilder.ToString();
         }
+
         #endregion
     }
 }

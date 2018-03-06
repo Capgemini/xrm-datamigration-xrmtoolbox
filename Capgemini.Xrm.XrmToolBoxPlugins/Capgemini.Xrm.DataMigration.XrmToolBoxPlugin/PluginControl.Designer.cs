@@ -76,6 +76,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btExport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.btExportCsv = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.btImport = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -91,6 +93,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbEnvironments = new System.Windows.Forms.GroupBox();
+            this.btnSchemaSourceConnectionString = new System.Windows.Forms.Button();
             this.cbShowSystemAttributes = new System.Windows.Forms.CheckBox();
             this.btExportConfigPath = new System.Windows.Forms.Button();
             this.btImportConfigPath = new System.Windows.Forms.Button();
@@ -121,6 +124,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tsbtRetrieveEntities = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtMappings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtFilters = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -135,7 +139,30 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.loadFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.tabPageRecordCounter = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btRCountExportResultsFile = new System.Windows.Forms.Button();
+            this.tbRCountExportResultFile = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.dataGridRCounts = new System.Windows.Forms.DataGridView();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsBtnCloseRCount = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsBtnExecuteCount = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsBtnExportResultToCsv = new System.Windows.Forms.ToolStripButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.btRCountExportConfigFile = new System.Windows.Forms.Button();
+            this.tbRCountExportConfigFile = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.tbRCountSchemaFilePath = new System.Windows.Forms.TextBox();
+            this.btRCountSchmaFile = new System.Windows.Forms.Button();
+            this.btnRCountConnectionString = new System.Windows.Forms.Button();
+            this.lblRCountConnectionString = new System.Windows.Forms.Label();
+            this.btImportCSV = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.topCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.batchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pageSize)).BeginInit();
@@ -152,6 +179,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbAttributes.SuspendLayout();
             this.gbEntities.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            this.tabPageRecordCounter.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridRCounts)).BeginInit();
+            this.toolStrip1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // BatchSizeLabel
@@ -222,7 +255,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             0});
             this.batchSize.Location = new System.Drawing.Point(192, 127);
             this.batchSize.Maximum = new decimal(new int[] {
-            100000,
+            1000000,
             0,
             0,
             0});
@@ -362,7 +395,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 22);
+            this.label3.Location = new System.Drawing.Point(10, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(128, 13);
             this.label3.TabIndex = 21;
@@ -637,6 +670,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.tabControl.Controls.Add(this.tabPageDataMigration);
             this.tabControl.Controls.Add(this.tabPageSchema);
+            this.tabControl.Controls.Add(this.tabPageRecordCounter);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.MinimumSize = new System.Drawing.Size(1000, 0);
@@ -668,16 +702,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // toolStrip3
             // 
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2,
             this.toolStripSeparator2,
             this.btExport,
+            this.toolStripSeparator9,
+            this.btExportCsv,
             this.toolStripSeparator7,
             this.btImport,
-            this.toolStripSeparator8});
+            this.toolStripSeparator8,
+            this.btImportCSV});
             this.toolStrip3.Location = new System.Drawing.Point(3, 3);
             this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(1036, 25);
+            this.toolStrip3.Size = new System.Drawing.Size(1036, 31);
             this.toolStrip3.TabIndex = 42;
             this.toolStrip3.Text = "toolStrip3";
             // 
@@ -687,42 +725,56 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripButton2.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Close;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Size = new System.Drawing.Size(28, 28);
             this.toolStripButton2.Text = "Close";
             this.toolStripButton2.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
             // 
             // btExport
             // 
             this.btExport.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.export;
             this.btExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btExport.Name = "btExport";
-            this.btExport.Size = new System.Drawing.Size(60, 22);
+            this.btExport.Size = new System.Drawing.Size(68, 28);
             this.btExport.Text = "Export";
             this.btExport.Click += new System.EventHandler(this.exportButton_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 31);
+            // 
+            // btExportCsv
+            // 
+            this.btExportCsv.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.export;
+            this.btExportCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btExportCsv.Name = "btExportCsv";
+            this.btExportCsv.Size = new System.Drawing.Size(90, 28);
+            this.btExportCsv.Text = "Export Csv";
+            this.btExportCsv.Click += new System.EventHandler(this.btExportCsv_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 31);
             // 
             // btImport
             // 
             this.btImport.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Import;
             this.btImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btImport.Name = "btImport";
-            this.btImport.Size = new System.Drawing.Size(63, 22);
+            this.btImport.Size = new System.Drawing.Size(71, 28);
             this.btImport.Text = "Import";
             this.btImport.Click += new System.EventHandler(this.importButton_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 31);
             // 
             // label4
             // 
@@ -852,6 +904,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.gbEnvironments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbEnvironments.Controls.Add(this.btnSchemaSourceConnectionString);
             this.gbEnvironments.Controls.Add(this.cbShowSystemAttributes);
             this.gbEnvironments.Controls.Add(this.btExportConfigPath);
             this.gbEnvironments.Controls.Add(this.btImportConfigPath);
@@ -871,6 +924,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEnvironments.TabStop = false;
             this.gbEnvironments.Text = "Environments";
             this.gbEnvironments.Enter += new System.EventHandler(this.gbEnvironments_Enter);
+            // 
+            // btnSchemaSourceConnectionString
+            // 
+            this.btnSchemaSourceConnectionString.Location = new System.Drawing.Point(346, 27);
+            this.btnSchemaSourceConnectionString.Name = "btnSchemaSourceConnectionString";
+            this.btnSchemaSourceConnectionString.Size = new System.Drawing.Size(26, 24);
+            this.btnSchemaSourceConnectionString.TabIndex = 38;
+            this.btnSchemaSourceConnectionString.Text = "...";
+            this.btnSchemaSourceConnectionString.UseVisualStyleBackColor = true;
+            this.btnSchemaSourceConnectionString.Click += new System.EventHandler(this.btnSchemaSourceConnectionString_Click);
             // 
             // cbShowSystemAttributes
             // 
@@ -1120,6 +1183,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // toolStrip2
             // 
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbCloseThisTab,
             this.toolStripSeparator1,
@@ -1135,7 +1199,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripDropDownButton2});
             this.toolStrip2.Location = new System.Drawing.Point(3, 3);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1036, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(1036, 31);
             this.toolStrip2.TabIndex = 94;
             this.toolStrip2.Text = "toolStrip1";
             // 
@@ -1145,56 +1209,65 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tsbCloseThisTab.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Close;
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 28);
             this.tsbCloseThisTab.Text = "Close";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbtRetrieveEntities
             // 
             this.tsbtRetrieveEntities.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.entities;
             this.tsbtRetrieveEntities.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtRetrieveEntities.Name = "tsbtRetrieveEntities";
-            this.tsbtRetrieveEntities.Size = new System.Drawing.Size(107, 22);
+            this.tsbtRetrieveEntities.Size = new System.Drawing.Size(115, 28);
             this.tsbtRetrieveEntities.Text = "Refresh Entities";
             this.tsbtRetrieveEntities.Click += new System.EventHandler(this.tsbtRetrieveEntities_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbtMappings
             // 
             this.tsbtMappings.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Mapping;
             this.tsbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtMappings.Name = "tsbtMappings";
-            this.tsbtMappings.Size = new System.Drawing.Size(80, 22);
+            this.tsbtMappings.Size = new System.Drawing.Size(88, 28);
             this.tsbtMappings.Text = "Mappings";
             this.tsbtMappings.Click += new System.EventHandler(this.tsbtMappings_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Mapping;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(131, 28);
+            this.toolStripButton1.Text = "Lookup Mappings";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbtFilters
             // 
             this.tsbtFilters.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Filter;
             this.tsbtFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbtFilters.Name = "tsbtFilters";
-            this.tsbtFilters.Size = new System.Drawing.Size(58, 22);
+            this.tsbtFilters.Size = new System.Drawing.Size(66, 28);
             this.tsbtFilters.Text = "Filters";
             this.tsbtFilters.Click += new System.EventHandler(this.tsbtFilters_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripDropDownButton1
             // 
@@ -1206,7 +1279,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripDropDownButton1.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Save;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(60, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(68, 28);
             this.toolStripDropDownButton1.Text = "Save";
             // 
             // saveSchemaToolStripMenuItem
@@ -1244,7 +1317,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 31);
             // 
             // toolStripDropDownButton2
             // 
@@ -1256,7 +1329,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripDropDownButton2.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(62, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(70, 28);
             this.toolStripDropDownButton2.Text = "Load";
             // 
             // loadSchemaToolStripMenuItem
@@ -1291,14 +1364,248 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.loadAllToolStripMenuItem.Text = "Load All";
             this.loadAllToolStripMenuItem.Click += new System.EventHandler(this.loadAllToolStripMenuItem_Click);
             // 
-            // toolStripButton1
+            // tabPageRecordCounter
             // 
-            this.toolStripButton1.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Mapping;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(123, 22);
-            this.toolStripButton1.Text = "Lookup Mappings";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.tabPageRecordCounter.Controls.Add(this.groupBox5);
+            this.tabPageRecordCounter.Controls.Add(this.groupBox4);
+            this.tabPageRecordCounter.Controls.Add(this.toolStrip1);
+            this.tabPageRecordCounter.Controls.Add(this.groupBox3);
+            this.tabPageRecordCounter.Location = new System.Drawing.Point(4, 22);
+            this.tabPageRecordCounter.Name = "tabPageRecordCounter";
+            this.tabPageRecordCounter.Size = new System.Drawing.Size(1042, 574);
+            this.tabPageRecordCounter.TabIndex = 2;
+            this.tabPageRecordCounter.Text = "Records Counter";
+            this.tabPageRecordCounter.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label13);
+            this.groupBox5.Controls.Add(this.btRCountExportResultsFile);
+            this.groupBox5.Controls.Add(this.tbRCountExportResultFile);
+            this.groupBox5.Location = new System.Drawing.Point(524, 32);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(515, 108);
+            this.groupBox5.TabIndex = 45;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "EXPORT CONFIG";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(27, 24);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(94, 13);
+            this.label13.TabIndex = 37;
+            this.label13.Text = "Export Results File";
+            // 
+            // btRCountExportResultsFile
+            // 
+            this.btRCountExportResultsFile.Location = new System.Drawing.Point(443, 25);
+            this.btRCountExportResultsFile.Margin = new System.Windows.Forms.Padding(2);
+            this.btRCountExportResultsFile.Name = "btRCountExportResultsFile";
+            this.btRCountExportResultsFile.Size = new System.Drawing.Size(26, 19);
+            this.btRCountExportResultsFile.TabIndex = 39;
+            this.btRCountExportResultsFile.Text = "...";
+            this.btRCountExportResultsFile.UseVisualStyleBackColor = true;
+            this.btRCountExportResultsFile.Click += new System.EventHandler(this.btRCountExportResultsFile_Click);
+            // 
+            // tbRCountExportResultFile
+            // 
+            this.tbRCountExportResultFile.Location = new System.Drawing.Point(151, 24);
+            this.tbRCountExportResultFile.Name = "tbRCountExportResultFile";
+            this.tbRCountExportResultFile.Size = new System.Drawing.Size(285, 20);
+            this.tbRCountExportResultFile.TabIndex = 38;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.dataGridRCounts);
+            this.groupBox4.Location = new System.Drawing.Point(9, 146);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(496, 425);
+            this.groupBox4.TabIndex = 44;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "RESULTS";
+            // 
+            // dataGridRCounts
+            // 
+            this.dataGridRCounts.AllowUserToAddRows = false;
+            this.dataGridRCounts.AllowUserToDeleteRows = false;
+            this.dataGridRCounts.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.dataGridRCounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridRCounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridRCounts.GridColor = System.Drawing.Color.WhiteSmoke;
+            this.dataGridRCounts.Location = new System.Drawing.Point(3, 16);
+            this.dataGridRCounts.Name = "dataGridRCounts";
+            this.dataGridRCounts.ReadOnly = true;
+            this.dataGridRCounts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridRCounts.Size = new System.Drawing.Size(490, 406);
+            this.dataGridRCounts.TabIndex = 0;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsBtnCloseRCount,
+            this.toolStripSeparator10,
+            this.tsBtnExecuteCount,
+            this.toolStripSeparator11,
+            this.tsBtnExportResultToCsv});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1042, 31);
+            this.toolStrip1.TabIndex = 43;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsBtnCloseRCount
+            // 
+            this.tsBtnCloseRCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsBtnCloseRCount.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Close;
+            this.tsBtnCloseRCount.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnCloseRCount.Name = "tsBtnCloseRCount";
+            this.tsBtnCloseRCount.Size = new System.Drawing.Size(28, 28);
+            this.tsBtnCloseRCount.Text = "Close";
+            this.tsBtnCloseRCount.Click += new System.EventHandler(this.tsBtnCloseRCount_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsBtnExecuteCount
+            // 
+            this.tsBtnExecuteCount.Enabled = false;
+            this.tsBtnExecuteCount.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.export;
+            this.tsBtnExecuteCount.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnExecuteCount.Name = "tsBtnExecuteCount";
+            this.tsBtnExecuteCount.Size = new System.Drawing.Size(111, 28);
+            this.tsBtnExecuteCount.Text = "Execute Count";
+            this.tsBtnExecuteCount.Click += new System.EventHandler(this.tsBtnExecuteCount_Click);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsBtnExportResultToCsv
+            // 
+            this.tsBtnExportResultToCsv.Enabled = false;
+            this.tsBtnExportResultToCsv.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.export;
+            this.tsBtnExportResultToCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnExportResultToCsv.Name = "tsBtnExportResultToCsv";
+            this.tsBtnExportResultToCsv.Size = new System.Drawing.Size(149, 28);
+            this.tsBtnExportResultToCsv.Text = "Export Results To CSV";
+            this.tsBtnExportResultToCsv.Click += new System.EventHandler(this.tsBtnExportResultToCsv_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Controls.Add(this.label12);
+            this.groupBox3.Controls.Add(this.btRCountExportConfigFile);
+            this.groupBox3.Controls.Add(this.tbRCountExportConfigFile);
+            this.groupBox3.Controls.Add(this.label16);
+            this.groupBox3.Controls.Add(this.tbRCountSchemaFilePath);
+            this.groupBox3.Controls.Add(this.btRCountSchmaFile);
+            this.groupBox3.Controls.Add(this.btnRCountConnectionString);
+            this.groupBox3.Controls.Add(this.lblRCountConnectionString);
+            this.groupBox3.Location = new System.Drawing.Point(9, 32);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(496, 108);
+            this.groupBox3.TabIndex = 38;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "CONFIG";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(49, 48);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(89, 13);
+            this.label11.TabIndex = 34;
+            this.label11.Text = "Export Config File";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(10, 22);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(128, 13);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "Source Connection String";
+            // 
+            // btRCountExportConfigFile
+            // 
+            this.btRCountExportConfigFile.Location = new System.Drawing.Point(465, 49);
+            this.btRCountExportConfigFile.Margin = new System.Windows.Forms.Padding(2);
+            this.btRCountExportConfigFile.Name = "btRCountExportConfigFile";
+            this.btRCountExportConfigFile.Size = new System.Drawing.Size(26, 19);
+            this.btRCountExportConfigFile.TabIndex = 36;
+            this.btRCountExportConfigFile.Text = "...";
+            this.btRCountExportConfigFile.UseVisualStyleBackColor = true;
+            this.btRCountExportConfigFile.Click += new System.EventHandler(this.btRCountExportConfigFile_Click);
+            // 
+            // tbRCountExportConfigFile
+            // 
+            this.tbRCountExportConfigFile.Location = new System.Drawing.Point(173, 48);
+            this.tbRCountExportConfigFile.Name = "tbRCountExportConfigFile";
+            this.tbRCountExportConfigFile.Size = new System.Drawing.Size(285, 20);
+            this.tbRCountExportConfigFile.TabIndex = 35;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(48, 74);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(90, 13);
+            this.label16.TabIndex = 11;
+            this.label16.Text = "Schema File Path";
+            // 
+            // tbRCountSchemaFilePath
+            // 
+            this.tbRCountSchemaFilePath.Location = new System.Drawing.Point(173, 74);
+            this.tbRCountSchemaFilePath.Name = "tbRCountSchemaFilePath";
+            this.tbRCountSchemaFilePath.Size = new System.Drawing.Size(285, 20);
+            this.tbRCountSchemaFilePath.TabIndex = 12;
+            // 
+            // btRCountSchmaFile
+            // 
+            this.btRCountSchmaFile.Location = new System.Drawing.Point(465, 74);
+            this.btRCountSchmaFile.Margin = new System.Windows.Forms.Padding(2);
+            this.btRCountSchmaFile.Name = "btRCountSchmaFile";
+            this.btRCountSchmaFile.Size = new System.Drawing.Size(26, 19);
+            this.btRCountSchmaFile.TabIndex = 24;
+            this.btRCountSchmaFile.Text = "...";
+            this.btRCountSchmaFile.UseVisualStyleBackColor = true;
+            this.btRCountSchmaFile.Click += new System.EventHandler(this.btRCountSchmaFile_Click);
+            // 
+            // btnRCountConnectionString
+            // 
+            this.btnRCountConnectionString.Location = new System.Drawing.Point(465, 16);
+            this.btnRCountConnectionString.Name = "btnRCountConnectionString";
+            this.btnRCountConnectionString.Size = new System.Drawing.Size(26, 24);
+            this.btnRCountConnectionString.TabIndex = 22;
+            this.btnRCountConnectionString.Text = "...";
+            this.btnRCountConnectionString.UseVisualStyleBackColor = true;
+            this.btnRCountConnectionString.Click += new System.EventHandler(this.btnRCountConnectionString_Click);
+            // 
+            // lblRCountConnectionString
+            // 
+            this.lblRCountConnectionString.AutoSize = true;
+            this.lblRCountConnectionString.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRCountConnectionString.ForeColor = System.Drawing.Color.Green;
+            this.lblRCountConnectionString.Location = new System.Drawing.Point(169, 22);
+            this.lblRCountConnectionString.MinimumSize = new System.Drawing.Size(170, 0);
+            this.lblRCountConnectionString.Name = "lblRCountConnectionString";
+            this.lblRCountConnectionString.Size = new System.Drawing.Size(170, 13);
+            this.lblRCountConnectionString.TabIndex = 23;
+            // 
+            // btImportCSV
+            // 
+            this.btImportCSV.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Import;
+            this.btImportCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btImportCSV.Name = "btImportCSV";
+            this.btImportCSV.Size = new System.Drawing.Size(93, 28);
+            this.btImportCSV.Text = "Import Csv";
+            this.btImportCSV.Click += new System.EventHandler(this.btImportCSV_Click);
             // 
             // PluginControl
             // 
@@ -1335,6 +1642,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.tabPageRecordCounter.ResumeLayout(false);
+            this.tabPageRecordCounter.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridRCounts)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1447,5 +1764,32 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private System.Windows.Forms.ToolStripMenuItem loadAllToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbShowSystemAttributes;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripButton btExportCsv;
+        private System.Windows.Forms.TabPage tabPageRecordCounter;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btRCountExportConfigFile;
+        private System.Windows.Forms.TextBox tbRCountExportConfigFile;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox tbRCountSchemaFilePath;
+        private System.Windows.Forms.Button btRCountSchmaFile;
+        private System.Windows.Forms.Button btnRCountConnectionString;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton tsBtnExecuteCount;
+        private System.Windows.Forms.Label lblRCountConnectionString;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.DataGridView dataGridRCounts;
+        private System.Windows.Forms.Button btnSchemaSourceConnectionString;
+        private System.Windows.Forms.ToolStripButton tsBtnCloseRCount;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btRCountExportResultsFile;
+        private System.Windows.Forms.TextBox tbRCountExportResultFile;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripButton tsBtnExportResultToCsv;
+        private System.Windows.Forms.ToolStripButton btImportCSV;
     }
 }

@@ -1,23 +1,23 @@
-﻿using Capgemini.Xrm.DataMigration.Core.EntitySchema;
+﻿using Capgemini.Xrm.DataMigration.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class SerializationSettings
+    internal class SerializationSettings
     {
         #region Public Properties
+
         public String XmlFilePath { get; set; }
         public CrmEntity[] crmEntity { get; set; }
         public string FailedValidationMessage { get; set; }
         public bool FailedValidation { get; set; }
         public string SuccessValidationMessage { get; set; }
-        #endregion
 
-        #region Public Methods 
+        #endregion Public Properties
+
+        #region Public Methods
+
         private void ValidateFailure()
         {
             var stringBuilder = new StringBuilder();
@@ -36,6 +36,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 
             FailedValidationMessage = stringBuilder.ToString();
         }
+
         private void ValidateSuccess()
         {
             if (FailedValidation == false)
@@ -43,12 +44,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 SuccessValidationMessage = "Successfully created XML file";
             }
         }
+
         public void ValidateAll()
         {
             ValidateFailure();
             ValidateSuccess();
         }
 
-        #endregion
+        #endregion Public Methods
     }
 }

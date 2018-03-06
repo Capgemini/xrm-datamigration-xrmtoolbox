@@ -1,16 +1,13 @@
-﻿using Microsoft.Xrm.Sdk;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.SettingFileHandler;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class ImportConfigSettingscs
+    internal class ImportConfigSettingscs
     {
         #region Public Properties
+
         public String JsonFilePath { get; set; }
         public String JsonFilePathLoad { get; set; }
         public Dictionary<string, Dictionary<Guid, Guid>> Mappings { get; set; }
@@ -21,13 +18,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public String SuccessValidationMessage { get; set; }
         public String SuccessValidationMessageLoading { get; set; }
 
-        #endregion
+        #endregion Public Properties
+
         #region Public Methods
+
         public void ValidateAll()
         {
             ValidateFailure();
             ValidateSuccessss();
         }
+
         public void ValidateLoading()
         {
             FailedValidationLoading = false;
@@ -44,9 +44,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             }
             FailedValidationLoadingMessage = message.ToString();
         }
-        #endregion
+
+        #endregion Public Methods
 
         #region Private  Methods
+
         private void ValidateFailure()
         {
             FailedValidation = false;
@@ -56,9 +58,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 message.AppendLine("Import config file path is empty");
                 FailedValidation = true;
             }
-          
+
             FailedValidationMessage = message.ToString();
         }
+
         private void ValidateSuccessss()
         {
             if (FailedValidation == false)
@@ -66,6 +69,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 SuccessValidationMessage = "Successfully created json file";
             }
         }
-        #endregion
+
+        #endregion Private  Methods
     }
 }

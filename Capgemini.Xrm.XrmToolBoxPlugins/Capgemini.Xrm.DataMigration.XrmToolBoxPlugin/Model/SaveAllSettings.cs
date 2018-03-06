@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class SaveAllSettings
+    internal class SaveAllSettings
     {
         #region Public Properties
+
         public string SchemaFilePath { get; set; }
         public string ImportFilePath { get; set; }
         public string ExportFilePath { get; set; }
         public string FailedValidationMessage { get; set; }
         public bool FailedValidation { get; set; }
         public string SuccessValidationMessage { get; set; }
-        #endregion
 
-        #region Public Methods 
+        #endregion Public Properties
+
+        #region Public Methods
+
         public void Validate()
         {
             var stringBuilder = new StringBuilder();
@@ -40,6 +39,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             }
             FailedValidationMessage = stringBuilder.ToString();
         }
-        #endregion
+
+        #endregion Public Methods
     }
 }

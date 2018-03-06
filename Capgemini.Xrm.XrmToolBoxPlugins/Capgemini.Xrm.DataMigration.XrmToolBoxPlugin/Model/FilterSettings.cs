@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
@@ -13,7 +9,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public bool WorkingState { get; set; }
         public string FailedValidationMessage { get; set; }
         public bool FailedValidation { get; set; }
-       
 
         public void ValidateFailure()
         {

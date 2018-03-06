@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Capgemini.Xrm.DataMigration.Config;
+﻿using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Xrm.Tooling.Connector;
+using System.Text;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
@@ -16,7 +11,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public int TopCount { get; set; }
         public string SchemaFilePath { get; set; }
         public string JsonFolderPath { get; set; }
-        public string SourceConnectionString { get; set;}
+        public string SourceConnectionString { get; set; }
         public string TargetConnectionString { get; set; }
         public string SchemaConnectionString { get; set; }
         public string FailedValidationMessage { get; set; }
@@ -32,7 +27,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             var stringBuilder = new StringBuilder();
             FailedValidationMessage = "";
             FailedValidation = false;
-            if(string.IsNullOrWhiteSpace(SchemaFilePath) && SchemaFilePath.Length < 5)
+            if (string.IsNullOrWhiteSpace(SchemaFilePath) && SchemaFilePath.Length < 5)
             {
                 FailedValidation = true;
                 stringBuilder.AppendLine("Enter correct Schema file Path");
@@ -40,11 +35,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 
             if (string.IsNullOrWhiteSpace(SourceConnectionString) && SourceServiceClient == null)
             {
-
                 FailedValidation = true;
                 stringBuilder.AppendLine("Select correct source connection details");
             }
-                       
 
             if (string.IsNullOrWhiteSpace(JsonFolderPath))
             {
@@ -59,6 +52,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             }
             FailedValidationMessage = stringBuilder.ToString();
         }
+
         public void ValidateImport()
         {
             var stringBuilder = new StringBuilder();
@@ -66,11 +60,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             FailedValidation = false;
             if (string.IsNullOrWhiteSpace(TargetConnectionString) && TargetServiceClient == null)
             {
-
                 FailedValidation = true;
                 stringBuilder.AppendLine("Select correct target connection details");
             }
-           
+
             if (string.IsNullOrWhiteSpace(JsonFolderPath))
             {
                 FailedValidation = true;
@@ -79,6 +72,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 
             FailedValidationMessage = stringBuilder.ToString();
         }
-
     }
 }

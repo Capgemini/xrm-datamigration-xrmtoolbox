@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
-using System.Configuration;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
     public static class ConnectionHelper
     {
-
         public static IOrganizationService GetOrganizationalService(string connectionString)
         {
             if (!connectionString.ToUpper().Contains("REQUIRENEWINSTANCE=TRUE"))
@@ -29,7 +27,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             }
 
             throw new System.Exception("Cannot get IOrganizationService");
-
         }
 
         public static IOrganizationService GetOrganizationalService(CrmServiceClient serviceClient)

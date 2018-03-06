@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
-using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
-    class MetadataHelper
+    internal class MetadataHelper
     {
         private static Dictionary<string, EntityMetadata> EntityMetadataCache = new Dictionary<string, EntityMetadata>();
 

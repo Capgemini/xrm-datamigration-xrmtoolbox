@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
 {
-    class LoadAllSettings
+    internal class LoadAllSettings
     {
-        public String SchemaPath { get; set; } 
-        public String ImportPath { get; set; } 
+        public String SchemaPath { get; set; }
+        public String ImportPath { get; set; }
         public String ExportPath { get; set; }
         public Boolean FailedValidation { get; set; }
         public String FailedValidationMessage { get; set; }
-
 
         public void Validate()
         {
@@ -36,7 +32,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             }
 
             FailedValidationMessage = message.ToString();
-        
         }
     }
 }

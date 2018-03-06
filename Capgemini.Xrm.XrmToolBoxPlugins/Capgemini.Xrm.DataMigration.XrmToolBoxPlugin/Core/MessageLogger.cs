@@ -1,25 +1,19 @@
-﻿
-using System.Windows.Forms;
+﻿using Capgemini.DataMigration.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Capgemini.Xrm.DataMigration.Core;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
-    public class MessageLogger :  ILogger
+    public class MessageLogger : ILogger
     {
         private readonly SynchronizationContext _syncContext;
         private readonly TextBox _tbMessage;
 
-        public  MessageLogger(TextBox tbMessage, SynchronizationContext syncContext)
+        public MessageLogger(TextBox tbMessage, SynchronizationContext syncContext)
         {
             _tbMessage = tbMessage;
             _syncContext = syncContext;
-
         }
 
         /// <summary>
@@ -35,7 +29,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
         {
             this.WriteLine("Error:" + message);
         }
-        
+
         public void Error(string message, Exception ex)
         {
             this.WriteLine("Error:" + message + ",Ex:" + ex.ToString());
@@ -59,7 +53,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                 this.WriteLine("Warning:" + message);
         }
 
-
         private void WriteLine(string message)
         {
             _syncContext.Send(p =>
@@ -67,6 +60,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                 _tbMessage.AppendText(string.Format("{0} - {1}{2}", DateTime.Now, message, Environment.NewLine));
             }, null);
         }
-
     }
 }

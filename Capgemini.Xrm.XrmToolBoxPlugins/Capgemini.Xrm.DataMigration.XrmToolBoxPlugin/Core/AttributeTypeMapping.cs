@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
-    class AttributeTypeMapping
+    internal class AttributeTypeMapping
     {
         #region Public Properties
+
         public string AttributeMetadataType { get; set; }
         public string AttributeMetadataTypeResult { get; set; }
-        #endregion
+
+        #endregion Public Properties
 
         #region Public Methods
+
         public void GetMapping()
         {
             AttributeMetadataTypeResult = "Unknown";
@@ -86,6 +84,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             else
                 MessageBox.Show("Missing mapping for " + AttributeMetadataType);
         }
-        #endregion
+
+        #endregion Public Methods
     }
 }

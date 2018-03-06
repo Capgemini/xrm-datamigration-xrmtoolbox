@@ -1,18 +1,13 @@
-﻿using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Core.EntitySchema;
+﻿using Capgemini.Xrm.DataMigration.Model;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
-    class CrmSchemaconfiguration
+    internal class CrmSchemaconfiguration
     {
         public String exceptionData { get; set; }
+
         public void SaveToFile(string filePath, CrmEntity entity)
         {
             entity = new CrmEntity();

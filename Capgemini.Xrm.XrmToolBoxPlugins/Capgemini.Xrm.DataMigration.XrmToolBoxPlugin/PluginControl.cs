@@ -1,36 +1,36 @@
-﻿using System;
-using XrmToolBox.Extensibility;
-using System.Windows.Forms;
-
-using Microsoft.Xrm.Sdk;
-using McTools.Xrm.Connection;
-using XrmToolBox.Extensibility.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using System.Threading;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
-using Capgemini.Xrm.DataMigration.Repositories;
+﻿using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.DataStores;
-using Capgemini.Xrm.DataMigration.Engine;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using Capgemini.Xrm.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.Engine;
+using Capgemini.Xrm.DataMigration.Model;
+using Capgemini.Xrm.DataMigration.Repositories;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
-using System.ComponentModel;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
+using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
-using static Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.SettingFileHandler;
-using System.Linq;
-using Capgemini.Xrm.DataMigration.Core.EntitySchema;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
+using static Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.SettingFileHandler;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public partial class PluginControl : PluginControlBase, IXrmToolBoxPluginControl
     {
         #region Private Readonly Object Initialization
+
         private readonly DataMigrationSettings _dataMigrationSettings = new DataMigrationSettings();
         private readonly DeserializationSettings _deserialization = new DeserializationSettings();
         private readonly SerializationSettings _xmlSettings = new SerializationSettings();
@@ -41,8 +41,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly SaveAllSettings _saveAllSettings = new SaveAllSettings();
         private readonly LoadAllSettings _loadAllSettings = new LoadAllSettings();
 
-        #endregion
+        #endregion Private Readonly Object Initialization
+
         #region Private Properties
+
         private readonly MessageLogger _logger;
         private bool _workingstate;
         private Task _currentTask;
@@ -61,10 +63,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private HashSet<string> _selectedEntity = new HashSet<string>();
         private HashSet<string> _checkedRelationship = new HashSet<string>();
         private List<EntityMetadata> _cachedMetadata;
-        #endregion
-        CancellationTokenSource _tokenSource = new CancellationTokenSource();
+
+        #endregion Private Properties
+
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
         public new event EventHandler OnRequestConnection;
+
         public PluginControl()
         {
             SettingFileHandler.GetConfigData(out _settings);
@@ -84,11 +89,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             _dataMigrationSettings.SchemaFilePath = tbSchemaFilePath.Text;
             _dataMigrationSettings.JsonFolderPath = tbFolderPath.Text;
         }
+
         private async void importButton_Click(object sender, EventArgs e)
         {
             if (btImport.Text == "Import")
             {
                 btExport.Enabled = false;
+                btExportCsv.Enabled = false;
+                btImportCSV.Enabled = false;
                 btImport.Text = "STOP";
                 _currentTask = StartImport();
 
@@ -98,11 +106,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (Exception ex)
                 {
-
                     _logger.Error("Import Error:", ex);
                 }
 
                 btExport.Enabled = true;
+                btExportCsv.Enabled = true;
+                btImportCSV.Enabled = true;
                 btImport.Text = "Import";
             }
             else
@@ -114,10 +123,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (Exception ex)
                 {
-
                     _logger.Error("Export Error:", ex);
                 }
-
             }
         }
 
@@ -131,6 +138,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     JsonSerializerConfig.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
 
                 btImport.Enabled = false;
+                btImportCSV.Enabled = false;
+                btExportCsv.Enabled = false;
                 btExport.Text = "STOP";
                 _currentTask = StartExport();
 
@@ -140,14 +149,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (Exception ex)
                 {
-
                     _logger.Error("Export Error:", ex);
                 }
 
-
                 btImport.Enabled = true;
+                btExportCsv.Enabled = true;
+                btImportCSV.Enabled = true;
                 btExport.Text = "Export";
-
             }
             else
             {
@@ -159,7 +167,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (Exception ex)
                 {
-
                     _logger.Error("Export Error:", ex);
                 }
             }
@@ -174,14 +181,36 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     _dataMigrationSettings.TargetServiceClient = detail.ServiceClient;
                     labelTargetConnectionString.Text = detail.ConnectionName;
                     break;
+
                 case "SourceOrganization":
                     _dataMigrationSettings.SourceConnectionString = detail.ConnectionString;
                     _dataMigrationSettings.SourceServiceClient = detail.ServiceClient;
                     _service = newService;
                     _organisationid = detail.ConnectionId.Value;
                     labelSourceConnectionString.Text = detail.ConnectionName;
+                    labelSchemaConnectionString.Text = detail.ConnectionName;
+                    lblRCountConnectionString.Text = detail.ConnectionName;
+                    tsBtnExecuteCount.Enabled = true;
                     SettingFileHandler.SaveConfigData(_settings);
+                    if (tabControl.SelectedTab == tabPageSchema)
+                        RefreshEntities();
                     _cachedMetadata = null;
+                    break;
+
+                default:
+                    if (detail.ConnectionName != null)
+                    {
+                        _dataMigrationSettings.SourceConnectionString = detail.ConnectionString;
+                        _dataMigrationSettings.SourceServiceClient = detail.ServiceClient;
+                        _service = newService;
+                        _organisationid = detail.ConnectionId.Value;
+                        labelSourceConnectionString.Text = detail.ConnectionName;
+                        labelSchemaConnectionString.Text = detail.ConnectionName;
+                        lblRCountConnectionString.Text = detail.ConnectionName;
+                        SettingFileHandler.SaveConfigData(_settings);
+                        tsBtnExecuteCount.Enabled = true;
+                        _cachedMetadata = null;
+                    }
                     break;
             }
         }
@@ -216,7 +245,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void btFolderPath_Click(object sender, EventArgs e)
         {
-
             var result = fbExportPath.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -225,7 +253,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private async Task StartExport()
+        private async Task StartExport(bool useCSV = false)
         {
             StatusLabel.Text = "";
             CollectUserSettings();
@@ -243,7 +271,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var orgService = ConnectionHelper.GetOrganizationalService(_dataMigrationSettings.SourceServiceClient);
             _logger.Info("Connectd to instance " + _dataMigrationSettings.SourceServiceClient.ConnectedOrgFriendlyName);
-            EntityRepository entityRepo = new EntityRepository(orgService);
+            EntityRepository entityRepo = new EntityRepository(orgService, new ServiceRetryExecutor());
 
             //TODO add support for multiple schema files and XMLFolderPath
             CrmExporterConfig exportConfig = new CrmExporterConfig()
@@ -256,25 +284,33 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 JsonFolderPath = _dataMigrationSettings.JsonFolderPath,
                 CrmMigrationToolSchemaFilters = _dataMigrationSettings.ExportConfig != null ? _dataMigrationSettings.ExportConfig.CrmMigrationToolSchemaFilters : null,
                 OneEntityPerBatch = _dataMigrationSettings.ExportConfig == null || _dataMigrationSettings.ExportConfig.OneEntityPerBatch,
-
             };
-            
+
             if (_dataMigrationSettings.ExportConfig != null)
             {
+                exportConfig.ExcludedFields = _dataMigrationSettings.ExportConfig.ExcludedFields;
                 exportConfig.LookupMapping = _dataMigrationSettings.ExportConfig.LookupMapping;
                 exportConfig.FilePrefix = _dataMigrationSettings.ExportConfig.FilePrefix;
                 exportConfig.SeperateFilesPerEntity = _dataMigrationSettings.ExportConfig.SeperateFilesPerEntity;
             }
 
-            CrmFileDataExporter fileExporter = new CrmFileDataExporter(_logger, entityRepo, exportConfig, _tokenSource.Token);
-            fileExporter.MigrateData();
-
+            if (!useCSV)
+            {
+                CrmFileDataExporter fileExporter = new CrmFileDataExporter(_logger, entityRepo, exportConfig, _tokenSource.Token);
+                fileExporter.MigrateData();
+            }
+            else
+            {
+                CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(_dataMigrationSettings.SchemaFilePath);
+                CrmFileDataExporterCsv fileExporter = new CrmFileDataExporterCsv(_logger, entityRepo, exportConfig, _tokenSource.Token, schema);
+                fileExporter.MigrateData();
+            }
         });
 
             await exportTask;
         }
 
-        private async Task StartImport()
+        private async Task StartImport(bool useCSV = false)
         {
             StatusLabel.Text = "";
             CollectUserSettings();
@@ -327,22 +363,30 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     while (cnt > 0)
                     {
                         cnt--;
-                        repos.Add(new EntityRepository(ConnectionHelper.GetOrganizationalService(_dataMigrationSettings.TargetConnectionString)));
+                        repos.Add(new EntityRepository(ConnectionHelper.GetOrganizationalService(_dataMigrationSettings.TargetConnectionString), new ServiceRetryExecutor()));
                         _logger.Info("New connection created to " + _dataMigrationSettings.TargetServiceClient.ConnectedOrgFriendlyName);
                     }
 
                     CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, repos, importConfig, _tokenSource.Token);
                     fileExporter.MigrateData();
-
                 }
                 else
                 {
                     _logger.Info("Starting Single Threaded processing, you must configure connection string for multithreaded processing adn set up max threads to more than 1");
-                    EntityRepository entityRepo = new EntityRepository(orgService);
-                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, entityRepo, importConfig, _tokenSource.Token);
-                    fileExporter.MigrateData();
-                }
+                    EntityRepository entityRepo = new EntityRepository(orgService, new ServiceRetryExecutor());
 
+                    if (!useCSV)
+                    {
+                        CrmFileDataImporter fileExporter = new CrmFileDataImporter(_logger, entityRepo, importConfig, _tokenSource.Token);
+                        fileExporter.MigrateData();
+                    }
+                    else
+                    {
+                        CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(_dataMigrationSettings.SchemaFilePath);
+                        CrmFileDataImporterCsv fileExporter = new CrmFileDataImporterCsv(_logger, entityRepo, importConfig, schema, _tokenSource.Token);
+                        fileExporter.MigrateData();
+                    }
+                }
             });
 
             await importTask;
@@ -381,15 +425,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 case "Error":
                     MessageLogger.LogLevel = 0;
                     break;
+
                 case "Warning":
                     MessageLogger.LogLevel = 1;
                     break;
+
                 case "Info":
                     MessageLogger.LogLevel = 2;
                     break;
+
                 case "Verbose":
                     MessageLogger.LogLevel = 3;
                     break;
+
                 default:
                     MessageLogger.LogLevel = 2;
                     break;
@@ -545,7 +593,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             sourceAttributesList.Add(item);
         }
 
-
         private void PopulateAttributes(string entityLogicalName, IOrganizationService service)
         {
             if (!_workingstate)
@@ -573,7 +620,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         }
 
                         attributes = attributes.OrderByDescending(p => p.IsPrimaryId).ThenByDescending(p => p.IsPrimaryName).ThenByDescending(p => p.IsCustomAttribute.Value).ThenBy(p => p.IsLogical.Value).ThenBy(p => p.LogicalName).ToArray();
-
 
                         foreach (AttributeMetadata attribute in attributes)
                         {
@@ -629,19 +675,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             item.ToolTipText = "";
 
-
             if (attribute.IsValidForCreate != null && !attribute.IsValidForCreate.Value)
             {
                 item.ForeColor = Color.Gray;
                 item.ToolTipText = "Not createable, ";
-
             }
 
             if (attribute.IsValidForUpdate != null && !attribute.IsValidForUpdate.Value)
             {
                 item.ForeColor = Color.Gray;
                 item.ToolTipText += "Not updateable, ";
-
             }
 
             if (attribute.IsCustomAttribute != null && attribute.IsCustomAttribute.Value)
@@ -663,14 +706,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             {
                 item.ForeColor = Color.Red;
                 item.ToolTipText += "Virtual or managed property, ";
-
             }
 
             if (attribute.IsLogical != null && attribute.IsLogical.Value)
             {
                 item.ForeColor = Color.Red;
                 item.ToolTipText += "Logical attribute, ";
-
             }
 
             if (attribute.IsValidForCreate != null && !attribute.IsValidForCreate.Value &&
@@ -683,13 +724,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             {
                 item.ForeColor = Color.Red;
                 item.ToolTipText += "Not readable, ";
-
             }
 
             if (attribute.Description != null && attribute.Description.LocalizedLabels.Count > 0)
             {
                 item.ToolTipText += attribute.Description.LocalizedLabels.First().Label;
-
             }
 
             if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
@@ -699,7 +738,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
 
             item.SubItems.Add(item.ToolTipText);
-
         }
 
         private void AddAttribute(AttributeMetadata attribute, ListViewItem item, string typename)
@@ -708,6 +746,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             item.SubItems.Add(attribute.LogicalName);
             item.SubItems.Add(typename.EndsWith("Type", StringComparison.Ordinal) ? typename.Substring(0, typename.LastIndexOf("Type", StringComparison.Ordinal)) : typename);
         }
+
         private void InitFilter()
         {
             string filter = null;
@@ -748,7 +787,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     var sourceEntitiesList = new List<ListViewItem>();
 
-
                     foreach (EntityMetadata entity in _cachedMetadata)
                     {
                         var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
@@ -773,8 +811,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void IsInvalidForCustomization(EntityMetadata entity, ListViewItem item)
         {
-
-
             if (entity.IsCustomEntity.Value)
             {
                 item.ForeColor = Color.DarkGreen;
@@ -791,13 +827,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 item.ForeColor = Color.Red;
                 item.ToolTipText = "Logical Entity";
             }
-
         }
 
         private void UpdateCheckBoxesEntities(EntityMetadata entity, ListViewItem item)
         {
             item.Checked |= _entityAttributes.ContainsKey(entity.LogicalName);
         }
+
         private void AsyncRunnerCompleteEntitiesOperation(RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
@@ -837,6 +873,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             Cursor = working ? Cursors.WaitCursor : Cursors.Default;
         }
+
         private void tabControl_Selected(object sender, TabControlEventArgs e)
         {
             if (tabControl.SelectedTab == tabPageSchema && string.IsNullOrWhiteSpace(labelSourceConnectionString.Text.ToString()))
@@ -845,22 +882,28 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
             else
             {
-                toolStrip2.Enabled = true;
-                labelSchemaConnectionString.Text = labelSourceConnectionString.Text;
-                if (_cachedMetadata == null)
-                {
-                    ClearMemory();
-                    PopulateEntities();
-                }
+                if (tabControl.SelectedTab == tabPageSchema)
+                    RefreshEntities();
             }
         }
+
+        private void RefreshEntities()
+        {
+            toolStrip2.Enabled = true;
+            labelSchemaConnectionString.Text = labelSourceConnectionString.Text;
+            if (_cachedMetadata == null)
+            {
+                ClearMemory();
+                PopulateEntities();
+            }
+        }
+
         private void tsbtMappings_Click(object sender, EventArgs e)
         {
             if (lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
             {
                 if (!string.IsNullOrEmpty(_entityLogicalName))
                 {
-
                     if (_mapping.ContainsKey(_entityLogicalName))
                     {
                         MappingIfContainsKey();
@@ -976,13 +1019,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 _filterQuery.Remove(_entityLogicalName);
             else
                 _filterQuery[_entityLogicalName] = filterDialog.QueryString;
-
         }
 
         private void chkAllAttributes_CheckedChanged(object sender, EventArgs e)
         {
             lvAttributes.Items.OfType<ListViewItem>().ToList().ForEach(item => item.Checked = chkAllAttributes.Checked);
         }
+
         private void lvAttributes_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var columnNumber = e.Column;
@@ -991,6 +1034,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 SetListViewSorting(lvAttributes, e.Column);
             }
         }
+
         private void lvEntities_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             SetListViewSorting(lvEntities, e.Column);
@@ -1021,7 +1065,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             listview.ListViewItemSorter = new ListViewItemComparer(column, listview.Sorting);
         }
 
-
         private void chkAllEntities_CheckedChanged(object sender, EventArgs e)
         {
             lvEntities.Items.OfType<ListViewItem>().ToList().ForEach(item => item.Checked = chkAllEntities.Checked);
@@ -1034,12 +1077,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             if (_entityAttributes.ContainsKey(_entityLogicalName))
             {
                 StoreAttriubteIfKeyExists(logicalName, e);
-
             }
             else
             {
                 StoreAttributeIfRequiresKey(logicalName, e);
-
             }
         }
 
@@ -1077,7 +1118,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 attributeSet.Add(logicalName);
             }
         }
-
 
         private void lvEntities_ItemCheck(object sender, ItemCheckEventArgs e)
         {
@@ -1126,7 +1166,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             GenerateXMLFile();
             GenerateXMLFileMessage();
             ResetEntities();
-
         }
 
         private void GenerateXMLFileMessage()
@@ -1206,7 +1245,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             crmRelationShip.RelatedEntityName = relationship.IntersectEntityName;
             crmRelationShip.ManyToMany = true;
             crmRelationShip.IsReflexive = relationship.IsCustomizable.Value;
-            crmRelationShip.TargetEntityPrimaryKey = crmEntity.PrimaryIdField == relationship.Entity2IntersectAttribute? relationship.Entity1IntersectAttribute : relationship.Entity2IntersectAttribute;
+            crmRelationShip.TargetEntityPrimaryKey = crmEntity.PrimaryIdField == relationship.Entity2IntersectAttribute ? relationship.Entity1IntersectAttribute : relationship.Entity2IntersectAttribute;
             crmRelationShip.TargetEntityName = crmEntity.Name == relationship.Entity2LogicalName ? relationship.Entity1LogicalName : relationship.Entity2LogicalName;
             crmRelationShip.RelationshipName = relationship.IntersectEntityName;
             relationshipList.Add(crmRelationShip);
@@ -1261,7 +1300,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-
         private void StoreLookUpAttribute(AttributeMetadata attribute, CrmField crmField)
         {
             if (crmField.FieldType.Equals("entityreference"))
@@ -1296,7 +1334,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void btSchemaFolderPath_Click(object sender, EventArgs e)
         {
-
             SaveFileDialog fileDialog = new SaveFileDialog();
             fileDialog.Filter = "XML Files|*.xml";
             fileDialog.OverwritePrompt = false;
@@ -1309,7 +1346,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                 if (File.Exists(tbSchemaPath.Text))
                     tbLoadSchemaFile_Click(this, new EventArgs());
-
             }
             else if (result == DialogResult.Cancel)
             {
@@ -1346,9 +1382,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 var logicalName = entities.Name;
                 HashSet<string> attributeSet = new HashSet<string>();
                 HashSet<string> relationShipSet = new HashSet<string>();
-                foreach (var attributes in entities.CrmFields)
+                if (entities.CrmFields != null)
                 {
-                    attributeSet.Add(attributes.FieldName);
+                    foreach (var attributes in entities.CrmFields)
+                    {
+                        attributeSet.Add(attributes.FieldName);
+                    }
                 }
                 if (entities.CrmRelationships != null)
                 {
@@ -1376,7 +1415,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             if (_entityRelationships.ContainsKey(_entityLogicalName))
             {
                 StoreRelationshipIfKeyExists(logicalName, e);
-
             }
             else
             {
@@ -1418,15 +1456,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-
         private void GetJsonFolderPathImport()
         {
             _importSchemaSettings.JsonFilePath = tbImportConfig.Text;
         }
+
         private void GetJsonFolderPathExport()
         {
             _exportSchemaSettings.JsonFilePath = tbExportConfig.Text;
         }
+
         private void DeleteFile(string filePath)
         {
             try
@@ -1507,7 +1546,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                 if (File.Exists(tbExportConfig.Text))
                     tbLoadFiltersFile_Click(this, new EventArgs());
-
             }
             else if (result == DialogResult.Cancel)
             {
@@ -1549,8 +1587,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-
-
         private void tbSaveMappings_Click(object sender, EventArgs e)
         {
             GetJsonFolderPathImport();
@@ -1583,7 +1619,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 migration.MigrationConfig = new MappingConfiguration();
             }
 
-
             if (_mapping != null)
             {
                 migration.MigrationConfig.Mappings = _mapper;
@@ -1592,7 +1627,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                 if (_importSchemaSettings.FailedValidation == false)
                 {
-
                     migration.JsonFolderPath = new FileInfo(_importSchemaSettings.JsonFilePath).DirectoryName + "\\ExtractedData";
                     if (File.Exists(_importSchemaSettings.JsonFilePath))
                     {
@@ -1624,12 +1658,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void GenerateExportConfigFile()
         {
-
             CrmExporterConfig config = new CrmExporterConfig();
             if (File.Exists(_exportSchemaSettings.JsonFilePath))
             {
                 config = CrmExporterConfig.GetConfiguration(_exportSchemaSettings.JsonFilePath);
-
             }
             config.CrmMigrationToolSchemaFilters = _filterQuery;
             _exportSchemaSettings.Filter = _filterQuery;
@@ -1651,12 +1683,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 if (File.Exists(_exportSchemaSettings.JsonFilePath))
                 {
                     File.Delete(_exportSchemaSettings.JsonFilePath);
-
                 }
                 config.SaveConfiguration(_exportSchemaSettings.JsonFilePath);
             }
         }
-
 
         private void DataConversion()
         {
@@ -1718,7 +1748,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             if (_exportSchemaSettings.FailedValidationLoading == false && CrmExporterConfig.GetConfiguration(_exportSchemaSettings.JsonFilePathLoad).CrmMigrationToolSchemaFilters.Count > 0)
             {
-
                 MessageBox.Show(_exportSchemaSettings.SuccessValidationMessageLoading);
             }
             else
@@ -1744,7 +1773,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 LoadFilterFile();
                 LoadMappingFileLookup();
                 LoadMappingFileGuid();
-             }
+            }
             else
             {
                 MessageBox.Show(_loadAllSettings.FailedValidationMessage);
@@ -1791,14 +1820,272 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void gbEnvironments_Enter(object sender, EventArgs e)
         {
-
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-
             OpenMappingForm();
+        }
 
+        private async void btExportCsv_Click(object sender, EventArgs e)
+        {
+            if (btExportCsv.Text == "Export Csv")
+            {
+                if (cbMinJson.Checked)
+                    JsonSerializerConfig.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
+                else
+                    JsonSerializerConfig.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+
+                btImport.Enabled = false;
+                btExport.Enabled = false;
+                btImportCSV.Enabled = false;
+                btExportCsv.Text = "STOP";
+                _currentTask = StartExport(true);
+
+                try
+                {
+                    await _currentTask;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("Export Error:", ex);
+                }
+
+                btImport.Enabled = true;
+                btExport.Enabled = true;
+                btImportCSV.Enabled = true;
+                btExportCsv.Text = "Export Csv";
+            }
+            else
+            {
+                _tokenSource.Cancel();
+
+                try
+                {
+                    await _currentTask;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("Export Error:", ex);
+                }
+            }
+        }
+
+        private void btnSchemaSourceConnectionString_Click(object sender, EventArgs e)
+        {
+            if (OnRequestConnection != null)
+            {
+                var args = new RequestConnectionEventArgs { ActionName = "SourceOrganization", Control = this };
+                OnRequestConnection(this, args);
+            }
+        }
+
+        #region RecordsCountTab
+
+        private void btnRCountConnectionString_Click(object sender, EventArgs e)
+        {
+            ResetDataGridRCounts();
+            if (OnRequestConnection != null)
+            {
+                var args = new RequestConnectionEventArgs { ActionName = "SourceOrganization", Control = this };
+                OnRequestConnection(this, args);
+            }
+        }
+
+        private void btRCountExportConfigFile_Click(object sender, EventArgs e)
+        {
+            ResetDataGridRCounts();
+            fdSchemaFile.DefaultExt = "json";
+            fdSchemaFile.Filter = "JSON Files|*.json";
+            DialogResult fd = fdSchemaFile.ShowDialog();
+
+            if (fd == DialogResult.OK)
+            {
+                tbRCountExportConfigFile.Text = fdSchemaFile.FileName;
+                _dataMigrationSettings.ExportConfig = CrmExporterConfig.GetConfiguration(tbRCountExportConfigFile.Text);
+            }
+
+            if (_dataMigrationSettings.ExportConfig != null &&
+                _dataMigrationSettings.ExportConfig.CrmMigrationToolSchemaPaths != null)
+            {
+                tbRCountSchemaFilePath.Text = _dataMigrationSettings.ExportConfig.CrmMigrationToolSchemaPaths[0];
+            }
+        }
+
+        private void btRCountSchmaFile_Click(object sender, EventArgs e)
+        {
+            ResetDataGridRCounts();
+            fdSchemaFile.DefaultExt = "xml";
+            fdSchemaFile.Filter = "XML Files|*.xml";
+            DialogResult fd = fdSchemaFile.ShowDialog();
+            if (fd == DialogResult.OK)
+            {
+                tbRCountSchemaFilePath.Text = fdSchemaFile.FileName;
+            }
+        }
+
+        private void tsBtnExecuteCount_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbRCountExportConfigFile.Text))
+            {
+                MessageBox.Show("Select export config file to execute count.");
+                return;
+            }
+            if (string.IsNullOrEmpty(tbRCountSchemaFilePath.Text))
+            {
+                MessageBox.Show("Select schema file to execute count.");
+                return;
+            }
+
+            ResetDataGridRCounts();
+            ExecuteRecordsCount();
+        }
+
+        private void ExecuteRecordsCount()
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Counting...",
+                Work = (w, e) =>
+                {
+                    RecordcounterProcessor recordcounterProcessor = new RecordcounterProcessor();
+                    e.Result = recordcounterProcessor.ExecuteRecordsCount(tbRCountExportConfigFile.Text,
+                            tbRCountSchemaFilePath.Text,
+                            _service, w, dataGridRCounts);
+                },
+                ProgressChanged = e =>
+                {
+                    SetWorkingMessage(e.UserState.ToString());
+                },
+                PostWorkCallBack = e =>
+                {
+                    // This code is executed in the main thread
+                    MessageBox.Show($"Finished");
+                    ResetDataGridRCounts();
+                    dataGridRCounts.DataSource = e.Result;
+                    dataGridRCounts.Columns[0].Width = 250;
+                    dataGridRCounts.Columns[1].Width = 250;
+                    tsBtnExportResultToCsv.Enabled = true;
+                },
+                AsyncArgument = null,
+                // Progress information panel size
+                MessageWidth = 340,
+                MessageHeight = 150
+            });
+        }
+
+        private void ResetDataGridRCounts()
+        {
+            dataGridRCounts.DataSource = null;
+            dataGridRCounts.Refresh();
+        }
+
+        private void tsBtnCloseRCount_Click(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void tsBtnExportResultToCsv_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbRCountExportResultFile.Text))
+            {
+                MessageBox.Show("Select export config file to execute count.");
+                return;
+            }
+            if (!string.IsNullOrEmpty(tbRCountExportResultFile.Text) &&
+                !tbRCountExportResultFile.Text.EndsWith(".csv"))
+            {
+                MessageBox.Show("Select .csv file to export results.");
+                return;
+            }
+            if (dataGridRCounts.DataSource == null)
+            {
+                MessageBox.Show("No data to export.");
+                return;
+            }
+
+            ExecuteExportToCsv();
+        }
+
+        private void ExecuteExportToCsv()
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Exporting to csv...",
+                Work = (w, e) =>
+                {
+                    List<RecordCountModel> list = (List<RecordCountModel>)dataGridRCounts.DataSource;
+                    RecordcounterProcessor recordcounterProcessor = new RecordcounterProcessor();
+                    recordcounterProcessor.WriteDataToCSV(list, tbRCountExportResultFile.Text);
+                },
+                ProgressChanged = e =>
+                {
+                    SetWorkingMessage(e.UserState.ToString());
+                },
+                PostWorkCallBack = e =>
+                {
+                    // This code is executed in the main thread
+                    MessageBox.Show($"Finished");
+                },
+                AsyncArgument = null,
+                // Progress information panel size
+                MessageWidth = 340,
+                MessageHeight = 150
+            });
+        }
+
+        private void btRCountExportResultsFile_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "CSV Files|*.csv";
+            fileDialog.OverwritePrompt = false;
+
+            var result = fileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+                tbRCountExportResultFile.Text = fileDialog.FileName.ToString();
+            else if (result == DialogResult.Cancel)
+                tbRCountExportResultFile.Text = null;
+        }
+
+        #endregion RecordsCountTab
+
+        private async void btImportCSV_Click(object sender, EventArgs e)
+        {
+            if (btImportCSV.Text == "Import Csv")
+            {
+                btExport.Enabled = false;
+                btExportCsv.Enabled = false;
+                btImport.Enabled = false;
+                btImportCSV.Text = "STOP";
+                _currentTask = StartImport(true);
+
+                try
+                {
+                    await _currentTask;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("Import Error:", ex);
+                }
+
+                btExport.Enabled = true;
+                btExportCsv.Enabled = true;
+                btImport.Enabled = true;
+                btImportCSV.Text = "Import Csv";
+            }
+            else
+            {
+                _tokenSource.Cancel();
+                try
+                {
+                    await _currentTask;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("Export Error:", ex);
+                }
+            }
         }
     }
 }
