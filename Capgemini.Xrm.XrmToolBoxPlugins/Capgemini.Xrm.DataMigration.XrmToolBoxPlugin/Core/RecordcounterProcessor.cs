@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             foreach (var item in crmSchemaConfiguration.Entities)
             {
                 string fetchXml = GetFetchXmlTemplate();
-                string filters = (crmExporterConfig.CrmMigrationToolSchemaFilters.ContainsKey(item.Name)) ? crmExporterConfig.CrmMigrationToolSchemaFilters[item.Name] : string.Empty;
+                string filters = (crmExporterConfig.CrmMigrationToolSchemaFilters != null && crmExporterConfig.CrmMigrationToolSchemaFilters.ContainsKey(item.Name)) ? crmExporterConfig.CrmMigrationToolSchemaFilters[item.Name] : string.Empty;
                 fetchXml = (!string.IsNullOrEmpty(filters)) ? fetchXml.Replace("{filter}", filters) : fetchXml.Replace("{filter}", string.Empty);
                 fetchXml = fetchXml.Replace("{entity}", item.Name);
 
