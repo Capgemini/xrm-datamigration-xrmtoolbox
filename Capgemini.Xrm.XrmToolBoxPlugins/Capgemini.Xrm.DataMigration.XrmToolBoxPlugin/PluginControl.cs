@@ -965,7 +965,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void OpenMappingForm()
         {
-            var mappingDialog = new MappingListLookup(_lookupMaping, _service, _cachedMetadata);
+            var mappingDialog = new MappingListLookup(_lookupMaping, _service, _cachedMetadata, _entityLogicalName);
             mappingDialog.StartPosition = FormStartPosition.CenterParent;
             mappingDialog.ShowDialog(ParentForm);
             mappingDialog.RefreshMappingList();
@@ -1545,7 +1545,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 tbExportConfig.Text = fileDialog.FileName.ToString();
 
                 if (File.Exists(tbExportConfig.Text))
+                {
                     tbLoadFiltersFile_Click(this, new EventArgs());
+                    LoadMappingFileLookup();
+                }
             }
             else if (result == DialogResult.Cancel)
             {
@@ -1708,8 +1711,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             LoadMappingFileGuid();
 
             GenerateLoadMappingFileMessage();
-
-            LoadMappingFileLookup();
         }
 
         private void GenerateLoadMappingFileMessage()
@@ -2087,5 +2088,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
             }
         }
+
+        private void loaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

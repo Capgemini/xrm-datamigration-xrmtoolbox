@@ -81,6 +81,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.btImport = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.btImportCSV = new System.Windows.Forms.ToolStripButton();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btClearLog = new System.Windows.Forms.Button();
@@ -162,7 +163,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.btRCountSchmaFile = new System.Windows.Forms.Button();
             this.btnRCountConnectionString = new System.Windows.Forms.Button();
             this.lblRCountConnectionString = new System.Windows.Forms.Label();
-            this.btImportCSV = new System.Windows.Forms.ToolStripButton();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.topCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.batchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pageSize)).BeginInit();
@@ -776,6 +777,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 31);
             // 
+            // btImportCSV
+            // 
+            this.btImportCSV.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Import;
+            this.btImportCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btImportCSV.Name = "btImportCSV";
+            this.btImportCSV.Size = new System.Drawing.Size(93, 28);
+            this.btImportCSV.Text = "Import Csv";
+            this.btImportCSV.Click += new System.EventHandler(this.btImportCSV_Click);
+            // 
             // label4
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1286,7 +1296,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.saveSchemaToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Save;
             this.saveSchemaToolStripMenuItem.Name = "saveSchemaToolStripMenuItem";
-            this.saveSchemaToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.saveSchemaToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
             this.saveSchemaToolStripMenuItem.Text = "Save Schema";
             this.saveSchemaToolStripMenuItem.Click += new System.EventHandler(this.tbSaveSchema_Click);
             // 
@@ -1294,7 +1304,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.saveFiltersToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Save;
             this.saveFiltersToolStripMenuItem.Name = "saveFiltersToolStripMenuItem";
-            this.saveFiltersToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.saveFiltersToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
             this.saveFiltersToolStripMenuItem.Text = "Save Export Config";
             this.saveFiltersToolStripMenuItem.Click += new System.EventHandler(this.tbSaveFilters_Click);
             // 
@@ -1302,7 +1312,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.saveMappingsToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Save;
             this.saveMappingsToolStripMenuItem.Name = "saveMappingsToolStripMenuItem";
-            this.saveMappingsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.saveMappingsToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
             this.saveMappingsToolStripMenuItem.Text = "Save Import Config";
             this.saveMappingsToolStripMenuItem.Click += new System.EventHandler(this.tbSaveMappings_Click);
             // 
@@ -1310,7 +1320,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.saveAllToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Save;
             this.saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
-            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.saveAllToolStripMenuItem.Size = new System.Drawing.Size(184, 30);
             this.saveAllToolStripMenuItem.Text = "Save All";
             this.saveAllToolStripMenuItem.Click += new System.EventHandler(this.saveAllToolStripMenuItem_Click);
             // 
@@ -1325,6 +1335,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.loadSchemaToolStripMenuItem,
             this.loadFiltersToolStripMenuItem,
             this.loadMappingsToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.loadAllToolStripMenuItem});
             this.toolStripDropDownButton2.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -1336,7 +1347,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.loadSchemaToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.loadSchemaToolStripMenuItem.Name = "loadSchemaToolStripMenuItem";
-            this.loadSchemaToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.loadSchemaToolStripMenuItem.Size = new System.Drawing.Size(164, 30);
             this.loadSchemaToolStripMenuItem.Text = "Load Schema";
             this.loadSchemaToolStripMenuItem.Click += new System.EventHandler(this.tbLoadSchemaFile_Click);
             // 
@@ -1344,7 +1355,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.loadFiltersToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.loadFiltersToolStripMenuItem.Name = "loadFiltersToolStripMenuItem";
-            this.loadFiltersToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.loadFiltersToolStripMenuItem.Size = new System.Drawing.Size(164, 30);
             this.loadFiltersToolStripMenuItem.Text = "Load Filters";
             this.loadFiltersToolStripMenuItem.Click += new System.EventHandler(this.tbLoadFiltersFile_Click);
             // 
@@ -1352,7 +1363,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.loadMappingsToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.loadMappingsToolStripMenuItem.Name = "loadMappingsToolStripMenuItem";
-            this.loadMappingsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.loadMappingsToolStripMenuItem.Size = new System.Drawing.Size(164, 30);
             this.loadMappingsToolStripMenuItem.Text = "Load Mappings";
             this.loadMappingsToolStripMenuItem.Click += new System.EventHandler(this.tbLoadMappingsFile_Click);
             // 
@@ -1360,7 +1371,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.loadAllToolStripMenuItem.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
             this.loadAllToolStripMenuItem.Name = "loadAllToolStripMenuItem";
-            this.loadAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.loadAllToolStripMenuItem.Size = new System.Drawing.Size(164, 30);
             this.loadAllToolStripMenuItem.Text = "Load All";
             this.loadAllToolStripMenuItem.Click += new System.EventHandler(this.loadAllToolStripMenuItem_Click);
             // 
@@ -1598,14 +1609,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.lblRCountConnectionString.Size = new System.Drawing.Size(170, 13);
             this.lblRCountConnectionString.TabIndex = 23;
             // 
-            // btImportCSV
+            // toolStripMenuItem1
             // 
-            this.btImportCSV.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.Import;
-            this.btImportCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btImportCSV.Name = "btImportCSV";
-            this.btImportCSV.Size = new System.Drawing.Size(93, 28);
-            this.btImportCSV.Text = "Import Csv";
-            this.btImportCSV.Click += new System.EventHandler(this.btImportCSV_Click);
+            this.toolStripMenuItem1.Image = global::Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Properties.Resources.CRM;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(208, 30);
+            this.toolStripMenuItem1.Text = "Load LookUp Mappings";
             // 
             // PluginControl
             // 
@@ -1791,5 +1800,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripButton tsBtnExportResultToCsv;
         private System.Windows.Forms.ToolStripButton btImportCSV;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }

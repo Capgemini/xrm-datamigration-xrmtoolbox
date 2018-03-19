@@ -14,11 +14,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private Dictionary<string, Dictionary<string, List<string>>> _mappings;
         private IOrganizationService _orgService;
         private readonly List<EntityMetadata> _metCache;
+        private readonly string _selctedValue;
 
-        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata)
+        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue)
         {
             this._metCache = metadata.ToList();
-
+            this._selctedValue = selectedValue;
             this._mappings = mappings;
             _orgService = orgService;
             InitializeComponent();
@@ -36,11 +37,24 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                 {
                     if (row.Cells[0].Value != null && row.Cells[1].Value != null && row.Cells[2].Value != null)
                     {
-                        if (!_mappings.ContainsKey(row.Cells[0].Value.ToString()))
+                        var mapKey = row.Cells[0].Value.ToString();
+
+                        if (!_mappings.ContainsKey(mapKey))
                         {
-                            _mappings.Add(row.Cells[0].Value.ToString(), new Dictionary<string, List<string>>());
+                            _mappings.Add(mapKey, new Dictionary<string, List<string>>());
                         }
-                        _mappings[row.Cells[0].Value.ToString()].Add(row.Cells[1].Value.ToString(), new List<string> { row.Cells[2].Value.ToString() });
+
+                        var entKey = row.Cells[1].Value.ToString();
+                        if (!_mappings[mapKey].ContainsKey(entKey))
+                        {
+                            _mappings[mapKey].Add(entKey, new List<string>());
+                        }
+
+                        if (_mappings[mapKey][entKey].Contains(row.Cells[2].Value.ToString()))
+                            throw new Exception($"Duplicated entry {mapKey} {entKey} {row.Cells[2].Value.ToString()}");
+
+                        _mappings[mapKey][entKey].Add(row.Cells[2].Value.ToString());
+                                             
                     }
                 }
             }
@@ -48,7 +62,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void MappingListLoad(object sender, EventArgs e)
         {
-            //  dgvMappings.DataSource = _mappings;
             dgvMappings.Rows.Clear();
             dgvMappings.Refresh();
             //Add mappings
@@ -57,54 +70,38 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             {
                 foreach (var m2 in m.Value)
                 {
-                    var vals = new object[3] { m.Key.ToString(), m2.Key.ToString(), m2.Value[0].ToString() };
-                    dgvMappings.Rows.Add(vals);
+                    foreach (var m2Value in m2.Value)
+                    {
+                        var vals = new object[] { m.Key, m2.Key, m2Value };
+                        dgvMappings.Rows.Add(vals);
 
-                    ValidateEntitytColumn(rowCount, m.Key.ToString());
-                    ValidateLookupColumn(rowCount, m2.Key.ToString());
+                        ValidateEntitytColumn(rowCount, m.Key);
+                        ValidateLookupColumn(rowCount, m2.Key);
 
-                    rowCount++;
+                        rowCount++;
+                    }
+                   
                 }
             }
+
         }
 
         private void dgvMappings_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-            var blank = new object[3] { null, null, null };
+            var blank = new object[] { _selctedValue, null, null };
             e.Row.SetValues(blank);
-        }
 
-        private void dgvMappings_CellValidating(object sender, DataGridViewCellValidatingEventArgs arg)
-        {
-            //if (!String.IsNullOrWhiteSpace(arg.FormattedValue.ToString()))
-            //{
-            //    if (arg.ColumnIndex == 0)
-            //    {
-            //        var newValue = arg.FormattedValue.ToString();
-            //        dgvMappings.Rows[arg.RowIndex].Cells[1].Value = null;
-            //        dgvMappings.Rows[arg.RowIndex].Cells[2].Value = null;
-            //        ValidateEntitytColumn(arg.RowIndex, newValue);
-            //    }
-            //    else if (arg.ColumnIndex == 1)
-            //    {
-            //        dgvMappings.Rows[arg.RowIndex].Cells[2].Value = null;
-            //        var newValue = arg.FormattedValue.ToString();
-            //        ValidateLookupColumn(arg.RowIndex, newValue);
-
-            //    }
-            //    else if (arg.ColumnIndex == 2)
-            //    {
-            //    }
-            //}
+            if (!string.IsNullOrWhiteSpace(_selctedValue))
+                ValidateEntitytColumn(e.Row.Index, _selctedValue);
         }
 
         private void ValidateLookupColumn(int rowIndex, string newValue)
         {
-            var lookup = (LookupAttributeMetadata)((AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag).Single(a => a.SchemaName == newValue);
+            var lookup = (LookupAttributeMetadata)((AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag).Single(a => a.LogicalName == newValue);
 
             var entitymeta = MetadataHelper.RetrieveEntities(lookup.Targets[0], _orgService);
 
-            var fields = entitymeta.Attributes.Select(a => a.LogicalName).ToArray();
+            var fields = entitymeta.Attributes.OrderBy(p=>p.LogicalName).Select(a => a.LogicalName).ToArray();
 
             (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
         }
@@ -112,11 +109,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private void ValidateEntitytColumn(int rowIndex, string newValue)
         {
             var entitymeta = MetadataHelper.RetrieveEntities(newValue, _orgService);
-            var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup).ToArray();
+            var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup).OrderBy(p=>p.LogicalName).ToArray();
             dgvMappings.Rows[rowIndex].Tag = lookups;
 
             (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DataSource = lookups;
-            (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DisplayMember = "SchemaName";
+            (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DisplayMember = "LogicalName";
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -126,30 +123,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void dgvMappings_SelectionChanged(object sender, EventArgs e)
         {
-        }
-
-        private void dgvMappings_CellValueChanged(object sender, DataGridViewCellEventArgs arg)
-        {
-            //if (arg.ColumnIndex == 0)
-            //{
-            //    DataGridViewComboBoxCell cell = dgvMappings.Rows[arg.RowIndex].Cells[0] as DataGridViewComboBoxCell;
-
-            //    var newValue = cell.Value;
-            //    if (newValue != null)
-            //        ValidateEntitytColumn(arg.RowIndex, newValue.ToString());
-
-            //}
-            //else if (arg.ColumnIndex == 1)
-            //{
-            //    DataGridViewComboBoxCell cell = dgvMappings.Rows[arg.RowIndex].Cells[1] as DataGridViewComboBoxCell;
-
-            //    var newValue = cell.Value;
-            //    if (newValue != null)
-            //        ValidateLookupColumn(arg.RowIndex, newValue.ToString());
-            //}
-            //else if (arg.ColumnIndex == 2)
-            //{
-            //}
         }
 
         private void dgvMappings_CurrentCellDirtyStateChanged(object sender, EventArgs e)

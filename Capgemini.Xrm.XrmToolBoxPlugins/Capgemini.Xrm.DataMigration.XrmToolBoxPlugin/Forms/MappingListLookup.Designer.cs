@@ -98,8 +98,6 @@
             this.dgvMappings.Name = "dgvMappings";
             this.dgvMappings.Size = new System.Drawing.Size(656, 235);
             this.dgvMappings.TabIndex = 3;
-            this.dgvMappings.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dgvMappings_CellValidating);
-            this.dgvMappings.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMappings_CellValueChanged);
             this.dgvMappings.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvMappings_CurrentCellDirtyStateChanged);
             this.dgvMappings.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgvMappings_DefaultValuesNeeded);
             this.dgvMappings.SelectionChanged += new System.EventHandler(this.dgvMappings_SelectionChanged);
