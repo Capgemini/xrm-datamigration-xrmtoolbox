@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.DataMigration.XrmToolBoxPlugin", "Capgemini.Xrm.DataMigration.XrmToolBoxPlugin\Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.csproj", "{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C} = {9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin", "Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin\Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin.csproj", "{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.XrmToolBoxPluginBase", "Capgemini.Xrm.XrmToolBoxPluginBase\Capgemini.Xrm.XrmToolBoxPluginBase.csproj", "{8D951286-69A9-4143-99EC-7C33CB01F720}"
 EndProject
@@ -27,6 +32,10 @@ Global
 		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

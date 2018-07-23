@@ -12,7 +12,7 @@ namespace Capgemini.Xrm.ContactTelephoneUpdate
     ExportMetadata("SmallImageBase64", PluginConstants.SmallImageBase64),
     ExportMetadata("BigImageBase64", PluginConstants.BigImageBase64),
     ExportMetadata("Name", "Contact Telephone Update"),
-    ExportMetadata("Description", "Capgemini Update Entity Attributes - updates telephone numbers for all active donors")]
+    ExportMetadata("Description", "Capgemini Update Entity Attributes - updates telephone numbers for all active contacts - example of using data migration engine")]
     public class Plugin : PluginBase
     {
         public override IXrmToolBoxPluginControl GetControl()

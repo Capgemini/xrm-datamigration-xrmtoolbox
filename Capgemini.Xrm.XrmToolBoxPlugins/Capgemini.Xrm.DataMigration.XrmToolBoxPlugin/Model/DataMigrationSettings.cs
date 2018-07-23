@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Xrm.Tooling.Connector;
+using System.IO;
 using System.Text;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
@@ -43,6 +44,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             {
                 FailedValidation = true;
                 stringBuilder.AppendLine("Enter correct Json file Path");
+            }
+
+            if(!Directory.Exists(JsonFolderPath))
+            {
+                Directory.CreateDirectory(JsonFolderPath);
             }
 
             if (BatchSize < PageSize)

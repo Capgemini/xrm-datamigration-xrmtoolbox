@@ -30,9 +30,8 @@ namespace Capgemini.Xrm.ContactTelephoneUpdate.Models
             stringBuilder.Append("  <entity name='contact'>");
             stringBuilder.Append("    <attribute name='telephone1' />");
             stringBuilder.Append("    <attribute name='mobilephone' />");
-            stringBuilder.Append("    <attribute name='nhs_personadonorbloodactivitystatus' />");
             stringBuilder.Append("    <filter type='and'>");
-            stringBuilder.Append("      <condition attribute='nhs_personadonorbloodactivitystatus' operator='eq' value='1' />");
+            stringBuilder.Append("      <condition attribute='statecode' operator='eq' value='1' />");
             stringBuilder.Append("    </filter>");
             stringBuilder.Append("  </entity>");
             stringBuilder.Append("</fetch>");
