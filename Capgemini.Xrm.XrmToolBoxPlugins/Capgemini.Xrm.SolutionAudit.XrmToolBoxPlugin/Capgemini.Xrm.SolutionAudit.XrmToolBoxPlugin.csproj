@@ -34,15 +34,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Capgemini.Xrm.Audit.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0\lib\net46\Capgemini.Xrm.Audit.Core.dll</HintPath>
+      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0.1\lib\net46\Capgemini.Xrm.Audit.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Capgemini.Xrm.Audit.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0\lib\net46\Capgemini.Xrm.Audit.DataAccess.dll</HintPath>
+      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0.1\lib\net46\Capgemini.Xrm.Audit.DataAccess.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Capgemini.Xrm.Audit.Reports, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0\lib\net46\Capgemini.Xrm.Audit.Reports.dll</HintPath>
+      <HintPath>..\..\packages\Capgemini.Xrm.Audit.Reports.3.0.0.1\lib\net46\Capgemini.Xrm.Audit.Reports.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ClosedXML, Version=0.90.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
@@ -213,8 +213,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginControl.resx">
@@ -257,13 +261,11 @@
       <FilesToDelete Include="..\..\CompiledVersion\XrmToolBox\Plugins\WeifenLuo.WinFormsUI.Docking.dll" />
       <FilesToDelete Include="..\..\CompiledVersion\XrmToolBox\Plugins\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" />
     </ItemGroup>
-
     <Copy SourceFiles="@(TargetFilesToCopy)" DestinationFolder="..\..\CompiledVersion\XrmToolBox\Plugins" />
     <Copy SourceFiles="@(FilesToDelete)" DestinationFolder="..\..\CompiledVersion\XrmToolBox" />
     <Copy SourceFiles="..\..\CompiledVersion\XrmToolBox\Plugins\Newtonsoft.Json.dll" DestinationFolder="..\..\CompiledVersion\XrmToolBox" />
     <!--Now lets delete the files that are not used by our plugin-->
-    <Delete Files="@(FilesToDelete)"  />
-
+    <Delete Files="@(FilesToDelete)" />
   </Target>
   <Import Project="..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
