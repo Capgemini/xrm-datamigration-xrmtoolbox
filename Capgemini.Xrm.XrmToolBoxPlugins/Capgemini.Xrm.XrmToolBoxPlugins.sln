@@ -1,18 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.DataMigration.XrmToolBoxPlugin", "Capgemini.Xrm.DataMigration.XrmToolBoxPlugin\Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.csproj", "{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C} = {9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BECE6860-D066-4502-AB89-204DA979BED5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin", "Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin\Capgemini.Xrm.SolutionAudit.XrmToolBoxPlugin.csproj", "{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{5E6BB39C-47C6-4920-9B0A-E8433BF144B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.XrmToolBoxPluginBase", "Capgemini.Xrm.XrmToolBoxPluginBase\Capgemini.Xrm.XrmToolBoxPluginBase.csproj", "{8D951286-69A9-4143-99EC-7C33CB01F720}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit", "Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit\Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.csproj", "{02FE1C61-34F2-4F47-9860-CE4B67BE915E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.ContactTelephoneUpdate", "Capgemini.Xrm.ContactTelephoneUpdate\Capgemini.Xrm.ContactTelephoneUpdate.csproj", "{0355C338-C685-4A77-BE6A-9CBC830D056D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.DataMigration.XrmToolBox", "MyXrmToolBoxPlugin3\Capgemini.Xrm.DataMigration.XrmToolBox.csproj", "{94CFA298-B643-477B-A329-F184EBF68CF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,24 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9149B9B3-D737-4FE7-B0EC-441EDAF58B77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D951286-69A9-4143-99EC-7C33CB01F720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D951286-69A9-4143-99EC-7C33CB01F720}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D951286-69A9-4143-99EC-7C33CB01F720}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D951286-69A9-4143-99EC-7C33CB01F720}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0355C338-C685-4A77-BE6A-9CBC830D056D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CF6184D-0D7A-4803-BEA4-2B3CC6D0BF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02FE1C61-34F2-4F47-9860-CE4B67BE915E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02FE1C61-34F2-4F47-9860-CE4B67BE915E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02FE1C61-34F2-4F47-9860-CE4B67BE915E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02FE1C61-34F2-4F47-9860-CE4B67BE915E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94CFA298-B643-477B-A329-F184EBF68CF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94CFA298-B643-477B-A329-F184EBF68CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94CFA298-B643-477B-A329-F184EBF68CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94CFA298-B643-477B-A329-F184EBF68CF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02FE1C61-34F2-4F47-9860-CE4B67BE915E} = {BECE6860-D066-4502-AB89-204DA979BED5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {661BCCDD-E1AB-402B-8CD2-C1E9980E0D9A}
 	EndGlobalSection
 EndGlobal

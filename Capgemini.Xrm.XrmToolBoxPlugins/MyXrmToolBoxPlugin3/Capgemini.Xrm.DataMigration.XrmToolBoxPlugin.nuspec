@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Capgemini.DataMigration.XrmToolBoxPlugin</id>
+    <version>1.0.0.6</version>
+    <title>Capgemini Xrm DataMigration XrmToolBox Plugin</title>
+    <authors>Capgemini</authors>
+    <owners>Capgemini</owners>
+    <projectUrl>https://capgeminiuk.visualstudio.com</projectUrl>
+    <iconUrl>https://icon.com</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plugin to do handle data migration import and export</description>
+    <summary>Capgemini DataMigration Engine XRMToolbox Plugin - Export/Import of CRM entities into JSON files</summary>
+    <releaseNotes>
+      Added Dependency to Xrm ToolBox latest, Slight tweak on UI for resize
+    </releaseNotes>
+    <copyright>Capgemini Copyright © 2020</copyright>
+    <tags>XrmToolBox Plugins</tags>
+    <dependencies>
+      <group>
+        <dependency id="XrmToolBox" version="1.2020.6.40" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\*" target="lib\net462\Plugins"></file>
+  </files>
+</package>
