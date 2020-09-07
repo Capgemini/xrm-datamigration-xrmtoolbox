@@ -423,7 +423,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     bwFill.DoWork += (sender, e) =>
                     {
-                        List<EntityMetadata> sourceList = MetadataHelper.RetrieveEntities((IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
+                        List<EntityMetadata> sourceList = MetadataHelper.RetrieveEntities(CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
                         if (!cbShowSystemAttributes.Checked)
                         {
                             sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
