@@ -90,6 +90,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = string.Empty });
             labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
+
         }
 
         public string ShowFolderBrowserDialog()
@@ -103,5 +104,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             openFileDialogExportConfigFile.ShowDialog();
             return openFileDialogExportConfigFile.FileName;
         }
+
+        private void wizardPage4_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        {
+            numericUpDownBatchSize.Value = 5000;
+        }
+
+        
     }
 }
