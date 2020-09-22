@@ -52,6 +52,7 @@ namespace MyXrmToolBoxPlugin3
                 SchemaGeneratorWizard.OnConnectionUpdated();
 
                 DataExportWizard.CrmServiceClient = detail.ServiceClient;
+                base.UpdateConnection(newService, detail, actionName, parameter);
             }
         }
 
