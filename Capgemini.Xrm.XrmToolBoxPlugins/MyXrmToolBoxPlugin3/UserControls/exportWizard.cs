@@ -12,8 +12,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     public partial class exportWizard : UserControl, IExportView
     {
         private MessageLogger logger;
-        private ExportPresenter presenter;
-        //private AeroWizard.WizardPage SelectedWizard { set; get; }
+        private ExportPresenter presenter;       
 
         public exportWizard()
         {
