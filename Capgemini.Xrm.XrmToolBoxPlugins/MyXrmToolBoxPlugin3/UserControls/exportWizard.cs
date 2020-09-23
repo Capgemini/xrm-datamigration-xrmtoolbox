@@ -13,6 +13,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     {
         private MessageLogger logger;
         private ExportPresenter presenter;
+        //private AeroWizard.WizardPage SelectedWizard { set; get; }
 
         public exportWizard()
         {
@@ -21,6 +22,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
             presenter = new ExportPresenter(this, logger);
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
+            wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
+            wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;
+        }
+        private void WizardNavigation(WizardButtons wizardButtons, bool isNextNavigation)
+        {
+            if (wizardButtons.Container.SelectedPage.Name == "wizardPage2")
+            {
+                NavigationValidation(wizardButtons.Container.SelectedPage.Controls[0], wizardButtons.Container.SelectedPage.Controls[2], isNextNavigation, wizardButtons);
+            }
+            else if (wizardButtons.Container.SelectedPage.Name == "wizardPage4")
+            {
+                NavigationValidation(wizardButtons.Container.SelectedPage.Controls[0], wizardButtons.Container.SelectedPage.Controls[10], isNextNavigation, wizardButtons);
+            }
+            else
+            {
+                if (isNextNavigation)
+                {
+                    wizardButtons.Container.NextPage();
+                }
+            }
+        }
+        private void WizardButtons1_OnCustomPreviousNavigation(object sender, EventArgs e)
+        {
+            var wizardButtons = ((WizardButtons)sender);
+            wizardButtons.Container.PreviousPage();
+            WizardNavigation(wizardButtons, false);
+        }     
+
+        private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
+        {
+            var wizardButtons = ((WizardButtons)sender);
+            WizardNavigation(wizardButtons, true);
+
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -90,7 +124,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = string.Empty });
             labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
-
         }
 
         public string ShowFolderBrowserDialog()
@@ -110,6 +143,57 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             numericUpDownBatchSize.Value = 5000;
         }
 
-        
+        private void textBoxExportLocation_TextChanged(object sender, EventArgs e)
+        {
+            Validation(textBoxExportLocation, labelFolderPathValidation);
+        }
+
+        private void textBoxSchemaLocation_TextChanged(object sender, EventArgs e)
+        {
+            Validation(textBoxSchemaLocation, labelSchemaLocationFile);
+        }
+
+        private void Validation(TextBox textBoxTovalidate, Label validationLabel)
+        {
+            var pathToExporData = textBoxTovalidate.Text;
+            var splitPath = pathToExporData.Split('\\');
+            if (splitPath != null && splitPath.Length > 1)
+            {
+                validationLabel.Visible = false;
+            }
+            else
+            {
+                validationLabel.Visible = true;
+            }
+        }
+
+        private void NavigationValidation(Control validatorControl, Control currentContainerControl, bool isNextButton, WizardButtons wizardButtons)
+        {
+            var elmControl = validatorControl;
+            var PathToExporData = currentContainerControl.Text;
+            var splitPath = PathToExporData.Split('\\');
+            if (splitPath != null && splitPath.Length > 1)
+            {
+                if (!isNextButton)
+                {
+                    elmControl.Visible = false;
+                }
+                else
+                {
+                    wizardButtons.Container.NextPage();
+                }
+            }
+            else
+            {
+                if (!isNextButton)
+                {
+                    elmControl.Visible = true;
+                }
+                else
+                {
+                    wizardButtons.Container.SelectedPage.Controls[0].Visible = true;
+                }
+            }
+        }
     }
 }

@@ -83,7 +83,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             Task.Run(() =>
             {
-                var orgService = (IOrganizationService)CrmServiceClient.OrganizationServiceProxy;
+                var orgService = CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy;
 
                 if (nudMaxThreads.Value > 1 && !string.IsNullOrWhiteSpace(TargetConnectionString))
                 {

@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class WizardButtons : UserControl
     {
-
         public AeroWizard.WizardPageContainer Container { get; set; }
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
@@ -21,7 +15,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             get { return button3.Visible; }
             set { button3.Visible = value; }
-        }       
+        }
 
         public WizardButtons()
         {
@@ -33,14 +27,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             button3.Visible = Container.SelectedPage.IsFinishPage;
 
-            if(Container.SelectedPage.IsFinishPage)
+            if (Container.SelectedPage.IsFinishPage)
             {
                 button3.BackColor = Color.DarkGray;
             }
             else
             {
                 button3.BackColor = SystemColors.ControlDarkDark;
-            }            
+            }
 
             button2.Enabled = !Container.SelectedPage.IsFinishPage;
             button1.Enabled = Container.SelectedPage != Container.Pages[0];
@@ -48,24 +42,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Container.PreviousPage();
+            if (OnCustomPreviousNavigation != null)
+            {
+                OnCustomPreviousNavigation(this, e);
+            }
+            else
+            {
+                Container.PreviousPage();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Container.NextPage();
+            if (OnCustomNextNavigation != null)
+            {
+                OnCustomNextNavigation(this, e);
+            }
+            else
+            {
+                Container.NextPage();
+            }
         }
-
-        public event EventHandler<EventArgs> OnExecute;
 
         private void button3_Click(object sender, EventArgs e)
         {
-            OnExecute(this,e);
+            OnExecute(this, e);
         }
 
         private void WizardButtons_Load(object sender, EventArgs e)
         {
             Container.SelectedPageChanged += Container_SelectedPageChanged;
         }
+
+        public event EventHandler<EventArgs> OnExecute;
+
+        public event EventHandler<EventArgs> OnCustomNextNavigation;
+
+        public event EventHandler<EventArgs> OnCustomPreviousNavigation;
     }
 }
