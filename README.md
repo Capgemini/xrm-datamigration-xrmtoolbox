@@ -4,12 +4,14 @@
  - [Introduction](#Introduction)
  - [Prerequisites](#Prerequisites)
  - [Installation](#Installation)
- - [Import/Export Schema Generation](#Import/Export Schema Generation)
- - [Data Export](#Data Export)
- - [Data Import](#Data Import)
+ - [Import Export Schema Generation](#Import-Export-Schema-Generation)
+ - [Data Export](#Data-Export)
+ - [Data Import](#Data-Import)
  
 ----
+<!--
 Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%20Reusable%20IP/_apis/build/status/NUGET%20CI%20Builds/XrmToolBox%20Plugin" alt="CI Build status">
+-->
 
 ### Introduction
 The Xrm Data Migrator Plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
@@ -25,7 +27,7 @@ Launch XrmToolBox, if we haven’t installed the plugin before, then we click on C
 ### Installation
 
 
-### Import/Export Schema Generation
+### Import Export Schema Generation
 
 ### Data Export
 Click on Schema Config tab, we can refresh entities by clicking on Refresh Entities button, then it will populate the Available entities list, and we can select the entities that we would to create schemas against.
