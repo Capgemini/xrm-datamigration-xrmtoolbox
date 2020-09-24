@@ -2,7 +2,6 @@
 
 ## Content
  - [Introduction](#Introduction)
- - [Prerequisites](#Prerequisites)
  - [Installation](#Installation)
  - [Import Export Schema Generation](#Import-Export-Schema-Generation)
  - [Data Export](#Data-Export)
@@ -13,37 +12,43 @@
 Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%20Reusable%20IP/_apis/build/status/NUGET%20CI%20Builds/XrmToolBox%20Plugin" alt="CI Build status">
 
 ### Introduction
-The Xrm Data Migrator Plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
-
-### Prerequisites
-
-Before using the plugin, we need to install XrmToolBox on your environment
-
-Install the plugin
-
-Launch XrmToolBox, if we haven’t installed the plugin before, then we click on Configuration menu and then on Tool Library
+The Xrm Data Migrator plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
 
 ### Installation
+Before using the Xrm Data Migrator, you will need to install XrmToolBox which can be downloaded from [here](https://www.xrmtoolbox.com/)
 
+Once XrmToolBox is installed, launch it and then select the Tool Library through Configuration menu as shown below:
+
+![Select Tool Library](images/SelectToolLibrary.png "Select Tool Library")
+
+Then search for "Xrm DataMigration" as shown below:
+![Search for Xrm Datamigration](images/SearchForXrmDatamigration.png "Search for Xrm Datamigration")
+
+Install the data migrator.
+
+Once the installation has completed successfully, you will see the Xrm Data Migrator listed in the Tools windows as shown below
+![Xrm Data Migrator](images/XrmDataMigrator.png "Xrm Data Migrator")
+
+Click the data migrator to launch it. You will be prompted for a connection to Dynamics 365 organization as shown in 
+![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
+
+Provide valid connection details
+![Connecting to Dynamics](images/ConnectingToDynamics.png "Connecting to Dynamics")
+
+The landing page of the data migrator will now be displayed as shown in
+![Data migrator landing page](images/DataMigratorLandingPage.png "Data migrator landing page")
 
 ### Import Export Schema Generation
+The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported.
+To Generate or modify an export schema, please perforfollow the steps below:
+1) Select Generate/Modify Export Schema from the Schema Config tab of the data migrator as shownn in
+![Data migrator landing page](images/DataMigratorLandingPage.png "Data migrator landing page")
+2) Select the desired entities and attributes combination as shown in
+![Export schema generation](images/ExportSchemaGeneration.png "Export schema generation"). Please ensure a schema file path is specified as shown in the image
+3) Select Save to generate the schema as shown in ![Generate export schema](images/GenerateExportSchema.png "Generate export schema")
+4) Once the export schema is generated, a "Successfully created XML file" dialog will pop up and the export schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships 
 
 ### Data Export
-Click on Schema Config tab, we can refresh entities by clicking on Refresh Entities button, then it will populate the Available entities list, and we can select the entities that we would to create schemas against.
 
-For each entity selected, we need to select its attributes and we select the Schema File path where we would like to store the schema file, if the file is non-existent then we need to create one, see fig.3.
-
-After fulfilling all the steps on the fig.3, then I click on the Save button and then we’ll be presented with a pop up as shown on screen in Fig.4
-
-After clicking on “Save Schema” button in Fig.4, then the schema XML file will be created and saved in the path provided in the Schema file path field.
 
 ### Data Import
-After exporting the data, we might need to import it in the target environment, we need to click on “Data Import” tab, then we’ll be presented with two options to select from (JSON or CSV)
-
-After clicking on Next Button on Fig.5, we land on screen Fig.6, below to select the directory that contains the source data.
-
-After clicking the next button on Fig.6 then we land on the screen below Fig.7
-
-Text Boxes we can see the config file is not mandatory, after clicking on the next button n fig.7 then we should land on screen in fif.8
-
-The log after the data are imported in Ms Dynamics environment
