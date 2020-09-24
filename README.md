@@ -9,9 +9,8 @@
  - [Data Import](#Data-Import)
  
 ----
-<!--
+
 Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%20Reusable%20IP/_apis/build/status/NUGET%20CI%20Builds/XrmToolBox%20Plugin" alt="CI Build status">
--->
 
 ### Introduction
 The Xrm Data Migrator Plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
