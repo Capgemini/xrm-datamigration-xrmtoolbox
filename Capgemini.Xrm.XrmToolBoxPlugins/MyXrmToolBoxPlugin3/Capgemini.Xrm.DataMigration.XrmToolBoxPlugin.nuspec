@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Capgemini.DataMigration.XrmToolBoxPlugin</id>
-    <version>1.0.0.7</version>
+    <version>1.0.0.8</version>
     <title>Capgemini Xrm DataMigration XrmToolBox Plugin</title>
     <authors>Capgemini</authors>
     <owners>Capgemini</owners>
-    <projectUrl>https://capgeminiuk.visualstudio.com</projectUrl>
+    <projectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</projectUrl>
     <iconUrl>https://icon.com</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Plugin to do handle data migration import and export</description>
