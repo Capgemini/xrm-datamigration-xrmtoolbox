@@ -2,14 +2,20 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Capgemini.DataMigration.XrmToolBoxPlugin</id>
-    <version>1.0.0.8</version>
+    <version>1.0.0.9</version>
     <title>Capgemini Xrm DataMigration XrmToolBox Plugin</title>
     <authors>Capgemini</authors>
     <owners>Capgemini</owners>
     <projectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</projectUrl>
     <iconUrl>https://icon.com</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Plugin to do handle data migration import and export</description>
+    <description>
+    The Xrm Data Migrator Xrm Plugin tool provides routines for managing data migration operations within Microsoft Dynamics 365.
+    Its key features include:
+    1) Generation of Dynamics 365 data import and/or export schema file. Both JSON and CSV formats are supported,
+    2) Export of data from one Dynamics 365 instance into JSON or CSV files,
+    3) Import of data contained with either JSON or CSV file into a Dynamics 365 instance.
+    </description>
     <summary>Capgemini DataMigration Engine XRMToolbox Plugin - Export/Import of CRM entities into JSON files</summary>
     <releaseNotes>
       Added Dependency to Xrm ToolBox latest, Slight tweak on UI for resize
