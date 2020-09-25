@@ -27,7 +27,8 @@ Then search for "CDS Data Migrator" as shown below and click Install
 Once the installation has completed successfully, you will see the CDS Data Migrator listed in the Tools windows as shown below
 ![CDS Data Migrator](images/CDSDataMigrator.png "CDS Data Migrator")
 
-Click the CDS Data Migrator to launch it. You will be prompted for a connection to Dynamics 365 organization as shown in 
+Click the CDS Data Migrator to launch it. You will be prompted for a connection to Dynamics 365 organization as shown below
+
 ![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
 
 Provide valid connection details
