@@ -1,4 +1,4 @@
-# Xrm Data Migrator
+# CDS Data Migrator
 
 ## Content
  - [Introduction](#Introduction)
@@ -12,24 +12,22 @@
 Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%20Reusable%20IP/_apis/build/status/NUGET%20CI%20Builds/XrmToolBox%20Plugin" alt="CI Build status">
 
 ### Introduction
-The Xrm Data Migrator plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
+The CDS Data Migrator plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
 
 ### Installation
-Before using the Xrm Data Migrator, you will need to install XrmToolBox which can be downloaded from [here](https://www.xrmtoolbox.com/)
+Before using the CDS Data Migrator, you will need to install XrmToolBox which can be downloaded from [here](https://www.xrmtoolbox.com/)
 
 Once XrmToolBox is installed, launch it and then select the Tool Library through Configuration menu as shown below:
 
 ![Select Tool Library](images/SelectToolLibrary.png "Select Tool Library")
 
-Then search for "Xrm DataMigration" as shown below:
-![Search for Xrm Datamigration](images/SearchForXrmDatamigration.png "Search for Xrm Datamigration")
+Then search for "CDS Data Migrator" as shown below and click Install
+![Search for CDS Data Migrator](images/SearchForCDSDatamigration.png "Search for CDS Data Migrator")
 
-Install the data migrator.
+Once the installation has completed successfully, you will see the CDS Data Migrator listed in the Tools windows as shown below
+![CDS Data Migrator](images/CDSDataMigrator.png "CDS Data Migrator")
 
-Once the installation has completed successfully, you will see the Xrm Data Migrator listed in the Tools windows as shown below
-![Xrm Data Migrator](images/XrmDataMigrator.png "Xrm Data Migrator")
-
-Click the data migrator to launch it. You will be prompted for a connection to Dynamics 365 organization as shown in 
+Click the CDS Data Migrator to launch it. You will be prompted for a connection to Dynamics 365 organization as shown in 
 ![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
 
 Provide valid connection details
