@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
 using McTools.Xrm.Connection;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
@@ -36,11 +27,6 @@ namespace MyXrmToolBoxPlugin3
         protected CancellationTokenSource TokenSource { get; set; } = null;
 
         protected MessageLogger Logger { get; set; } = null;
-
-        protected override void OnConnectionUpdated(ConnectionUpdatedEventArgs e)
-        {
-            base.OnConnectionUpdated(e);
-        }
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
