@@ -2,6 +2,7 @@
 
 ## Content
  - [Introduction](#Introduction)
+ - [Use Cases](#Use-Cases)
  - [Installation](#Installation)
  - [Data Import and Data Export Schema Generation](#Data-Import-and-Data-Export-Schema-Generation)
  - [Export Config File](#Export-Config-File)
@@ -14,6 +15,29 @@ Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%2
 
 ### Introduction
 The CDS Data Migrator plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
+
+### Use Cases
+A major benefit of the CDS Data Migrator is that it has data obfuscation built in. For example, sample production data might contain confidential information such as names, email and GUIDs which should not exist in other environments. When import this data into another environment such as test or UAT then the tool can be configured to scrabble select entity fields during the import. Strings are scrabbled by replacing a value with a new value of the same length but with random characters (A-Z a-z 0-9). Numbers are scrabbled to another random number. 
+If you need to move reference/configuration data from development into other environments such as test, UAT or production then this tool saves time as the configuration would only need to be done once and then can be replicated in other environments seamlessly using the tool. This includes entities such as Calendars, Business Units, Teams, and Organisation Settings.
+
+#### Feature Comparison
+Below is a table comparing the CDS Data Migrator tool with Microsoft's.
+
+|Feature  |MSFT Configuration Migration Tool  |CDS Data Migrator  |
+|:---------|:---------:|:---------:|
+|Supports attributes in schema     |     ![Yes](images/yes.png "Yes")    |     ![Yes](images/yes.png "Yes")    |
+|Supports many to many relationships in schema     |    ![Yes](images/yes.png "Yes")     |    ![Yes](images/yes.png "Yes")     |
+|Schema Validation     |    ![Yes](images/yes.png "Yes")     |    ![No](images/no.png "No")     |
+|Modification of existing schema     |   ![Yes](images/yes.png "Yes")      |     ![Yes](images/yes.png "Yes")    |
+|Exporting of data from a single environment using schema     |     ![Yes](images/yes.png "Yes")    |     ![Yes](images/yes.png "Yes")    |
+|Error logging on data export / import process   |     ![Yes](images/yes.png "Yes")    |     ![Yes](images/yes.png "Yes")    |
+|Colour coded sorting applied to attributes     |     ![No](images/no.png "No")    |     ![Yes](images/yes.png "Yes")    |
+|Apply GUID Mappings included in export / import process     |     ![No](images/no.png "No")    |     ![Yes](images/yes.png "Yes")    |
+|Apply Filters included in the export / import process     |     ![No](images/no.png "No")    |     ![Yes](images/yes.png "Yes")    |
+|Ability to migrate Teams     |     ![Yes](images/yes.png "Yes")    |     ![Yes](images/yes.png "Yes")    |
+|Ability to migrate Calendars     |     ![No](images/no.png "No")    |     ![Yes](images/yes.png "Yes")    |
+|Ability to migrate Business Units     |     ![Yes](images/yes.png "Yes")    |     ![Yes](images/yes.png "Yes")    |
+
 
 ### Installation
 Before using the CDS Data Migrator, you will need to install XrmToolBox which can be downloaded from [here](https://www.xrmtoolbox.com/)
