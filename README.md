@@ -16,6 +16,10 @@ Current build status: <img src="https://capgeminiuk.visualstudio.com/Capgemini%2
 ### Introduction
 The CDS Data Migrator plugin provides routines for managing data migration operations within Microsoft Dynamics 365.
 
+#### Video Intro 
+
+[![CDS Data Migrator - Intro](https://img.youtube.com/vi/-8PHKUIg6MQ/0.jpg)](https://youtu.be/-8PHKUIg6MQ)
+
 ### Use Cases
 A major benefit of the CDS Data Migrator is that it has data obfuscation built in. For example, sample production data might contain confidential information such as names, email and GUIDs which should not exist in other environments. When import this data into another environment such as test or UAT then the tool can be configured to scrabble select entity fields during the import. Strings are scrabbled by replacing a value with a new value of the same length but with random characters (A-Z a-z 0-9). Numbers are scrabbled to another random number. 
 If you need to move reference/configuration data from development into other environments such as test, UAT or production then this tool saves time as the configuration would only need to be done once and then can be replicated in other environments seamlessly using the tool. This includes entities such as Calendars, Business Units, Teams, and Organisation Settings.
