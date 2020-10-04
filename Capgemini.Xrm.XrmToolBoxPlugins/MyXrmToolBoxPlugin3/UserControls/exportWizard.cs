@@ -116,6 +116,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void WizardButtons1_OnExecute(object sender, EventArgs e)
         {
+            textBoxLogs.Clear();
             ExportDataHandler(sender, e);
         }
 

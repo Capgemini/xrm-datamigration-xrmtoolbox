@@ -136,8 +136,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
-            this.stepWizardControl1.Controls.Add(this.wizardPage3);
             this.stepWizardControl1.Controls.Add(this.wizardPage1);
+            this.stepWizardControl1.Controls.Add(this.wizardPage3);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -145,7 +145,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.stepWizardControl1.NextButton = null;
             this.stepWizardControl1.Pages.Add(this.wizardPage1);
             this.stepWizardControl1.Pages.Add(this.wizardPage3);
-            this.stepWizardControl1.Size = new System.Drawing.Size(1800, 879);
+            this.stepWizardControl1.Size = new System.Drawing.Size(1800, 740);
             this.stepWizardControl1.TabIndex = 41;
             // 
             // wizardPage1
@@ -157,7 +157,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.wizardPage1.Controls.Add(this.radioButton1);
             this.wizardPage1.Name = "wizardPage1";
             this.wizardPage1.ShowCancel = false;
-            this.wizardPage1.Size = new System.Drawing.Size(1800, 879);
+            this.wizardPage1.Size = new System.Drawing.Size(1800, 740);
             this.wizardPage1.TabIndex = 2;
             this.wizardPage1.Text = "Schema Mode";
             // 
@@ -244,7 +244,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.wizardPage3.IsFinishPage = true;
             this.wizardPage3.Name = "wizardPage3";
             this.wizardPage3.ShowCancel = false;
-            this.wizardPage3.Size = new System.Drawing.Size(1800, 879);
+            this.wizardPage3.Size = new System.Drawing.Size(1800, 740);
             this.wizardPage3.TabIndex = 4;
             this.wizardPage3.Text = "Schema Creation";
             // 
@@ -471,7 +471,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbEntities.Size = new System.Drawing.Size(514, 797);
+            this.gbEntities.Size = new System.Drawing.Size(514, 658);
             this.gbEntities.TabIndex = 95;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Available entities";
@@ -509,7 +509,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.cbShowSystemAttributes.Location = new System.Drawing.Point(428, 43);
             this.cbShowSystemAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbShowSystemAttributes.Name = "cbShowSystemAttributes";
-            this.cbShowSystemAttributes.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.cbShowSystemAttributes.Padding = new System.Windows.Forms.Padding(6);
             this.cbShowSystemAttributes.Size = new System.Drawing.Size(72, 37);
             this.cbShowSystemAttributes.TabIndex = 104;
             this.cbShowSystemAttributes.Text = "toggleCheckBox1";
@@ -530,7 +530,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.lvEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvEntities.MultiSelect = false;
             this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(494, 728);
+            this.lvEntities.Size = new System.Drawing.Size(494, 589);
             this.lvEntities.TabIndex = 64;
             this.lvEntities.UseCompatibleStateImageBehavior = false;
             this.lvEntities.View = System.Windows.Forms.View.Details;
@@ -805,11 +805,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.wizardButtons1.Container = this.stepWizardControl1;
             this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(1420, 0);
+            this.wizardButtons1.Location = new System.Drawing.Point(1300, 0);
             this.wizardButtons1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.ShowExecuteButton = true;
-            this.wizardButtons1.Size = new System.Drawing.Size(380, 115);
+            this.wizardButtons1.ShowExecuteButton = false;
+            this.wizardButtons1.Size = new System.Drawing.Size(500, 254);
             this.wizardButtons1.TabIndex = 2;
             // 
             // splitContainer1
@@ -829,7 +829,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.splitContainer1.Panel2.Controls.Add(this.wizardButtons1);
             this.splitContainer1.Panel2MinSize = 0;
             this.splitContainer1.Size = new System.Drawing.Size(1800, 1000);
-            this.splitContainer1.SplitterDistance = 879;
+            this.splitContainer1.SplitterDistance = 740;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 42;
             // 

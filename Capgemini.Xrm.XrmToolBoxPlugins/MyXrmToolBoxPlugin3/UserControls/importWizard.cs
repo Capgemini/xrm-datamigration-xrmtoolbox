@@ -78,9 +78,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         }
 
         private void button2_Click(object sender, EventArgs e)
-        {
+        {            
             var tokenSource = new CancellationTokenSource();
-
+            tbLogger.Clear();
             Task.Run(() =>
             {
                 var orgService = CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy;
@@ -153,5 +153,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 stepWizardControl1.Pages[0].AllowNext = true;
             }
         }
+
     }
 }

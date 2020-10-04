@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Capgemini.DataMigration.XrmToolBoxPlugin</id>
-    <version>1.0.0.10</version>
+    <version>1.0.0.11</version>
     <title>CDS Data Migrator</title>
     <authors>Capgemini</authors>
     <owners>Capgemini</owners>
@@ -10,15 +10,20 @@
     <iconUrl>https://icon.com</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      The CDS Data Migrator tool provides routines for managing data migration operations within Microsoft Dynamics 365.
+     The CDS Data Migrator tool provides an easy to use interface that enables you to generate an XML schema file that can be used to export data from one CRM environment and import into another. The tool not only supports the ability to add entity attributes and many-to-many relationships to the schema, but beyond that, it supports the creation of filters and GUID mappings which are stored as .JSON file formats.
       Its key features include:
       1) Generation of Dynamics 365 data import and/or export schema file. Both JSON and CSV formats are supported,
       2) Export of data from one Dynamics 365 instance into JSON or CSV files,
-      3) Import of data contained with either JSON or CSV file into a Dynamics 365 instance.
+      3) Import of data contained with either JSON or CSV file into a Dynamics 365 instance,
+      4) Colour coded sorting applied to attributes,
+      5) Apply GUID Mappings included in export / import process,
+      6) Apply Filters included in the export / import process,
+      7) Ability to migrate Calendars.
     </description>
     <summary>CDS Data Migrator - Export/Import of Dynamics 365 entities into JSON\CSV files</summary>
     <releaseNotes>
-      Added Dependency to Xrm ToolBox latest, Slight tweak on UI for resize
+      1) Export filtering issue fixed
+      2) Ensured that log information display is consistent in all tabs
     </releaseNotes>
     <copyright>Capgemini Copyright © 2020</copyright>
     <tags>XrmToolBox Plugins</tags>
