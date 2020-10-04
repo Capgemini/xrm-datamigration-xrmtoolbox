@@ -19,7 +19,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
     public class DataMigrationService
     {
         private ILogger logger;
-
+        private CrmExporterConfig exportConfig;
         public DataMigrationService(ILogger logger)
         {
             this.logger = logger;
@@ -31,7 +31,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 
             EntityRepository repo = new EntityRepository(exportSettings.EnvironmentConnection, new ServiceRetryExecutor());
 
-            CrmExporterConfig exportConfig;
+           
 
             if (!string.IsNullOrEmpty(exportSettings.ExportConfigPath))
             {
@@ -46,7 +46,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
                     BatchSize = Convert.ToInt32(exportSettings.BatchSize),
                     PageSize = Convert.ToInt32(exportSettings.BatchSize),
                     TopCount = Convert.ToInt32(1000000),
-                    OnlyActiveRecords = false,
+                    OnlyActiveRecords = !exportSettings.ExportInactiveRecords,
                     JsonFolderPath = exportSettings.SavePath,
                     CrmMigrationToolSchemaFilters = new Dictionary<string, string>(),
                     OneEntityPerBatch = false,
@@ -77,7 +77,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
             config.CrmMigrationToolSchemaPaths = new List<string>() { exportSettings.SchemaPath };
             // TODO need add code for the minimize if JSON stuff
             config.JsonFolderPath = exportSettings.SavePath;
-            config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
+            if (exportConfig.CrmMigrationToolSchemaFilters != null && exportConfig.CrmMigrationToolSchemaFilters.Count > 0)
+            {
+                config.OnlyActiveRecords = false;
+            }
+            else
+            {
+                config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
+            }           
             config.BatchSize = exportSettings.BatchSize > 0 ? exportSettings.BatchSize : 1;
             config.PageSize = config.BatchSize;
         }
