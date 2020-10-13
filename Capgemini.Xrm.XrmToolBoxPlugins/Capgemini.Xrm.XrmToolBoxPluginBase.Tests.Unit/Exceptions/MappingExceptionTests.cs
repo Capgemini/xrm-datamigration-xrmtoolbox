@@ -1,26 +1,53 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class MappingExceptionTests
     {
-        [TestMethod]
-        public void MappingExceptionTest()
+        private MappingException systemUnderTest;
+
+        [TestInitialize]
+        public void Setup()
         {
-            Assert.Fail();
+            systemUnderTest = new MappingException();
         }
 
         [TestMethod]
-        public void MappingExceptionTest1()
+        public void MappingExceptionDefaultConstructor()
         {
-            Assert.Fail();
+            FluentActions.Invoking(() => systemUnderTest = new MappingException())
+                 .Should()
+                 .NotThrow();
         }
 
         [TestMethod]
-        public void MappingExceptionTest2()
+        public void MappingExceptionWithMessage()
         {
-            Assert.Fail();
+            var message = "Test message";
+
+            FluentActions.Invoking(() => systemUnderTest = new MappingException(message))
+                 .Should()
+                 .NotThrow();
+
+            Assert.AreEqual(message, systemUnderTest.Message);
+        }
+
+        [TestMethod]
+        public void MappingExceptionWithMessageAndException()
+        {
+            var message = "Test message";
+
+            FluentActions.Invoking(() => systemUnderTest = new MappingException(message, new Exception()))
+                 .Should()
+                 .NotThrow();
+
+            Assert.AreEqual(message, systemUnderTest.Message);
+            Assert.IsNotNull(systemUnderTest.InnerException);
         }
     }
 }

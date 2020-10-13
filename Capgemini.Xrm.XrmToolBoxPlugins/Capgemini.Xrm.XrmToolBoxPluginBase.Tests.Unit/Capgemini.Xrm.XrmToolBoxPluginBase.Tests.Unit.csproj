@@ -168,7 +168,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Capgemini.Xrm.DataMigration.XrmToolBox\Capgemini.Xrm.DataMigration.XrmToolBox.csproj">
+      <Project>{94cfa298-b643-477b-a329-f184ebf68cf6}</Project>
+      <Name>Capgemini.Xrm.DataMigration.XrmToolBox</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
