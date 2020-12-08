@@ -26,15 +26,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void Container_SelectedPageChanged(object sender, EventArgs e)
         {
             button3.Visible = Container.SelectedPage.IsFinishPage;
-
-            if (Container.SelectedPage.IsFinishPage)
-            {
-                button3.BackColor = Color.DarkGray;
-            }
-            else
-            {
-                button3.BackColor = SystemColors.ControlDarkDark;
-            }
+            button3.BackColor = Color.Green;
 
             button2.Enabled = !Container.SelectedPage.IsFinishPage;
             button1.Enabled = Container.SelectedPage != Container.Pages[0];
