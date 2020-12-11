@@ -26,10 +26,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void Container_SelectedPageChanged(object sender, EventArgs e)
         {
             button3.Visible = Container.SelectedPage.IsFinishPage;
+
             button3.BackColor = Color.Green;
 
             button2.Enabled = !Container.SelectedPage.IsFinishPage;
-            button1.Enabled = Container.SelectedPage != Container.Pages[0];
+            DisableBackButtonIfNotRequired();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -64,6 +65,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void WizardButtons_Load(object sender, EventArgs e)
         {
             Container.SelectedPageChanged += Container_SelectedPageChanged;
+            DisableBackButtonIfNotRequired();
         }
 
         public event EventHandler<EventArgs> OnExecute;
@@ -71,5 +73,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         public event EventHandler<EventArgs> OnCustomNextNavigation;
 
         public event EventHandler<EventArgs> OnCustomPreviousNavigation;
+
+        private void DisableBackButtonIfNotRequired()
+        { 
+            if (button1 != null && Container.SelectedPage != null && Container.Pages.Count > 0)
+            {
+                button1.Enabled = Container.SelectedPage != Container.Pages[0];
+            }
+        }
     }
 }
