@@ -25,7 +25,7 @@ jobs:
         displayName: 'NuGet restore'
         inputs:
           restoreSolution: '$(solution)'
-          #vstsFeed: '25162f08-da5e-4c04-bac0-40216eaa4bf9'
+          vstsFeed: '25162f08-da5e-4c04-bac0-40216eaa4bf9'
           restoreDirectory: ../packages
 
       #- task: SonarCloudPrepare@1
