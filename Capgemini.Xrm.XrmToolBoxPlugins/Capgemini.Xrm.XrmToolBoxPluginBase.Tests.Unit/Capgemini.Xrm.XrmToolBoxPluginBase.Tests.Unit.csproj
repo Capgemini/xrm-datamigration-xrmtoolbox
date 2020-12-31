@@ -169,12 +169,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Capgemini.Xrm.DataMigration.XrmToolBox\Capgemini.Xrm.DataMigration.XrmToolBox.csproj">
-      <Project>{94cfa298-b643-477b-a329-f184ebf68cf6}</Project>
-      <Name>Capgemini.Xrm.DataMigration.XrmToolBox</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.8\analyzers\dotnet\Microsoft.CodeAnalysis.VersionCheckAnalyzer.dll" />
     <Analyzer Include="..\..\packages\Microsoft.CodeQuality.Analyzers.2.9.8\analyzers\dotnet\cs\Humanizer.dll" />
@@ -188,6 +182,12 @@
     <Analyzer Include="..\..\packages\SecurityCodeScan.3.4.0.0\analyzers\dotnet\YamlDotNet.dll" />
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Capgemini.Xrm.DataMigration.XrmToolBox\Capgemini.Xrm.DataMigration.XrmToolBox.csproj">
+      <Project>{94cfa298-b643-477b-a329-f184ebf68cf6}</Project>
+      <Name>Capgemini.Xrm.DataMigration.XrmToolBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
