@@ -48,7 +48,7 @@ jobs:
       - task: VSTest@2
         displayName: Run tests
         inputs:
-          searchFolder: tests
+          searchFolder: Capgemini.Xrm.XrmToolBoxPlugins
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
           codeCoverageEnabled: true
@@ -89,7 +89,7 @@ jobs:
         displayName: Copy tests to staging directory
         inputs:
           Contents: '**/$(buildConfiguration)/**'
-          SourceFolder: tests
+          SourceFolder: Capgemini.Xrm.XrmToolBoxPlugins
           TargetFolder: '$(Build.ArtifactStagingDirectory)/tests'
 
       - publish: $(Build.ArtifactStagingDirectory)/package
