@@ -28,15 +28,15 @@ jobs:
           vstsFeed: '25162f08-da5e-4c04-bac0-40216eaa4bf9'
           restoreDirectory: ../packages
 
-      #- task: SonarCloudPrepare@1
-      #  displayName: Prepare SonarCloud
-      #  inputs:
-      #    SonarCloud: 'Capgemini Accelerator Token'
-      #    organization: 'capgemini-1'
-      #    scannerMode: 'MSBuild'
-      #    projectKey: 'xrm-datamigration'
-      #    projectName: 'xrm-datamigration'
-      #    projectVersion: '$(GitVersion.NuGetVersionV2)'
+      - task: SonarCloudPrepare@1
+        displayName: Prepare SonarCloud
+        inputs:
+          SonarCloud: 'Capgemini Accelerator Token'
+          organization: 'capgemini-1'
+          scannerMode: 'MSBuild'
+          projectKey: 'xrm-datamigration-xrmtoolbox'
+          projectName: 'xrm-datamigration-xrmtoolbox'
+          projectVersion: '$(GitVersion.NuGetVersionV2)'
 
       - task: VSBuild@1
         displayName: 'Build solution **\*.sln'
