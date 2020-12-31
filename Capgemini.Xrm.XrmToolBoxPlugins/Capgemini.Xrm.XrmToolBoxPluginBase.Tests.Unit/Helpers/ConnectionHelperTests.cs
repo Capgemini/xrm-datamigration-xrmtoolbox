@@ -13,7 +13,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Helpers.Tests
     public class ConnectionHelperTests
     {
         private string connectionString;
-
         private IOrganizationService actual;
 
         [TestInitialize]
