@@ -159,6 +159,7 @@
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
     <Compile Include="Helpers\ConnectionHelperTests.cs" />
     <Compile Include="Logging\MessageLoggerTests.cs" />
+    <Compile Include="Model\FilterSettingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
