@@ -7,7 +7,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class WizardButtons : UserControl
     {
-        public AeroWizard.WizardPageContainer Container { get; set; }
+        public new AeroWizard.WizardPageContainer Container { get; set; }
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         public event EventHandler<EventArgs> OnCustomPreviousNavigation;
 
         private void DisableBackButtonIfNotRequired()
-        { 
+        {
             if (button1 != null && Container.SelectedPage != null && Container.Pages.Count > 0)
             {
                 button1.Enabled = Container.SelectedPage != Container.Pages[0];

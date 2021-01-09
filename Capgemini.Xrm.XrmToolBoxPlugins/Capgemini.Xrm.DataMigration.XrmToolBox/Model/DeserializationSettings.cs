@@ -13,7 +13,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public void Validate()
         {
             FailedValidation = false;
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             if (string.IsNullOrWhiteSpace(XmlFolderPath) || XmlFolderPath == null)
             {
                 stringBuilder.AppendLine("Enter schema folder path");

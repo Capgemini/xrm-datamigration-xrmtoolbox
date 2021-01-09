@@ -28,7 +28,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         {
             FailedValidation = false;
             StringBuilder message = new StringBuilder();
-            if (string.IsNullOrEmpty(JsonFilePath) || JsonFilePath == null)
+            if (string.IsNullOrEmpty(JsonFilePath))
             {
                 FailedValidation = true;
                 message.AppendLine("Export config file path is empty");
@@ -49,7 +49,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         {
             FailedValidationLoading = false;
             StringBuilder message = new StringBuilder();
-            if (string.IsNullOrEmpty(JsonFilePathLoad) || JsonFilePathLoad == null)
+            if (string.IsNullOrEmpty(JsonFilePathLoad))
             {
                 FailedValidationLoading = true;
                 message.AppendLine("Json file path is empty");

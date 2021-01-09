@@ -19,19 +19,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         {
             FailedValidation = false;
             StringBuilder message = new StringBuilder();
-            if (string.IsNullOrEmpty(SchemaPath) || SchemaPath == null)
+            if (string.IsNullOrEmpty(SchemaPath))
             {
                 message.AppendLine("Schema file path is empty");
                 FailedValidation = true;
             }
 
-            if (string.IsNullOrEmpty(ImportPath) || ImportPath == null)
+            if (string.IsNullOrEmpty(ImportPath))
             {
                 message.AppendLine("Import config file path is empty");
                 FailedValidation = true;
             }
 
-            if (string.IsNullOrEmpty(ExportPath) || ExportPath == null)
+            if (string.IsNullOrEmpty(ExportPath))
             {
                 message.AppendLine("Export config file path is empty");
                 FailedValidation = true;

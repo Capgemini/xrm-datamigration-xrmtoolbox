@@ -45,8 +45,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Capgemini.DataMigration.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.DataMigration.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Capgemini.DataMigration.Resiliency.Polly, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.DataMigration.Resiliency.Polly.dll</HintPath>
+    </Reference>
+    <Reference Include="Capgemini.Xrm.DataMigration.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.Xrm.DataMigration.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Capgemini.Xrm.DataMigration.CrmStore, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.Xrm.DataMigration.CrmStore.dll</HintPath>
+    </Reference>
+    <Reference Include="Capgemini.Xrm.DataMigration.Engine, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.Xrm.DataMigration.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="Capgemini.Xrm.DataMigration.FileStore, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Capgemini.Xrm.DataMigration.Engine.2.7.0\lib\net462\Capgemini.Xrm.DataMigration.FileStore.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CsvHelper.6.1.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=5.10.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.5.10.0\lib\net45\FluentAssertions.dll</HintPath>
@@ -85,6 +106,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Polly, Version=5.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Polly.5.8.0\lib\net45\Polly.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -152,15 +176,23 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
-    <Compile Include="DataMigration\DataMigrationFetchXmlRunnerTests.cs" />
-    <Compile Include="DataMigration\MigrationParametersTests.cs" />
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
     <Compile Include="Helpers\ConnectionHelperTests.cs" />
     <Compile Include="Logging\MessageLoggerTests.cs" />
+    <Compile Include="Model\DataMigrationSettingsTests.cs" />
+    <Compile Include="Model\DeserializationSettingsTests.cs" />
+    <Compile Include="Model\ExportConfigSettingsTests.cs" />
     <Compile Include="Model\FilterSettingsTests.cs" />
+    <Compile Include="Model\ImportConfigSettingscsTests.cs" />
+    <Compile Include="Model\LoadAllSettingsTests.cs" />
+    <Compile Include="Model\RecordCountModelTests.cs" />
+    <Compile Include="Model\SerializationSettingsTests.cs" />
+    <Compile Include="Presenters\ExportPresenterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\SchemaGeneratorTests.cs" />
+    <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\stylecop.json">

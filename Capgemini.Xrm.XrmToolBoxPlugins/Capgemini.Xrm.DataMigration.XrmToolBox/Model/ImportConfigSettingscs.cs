@@ -33,7 +33,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         public void ValidateLoading()
         {
             FailedValidationLoading = false;
-            StringBuilder message = new StringBuilder();
+            var message = new StringBuilder();
             if (string.IsNullOrEmpty(JsonFilePathLoad) || JsonFilePathLoad == null)
             {
                 FailedValidationLoading = true;
@@ -51,8 +51,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
         private void ValidateFailure()
         {
             FailedValidation = false;
-            StringBuilder message = new StringBuilder();
-            if (string.IsNullOrEmpty(JsonFilePath) || JsonFilePath == null)
+            var message = new StringBuilder();
+            if (string.IsNullOrEmpty(JsonFilePath))
             {
                 message.AppendLine("Import config file path is empty");
                 FailedValidation = true;
