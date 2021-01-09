@@ -1282,13 +1282,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                 if (!importSchemaSettings.FailedValidation)
                 {
-                    migration.JsonFolderPath = new FileInfo(importSchemaSettings.JsonFilePath).DirectoryName + "\\ExtractedData";
-                    if (File.Exists(importSchemaSettings.JsonFilePath))
+                    var directoryName = Path.GetFullPath(exportSchemaSettings.JsonFilePath);
+
+                    migration.JsonFolderPath = directoryName + "\\ExtractedData";
+                    if (File.Exists(directoryName))
                     {
-                        File.Delete(importSchemaSettings.JsonFilePath);
+                        File.Delete(directoryName);
                     }
 
-                    migration.SaveConfiguration(importSchemaSettings.JsonFilePath);
+                    migration.SaveConfiguration(directoryName);
                 }
             }
         }
@@ -1337,12 +1339,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             if (!exportSchemaSettings.FailedValidation)
             {
-                if (File.Exists(exportSchemaSettings.JsonFilePath))
+                var destFileName = Path.GetFullPath(exportSchemaSettings.JsonFilePath);
+
+                if (File.Exists(destFileName))
                 {
-                    File.Delete(exportSchemaSettings.JsonFilePath);
+                    File.Delete(destFileName);
                 }
 
-                config.SaveConfiguration(exportSchemaSettings.JsonFilePath);
+                config.SaveConfiguration(destFileName);
             }
         }
 
@@ -1507,13 +1511,29 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void SetMenuVisibility(WizardMode mode)
         {
             //Import
-            tsbtMappings.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            loadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            saveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            tbImportConfig.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            btImportConfigPath.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            SetImportMenuVisibility(mode);
 
             //Export
+            SetExportMenuVisibility(mode);
+
+            //Schema
+            SetSchemaMenuVisibility(mode);
+
+            //All
+            loadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+            saveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+        }
+
+        private void SetSchemaMenuVisibility(WizardMode mode)
+        {
+            loadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            saveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            tbSchemaPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            btSchemaFolderPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+        }
+
+        private void SetExportMenuVisibility(WizardMode mode)
+        {
             lookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             tsbtFilters.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             loadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
@@ -1521,16 +1541,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             saveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             tbExportConfig.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             btExportConfigPath.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+        }
 
-            //Schema
-            loadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            saveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            tbSchemaPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            btSchemaFolderPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-
-            //All
-            loadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
-            saveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+        private void SetImportMenuVisibility(WizardMode mode)
+        {
+            tsbtMappings.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            loadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            saveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            tbImportConfig.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            btImportConfigPath.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
         }
 
         private void ToolStripButtonConnectClick(object sender, EventArgs e)

@@ -92,72 +92,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                    4 = in string
                    */
                 int startNodeName = 0, startAtt = 0;
-                for (int i = 0; i < nodeText.Length; ++i)
-                {
-                    if (nodeText[i] == '"')
-                    {
-                        inString = !inString;
-                    }
-
-                    if (inString && nodeText[i] == '"')
-                    {
-                        lastSt = i;
-                    }
-                    else if (nodeText[i] == '"')
-                    {
-                        rtb.Select(lastSt + st + 2, i - lastSt - 1);
-                        rtb.SelectionColor = HcString;
-                    }
-
-                    switch (state)
-                    {
-                        case 0:
-                            if (!char.IsWhiteSpace(nodeText, i))
-                            {
-                                startNodeName = i;
-                                state = 1;
-                            }
-
-                            break;
-
-                        case 1:
-                            if (char.IsWhiteSpace(nodeText, i))
-                            {
-                                rtb.Select(startNodeName + st, i - startNodeName + 1);
-                                rtb.SelectionColor = HcNode;
-                                state = 2;
-                            }
-
-                            break;
-
-                        case 2:
-                            if (!char.IsWhiteSpace(nodeText, i))
-                            {
-                                startAtt = i;
-                                state = 3;
-                            }
-
-                            break;
-
-                        case 3:
-                            if (char.IsWhiteSpace(nodeText, i) || nodeText[i] == '=')
-                            {
-                                rtb.Select(startAtt + st, i - startAtt + 1);
-                                rtb.SelectionColor = HcAttribute;
-                                state = 4;
-                            }
-
-                            break;
-
-                        case 4:
-                            if (nodeText[i] == '"' && !inString)
-                            {
-                                state = 2;
-                            }
-
-                            break;
-                    }
-                }
+                ProcessEachNodeText(rtb, st, nodeText, ref inString, ref lastSt, ref state, ref startNodeName, ref startAtt);
 
                 if (state == 1)
                 {
@@ -168,6 +103,81 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
             // reset selection
             rtb.Select(selStart, selLength);
+        }
+
+        private static void ProcessEachNodeText(RichTextBox rtb, int st, string nodeText, ref bool inString, ref int lastSt, ref int state, ref int startNodeName, ref int startAtt)
+        {
+            for (int i = 0; i < nodeText.Length; ++i)
+            {
+                if (nodeText[i] == '"')
+                {
+                    inString = !inString;
+                }
+
+                if (inString && nodeText[i] == '"')
+                {
+                    lastSt = i;
+                }
+                else if (nodeText[i] == '"')
+                {
+                    rtb.Select(lastSt + st + 2, i - lastSt - 1);
+                    rtb.SelectionColor = HcString;
+                }
+
+                ProcessState(rtb, st, nodeText, inString, ref state, ref startNodeName, ref startAtt, i);
+            }
+        }
+
+        private static void ProcessState(RichTextBox rtb, int st, string nodeText, bool inString, ref int state, ref int startNodeName, ref int startAtt, int i)
+        {
+            switch (state)
+            {
+                case 0:
+                    if (!char.IsWhiteSpace(nodeText, i))
+                    {
+                        startNodeName = i;
+                        state = 1;
+                    }
+
+                    break;
+
+                case 1:
+                    if (char.IsWhiteSpace(nodeText, i))
+                    {
+                        rtb.Select(startNodeName + st, i - startNodeName + 1);
+                        rtb.SelectionColor = HcNode;
+                        state = 2;
+                    }
+
+                    break;
+
+                case 2:
+                    if (!char.IsWhiteSpace(nodeText, i))
+                    {
+                        startAtt = i;
+                        state = 3;
+                    }
+
+                    break;
+
+                case 3:
+                    if (char.IsWhiteSpace(nodeText, i) || nodeText[i] == '=')
+                    {
+                        rtb.Select(startAtt + st, i - startAtt + 1);
+                        rtb.SelectionColor = HcAttribute;
+                        state = 4;
+                    }
+
+                    break;
+
+                case 4:
+                    if (nodeText[i] == '"' && !inString)
+                    {
+                        state = 2;
+                    }
+
+                    break;
+            }
         }
 
         private void BtnCloseClick(object sender, EventArgs e)
