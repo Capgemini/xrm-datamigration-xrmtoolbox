@@ -18,15 +18,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Tests
         }
 
         [TestMethod]
-        [Ignore("Will fix this!!!")]
         public void OnConnectionUpdated()
         {
-            using (var systemUnderTest = new SchemaGenerator())
-            {
-                FluentActions.Invoking(() => systemUnderTest.OnConnectionUpdated())
-                                .Should()
-                                .NotThrow();
-            }
+            Assert.Fail();
         }
     }
 }
