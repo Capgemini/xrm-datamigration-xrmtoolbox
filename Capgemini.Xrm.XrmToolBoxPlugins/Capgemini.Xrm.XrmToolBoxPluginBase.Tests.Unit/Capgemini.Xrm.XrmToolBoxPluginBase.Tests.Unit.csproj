@@ -189,6 +189,7 @@
     <Compile Include="Model\ImportConfigSettingscsTests.cs" />
     <Compile Include="Model\LoadAllSettingsTests.cs" />
     <Compile Include="Model\RecordCountModelTests.cs" />
+    <Compile Include="Model\SaveAllSettingsTests.cs" />
     <Compile Include="Model\SerializationSettingsTests.cs" />
     <Compile Include="Presenters\ExportPresenterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
