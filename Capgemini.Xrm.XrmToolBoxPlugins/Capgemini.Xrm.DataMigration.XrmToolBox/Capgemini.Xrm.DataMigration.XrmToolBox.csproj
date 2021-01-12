@@ -249,7 +249,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Services\DataMigrationService.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="UserControls\exportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
