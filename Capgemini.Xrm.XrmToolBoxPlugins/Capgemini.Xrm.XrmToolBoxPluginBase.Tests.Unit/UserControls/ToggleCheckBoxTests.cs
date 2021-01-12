@@ -1,10 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
-    [ExcludeFromCodeCoverage]
     [TestClass]
     public class ToggleCheckBoxTests
     {

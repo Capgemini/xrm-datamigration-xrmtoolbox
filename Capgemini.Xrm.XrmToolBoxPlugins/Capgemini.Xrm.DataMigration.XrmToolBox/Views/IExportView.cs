@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using XrmToolBox.Extensibility;
 

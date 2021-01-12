@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model.Tests
 {
-    [ExcludeFromCodeCoverage]
     [TestClass]
     public class SerializationSettingsTests
     {

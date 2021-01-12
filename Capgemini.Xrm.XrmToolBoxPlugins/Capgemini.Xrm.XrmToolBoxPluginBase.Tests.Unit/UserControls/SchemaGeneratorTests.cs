@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Tests
 {
-    [ExcludeFromCodeCoverage]
     [TestClass]
     public class SchemaGeneratorTests
     {

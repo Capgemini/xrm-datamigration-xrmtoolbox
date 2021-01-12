@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,7 +7,6 @@ using Microsoft.Xrm.Tooling.Connector;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Helpers.Tests
 {
-    [ExcludeFromCodeCoverage]
     [TestClass]
     public class ConnectionHelperTests
     {

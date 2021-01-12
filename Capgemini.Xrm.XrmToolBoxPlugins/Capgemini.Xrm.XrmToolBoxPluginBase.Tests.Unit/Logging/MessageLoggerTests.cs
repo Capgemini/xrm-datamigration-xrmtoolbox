@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
 {
-    [ExcludeFromCodeCoverage]
     [TestClass]
     public class MessageLoggerTests
     {
