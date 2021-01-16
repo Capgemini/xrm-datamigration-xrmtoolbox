@@ -13,5 +13,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                              .Should()
                              .NotThrow();
         }
+
+        [TestMethod]
+        public void ToggleOnPaint()
+        {
+            using (var systemUnderTest = new ToggleCheckBox())
+            {
+                FluentActions.Invoking(() => systemUnderTest.Refresh())
+                             .Should()
+                             .NotThrow();
+            }
+        }
     }
 }
