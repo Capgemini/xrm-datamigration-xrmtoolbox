@@ -1,12 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
-using FluentAssertions;
-
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Microsoft.Xrm.Sdk;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MyXrmToolBoxPlugin3.Tests
 {

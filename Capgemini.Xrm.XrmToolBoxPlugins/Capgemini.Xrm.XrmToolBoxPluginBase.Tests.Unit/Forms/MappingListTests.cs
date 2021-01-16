@@ -11,21 +11,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms.Tests
     {
         private List<Item<EntityReference, EntityReference>> mappings;
 
-        private MappingList systemUnderTest;
-
         [TestInitialize]
         public void Setup()
         {
             mappings = new List<Item<EntityReference, EntityReference>>();
-
-            systemUnderTest = new MappingList(mappings);
         }
 
         [TestMethod]
         public void MappingListInstantiation()
         {
-            var mappings = new List<Item<EntityReference, EntityReference>>();
-
             FluentActions.Invoking(() => new MappingList(mappings))
                          .Should()
                          .NotThrow();
@@ -35,18 +29,23 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms.Tests
         public void GetMappingListEmptyEntityLogicalName()
         {
             string entityLogicalName = string.Empty;
+            using (var systemUnderTest = new MappingList(mappings))
+            {
+                var actual = systemUnderTest.GetMappingList(entityLogicalName);
 
-            var actual = systemUnderTest.GetMappingList(entityLogicalName);
-
-            actual.Count.Should().Be(0);
+                actual.Count.Should().Be(0);
+            }
         }
 
         [TestMethod]
         public void GetGuidMappingList()
         {
-            var actual = systemUnderTest.GetGuidMappingList();
+            using (var systemUnderTest = new MappingList(mappings))
+            {
+                var actual = systemUnderTest.GetGuidMappingList();
 
-            actual.Count.Should().Be(0);
+                actual.Count.Should().Be(0);
+            }
         }
     }
 }
