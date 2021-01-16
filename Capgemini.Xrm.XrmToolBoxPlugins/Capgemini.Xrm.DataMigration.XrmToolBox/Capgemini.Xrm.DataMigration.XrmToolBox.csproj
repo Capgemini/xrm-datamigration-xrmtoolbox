@@ -228,6 +228,7 @@
     <Compile Include="Model\DeserializationSettings.cs" />
     <Compile Include="Model\ExportConfigSettings.cs" />
     <Compile Include="Model\ExportSettings.cs" />
+    <Compile Include="Model\FilterEditorState.cs" />
     <Compile Include="Model\FilterSettings.cs" />
     <Compile Include="Model\ImportConfigSettingscs.cs" />
     <Compile Include="Model\LoadAllSettings.cs" />
