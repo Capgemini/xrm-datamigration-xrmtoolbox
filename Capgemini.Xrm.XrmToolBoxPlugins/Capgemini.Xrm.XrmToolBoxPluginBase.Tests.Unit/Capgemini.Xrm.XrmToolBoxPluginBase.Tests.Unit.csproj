@@ -235,6 +235,7 @@
     <Compile Include="Model\SaveAllSettingsTests.cs" />
     <Compile Include="Model\SerializationSettingsTests.cs" />
     <Compile Include="MyPluginControlTests.cs" />
+    <Compile Include="PluginTests.cs" />
     <Compile Include="Presenters\ExportPresenterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\SchemaGeneratorTests.cs" />

@@ -1,8 +1,8 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+﻿using System.Collections.Generic;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using System.Collections.Generic;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms.Tests
 {
