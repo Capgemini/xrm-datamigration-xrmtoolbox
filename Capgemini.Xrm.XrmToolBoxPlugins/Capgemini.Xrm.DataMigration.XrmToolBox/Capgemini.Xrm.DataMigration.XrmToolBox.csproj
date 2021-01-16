@@ -221,7 +221,6 @@
     <Compile Include="Forms\MappingListLookup.Designer.cs">
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\MessageLogger.cs" />
     <Compile Include="Model\DataMigrationSettings.cs" />
@@ -329,6 +328,7 @@
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
