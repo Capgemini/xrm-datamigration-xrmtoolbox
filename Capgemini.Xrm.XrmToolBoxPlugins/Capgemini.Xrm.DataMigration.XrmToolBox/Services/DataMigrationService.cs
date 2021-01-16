@@ -69,7 +69,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)
         {
             config.CrmMigrationToolSchemaPaths = new List<string>() { exportSettings.SchemaPath };
-            // TODO need add code for the minimize if JSON stuff
+
             config.JsonFolderPath = exportSettings.SavePath;
             if (exportConfig.CrmMigrationToolSchemaFilters != null && exportConfig.CrmMigrationToolSchemaFilters.Count > 0)
             {
