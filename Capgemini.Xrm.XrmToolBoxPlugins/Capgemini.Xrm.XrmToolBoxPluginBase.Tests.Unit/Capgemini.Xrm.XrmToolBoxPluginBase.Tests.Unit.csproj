@@ -220,6 +220,9 @@
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
+    <Compile Include="Forms\FilterEditorTests.cs" />
+    <Compile Include="Forms\MappingListLookupTests.cs" />
+    <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ConnectionHelperTests.cs" />
     <Compile Include="Logging\MessageLoggerTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />

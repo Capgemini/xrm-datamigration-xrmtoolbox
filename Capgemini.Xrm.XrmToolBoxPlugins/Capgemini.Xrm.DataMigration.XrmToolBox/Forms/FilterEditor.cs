@@ -33,11 +33,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             set
             {
                 txtFilter.Text = value;
-                HighlightRTF();
+                HighlightRrt();
             }
         }
 
-        private void HighlightRTF()
+        private void HighlightRrt()
         {
             var selStart = txtFilter.SelectionStart;
             var selLength = txtFilter.SelectionLength;
@@ -182,7 +182,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void TextBoxFilterTextChanged(object sender, EventArgs e)
         {
-            HighlightRTF();
+            HighlightRrt();
         }
 
         private void ButtonCloseClick(object sender, EventArgs e)
