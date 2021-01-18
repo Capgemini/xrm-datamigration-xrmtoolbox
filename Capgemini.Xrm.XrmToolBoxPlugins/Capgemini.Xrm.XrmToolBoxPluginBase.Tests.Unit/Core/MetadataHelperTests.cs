@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
-using Moq;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
-using System;
-using System.Reflection;
-using System.Linq;
+using Moq;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
 {
