@@ -218,7 +218,10 @@
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
+    <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
+    <Compile Include="Core\MetadataHelperTests.cs" />
+    <Compile Include="Core\OrganisationsTests.cs" />
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />

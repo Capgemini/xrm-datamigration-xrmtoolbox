@@ -24,19 +24,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                 return entities;
             }
 
-            RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
+            var request = new RetrieveAllEntitiesRequest
             {
                 RetrieveAsIfPublished = true,
                 EntityFilters = EntityFilters.Entity
             };
 
-            RetrieveAllEntitiesResponse response = (RetrieveAllEntitiesResponse)oService.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)oService.Execute(request);
 
-            foreach (EntityMetadata emd in response.EntityMetadata)
+            if (response.EntityMetadata != null)
             {
-                if (emd.DisplayName.UserLocalizedLabel != null)
+                foreach (EntityMetadata emd in response.EntityMetadata)
                 {
-                    entities.Add(emd);
+                    if (emd.DisplayName.UserLocalizedLabel != null)
+                    {
+                        entities.Add(emd);
+                    }
                 }
             }
 

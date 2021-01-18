@@ -10,7 +10,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             Filter = string.Empty;
         }
 
-        public List<string> UnmarkedAttributes { get; private set; }
+        public List<string> UnmarkedAttributes { get; }
 
         public string Filter { get; set; }
     }
