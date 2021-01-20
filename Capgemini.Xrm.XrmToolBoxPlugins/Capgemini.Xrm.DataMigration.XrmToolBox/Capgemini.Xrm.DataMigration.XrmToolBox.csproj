@@ -124,7 +124,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
+    <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
     <Compile Include="UserControls\exportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>

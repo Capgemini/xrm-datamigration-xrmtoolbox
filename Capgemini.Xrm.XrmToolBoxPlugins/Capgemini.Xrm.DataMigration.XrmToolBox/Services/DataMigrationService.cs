@@ -1,9 +1,10 @@
 ﻿using Capgemini.DataMigration.Core;
 using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.DataMigration.Config;
+using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,26 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
     {
         private readonly ILogger logger;
         private CrmExporterConfig exportConfig;
+        private ICrmGenericMigratorFactory migratorFactory;
 
-        public DataMigrationService(ILogger logger)
+        public DataMigrationService(ILogger logger) : this(logger, new CrmGenericMigratorFactory())
         {
-            this.logger = logger;
+
+        }
+
+        public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.migratorFactory = migratorFactory ?? throw new ArgumentNullException(nameof(migratorFactory));
         }
 
         public void ExportData(ExportSettings exportSettings)
         {
+            if (exportSettings is null)
+            {
+                throw new ArgumentNullException(nameof(exportSettings));
+            }
+
             var tokenSource = new CancellationTokenSource();
 
             EntityRepository repo = new EntityRepository(exportSettings.EnvironmentConnection, new ServiceRetryExecutor());
@@ -54,22 +67,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 
             CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
 
-            if (exportSettings.DataFormat == "json")
-            {
-                CrmFileDataExporter exporter = new CrmFileDataExporter(logger, repo, exportConfig, tokenSource.Token);
-                exporter.MigrateData();
-            }
-            else
-            {
-                CrmFileDataExporterCsv exporter = new CrmFileDataExporterCsv(logger, repo, exportConfig, tokenSource.Token, schema);
-                exporter.MigrateData();
-            }
+            GenericCrmDataMigrator migrator = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
+            migrator.MigrateData();
+
         }
 
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)
         {
             config.CrmMigrationToolSchemaPaths = new List<string>() { exportSettings.SchemaPath };
 
+            // TODO need add code for the minimize if JSON stuff
             config.JsonFolderPath = exportSettings.SavePath;
             if (exportConfig.CrmMigrationToolSchemaFilters != null && exportConfig.CrmMigrationToolSchemaFilters.Count > 0)
             {
