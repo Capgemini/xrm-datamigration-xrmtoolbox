@@ -51,7 +51,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                logger.LogError(ex.Message);
             }
         }
 

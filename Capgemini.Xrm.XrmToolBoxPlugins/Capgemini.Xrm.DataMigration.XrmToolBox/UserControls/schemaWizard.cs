@@ -824,7 +824,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var sourceList = MetadataHelper.RetrieveEntities(item, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
 
-                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Length > 0)
+                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
                     {
                         fieldsSelected = true;
                     }
@@ -870,7 +870,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void ResetEntities()
         {
             xmlSettings.Entity.Clear();
-            crmSchemaConfiguration.Entities = null;
+            crmSchemaConfiguration.Entities.Clear();
         }
 
         private void GetSchemaFilePath()
@@ -891,7 +891,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
                 }
 
-                crmSchemaConfiguration.Entities = crmEntityList.ToArray();
+                crmSchemaConfiguration.Entities.Clear();
+                crmSchemaConfiguration.Entities.AddRange(crmEntityList);
+
                 xmlSettings.Entity.Clear();
                 xmlSettings.Entity.AddRange(crmSchemaConfiguration.Entities);
             }
@@ -927,7 +929,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
             }
 
-            crmEntity.CrmRelationships = relationshipList.ToArray();
+            crmEntity.CrmRelationships.Clear();
+            crmEntity.CrmRelationships.AddRange(relationshipList);
         }
 
         private void StoreCrmEntityRelationShipData(CrmEntity crmEntity, ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
@@ -959,7 +962,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList);
                     }
 
-                    crmEntity.CrmFields = crmFieldList.ToArray();
+                    crmEntity.CrmFields.Clear();
+                    crmEntity.CrmFields.AddRange(crmFieldList);
                 }
             }
         }
@@ -1069,7 +1073,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             lvRelationship.Items.Clear();
         }
 
-        private void StoreEntityData(CrmEntity[] crmEntity)
+        private void StoreEntityData(List<CrmEntity> crmEntity)
         {
             entityAttributes.Clear();
             entityRelationships.Clear();
@@ -1306,7 +1310,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             if (mapping != null)
             {
-                migration.MigrationConfig.Mappings = mapper;
+                migration.MigrationConfig.Mappings.Clear();
+                foreach (var item in mapper)
+                {
+                    migration.MigrationConfig.Mappings.Add(item.Key, item.Value);
+                }
+
                 importSchemaSettings.Mappings.Clear();
 
                 foreach (var item in mapper)
@@ -1351,7 +1360,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 config = CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePath);
             }
 
-            config.CrmMigrationToolSchemaFilters = filterQuery;
+            config.CrmMigrationToolSchemaFilters.Clear();
+            foreach (var item in filterQuery)
+            {
+                config.CrmMigrationToolSchemaFilters.Add(item.Key, item.Value);
+            }
+
             exportSchemaSettings.Filter.Clear();
             foreach (var item in filterQuery)
             {
@@ -1370,7 +1384,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             if (lookupMaping.Count > 0)
             {
-                config.LookupMapping = lookupMaping;
+                config.LookupMapping.Clear();
+                foreach (var item in lookupMaping)
+                {
+                    config.LookupMapping.Add(item.Key, item.Value);
+                }
             }
 
             if (!exportSchemaSettings.FailedValidation)
