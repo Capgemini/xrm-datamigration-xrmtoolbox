@@ -79,6 +79,7 @@
     <Compile Include="Core\ListViewItemComparerTests.cs" />
     <Compile Include="Core\MetadataHelperTests.cs" />
     <Compile Include="Core\OrganisationsTests.cs" />
+    <Compile Include="Services\CrmGenericMigratorFactoryTests.cs" />
     <Compile Include="Services\DataMigrationServiceTests.cs" />
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />

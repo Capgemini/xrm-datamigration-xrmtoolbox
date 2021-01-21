@@ -15,8 +15,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
     public class DataMigrationService
     {
         private readonly ILogger logger;
+        private readonly ICrmGenericMigratorFactory migratorFactory;
         private CrmExporterConfig exportConfig;
-        private ICrmGenericMigratorFactory migratorFactory;
 
         public DataMigrationService(ILogger logger) : this(logger, new CrmGenericMigratorFactory())
         {

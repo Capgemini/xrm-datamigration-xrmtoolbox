@@ -9,6 +9,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 {
     public interface ICrmGenericMigratorFactory
     {
-        GenericCrmDataMigrator GetCrmDataMigrator(string dataFormat, ILogger logger, EntityRepository repo, CrmExporterConfig exportConfig, CancellationToken token, CrmSchemaConfiguration schema);
+        GenericCrmDataMigrator GetCrmDataMigrator(string dataFormat, ILogger logger, IEntityRepository repo, CrmExporterConfig exportConfig, CancellationToken token, CrmSchemaConfiguration schema);
     }
 }
