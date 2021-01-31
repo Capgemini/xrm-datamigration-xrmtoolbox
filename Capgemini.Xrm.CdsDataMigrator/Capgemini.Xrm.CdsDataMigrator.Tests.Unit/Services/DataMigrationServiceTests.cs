@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Threading;
+using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.DataStore;
+using Capgemini.Xrm.DataMigration.Repositories;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Moq;
 
 namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
@@ -11,102 +19,128 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
     [TestClass]
     public class DataMigrationServiceTests
     {
-        //private Mock<Capgemini.DataMigration.Core.ILogger> loggerMock;
-        //private Mock<DataMigration.XrmToolBox.Services.ICrmGenericMigratorFactory> migratorFactoryMock;
-        //private DataMigration.XrmToolBoxPlugin.Services.DataMigrationService systemUnderTest;
+        private Mock<ILogger> loggerMock;
+        private Mock<ICrmGenericMigratorFactory> migratorFactoryMock;
 
-        //[TestInitialize]
-        //public void TestSetup()
-        //{
-        //    loggerMock = new Mock<Capgemini.DataMigration.Core.ILogger>();
-        //    migratorFactoryMock = new Mock<DataMigration.XrmToolBox.Services.ICrmGenericMigratorFactory>();
-        //    systemUnderTest = new DataMigration.XrmToolBoxPlugin.Services.DataMigrationService(loggerMock.Object);
-        //}
+        private DataMigrationService systemUnderTest;
 
-        //[TestMethod]
-        //public void DataMigrationServiceIntantiation()
-        //{
-        //    FluentActions.Invoking(() => new DataMigration.XrmToolBoxPlugin.Services.DataMigrationService(loggerMock.Object))
-        //                    .Should()
-        //                    .NotThrow();
-        //}
+        [TestInitialize]
+        public void TestSetup()
+        {
+            loggerMock = new Mock<ILogger>();
+            migratorFactoryMock = new Mock<ICrmGenericMigratorFactory>();
 
-        //[TestMethod]
-        //public void ExportDataWithNullExportSettings()
-        //{
-        //    FluentActions.Invoking(() => systemUnderTest.ExportData(null))
-        //        .Should()
-        //        .Throw<ArgumentNullException>();
-        //}
+            systemUnderTest = new DataMigrationService(loggerMock.Object, migratorFactoryMock.Object);
+        }
 
-        //[TestMethod]
-        //[Ignore("Untestable due to file system access. Requires refactoring.")]
-        //public void ExportDataWithExportSettings()
-        //{
-        //    var exportSettings = new ExportSettings
-        //    {
-        //        SchemaPath = string.Empty,
-        //    };
+        [TestMethod]
+        public void DataMigrationServiceIntantiation()
+        {
+            FluentActions.Invoking(() => new DataMigrationService(loggerMock.Object, migratorFactoryMock.Object))
+                            .Should()
+                            .NotThrow();
+        }
 
-        //    FluentActions.Invoking(() => systemUnderTest.ExportData(exportSettings))
-        //        .Should()
-        //        .NotThrow();
-        //}
+        [TestMethod]
+        public void DataMigrationServiceIntantiationWithNullInputs()
+        {
+            FluentActions.Invoking(() => new DataMigrationService(null, null))
+                            .Should()
+                            .Throw<ArgumentNullException>();
+        }
 
-        //[TestMethod]
-        //[Ignore("Untestable due to file system access and GenericCrmDataMigrator isn't mockable. Requires refactoring.")]
-        //public void ExportDataAsJson()
-        //{
-        //    var exportSettings = new DataMigration.XrmToolBoxPlugin.Models.ExportSettings
-        //    {
-        //        SchemaPath = string.Empty,
-        //        DataFormat = "json",
-        //    };
+        [TestMethod]
+        public void DataMigrationServiceIntantiationWithNullLogger()
+        {
+            FluentActions.Invoking(() => new DataMigrationService(null, migratorFactoryMock.Object))
+                            .Should()
+                            .Throw<ArgumentNullException>();
+        }
 
-        //    migratorFactoryMock
-        //        .Setup(x => x.GetCrmDataMigrator(
-        //            "json",
-        //            It.IsAny<ILogger>(),
-        //            It.IsAny<EntityRepository>(),
-        //            It.IsAny<CrmExporterConfig>(),
-        //            It.IsAny<CancellationToken>(),
-        //            It.IsAny<CrmSchemaConfiguration>()))
-        //        .Returns(new Mock<GenericCrmDataMigrator>().Object)
-        //        .Verifiable();
+        [TestMethod]
+        public void DataMigrationServiceIntantiationWithNullMigratorFactor()
+        {
+            FluentActions.Invoking(() => new DataMigrationService(loggerMock.Object, null))
+                            .Should()
+                            .Throw<ArgumentNullException>();
+        }
 
-        //    FluentActions.Invoking(() => systemUnderTest.ExportData(exportSettings))
-        //        .Should()
-        //        .NotThrow();
+        [TestMethod]
+        public void ExportDataWithNullExportSettings()
+        {
+            FluentActions.Invoking(() => systemUnderTest.ExportData(null))
+                .Should()
+                .Throw<ArgumentNullException>();
+        }
 
-        //    migratorFactoryMock.Verify();
-        //}
+        [TestMethod]
+        public void ExportDataAsJson()
+        {
+            var dataFormat = "json";
+            var exportSettings = new ExportSettings
+            {
+                // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
+                SchemaPath = "TestData/ContactSchemaWithOwner.xml",
+                DataFormat = dataFormat,
+            };
 
-        //[TestMethod]
-        //[Ignore("Untestable due to file system access and GenericCrmDataMigrator isn't mockable. Requires refactoring.")]
-        //public void ExportDataAsCsv()
-        //{
-        //    var exportSettings = new ExportSettings
-        //    {
-        //        SchemaPath = string.Empty,
-        //        DataFormat = "csv",
-        //    };
+            var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;
+            var storeWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>().Object;
 
-        //    migratorFactoryMock
-        //        .Setup(x => x.GetCrmDataMigrator(
-        //            "csv",
-        //            It.IsAny<ILogger>(),
-        //            It.IsAny<EntityRepository>(),
-        //            It.IsAny<CrmExporterConfig>(),
-        //            It.IsAny<CancellationToken>(),
-        //            It.IsAny<CrmSchemaConfiguration>()))
-        //        .Returns(new Mock<GenericCrmDataMigrator>().Object)
-        //        .Verifiable();
+            var genericCrmDataMigrator = new GenericCrmDataMigrator(loggerMock.Object, storeReader, storeWriter);
 
-        //    FluentActions.Invoking(() => systemUnderTest.ExportData(exportSettings))
-        //        .Should()
-        //        .NotThrow();
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                                                dataFormat,
+                                                                It.IsAny<ILogger>(),
+                                                                It.IsAny<EntityRepository>(),
+                                                                It.IsAny<CrmExporterConfig>(),
+                                                                It.IsAny<CancellationToken>(),
+                                                                It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(genericCrmDataMigrator)
+                               .Verifiable();
 
-        //    migratorFactoryMock.Verify();
-        //}
+            FluentActions.Invoking(() => systemUnderTest.ExportData(exportSettings))
+                         .Should()
+                         .Throw<NullReferenceException>();
+
+            migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void ExportDataAsCsv()
+        {
+            var dataFormat = "csv";
+            var exportSettings = new ExportSettings
+            {
+                // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
+                SchemaPath = "TestData/BusinessUnitSchema.xml",
+                DataFormat = dataFormat,
+                ExportConfigPath = "TestData"
+            };
+
+            var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;
+            var storeWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>().Object;
+
+            var genericCrmDataMigrator = new GenericCrmDataMigrator(loggerMock.Object, storeReader, storeWriter);
+
+            var factoryMock = new Mock<ICrmGenericMigratorFactory>();
+            factoryMock.Setup(x => x.GetCrmDataMigrator(
+                                                                dataFormat,
+                                                                It.IsAny<ILogger>(),
+                                                                It.IsAny<EntityRepository>(),
+                                                                It.IsAny<CrmExporterConfig>(),
+                                                                It.IsAny<CancellationToken>(),
+                                                                It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(genericCrmDataMigrator)
+                               .Verifiable();
+
+            var localSystemUnderTest = new DataMigrationService(loggerMock.Object, factoryMock.Object);
+
+            FluentActions.Invoking(() => localSystemUnderTest.ExportData(exportSettings))
+                         .Should()
+                         .Throw<NullReferenceException>();
+
+            factoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
+        }
     }
 }

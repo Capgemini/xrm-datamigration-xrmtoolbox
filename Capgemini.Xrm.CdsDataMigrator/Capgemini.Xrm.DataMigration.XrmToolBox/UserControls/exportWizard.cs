@@ -6,6 +6,8 @@ using System.Threading;
 using Microsoft.Xrm.Tooling.Connector;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using XrmToolBox.Extensibility;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -13,13 +15,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     {
         private readonly MessageLogger logger;
         private readonly ExportPresenter presenter;
+        private readonly IDataMigrationService dataMigrationService;
+        private readonly ICrmGenericMigratorFactory migratorFactory;
 
         public exportWizard()
         {
             InitializeComponent();
 
+            migratorFactory = new CrmGenericMigratorFactory();
             logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
-            presenter = new ExportPresenter(this, logger);
+            dataMigrationService = new DataMigrationService(logger, migratorFactory);
+            presenter = new ExportPresenter(this, logger, dataMigrationService);
+
             logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;

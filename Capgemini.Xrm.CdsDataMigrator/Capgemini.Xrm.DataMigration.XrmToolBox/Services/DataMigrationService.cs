@@ -1,7 +1,6 @@
 ﻿using Capgemini.DataMigration.Core;
 using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
@@ -12,15 +11,11 @@ using System.Threading;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 {
-    public class DataMigrationService
+    public class DataMigrationService : IDataMigrationService
     {
         private readonly ILogger logger;
         private readonly ICrmGenericMigratorFactory migratorFactory;
         private CrmExporterConfig exportConfig;
-
-        public DataMigrationService(ILogger logger) : this(logger, new CrmGenericMigratorFactory())
-        {
-        }
 
         public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
         {
@@ -61,9 +56,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
                 };
             }
 
-            CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
+            var schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
 
-            GenericCrmDataMigrator migrator = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
+            var migrator = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
             migrator.MigrateData();
         }
 

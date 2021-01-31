@@ -6,7 +6,6 @@ using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
-using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -60,10 +59,8 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
                 JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
             };
             var cancellationToken = CancellationToken.None;
-            var schema = new CrmSchemaConfiguration
-            {
-                Entities = new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } }
-            };
+            var schema = new CrmSchemaConfiguration();
+            schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
 
             var migrator = systemUnderTest.GetCrmDataMigrator("csv", logger, entityRepo, exportConfig, cancellationToken, schema);
 

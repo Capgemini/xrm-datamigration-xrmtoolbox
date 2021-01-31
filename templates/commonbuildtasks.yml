@@ -49,7 +49,7 @@ jobs:
       - task: VSTest@2
         displayName: Run tests
         inputs:
-          searchFolder: Capgemini.Xrm.XrmToolBoxPlugins
+          searchFolder: Capgemini.Xrm.CdsDataMigrator
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
           codeCoverageEnabled: true
@@ -99,4 +99,4 @@ jobs:
 
       - publish: $(Build.ArtifactStagingDirectory)/tests
         displayName: Publish tests
-        artifact: Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Tests
+        artifact: Capgemini.Xrm.CdsDataMigrator.Tests

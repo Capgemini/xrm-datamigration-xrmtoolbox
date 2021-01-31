@@ -4,6 +4,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models
 {
     public class ExportSettings
     {
+        public ExportSettings()
+        {
+        }
+
         public string DataFormat { get; set; }
 
         public string SavePath { get; set; }
