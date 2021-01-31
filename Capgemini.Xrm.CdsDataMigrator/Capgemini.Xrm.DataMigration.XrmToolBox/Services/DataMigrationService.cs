@@ -20,7 +20,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 
         public DataMigrationService(ILogger logger) : this(logger, new CrmGenericMigratorFactory())
         {
-
         }
 
         public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
@@ -55,11 +54,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
                     TopCount = Convert.ToInt32(1000000),
                     OnlyActiveRecords = !exportSettings.ExportInactiveRecords,
                     JsonFolderPath = exportSettings.SavePath,
-                    CrmMigrationToolSchemaFilters = new Dictionary<string, string>(),
                     OneEntityPerBatch = false,
-                    LookupMapping = new Dictionary<string, Dictionary<string, List<string>>>(),
                     FilePrefix = "0.1",
-                    ExcludedFields = new List<string> { },
                     SeperateFilesPerEntity = true,
                     FetchXMLFolderPath = string.Empty
                 };
@@ -69,7 +65,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 
             GenericCrmDataMigrator migrator = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
             migrator.MigrateData();
-
         }
 
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)

@@ -87,7 +87,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
                 if (nudMaxThreads.Value > 1 && !string.IsNullOrWhiteSpace(TargetConnectionString))
                 {
-                    logger.Info("Starting MultiThreaded Processing, using " + nudMaxThreads.Value + " threads");
+                    logger.LogInfo("Starting MultiThreaded Processing, using " + nudMaxThreads.Value + " threads");
                     List<IEntityRepository> repos = new List<IEntityRepository>();
                     int threadCount = Convert.ToInt32(nudMaxThreads.Value);
 
@@ -102,7 +102,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 }
                 else
                 {
-                    logger.Info("Starting Single Threaded processing, you must configure connection string for multithreaded processing adn set up max threads to more than 1");
+                    logger.LogInfo("Starting Single Threaded processing, you must configure connection string for multithreaded processing adn set up max threads to more than 1");
                     EntityRepository entityRepo = new EntityRepository(orgService, new ServiceRetryExecutor());
 
                     if (radioButton2.Checked)

@@ -20,7 +20,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
             presenter = new ExportPresenter(this, logger);
-            logger.Verbose($"ExportPresenter {presenter} successfully instatiated!");
+            logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;

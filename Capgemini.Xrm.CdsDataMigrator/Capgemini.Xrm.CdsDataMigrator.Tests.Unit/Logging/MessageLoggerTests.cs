@@ -41,7 +41,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Verbose
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Error(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
                             .Should()
                             .NotThrow();
 
@@ -63,7 +63,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Error
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Error(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
                             .Should()
                             .NotThrow();
 
@@ -83,7 +83,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
             {
                 systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current);
 
-                FluentActions.Invoking(() => systemUnderTest.Error(Message, exception))
+                FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
                             .Should()
                             .NotThrow();
 
@@ -103,7 +103,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Info(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
                             .Should()
                             .NotThrow();
 
@@ -124,7 +124,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Info
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Info(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
                             .Should()
                             .NotThrow();
 
@@ -143,7 +143,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Verbose(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
                             .Should()
                             .NotThrow();
 
@@ -164,7 +164,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Verbose
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Verbose(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
                             .Should()
                             .NotThrow();
 
@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Error
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Warning(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
                             .Should()
                             .NotThrow();
 
@@ -204,7 +204,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.Warning(Message))
+                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
                             .Should()
                             .NotThrow();
 

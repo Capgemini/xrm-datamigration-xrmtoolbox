@@ -44,14 +44,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
         {
             try
             {
-                DataMigrationService migrationService = new DataMigrationService(this.logger);
+                DataMigrationService migrationService = new DataMigrationService(logger);
 
                 ExportSettings settings = GetExportSettingsObject();
                 migrationService.ExportData(settings);
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                logger.LogError(ex.Message);
             }
         }
 

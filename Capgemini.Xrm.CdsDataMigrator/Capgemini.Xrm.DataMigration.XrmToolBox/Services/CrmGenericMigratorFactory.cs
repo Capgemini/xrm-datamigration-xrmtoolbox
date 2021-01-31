@@ -19,7 +19,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
                     return new CrmFileDataExporter(logger, repo, exportConfig, token);
 
                 case "csv":
-                    return new CrmFileDataExporterCsv(logger, repo, exportConfig, token, schema);
+                    return new CrmFileDataExporterCsv(logger, repo, exportConfig, schema, token);
 
                 default:
                     throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");

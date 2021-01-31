@@ -18,17 +18,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
 
         public LogLevel LogLevel { get; set; } = LogLevel.Info;
 
-        public void Error(string message)
+        public void LogError(string message)
         {
             WriteLine($"Error:{message}");
         }
 
-        public void Error(string message, Exception ex)
+        public void LogError(string message, Exception ex)
         {
             WriteLine($"Error:{message},Ex:{ex}");
         }
 
-        public void Info(string message)
+        public void LogInfo(string message)
         {
             if ((int)LogLevel > 1)
             {
@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
             }
         }
 
-        public void Verbose(string message)
+        public void LogVerbose(string message)
         {
             if ((int)LogLevel > 2)
             {
@@ -44,7 +44,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
             }
         }
 
-        public void Warning(string message)
+        public void LogWarning(string message)
         {
             if (LogLevel > 0)
             {
