@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
@@ -11,7 +12,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         {
             var systemUndertest = new ExportSettings();
 
-            systemUndertest.DataFormat.Should().BeNullOrEmpty();
+            systemUndertest.DataFormat.Should().Be(DataFormat.Json);
             systemUndertest.SavePath.Should().BeNullOrEmpty();
             systemUndertest.EnvironmentConnection.Should().BeNull();
             systemUndertest.ExportConfigPath.Should().BeNullOrEmpty();
@@ -28,7 +29,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
 
             var systemUndertest = new ExportSettings
             {
-                DataFormat = testString,
+                DataFormat = DataFormat.Json,
                 SavePath = testString,
                 EnvironmentConnection = null,
                 ExportConfigPath = testString,
@@ -38,7 +39,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                 BatchSize = 5
             };
 
-            systemUndertest.DataFormat.Should().Be(testString);
+            systemUndertest.DataFormat.Should().Be(DataFormat.Json);
             systemUndertest.SavePath.Should().Be(testString);
             systemUndertest.EnvironmentConnection.Should().BeNull();
             systemUndertest.ExportConfigPath.Should().Be(testString);

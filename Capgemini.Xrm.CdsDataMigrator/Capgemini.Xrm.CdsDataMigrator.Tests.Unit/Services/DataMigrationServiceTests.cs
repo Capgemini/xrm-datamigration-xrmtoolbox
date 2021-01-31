@@ -6,6 +6,7 @@ using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.DataStore;
 using Capgemini.Xrm.DataMigration.Repositories;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
@@ -76,7 +77,7 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
         [TestMethod]
         public void ExportDataAsJson()
         {
-            var dataFormat = "json";
+            var dataFormat = DataFormat.Json;
             var exportSettings = new ExportSettings
             {
                 // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
@@ -109,7 +110,7 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
         [TestMethod]
         public void ExportDataAsCsv()
         {
-            var dataFormat = "csv";
+            var dataFormat = DataFormat.Csv;
             var exportSettings = new ExportSettings
             {
                 // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!

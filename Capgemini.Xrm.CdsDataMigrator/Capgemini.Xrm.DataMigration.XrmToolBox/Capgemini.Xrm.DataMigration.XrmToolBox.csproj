@@ -218,6 +218,7 @@
     <Compile Include="Core\Settings.cs" />
     <Compile Include="Core\WizardMode.cs" />
     <Compile Include="Core\WizardType.cs" />
+    <Compile Include="Enums\DataFormat.cs" />
     <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
@@ -239,7 +240,7 @@
     <Compile Include="Forms\MappingListLookup.Designer.cs">
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Logging\MessageLogger.cs" />
     <Compile Include="Model\DataMigrationSettings.cs" />
     <Compile Include="Model\DeserializationSettings.cs" />

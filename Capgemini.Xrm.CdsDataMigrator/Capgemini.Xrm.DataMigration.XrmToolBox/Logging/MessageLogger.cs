@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows.Forms;
 using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
 {

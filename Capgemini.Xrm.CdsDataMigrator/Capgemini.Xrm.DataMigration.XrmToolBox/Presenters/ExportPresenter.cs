@@ -3,6 +3,7 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using System;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 {
@@ -66,11 +67,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 
             if (exportView.FormatJsonSelected)
             {
-                settings.DataFormat = "json";
+                settings.DataFormat = DataFormat.Json;
             }
             else if (exportView.FormatCsvSelected)
             {
-                settings.DataFormat = "csv";
+                settings.DataFormat = DataFormat.Csv;
             }
 
             settings.SavePath = exportView.SaveExportLocation;

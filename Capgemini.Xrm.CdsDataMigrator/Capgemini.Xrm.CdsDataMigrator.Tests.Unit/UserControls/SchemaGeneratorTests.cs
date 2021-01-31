@@ -13,12 +13,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Tests
                         .Should()
                         .NotThrow();
         }
-
-        [TestMethod]
-        [Ignore("TODO: fix")]
-        public void OnConnectionUpdated()
-        {
-            Assert.Fail();
-        }
     }
 }

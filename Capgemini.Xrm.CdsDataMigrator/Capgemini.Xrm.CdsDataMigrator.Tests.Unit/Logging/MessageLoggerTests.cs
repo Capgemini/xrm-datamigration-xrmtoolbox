@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

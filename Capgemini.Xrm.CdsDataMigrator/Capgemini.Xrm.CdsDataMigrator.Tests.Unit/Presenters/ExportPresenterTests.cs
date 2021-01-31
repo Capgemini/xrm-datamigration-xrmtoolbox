@@ -1,4 +1,5 @@
 ﻿using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
@@ -41,7 +42,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
 
             var actual = systemUnderTest.GetExportSettingsObject();
 
-            actual.DataFormat.Should().Be("json");
+            actual.DataFormat.Should().Be(DataFormat.Json);
 
             exportView.VerifyAll();
         }
@@ -65,7 +66,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
 
             var actual = systemUnderTest.GetExportSettingsObject();
 
-            actual.DataFormat.Should().Be("csv");
+            actual.DataFormat.Should().Be(DataFormat.Csv);
 
             exportView.VerifyAll();
         }

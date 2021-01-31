@@ -3,6 +3,7 @@ using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using System;
 using System.Threading;
 
@@ -10,15 +11,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 {
     public class CrmGenericMigratorFactory : ICrmGenericMigratorFactory
     {
-        public GenericCrmDataMigrator GetCrmDataMigrator(string dataFormat, ILogger logger, IEntityRepository repo, CrmExporterConfig exportConfig, CancellationToken token, CrmSchemaConfiguration schema)
+        public GenericCrmDataMigrator GetCrmDataMigrator(DataFormat dataFormat, ILogger logger, IEntityRepository repo, CrmExporterConfig exportConfig, CancellationToken token, CrmSchemaConfiguration schema)
         {
-            // TODO: refactor to enum
             switch (dataFormat)
             {
-                case "json":
+                case DataFormat.Json:
                     return new CrmFileDataExporter(logger, repo, exportConfig, token);
 
-                case "csv":
+                case DataFormat.Csv:
                     return new CrmFileDataExporterCsv(logger, repo, exportConfig, schema, token);
 
                 default:
