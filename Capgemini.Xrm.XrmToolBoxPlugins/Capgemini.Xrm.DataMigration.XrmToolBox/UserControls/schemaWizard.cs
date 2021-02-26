@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
@@ -17,6 +16,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using MyXrmToolBoxPlugin3;
+using NuGet;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
@@ -26,14 +26,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
     /// </summary>
     public partial class SchemaGenerator : UserControl
     {
-        private readonly DataMigrationSettings dataMigrationSettings = new DataMigrationSettings();
-        private readonly DeserializationSettings deserialization = new DeserializationSettings();
-        private readonly SerializationSettings xmlSettings = new SerializationSettings();
-        private readonly ExportConfigSettings exportSchemaSettings = new ExportConfigSettings();
-        private readonly ImportConfigSettingscs importSchemaSettings = new ImportConfigSettingscs();
         private readonly CrmSchemaConfiguration crmSchemaConfiguration = new CrmSchemaConfiguration();
         private readonly AttributeTypeMapping attributeMapping = new AttributeTypeMapping();
-        private readonly LoadAllSettings loadAllSettings = new LoadAllSettings();
         private readonly HashSet<string> checkedEntity = new HashSet<string>();
         private readonly HashSet<string> selectedEntity = new HashSet<string>();
         private readonly HashSet<string> checkedRelationship = new HashSet<string>();
@@ -64,22 +58,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public void OnConnectionUpdated()
         {
+            organisationId = CrmServiceClient.ConnectedOrgId;
+            toolStripLabelConnection.Text = $"Connected to: {CrmServiceClient.ConnectedOrgFriendlyName}";
             RefreshEntities(true);
-        }
-
-        private void ButtonSourceConnectionStringClick(object sender, EventArgs e)
-        {
-            PerformOnConnectionRequestedAction("SourceOrganization");
-        }
-
-        private void ButtonTargetConnectionStringClick(object sender, EventArgs e)
-        {
-            PerformOnConnectionRequestedAction("TargetOrganization");
-        }
-
-        private void ButtonSchemaClick(object sender, EventArgs e)
-        {
-            PerformOnConnectionRequestedAction("SchemaOrganization");
         }
 
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
@@ -102,10 +83,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             mapper.Clear();
             lookupMaping.Clear();
             filterQuery.Clear();
-            dataMigrationSettings.JsonFolderPath = null;
-            importSchemaSettings.JsonFilePath = null;
-            exportSchemaSettings.JsonFilePath = null;
-            deserialization.XmlFolderPath = null;
             selectedEntity.Clear();
             checkedRelationship.Clear();
             mapping.Clear();
@@ -120,10 +97,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            var orgService = CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy;
             GetEntityLogicalName();
-            PopulateAttributes(entityLogicalName, orgService);
-            PopulateRelationship(entityLogicalName, orgService);
+            PopulateAttributes(entityLogicalName, CrmServiceClient);
+            PopulateRelationship(entityLogicalName, CrmServiceClient);
             AddSelectedEntities();
         }
 
@@ -788,7 +764,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var sourceList = MetadataHelper.RetrieveEntities(item, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
 
-                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Length > 0)
+                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
                     {
                         fieldsSelected = true;
                     }
@@ -807,39 +783,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             if (AreCrmEntityFieldsSelected())
             {
-                GetSchemaFilePath();
                 CollectCrmEntityFields();
                 GenerateXMLFile();
-                GenerateXMLFileMessage();
-                ResetEntities();
+                crmSchemaConfiguration.Entities.Clear();
             }
             else
             {
                 MessageBox.Show("Please select at least one attribute for each selected entity!");
             }
-        }
-
-        private void GenerateXMLFileMessage()
-        {
-            if (!xmlSettings.FailedValidation)
-            {
-                MessageBox.Show(xmlSettings.SuccessValidationMessage);
-            }
-            else
-            {
-                MessageBox.Show(xmlSettings.FailedValidationMessage);
-            }
-        }
-
-        private void ResetEntities()
-        {
-            xmlSettings.Entity.Clear();
-            crmSchemaConfiguration.Entities = null;
-        }
-
-        private void GetSchemaFilePath()
-        {
-            xmlSettings.XmlFilePath = tbSchemaPath.Text;
         }
 
         private void CollectCrmEntityFields()
@@ -851,13 +802,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in checkedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = MetadataHelper.RetrieveEntities(item, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
+                    var sourceList = MetadataHelper.RetrieveEntities(item, CrmServiceClient);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
                 }
 
-                crmSchemaConfiguration.Entities = crmEntityList.ToArray();
-                xmlSettings.Entity.Clear();
-                xmlSettings.Entity.AddRange(crmSchemaConfiguration.Entities);
+                crmSchemaConfiguration.Entities.Clear();
+                crmSchemaConfiguration.Entities.AddRange(crmEntityList);
             }
         }
 
@@ -891,7 +841,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
             }
 
-            crmEntity.CrmRelationships = relationshipList.ToArray();
+            crmEntity.CrmRelationships.Clear();
+            crmEntity.CrmRelationships.AddRange(relationshipList);
         }
 
         private void StoreCrmEntityRelationShipData(CrmEntity crmEntity, ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
@@ -923,7 +874,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList);
                     }
 
-                    crmEntity.CrmFields = crmFieldList.ToArray();
+                    crmEntity.CrmFields.Clear();
+                    crmEntity.CrmFields.AddRange(crmFieldList);
                 }
             }
         }
@@ -979,11 +931,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void GenerateXMLFile()
         {
-            xmlSettings.ValidateAll();
-            var path = xmlSettings.XmlFilePath;
-            if (!xmlSettings.FailedValidation)
+            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
             {
-                crmSchemaConfiguration.SaveToFile(path);
+                crmSchemaConfiguration.SaveToFile(tbSchemaPath.Text);
             }
         }
 
@@ -1003,7 +953,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbSchemaPath.Text))
                     {
-                        ToolBarLoadSchemaFileClick(this, new EventArgs());
+                        LoadSchemaFile();
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -1015,14 +965,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void LoadSchemaFile()
         {
-            deserialization.XmlFolderPath = tbSchemaPath.Text;
-            deserialization.Validate();
-            if (!deserialization.FailedValidation)
+            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
             {
-                CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(deserialization.XmlFolderPath);
-                StoreEntityData(crmSchema.Entities);
-                ClearAllListViews();
-                PopulateEntities();
+                try
+                {
+                    CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
+                    StoreEntityData(crmSchema.Entities?.ToArray());
+                    ClearAllListViews();
+                    PopulateEntities();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Schema File load error, ensure to load correct Schema file, Error:" + ex.Message);
+                }
             }
         }
 
@@ -1111,16 +1066,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void GetJsonFolderPathImport()
-        {
-            importSchemaSettings.JsonFilePath = tbImportConfig.Text;
-        }
-
-        private void GetJsonFolderPathExport()
-        {
-            exportSchemaSettings.JsonFilePath = tbExportConfig.Text;
-        }
-
         private void ButtonImportConfigPathClick(object sender, EventArgs e)
         {
             using (var fileDialog = new SaveFileDialog
@@ -1137,7 +1082,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbImportConfig.Text))
                     {
-                        ToolBarLoadMappingsFileClick(this, new EventArgs());
+                        LoadImportConfigFile();
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -1147,38 +1092,29 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void LoadMappingFileLookup()
+        private void LoadImportConfigFile()
         {
-            exportSchemaSettings.JsonFilePathLoad = tbExportConfig.Text;
-            exportSchemaSettings.ValidateLoading();
-            try
+            if (!string.IsNullOrWhiteSpace(tbImportConfig.Text))
             {
-                if (!exportSchemaSettings.FailedValidationLoading)
+                try
                 {
-                    lookupMaping = CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePathLoad).LookupMapping;
-                }
-            }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Load Correct file");
-            }
-        }
+                    var configImport = CrmImportConfig.GetConfiguration(tbImportConfig.Text);
+                    if (configImport.MigrationConfig == null)
+                    {
+                        MessageBox.Show("Invalid Import Config File");
+                        tbImportConfig.Text = "";
+                        return;
+                    }
 
-        private void LoadMappingFileGuid()
-        {
-            importSchemaSettings.JsonFilePathLoad = tbImportConfig.Text;
-            importSchemaSettings.ValidateLoading();
-            try
-            {
-                if (!importSchemaSettings.FailedValidationLoading)
-                {
-                    mapper = CrmImportConfig.GetConfiguration(importSchemaSettings.JsonFilePathLoad).MigrationConfig.Mappings;
+                    mapper = configImport.MigrationConfig.Mappings;
                     DataConversion();
+
+                    MessageBox.Show("Guid Id Mappings loaded from Import Config File");
                 }
-            }
-            catch (NullReferenceException exception)
-            {
-                MessageBox.Show("Load Correct file, error:" + exception.Message);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Load Correct Import Config file, error:" + ex.Message);
+                }
             }
         }
 
@@ -1198,8 +1134,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbExportConfig.Text))
                     {
-                        ToolBarLoadFiltersFileClick(this, new EventArgs());
-                        LoadMappingFileLookup();
+                        LoadExportConfigFile();
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -1209,141 +1144,134 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void LoadFilterFile()
+        private void LoadExportConfigFile()
         {
-            exportSchemaSettings.JsonFilePathLoad = tbExportConfig.Text;
-            exportSchemaSettings.ValidateLoading();
-            try
+            if (!string.IsNullOrWhiteSpace(tbExportConfig.Text))
             {
-                if (!exportSchemaSettings.FailedValidationLoading && CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePathLoad).CrmMigrationToolSchemaFilters.Count > 0)
+                try
                 {
-                    filterQuery = CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePathLoad).CrmMigrationToolSchemaFilters;
+                    var configFile = CrmExporterConfig.GetConfiguration(tbExportConfig.Text);
+                    if (!configFile.CrmMigrationToolSchemaPaths.Any())
+                    {
+                        MessageBox.Show("Invalid Export Config File");
+                        tbExportConfig.Text = "";
+                        return;
+                    }
+
+                    filterQuery = configFile.CrmMigrationToolSchemaFilters;
+                    lookupMaping = configFile.LookupMapping;
+
+                    MessageBox.Show("Filters and Lookup Mappings loaded from Export Config File");
                 }
-            }
-            catch (NullReferenceException exception)
-            {
-                MessageBox.Show("Load Correct file, error:" + exception.Message);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Load Correct Export Config file, error:" + ex.Message);
+                }
             }
         }
 
         private void ToolBarLoadSchemaClick(object sender, EventArgs e)
         {
-            deserialization.XmlFolderPath = tbSchemaPath.Text;
-            deserialization.Validate();
-            if (!deserialization.FailedValidation)
+            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
             {
-                CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(deserialization.XmlFolderPath);
-                StoreEntityData(crmSchema.Entities);
-                ClearAllListViews();
-                PopulateEntities();
-            }
-            else
-            {
-                MessageBox.Show(deserialization.FailedValidationMessage);
+                try
+                {
+                    CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
+                    StoreEntityData(crmSchema.Entities?.ToArray());
+                    ClearAllListViews();
+                    PopulateEntities();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Load Correct Schema file, error:" + ex.Message);
+                }
             }
         }
 
         private void ToolBarSaveMappingsClick(object sender, EventArgs e)
         {
-            GetJsonFolderPathImport();
             GenerateImportConfigFile();
-            GenerateImportConfigMessage();
-        }
-
-        private void GenerateImportConfigMessage()
-        {
-            MessageBox.Show(importSchemaSettings.FailedValidation ? importSchemaSettings.FailedValidationMessage : importSchemaSettings.SuccessValidationMessage);
         }
 
         private void GenerateImportConfigFile()
         {
-            CrmImportConfig migration = new CrmImportConfig() { IgnoreStatuses = true, IgnoreSystemFields = true, SaveBatchSize = 200 };
-            if (File.Exists(importSchemaSettings.JsonFilePath))
+            try
             {
-                migration = CrmImportConfig.GetConfiguration(importSchemaSettings.JsonFilePath);
-            }
-
-            if (migration.MigrationConfig == null)
-            {
-                migration.MigrationConfig = new MappingConfiguration();
-            }
-
-            if (mapping != null)
-            {
-                migration.MigrationConfig.Mappings = mapper;
-                importSchemaSettings.Mappings.Clear();
-
-                foreach (var item in mapper)
+                CrmImportConfig migration = new CrmImportConfig()
                 {
-                    importSchemaSettings.Mappings.Add(item.Key, item.Value);
+                    IgnoreStatuses = true,
+                    IgnoreSystemFields = true,
+                    SaveBatchSize = 1000,
+                    JsonFolderPath = "ExtractedData"
+                };
+
+                if (File.Exists(tbImportConfig.Text))
+                {
+                    migration = CrmImportConfig.GetConfiguration(tbImportConfig.Text);
                 }
 
-                importSchemaSettings.ValidateAll();
-
-                if (!importSchemaSettings.FailedValidation)
+                if (migration.MigrationConfig == null)
                 {
-                    migration.JsonFolderPath = new FileInfo(importSchemaSettings.JsonFilePath).DirectoryName + "\\ExtractedData";
-                    if (File.Exists(importSchemaSettings.JsonFilePath))
+                    migration.MigrationConfig = new MappingConfiguration();
+                }
+
+                if (mapping != null)
+                {
+                    migration.MigrationConfig.Mappings.Clear();
+                    migration.MigrationConfig.Mappings.AddRange(mapper);
+
+                    if (File.Exists(tbImportConfig.Text))
                     {
-                        File.Delete(importSchemaSettings.JsonFilePath);
+                        File.Delete(tbImportConfig.Text);
                     }
 
-                    migration.SaveConfiguration(importSchemaSettings.JsonFilePath);
+                    migration.SaveConfiguration(tbImportConfig.Text);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Saving Import Config file, Error:" + ex.Message);
             }
         }
 
         private void ToolBarSaveFiltersClick(object sender, EventArgs e)
         {
-            GetJsonFolderPathExport();
             GenerateExportConfigFile();
-            GenerateExportConfigMessage();
-        }
-
-        private void GenerateExportConfigMessage()
-        {
-            MessageBox.Show(exportSchemaSettings.FailedValidation ? exportSchemaSettings.FailedValidationMessage : exportSchemaSettings.SuccessValidationMessage);
         }
 
         private void GenerateExportConfigFile()
         {
-            CrmExporterConfig config = new CrmExporterConfig();
-            if (File.Exists(exportSchemaSettings.JsonFilePath))
+            CrmExporterConfig config = new CrmExporterConfig()
             {
-                config = CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePath);
+                JsonFolderPath = "ExtractedData",
+            };
+
+            if (File.Exists(tbExportConfig.Text))
+            {
+                config = CrmExporterConfig.GetConfiguration(tbExportConfig.Text);
             }
 
-            config.CrmMigrationToolSchemaFilters = filterQuery;
-            exportSchemaSettings.Filter.Clear();
-            foreach (var item in filterQuery)
-            {
-                exportSchemaSettings.Filter.Add(item.Key, item.Value);
-            }
-
-            exportSchemaSettings.Validate();
-            exportSchemaSettings.ValidateSuccess();
+            config.CrmMigrationToolSchemaFilters.Clear();
+            config.CrmMigrationToolSchemaFilters.AddRange(filterQuery);
 
             if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
             {
-                config.CrmMigrationToolSchemaPaths = new List<string>() { tbSchemaPath.Text };
-
-                config.JsonFolderPath = new FileInfo(exportSchemaSettings.JsonFilePath).DirectoryName + "\\ExtractedData";
+                config.CrmMigrationToolSchemaPaths.Clear();
+                config.CrmMigrationToolSchemaPaths.Add(tbSchemaPath.Text);
             }
 
             if (lookupMaping.Count > 0)
             {
-                config.LookupMapping = lookupMaping;
+                config.LookupMapping.Clear();
+                config.LookupMapping.AddRange(lookupMaping);
             }
 
-            if (!exportSchemaSettings.FailedValidation)
+            if (File.Exists(tbExportConfig.Text))
             {
-                if (File.Exists(exportSchemaSettings.JsonFilePath))
-                {
-                    File.Delete(exportSchemaSettings.JsonFilePath);
-                }
-
-                config.SaveConfiguration(exportSchemaSettings.JsonFilePath);
+                File.Delete(tbExportConfig.Text);
             }
+
+            config.SaveConfiguration(tbExportConfig.Text);
         }
 
         private void DataConversion()
@@ -1364,53 +1292,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarLoadMappingsFileClick(object sender, EventArgs e)
         {
-            LoadMappingFileGuid();
-
-            GenerateLoadMappingFileMessage();
-        }
-
-        private void GenerateLoadMappingFileMessage()
-        {
-            if (!importSchemaSettings.FailedValidationLoading)
-            {
-                MessageBox.Show(importSchemaSettings.SuccessValidationMessageLoading);
-            }
-            else
-            {
-                MessageBox.Show(importSchemaSettings.FailedValidationLoadingMessage);
-            }
+            LoadImportConfigFile();
         }
 
         private void ToolBarLoadSchemaFileClick(object sender, EventArgs e)
         {
             LoadSchemaFile();
-            GenerateLoadSchemaFileMessage();
-        }
-
-        private void GenerateLoadSchemaFileMessage()
-        {
-            if (deserialization.FailedValidation)
-            {
-                MessageBox.Show(deserialization.FailedValidationMessage);
-            }
         }
 
         private void ToolBarLoadFiltersFileClick(object sender, EventArgs e)
         {
-            LoadFilterFile();
-            GenerateLoadFilterFileMessage();
-        }
-
-        private void GenerateLoadFilterFileMessage()
-        {
-            if (!exportSchemaSettings.FailedValidationLoading && CrmExporterConfig.GetConfiguration(exportSchemaSettings.JsonFilePathLoad).CrmMigrationToolSchemaFilters.Count > 0)
-            {
-                MessageBox.Show(exportSchemaSettings.SuccessValidationMessageLoading);
-            }
-            else
-            {
-                MessageBox.Show(exportSchemaSettings.FailedValidationLoadingMessage);
-            }
+            LoadExportConfigFile();
         }
 
         private void LoadAllToolStripMenuItemClick(object sender, EventArgs e)
@@ -1420,63 +1312,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void LoadAllFiles()
         {
-            loadAllSettings.SchemaPath = tbSchemaPath.Text;
-            loadAllSettings.ImportPath = tbImportConfig.Text;
-            loadAllSettings.ExportPath = tbExportConfig.Text;
-            loadAllSettings.Validate();
-
-            if (!loadAllSettings.FailedValidation)
-            {
-                LoadSchemaFile();
-                LoadFilterFile();
-                LoadMappingFileLookup();
-                LoadMappingFileGuid();
-            }
-            else
-            {
-                MessageBox.Show(loadAllSettings.FailedValidationMessage);
-            }
+            LoadSchemaFile();
+            LoadExportConfigFile();
+            LoadImportConfigFile();
         }
 
         private void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            xmlSettings.XmlFilePath = tbSchemaPath.Text;
-            importSchemaSettings.JsonFilePath = tbImportConfig.Text;
-            exportSchemaSettings.JsonFilePath = tbExportConfig.Text;
             GenerateImportConfigFile();
             GenerateExportConfigFile();
             CollectCrmEntityFields();
             GenerateXMLFile();
-            GenerateSaveAllMessage();
-            ResetEntities();
-        }
-
-        private void GenerateSaveAllMessage()
-        {
-            StringBuilder failedMessage = new StringBuilder();
-            if (xmlSettings.FailedValidation)
-            {
-                failedMessage.Append(xmlSettings.FailedValidationMessage);
-            }
-
-            if (exportSchemaSettings.FailedValidation)
-            {
-                failedMessage.Append(exportSchemaSettings.FailedValidationMessage);
-            }
-
-            if (importSchemaSettings.FailedValidation)
-            {
-                failedMessage.Append(importSchemaSettings.FailedValidationMessage);
-            }
-
-            if (!exportSchemaSettings.FailedValidation && !importSchemaSettings.FailedValidation && !xmlSettings.FailedValidation)
-            {
-                MessageBox.Show("Successfully saved all files");
-            }
-            else
-            {
-                MessageBox.Show(failedMessage.ToString());
-            }
+            crmSchemaConfiguration.Entities.Clear();
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
@@ -1517,7 +1364,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             lookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             tsbtFilters.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             loadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            toolStripMenuItem1.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             saveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             tbExportConfig.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             btExportConfigPath.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
@@ -1535,17 +1381,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolStripButtonConnectClick(object sender, EventArgs e)
         {
-            PerformOnConnectionRequestedAction("SourceOrganization");
-            toolStripLabelConnection.Text = $"Connected to: {CrmServiceClient.ConnectedOrgFriendlyName}";
-        }
-
-        private void PerformOnConnectionRequestedAction(string actionName)
-        {
             if (OnConnectionRequested != null)
             {
-                var args = new RequestConnectionEventArgs { ActionName = actionName, Control = (MyPluginControl)Parent };
+                var args = new RequestConnectionEventArgs { ActionName = "SchemaConnection", Control = (MyPluginControl)Parent };
                 OnConnectionRequested(this, args);
             }
         }
+
     }
 }

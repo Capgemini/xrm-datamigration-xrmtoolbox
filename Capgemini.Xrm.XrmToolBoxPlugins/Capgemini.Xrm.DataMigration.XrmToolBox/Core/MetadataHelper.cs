@@ -61,7 +61,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                     var request = new RetrieveEntityRequest
                     {
                         LogicalName = logicalName,
-                        EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships
+                        EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships 
                     };
 
                     var response = (RetrieveEntityResponse)oService.Execute(request);

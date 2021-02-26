@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
@@ -13,31 +14,32 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool ShowExecuteButton
         {
-            get { return button3.Visible; }
-            set { button3.Visible = value; }
+            get { return btnExecute.Visible; }
+            set { btnExecute.Visible = value; }
         }
 
         public WizardButtons()
         {
             InitializeComponent();
-            button3.Visible = ShowExecuteButton;
+            btnExecute.Visible = ShowExecuteButton;
+            btnBack.Enabled = false;
         }
 
         private void Container_SelectedPageChanged(object sender, EventArgs e)
         {
-            button3.Visible = Container.SelectedPage.IsFinishPage;
+            btnExecute.Visible = Container.SelectedPage.IsFinishPage;
 
             if (Container.SelectedPage.IsFinishPage)
             {
-                button3.BackColor = Color.DarkGray;
+                btnExecute.BackColor = Color.Green;
             }
             else
             {
-                button3.BackColor = SystemColors.ControlDarkDark;
+                btnExecute.BackColor = SystemColors.ControlDarkDark;
             }
 
-            button2.Enabled = !Container.SelectedPage.IsFinishPage;
-            button1.Enabled = Container.SelectedPage != Container.Pages[0];
+            btnNext.Enabled = Container.SelectedPage != Container.Pages[Container.Pages.Count-1];
+            btnBack.Enabled = Container.SelectedPage != Container.Pages[0];
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,7 +68,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void button3_Click(object sender, EventArgs e)
         {
+            btnExecute.Enabled = false;
             OnExecute?.Invoke(this, e);
+            btnExecute.Enabled = true;
         }
 
         private void WizardButtons_Load(object sender, EventArgs e)

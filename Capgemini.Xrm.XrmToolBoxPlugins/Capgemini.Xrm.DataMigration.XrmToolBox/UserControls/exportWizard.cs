@@ -6,6 +6,10 @@ using System.Threading;
 using Microsoft.Xrm.Tooling.Connector;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using XrmToolBox.Extensibility;
+using MyXrmToolBoxPlugin3;
+using System.Linq;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
+using Capgemini.Xrm.DataMigration.CrmStore.Config;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -23,38 +27,50 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;
-        }
 
-        private void WizardNavigation(WizardButtons wizardButtons, bool isNextNavigation)
-        {
-            if (wizardButtons.Container.SelectedPage.Name == "wizardPage2")
-            {
-                NavigationValidation(wizardButtons.Container.SelectedPage.Controls[0], wizardButtons.Container.SelectedPage.Controls[2], isNextNavigation, wizardButtons);
-            }
-            else if (wizardButtons.Container.SelectedPage.Name == "wizardPage4")
-            {
-                NavigationValidation(wizardButtons.Container.SelectedPage.Controls[0], wizardButtons.Container.SelectedPage.Controls[10], isNextNavigation, wizardButtons);
-            }
-            else
-            {
-                if (isNextNavigation)
-                {
-                    wizardButtons.Container.NextPage();
-                }
-            }
+            FormatCsvSelected = false;
+            FormatJsonSelected = true;
+            numericUpDownBatchSize.Value = 5000;
         }
 
         private void WizardButtons1_OnCustomPreviousNavigation(object sender, EventArgs e)
         {
             var wizardButtons = ((WizardButtons)sender);
+
+            WizardValidation(wizardButtons);
             wizardButtons.Container.PreviousPage();
-            WizardNavigation(wizardButtons, false);
         }
 
         private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
         {
             var wizardButtons = ((WizardButtons)sender);
-            WizardNavigation(wizardButtons, true);
+
+            if (WizardValidation(wizardButtons))
+                wizardButtons.Container.NextPage();
+        }
+
+        private bool WizardValidation(WizardButtons wizardButtons)
+        {
+            bool valResults = true;
+
+            if (wizardButtons.Container.SelectedPage.Name == "exportConfig")
+            {
+                if (!string.IsNullOrWhiteSpace(ExportConfigFileLocation))
+                {
+                    valResults = LoadSettingsFromConfig(wizardButtons);
+                }
+            }
+            else if (wizardButtons.Container.SelectedPage.Name == "exportLocation")
+            {
+                valResults = ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, textBoxExportLocation);
+            }
+            else if (wizardButtons.Container.SelectedPage.Name == "executeExport")
+            {
+                valResults = ValidationHelpers.IsTextControlNotEmpty(labelSchemaLocationFileValidation, textBoxSchemaLocation) &&
+                             ValidationHelpers.IsTextControlNotEmpty(labelExportConnectionValidation, labelTargetConnectionString);
+            }
+
+            return valResults;
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -86,13 +102,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         public decimal BatchSize
         {
             get => numericUpDownBatchSize.Value;
-            set
-            {
-                if (value > 0 && value <= 5000)
-                {
-                    numericUpDownBatchSize.Value = value;
-                }
-            }
+            set => numericUpDownBatchSize.Value = value;
         }
 
         private void buttonExportLocation_Click(object sender, EventArgs e)
@@ -123,7 +133,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)
         {
-            OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = string.Empty });
+            if (OnConnectionRequested != null)
+            {
+                OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (MyPluginControl)Parent });
+            }
+        }
+
+        internal void OnConnectionUpdated()
+        {
             labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
         }
 
@@ -139,62 +156,25 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             return openFileDialogExportConfigFile.FileName;
         }
 
-        private void wizardPage4_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private bool LoadSettingsFromConfig(WizardButtons wizardButtons)
         {
-            numericUpDownBatchSize.Value = 5000;
+            try
+            {
+                var config = CrmExporterConfig.GetConfiguration(ExportConfigFileLocation);
+                ExportSchemaFileLocation = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
+                SaveExportLocation = config.JsonFolderPath;
+                BatchSize = config.BatchSize;
+                ExportInactiveRecordsChecked = !config.OnlyActiveRecords;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Export Config Error:" + ex.ToString());
+                return false;
+            }
+
+            return true;
         }
 
-        private void textBoxExportLocation_TextChanged(object sender, EventArgs e)
-        {
-            Validation(textBoxExportLocation, labelFolderPathValidation);
-        }
-
-        private void textBoxSchemaLocation_TextChanged(object sender, EventArgs e)
-        {
-            Validation(textBoxSchemaLocation, labelSchemaLocationFile);
-        }
-
-        private void Validation(TextBox textBoxTovalidate, Label validationLabel)
-        {
-            var pathToExporData = textBoxTovalidate.Text;
-            var splitPath = pathToExporData.Split('\\');
-            if (splitPath != null && splitPath.Length > 1)
-            {
-                validationLabel.Visible = false;
-            }
-            else
-            {
-                validationLabel.Visible = true;
-            }
-        }
-
-        private void NavigationValidation(Control validatorControl, Control currentContainerControl, bool isNextButton, WizardButtons wizardButtons)
-        {
-            var elmControl = validatorControl;
-            var PathToExporData = currentContainerControl.Text;
-            var splitPath = PathToExporData.Split('\\');
-            if (splitPath != null && splitPath.Length > 1)
-            {
-                if (!isNextButton)
-                {
-                    elmControl.Visible = false;
-                }
-                else
-                {
-                    wizardButtons.Container.NextPage();
-                }
-            }
-            else
-            {
-                if (!isNextButton)
-                {
-                    elmControl.Visible = true;
-                }
-                else
-                {
-                    wizardButtons.Container.SelectedPage.Controls[0].Visible = true;
-                }
-            }
-        }
     }
 }

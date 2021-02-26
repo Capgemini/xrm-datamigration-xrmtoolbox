@@ -36,20 +36,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
             {
                 exportConfig = new CrmExporterConfig
                 {
-                    CrmMigrationToolSchemaPaths = new List<string> { exportSettings.SchemaPath },
                     BatchSize = Convert.ToInt32(exportSettings.BatchSize),
-                    PageSize = Convert.ToInt32(exportSettings.BatchSize),
+                    PageSize = 5000,
                     TopCount = Convert.ToInt32(1000000),
                     OnlyActiveRecords = !exportSettings.ExportInactiveRecords,
                     JsonFolderPath = exportSettings.SavePath,
-                    CrmMigrationToolSchemaFilters = new Dictionary<string, string>(),
-                    OneEntityPerBatch = false,
-                    LookupMapping = new Dictionary<string, Dictionary<string, List<string>>>(),
-                    FilePrefix = "0.1",
-                    ExcludedFields = new List<string> { },
+                    OneEntityPerBatch = true,
+                    FilePrefix = "ExtractedData",
                     SeperateFilesPerEntity = true,
                     FetchXMLFolderPath = string.Empty
                 };
+
+                exportConfig.CrmMigrationToolSchemaPaths.Clear();
+                exportConfig.CrmMigrationToolSchemaPaths.Add(exportSettings.SchemaPath);
             }
 
             CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
@@ -61,26 +60,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
             }
             else
             {
-                CrmFileDataExporterCsv exporter = new CrmFileDataExporterCsv(logger, repo, exportConfig, tokenSource.Token, schema);
+                CrmFileDataExporterCsv exporter = new CrmFileDataExporterCsv(logger, repo, exportConfig, schema, tokenSource.Token);
                 exporter.MigrateData();
             }
         }
 
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)
         {
-            config.CrmMigrationToolSchemaPaths = new List<string>() { exportSettings.SchemaPath };
+            config.CrmMigrationToolSchemaPaths.Clear();
+            config.CrmMigrationToolSchemaPaths.Add(exportSettings.SchemaPath);
+
             // TODO need add code for the minimize if JSON stuff
             config.JsonFolderPath = exportSettings.SavePath;
-            if (exportConfig.CrmMigrationToolSchemaFilters != null && exportConfig.CrmMigrationToolSchemaFilters.Count > 0)
-            {
-                config.OnlyActiveRecords = false;
-            }
-            else
-            {
-                config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
-            }
-            config.BatchSize = exportSettings.BatchSize > 0 ? exportSettings.BatchSize : 1;
-            config.PageSize = config.BatchSize;
+            config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
+            config.BatchSize = exportSettings.BatchSize;
         }
     }
 }

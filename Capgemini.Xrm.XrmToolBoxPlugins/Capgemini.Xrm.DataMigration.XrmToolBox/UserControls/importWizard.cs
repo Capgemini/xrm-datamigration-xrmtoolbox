@@ -4,9 +4,11 @@ using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
+using MyXrmToolBoxPlugin3;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,11 +31,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 IgnoreStatuses = cbIgnoreStatuses.Checked,
                 IgnoreSystemFields = cbIgnoreSystemFields.Checked,
                 SaveBatchSize = Convert.ToInt32(nudSavePageSize.Value),
-                JsonFolderPath = string.Empty
+                JsonFolderPath = tbSourceDataLocation.Text,
+                FilePrefix = "ExtractedData"
             };
 
             wizardButtons1.OnExecute += button2_Click;
             logger = new MessageLogger(tbLogger, SynchronizationContext.Current);
+            wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -58,7 +62,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)
         {
-            OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = "" });
+            if (OnConnectionRequested != null)
+            {
+                OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = "TargetConnection", Control = (MyPluginControl)Parent });
+            }
+        }
+
+        internal void OnConnectionUpdated()
+        {
             labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
             stepWizardControl1.Pages[3].AllowNext = true;
         }
@@ -79,13 +90,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void button2_Click(object sender, EventArgs e)
         {
+            importConfig.JsonFolderPath = tbSourceDataLocation.Text;
+            importConfig.IgnoreStatuses = cbIgnoreStatuses.Checked;
+            importConfig.IgnoreSystemFields = cbIgnoreSystemFields.Checked;
+            importConfig.SaveBatchSize = Convert.ToInt32(nudSavePageSize.Value);
+
             var tokenSource = new CancellationTokenSource();
             tbLogger.Clear();
             Task.Run(() =>
             {
-                var orgService = CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy;
-
-                if (nudMaxThreads.Value > 1 && !string.IsNullOrWhiteSpace(TargetConnectionString))
+                if (nudMaxThreads.Value > 1)
                 {
                     logger.Info("Starting MultiThreaded Processing, using " + nudMaxThreads.Value + " threads");
                     List<IEntityRepository> repos = new List<IEntityRepository>();
@@ -94,7 +108,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                     while (threadCount > 0)
                     {
                         threadCount--;
-                        repos.Add(new EntityRepository(orgService, new ServiceRetryExecutor()));
+                        repos.Add(new EntityRepository(CrmServiceClient.Clone(), new ServiceRetryExecutor()));
                     }
 
                     CrmFileDataImporter fileExporter = new CrmFileDataImporter(logger, repos, importConfig, tokenSource.Token);
@@ -102,8 +116,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 }
                 else
                 {
-                    logger.Info("Starting Single Threaded processing, you must configure connection string for multithreaded processing adn set up max threads to more than 1");
-                    EntityRepository entityRepo = new EntityRepository(orgService, new ServiceRetryExecutor());
+                    logger.Info("Starting Single Threaded processing, you must set up max threads to more than 1");
+                    EntityRepository entityRepo = new EntityRepository(CrmServiceClient, new ServiceRetryExecutor());
 
                     if (radioButton2.Checked)
                     {
@@ -127,12 +141,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             if (fd == DialogResult.OK)
             {
                 tbImportConfigFile.Text = openFileDialog1.FileName;
-                importConfig = CrmImportConfig.GetConfiguration(openFileDialog1.FileName);
-
-                cbIgnoreSystemFields.Checked = importConfig.IgnoreSystemFields;
-                cbIgnoreStatuses.Checked = importConfig.IgnoreStatuses;
-                tbSourceDataLocation.Text = importConfig.JsonFolderPath;
-                nudSavePageSize.Value = importConfig.SaveBatchSize;
             }
         }
 
@@ -152,6 +160,44 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             {
                 stepWizardControl1.Pages[0].AllowNext = true;
             }
+        }
+
+        private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
+        {
+            var wizardButtons = ((WizardButtons)sender);
+            WizardNavigation(wizardButtons);
+        }
+
+        private void WizardNavigation(WizardButtons wizardButtons)
+        {
+            if (wizardButtons.Container.SelectedPage.Name == "wizardPage2")
+            {
+                ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
+
+                if (!labelFolderPathValidation.Visible)
+                {
+                    wizardButtons.Container.NextPage();
+                }
+            }
+            else if (!wizardButtons.Container.SelectedPage.IsFinishPage)
+            {
+                wizardButtons.Container.NextPage();
+            }
+        }
+
+        private void tbSourceDataLocation_TextChanged(object sender, EventArgs e)
+        {
+            ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
+        }
+
+        private void tbImportConfigFile_TextChanged(object sender, EventArgs e)
+        {
+            importConfig = CrmImportConfig.GetConfiguration(openFileDialog1.FileName);
+
+            cbIgnoreSystemFields.Checked = importConfig.IgnoreSystemFields;
+            cbIgnoreStatuses.Checked = importConfig.IgnoreStatuses;
+            tbSourceDataLocation.Text = importConfig.JsonFolderPath;
+            nudSavePageSize.Value = importConfig.SaveBatchSize;
         }
     }
 }

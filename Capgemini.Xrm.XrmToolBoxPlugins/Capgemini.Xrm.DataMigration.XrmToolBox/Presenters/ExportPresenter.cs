@@ -1,20 +1,8 @@
 ﻿using Capgemini.DataMigration.Core;
-using Capgemini.DataMigration.Resiliency.Polly;
-using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Engine;
-using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 {
@@ -63,7 +51,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                logger.LogError(ex.Message);
             }
         }
 

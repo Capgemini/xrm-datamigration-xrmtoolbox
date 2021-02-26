@@ -1,10 +1,10 @@
 ﻿using System;
 using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk;
-using McTools.Xrm.Connection;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using System.Threading;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
+using McTools.Xrm.Connection;
 
 namespace MyXrmToolBoxPlugin3
 {
@@ -23,8 +23,6 @@ namespace MyXrmToolBoxPlugin3
             SchemaGeneratorWizard.BringToFront();
         }
 
-        public new event EventHandler OnRequestConnection;
-
         protected CancellationTokenSource TokenSource { get; set; } = null;
 
         protected MessageLogger Logger { get; set; } = null;
@@ -33,23 +31,36 @@ namespace MyXrmToolBoxPlugin3
         {
             if (detail != null)
             {
-                DataImportWizard.CrmServiceClient = detail.ServiceClient;
+                if (actionName == "SchemaConnection" || actionName == "" )
+                {
+                    SchemaGeneratorWizard.CrmServiceClient = detail.ServiceClient;
+                    SchemaGeneratorWizard.OnConnectionUpdated();
+                }
 
-                SchemaGeneratorWizard.CrmServiceClient = detail.ServiceClient;
-                SchemaGeneratorWizard.OnConnectionUpdated();
+                if (actionName == "SourceConnection" || actionName == "")
+                {
+                    DataExportWizard.CrmServiceClient = detail.ServiceClient;
+                    DataExportWizard.OnConnectionUpdated();
+                }
+                
+                if (actionName == "TargetConnection" || actionName == "")
+                {
+                    DataImportWizard.CrmServiceClient = detail.ServiceClient;
+                    DataImportWizard.OnConnectionUpdated();
+                } 
+            }
 
-                DataExportWizard.CrmServiceClient = detail.ServiceClient;
+            if (actionName == "")
+            {
                 base.UpdateConnection(newService, detail, actionName, parameter);
             }
+
         }
 
         private void ImportWizard1_onConnectionRequested(object sender, RequestConnectionEventArgs e)
         {
-            if (OnRequestConnection != null)
-            {
-                var args = new RequestConnectionEventArgs { ActionName = "Custom", Control = this };
-                OnRequestConnection(this, args);
-            }
+            RaiseRequestConnectionEvent(e);
+
         }
 
         private void toolStripButtonSchemaConfig_Click(object sender, EventArgs e)
