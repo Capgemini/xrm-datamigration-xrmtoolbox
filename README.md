@@ -28,9 +28,7 @@ After clicking the next button on Fig.6 then we land on the screen below Fig.7
 
 Text Boxes we can see the config file is not mandatory, after clicking on the next button n fig.7 then we should land on screen in fif.8 
 
-The log after the data are imported in Ms Dynamics environment 
-
- 
+The log after the data are imported in Ms Dynamics environment
 
  
 
