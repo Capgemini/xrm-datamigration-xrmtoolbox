@@ -8,13 +8,11 @@ Install the plugin
 
 Launch XrmToolBox, if we haven’t installed the plugin before, then we click on Configuration menu and then on Tool Library 
 
-
 ##Data Export 
 
 Click on Schema Config tab, we can refresh entities by clicking on Refresh Entities button, then it will populate the Available entities list, and we can select the entities that we would to create schemas against. 
 
 For each entity selected, we need to select its attributes and we select the Schema File path where we would like to store the schema file, if the file is non-existent then we need to create one, see fig.3. 
- 
 
 After fulfilling all the steps on the fig.3, then I click on the Save button and then we’ll be presented with a pop up as shown on screen in Fig.4 
 
