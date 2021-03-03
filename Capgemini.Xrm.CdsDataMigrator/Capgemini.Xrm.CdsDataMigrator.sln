@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator.Tests.Unit", "Capgemini.Xrm.CdsDataMigrator.Tests.Unit\Capgemini.Xrm.CdsDataMigrator.Tests.Unit.csproj", "{02FE1C61-34F2-4F47-9860-CE4B67BE915E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.DataMigration.XrmToolBox", "Capgemini.Xrm.DataMigration.XrmToolBox\Capgemini.Xrm.DataMigration.XrmToolBox.csproj", "{94CFA298-B643-477B-A329-F184EBF68CF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator", "Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.csproj", "{94CFA298-B643-477B-A329-F184EBF68CF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

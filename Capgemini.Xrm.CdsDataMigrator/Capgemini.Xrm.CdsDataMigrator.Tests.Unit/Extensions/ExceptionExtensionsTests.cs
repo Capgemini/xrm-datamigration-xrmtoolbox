@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Extensions.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class ExceptionExtensionsTests
     {

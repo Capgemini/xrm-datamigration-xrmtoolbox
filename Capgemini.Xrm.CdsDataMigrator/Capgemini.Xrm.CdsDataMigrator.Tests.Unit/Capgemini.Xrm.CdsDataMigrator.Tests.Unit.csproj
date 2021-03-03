@@ -170,9 +170,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Capgemini.Xrm.DataMigration.XrmToolBox\Capgemini.Xrm.DataMigration.XrmToolBox.csproj">
+    <ProjectReference Include="..\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.csproj">
       <Project>{94cfa298-b643-477b-a329-f184ebf68cf6}</Project>
-      <Name>Capgemini.Xrm.DataMigration.XrmToolBox</Name>
+      <Name>Capgemini.Xrm.CdsDataMigrator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

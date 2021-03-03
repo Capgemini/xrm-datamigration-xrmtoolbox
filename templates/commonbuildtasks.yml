@@ -81,7 +81,7 @@ jobs:
         displayName: 'NuGet pack'
         inputs:
           command: pack
-          packagesToPack: Capgemini.Xrm.XrmToolBoxPlugins/Capgemini.Xrm.DataMigration.XrmToolBox/Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.nuspec            
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.nuspec            
           packDestination: '$(Build.ArtifactStagingDirectory)/package'
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2
@@ -90,7 +90,7 @@ jobs:
         displayName: Copy tests to staging directory
         inputs:
           Contents: '**/$(buildConfiguration)/**'
-          SourceFolder: Capgemini.Xrm.XrmToolBoxPlugins
+          SourceFolder: Capgemini.Xrm.CdsDataMigrator
           TargetFolder: '$(Build.ArtifactStagingDirectory)/tests'
 
       - publish: $(Build.ArtifactStagingDirectory)/package

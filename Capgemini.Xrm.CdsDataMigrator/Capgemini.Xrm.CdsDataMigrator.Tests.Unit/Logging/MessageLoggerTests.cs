@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class MessageLoggerTests
     {
@@ -42,7 +43,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Verbose
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
+                FluentActions.Invoking(() => systemUnderTest.Error(Message))
                             .Should()
                             .NotThrow();
 
@@ -64,7 +65,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Error
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
+                FluentActions.Invoking(() => systemUnderTest.Error(Message))
                             .Should()
                             .NotThrow();
 
@@ -84,7 +85,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
             {
                 systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current);
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
+                FluentActions.Invoking(() => systemUnderTest.Error(Message, exception))
                             .Should()
                             .NotThrow();
 
@@ -104,7 +105,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                FluentActions.Invoking(() => systemUnderTest.Info(Message))
                             .Should()
                             .NotThrow();
 
@@ -125,7 +126,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Info
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                FluentActions.Invoking(() => systemUnderTest.Info(Message))
                             .Should()
                             .NotThrow();
 
@@ -144,7 +145,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                FluentActions.Invoking(() => systemUnderTest.Verbose(Message))
                             .Should()
                             .NotThrow();
 
@@ -165,7 +166,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Verbose
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                FluentActions.Invoking(() => systemUnderTest.Verbose(Message))
                             .Should()
                             .NotThrow();
 
@@ -184,7 +185,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Error
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                FluentActions.Invoking(() => systemUnderTest.Warning(Message))
                             .Should()
                             .NotThrow();
 
@@ -205,7 +206,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
                     LogLevel = LogLevel.Warning
                 };
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                FluentActions.Invoking(() => systemUnderTest.Warning(Message))
                             .Should()
                             .NotThrow();
 
