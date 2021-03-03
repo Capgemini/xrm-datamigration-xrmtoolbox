@@ -98,23 +98,52 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void ValidateLookupColumn(int rowIndex, string newValue)
         {
-            var lookup = (LookupAttributeMetadata)((AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag).Single(a => a.LogicalName == newValue);
+            var allAttributes = (AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag;
+            var attr = allAttributes.SingleOrDefault(a => a.LogicalName == newValue);
 
-            var entitymeta = MetadataHelper.RetrieveEntities(lookup.Targets[0], orgService);
+            if (attr == null)
+            {
+                throw new MappingException($"schema logical name {newValue} does not exist in the attribue metadata. Please ensure the field exists with that name and the schema is updated accordingly.");
+            }
 
-            var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-
-            (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
+            {
+                var entitymeta = MetadataHelper.RetrieveEntities(attr.EntityLogicalName, orgService);
+                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            //Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
+            else if (attr.AttributeType == AttributeTypeCode.Owner)
+            {
+                var entitymeta = MetadataHelper.RetrieveEntities("systemuser", orgService);
+                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            else if (attr.AttributeType == AttributeTypeCode.Lookup)
+            {
+                var lookup = attr as LookupAttributeMetadata;
+                var entitymeta = MetadataHelper.RetrieveEntities(lookup.Targets[0], orgService);
+                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            else
+            {
+                throw new MappingException($"schema logical name {newValue}, not supported attribute type: {attr.AttributeType} .");
+            }
         }
 
         private void ValidateEntitytColumn(int rowIndex, string newValue)
         {
             var entitymeta = MetadataHelper.RetrieveEntities(newValue, orgService);
-            var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup).OrderBy(p => p.LogicalName).ToArray();
-            dgvMappings.Rows[rowIndex].Tag = lookups;
+            var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
 
-            (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DataSource = lookups;
-            (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DisplayMember = "LogicalName";
+            if (dgvMappings.Rows != null && dgvMappings.Rows.Count > rowIndex && dgvMappings.Rows[rowIndex].Cells.Count > 0)
+            {
+                dgvMappings.Rows[rowIndex].Tag = lookups;
+
+                (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DataSource = lookups;
+                (dgvMappings.Rows[rowIndex].Cells[1] as DataGridViewComboBoxCell).DisplayMember = "LogicalName";
+            }
         }
 
         private void CloseButtonClick(object sender, EventArgs e)
@@ -153,6 +182,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                     }
                 }
             }
+        }
+
+        private void dgvMappings_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            //Temporary solution to hide critical failure
+            e.Cancel = true;
         }
     }
 }

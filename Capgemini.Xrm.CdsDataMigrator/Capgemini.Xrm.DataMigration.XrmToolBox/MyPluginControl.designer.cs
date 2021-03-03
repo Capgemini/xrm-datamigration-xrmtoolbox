@@ -50,9 +50,8 @@
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StatusLabel.Location = new System.Drawing.Point(0, 0);
-            this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.StatusLabel.Size = new System.Drawing.Size(0, 13);
             this.StatusLabel.TabIndex = 16;
             // 
             // fdSchemaFile
@@ -70,35 +69,35 @@
             this.toolStripButtonSchemaConfig.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSchemaConfig.Name = "toolStripButtonSchemaConfig";
             this.toolStripButtonSchemaConfig.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripButtonSchemaConfig.Size = new System.Drawing.Size(163, 32);
+            this.toolStripButtonSchemaConfig.Size = new System.Drawing.Size(135, 25);
             this.toolStripButtonSchemaConfig.Text = "Schema Config";
             this.toolStripButtonSchemaConfig.Click += new System.EventHandler(this.toolStripButtonSchemaConfig_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 35);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
             // 
             // toolStripButtonDataImport
             // 
             this.toolStripButtonDataImport.Image = global::Capgemini.Xrm.DataMigration.XrmToolBox.Properties.Resources.Import;
             this.toolStripButtonDataImport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDataImport.Name = "toolStripButtonDataImport";
-            this.toolStripButtonDataImport.Size = new System.Drawing.Size(142, 32);
+            this.toolStripButtonDataImport.Size = new System.Drawing.Size(117, 25);
             this.toolStripButtonDataImport.Text = "Data Import";
             this.toolStripButtonDataImport.Click += new System.EventHandler(this.toolStripButtonDataImport_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 35);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
             // 
             // toolStripButtonDataExport
             // 
             this.toolStripButtonDataExport.Image = global::Capgemini.Xrm.DataMigration.XrmToolBox.Properties.Resources.export;
             this.toolStripButtonDataExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDataExport.Name = "toolStripButtonDataExport";
-            this.toolStripButtonDataExport.Size = new System.Drawing.Size(139, 32);
+            this.toolStripButtonDataExport.Size = new System.Drawing.Size(114, 25);
             this.toolStripButtonDataExport.Text = "Data Export";
             this.toolStripButtonDataExport.Click += new System.EventHandler(this.toolStripButtonDataExport_Click);
             // 
@@ -114,8 +113,8 @@
             this.toolStripButtonDataExport});
             this.toolStripPluginOptionMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripPluginOptionMenu.Name = "toolStripPluginOptionMenu";
-            this.toolStripPluginOptionMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStripPluginOptionMenu.Size = new System.Drawing.Size(1829, 35);
+            this.toolStripPluginOptionMenu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripPluginOptionMenu.Size = new System.Drawing.Size(1372, 28);
             this.toolStripPluginOptionMenu.TabIndex = 4;
             this.toolStripPluginOptionMenu.Text = "toolStrip1";
             // 
@@ -124,9 +123,9 @@
             this.SchemaGeneratorWizard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.SchemaGeneratorWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SchemaGeneratorWizard.Location = new System.Drawing.Point(0, 0);
-            this.SchemaGeneratorWizard.Margin = new System.Windows.Forms.Padding(5);
+            this.SchemaGeneratorWizard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.SchemaGeneratorWizard.Name = "SchemaGeneratorWizard";
-            this.SchemaGeneratorWizard.Size = new System.Drawing.Size(1829, 738);
+            this.SchemaGeneratorWizard.Size = new System.Drawing.Size(1372, 600);
             this.SchemaGeneratorWizard.TabIndex = 0;
             // 
             // DataImportWizard
@@ -135,9 +134,8 @@
             this.DataImportWizard.CrmServiceClient = null;
             this.DataImportWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataImportWizard.Location = new System.Drawing.Point(0, 0);
-            this.DataImportWizard.Margin = new System.Windows.Forms.Padding(4);
             this.DataImportWizard.Name = "DataImportWizard";
-            this.DataImportWizard.Size = new System.Drawing.Size(1829, 738);
+            this.DataImportWizard.Size = new System.Drawing.Size(1372, 600);
             this.DataImportWizard.TabIndex = 47;
             this.DataImportWizard.TargetConnectionString = null;
             // 
@@ -155,28 +153,27 @@
             this.DataExportWizard.ExportInactiveRecordsChecked = false;
             this.DataExportWizard.ExportSchemaFileLocation = "";
             this.DataExportWizard.FormatCsvSelected = false;
-            this.DataExportWizard.FormatJsonSelected = false;
+            this.DataExportWizard.FormatJsonSelected = true;
             this.DataExportWizard.Location = new System.Drawing.Point(0, 0);
             this.DataExportWizard.Margin = new System.Windows.Forms.Padding(0);
             this.DataExportWizard.MinimizeJsonChecked = false;
             this.DataExportWizard.Name = "DataExportWizard";
             this.DataExportWizard.SaveExportLocation = "";
-            this.DataExportWizard.Size = new System.Drawing.Size(1829, 738);
+            this.DataExportWizard.Size = new System.Drawing.Size(1372, 600);
             this.DataExportWizard.TabIndex = 49;
             // 
             // MyPluginControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.toolStripPluginOptionMenu);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.SchemaGeneratorWizard);
             this.Controls.Add(this.DataImportWizard);
             this.Controls.Add(this.DataExportWizard);
-            this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(1400, 738);
+            this.MinimumSize = new System.Drawing.Size(1050, 600);
             this.Name = "MyPluginControl";
-            this.Size = new System.Drawing.Size(1829, 738);
+            this.Size = new System.Drawing.Size(1372, 600);
             this.toolStripPluginOptionMenu.ResumeLayout(false);
             this.toolStripPluginOptionMenu.PerformLayout();
             this.ResumeLayout(false);

@@ -37,7 +37,32 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
             }
         }
 
+        public void LogError(string message)
+        {
+            this.Error(message);
+        }
+
+        public void LogError(string message, Exception ex)
+        {
+            this.Error(message, ex);
+        }
+
+        public void LogInfo(string message)
+        {
+            this.Info(message);
+        }
+
         public void LogVerbose(string message)
+        {
+            this.Verbose(message);
+        }
+
+        public void LogWarning(string message)
+        {
+            this.Warning(message);
+        }
+
+        public void Verbose(string message)
         {
             if ((int)LogLevel > 2)
             {

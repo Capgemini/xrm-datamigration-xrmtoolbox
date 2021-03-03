@@ -3,7 +3,11 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using System;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 {

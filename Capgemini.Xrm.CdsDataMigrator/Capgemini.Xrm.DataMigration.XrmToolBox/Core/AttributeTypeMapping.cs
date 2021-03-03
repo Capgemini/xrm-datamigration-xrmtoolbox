@@ -79,6 +79,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                     result = "status";
                     break;
 
+                case "OwnerType":
                 case "Owner":
                     result = "entityreference";
                     break;
