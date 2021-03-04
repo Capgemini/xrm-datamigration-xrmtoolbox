@@ -227,6 +227,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalSuppressions.cs">
+      <Link>GlobalSuppressions.cs</Link>
+    </Compile>
     <Compile Include="Attributes\ValidatedNotNullAttribute.cs" />
     <Compile Include="Core\AttributeTypeMapping.cs" />
     <Compile Include="Core\EntitySettings.cs" />
@@ -239,6 +242,8 @@
     <Compile Include="Core\Settings.cs" />
     <Compile Include="Core\WizardMode.cs" />
     <Compile Include="Core\WizardType.cs" />
+    <Compile Include="Enums\DataFormat.cs" />
+    <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
@@ -262,13 +267,18 @@
     </Compile>
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\MessageLogger.cs" />
     <Compile Include="Model\DataMigrationSettings.cs" />
+    <Compile Include="Model\DeserializationSettings.cs" />
+    <Compile Include="Model\ExportConfigSettings.cs" />
     <Compile Include="Model\ExportSettings.cs" />
+    <Compile Include="Model\FilterEditorState.cs" />
     <Compile Include="Model\FilterSettings.cs" />
+    <Compile Include="Model\ImportConfigSettingscs.cs" />
+    <Compile Include="Model\LoadAllSettings.cs" />
     <Compile Include="Model\RecordCountModel.cs" />
     <Compile Include="Model\SaveAllSettings.cs" />
+    <Compile Include="Model\SerializationSettings.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="MyPluginControl.cs">
       <SubType>UserControl</SubType>
@@ -283,7 +293,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
+    <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
+    <Compile Include="Services\IDataMigrationService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserControls\exportWizard.cs">
       <SubType>UserControl</SubType>

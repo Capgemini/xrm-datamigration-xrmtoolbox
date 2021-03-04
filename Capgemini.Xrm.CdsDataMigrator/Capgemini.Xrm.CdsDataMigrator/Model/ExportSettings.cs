@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models
 {
     public class ExportSettings
     {
-        public string DataFormat { get; set; }
+        public DataFormat DataFormat { get; set; }
 
         public string SavePath { get; set; }
 

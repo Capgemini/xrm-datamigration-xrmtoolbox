@@ -10,6 +10,8 @@ using MyXrmToolBoxPlugin3;
 using System.Linq;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -17,13 +19,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     {
         private readonly MessageLogger logger;
         private readonly ExportPresenter presenter;
+        private readonly IDataMigrationService dataMigrationService;
+        private readonly ICrmGenericMigratorFactory migratorFactory;
 
         public exportWizard()
         {
             InitializeComponent();
 
             logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
-            presenter = new ExportPresenter(this, logger);
+
+            migratorFactory = new CrmGenericMigratorFactory();
+            logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
+            dataMigrationService = new DataMigrationService(logger, migratorFactory);
+            presenter = new ExportPresenter(this, logger, dataMigrationService);
+
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;
@@ -57,7 +66,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             {
                 if (!string.IsNullOrWhiteSpace(ExportConfigFileLocation))
                 {
-                    valResults = LoadSettingsFromConfig(wizardButtons);
+                    valResults = LoadSettingsFromConfig();
                 }
             }
             else if (wizardButtons.Container.SelectedPage.Name == "exportLocation")
@@ -156,7 +165,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             return openFileDialogExportConfigFile.FileName;
         }
 
-        private bool LoadSettingsFromConfig(WizardButtons wizardButtons)
+        private bool LoadSettingsFromConfig()
         {
             try
             {
@@ -165,16 +174,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 SaveExportLocation = config.JsonFolderPath;
                 BatchSize = config.BatchSize;
                 ExportInactiveRecordsChecked = !config.OnlyActiveRecords;
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Export Config Error:" + ex.ToString());
+                MessageBox.Show($"Export Config Error: {ex}");
                 return false;
             }
 
             return true;
         }
-
     }
 }

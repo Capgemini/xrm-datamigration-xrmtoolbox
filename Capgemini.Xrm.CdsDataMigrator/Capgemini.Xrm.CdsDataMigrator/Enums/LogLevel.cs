@@ -1,4 +1,4 @@
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
+namespace Capgemini.Xrm.DataMigration.XrmToolBox.Enums
 {
     public enum LogLevel
     {

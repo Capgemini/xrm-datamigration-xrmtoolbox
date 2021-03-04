@@ -3,23 +3,26 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using System;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 {
     public class ExportPresenter
     {
-        private IExportView exportView;
-        private ILogger logger;
+        private readonly IExportView exportView;
+        private readonly Capgemini.DataMigration.Core.ILogger logger;
+        private readonly IDataMigrationService dataMigrationService;
 
-        public ExportPresenter(IExportView exportView, ILogger logger)
+        public ExportPresenter(IExportView exportView, ILogger logger, IDataMigrationService dataMigrationService)
         {
             this.exportView = exportView;
+            this.logger = logger;
+            this.dataMigrationService = dataMigrationService;
+
             this.exportView.SelectExportLocationHandler += SelectExportLocation;
             this.exportView.SelectExportConfigFileHandler += SelectExportConfig;
             this.exportView.SelectSchemaFileHandler += SelectSchemaFile;
             this.exportView.ExportDataHandler += ExportData;
-
-            this.logger = logger;
         }
 
         private void SelectExportLocation(object sender, EventArgs e)
@@ -42,12 +45,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
 
         private void ExportData(object sender, EventArgs e)
         {
+            ExportDataAction();
+        }
+
+        public void ExportDataAction()
+        {
             try
             {
-                DataMigrationService migrationService = new DataMigrationService(this.logger);
-
-                ExportSettings settings = GetExportSettingsObject();
-                migrationService.ExportData(settings);
+                var settings = GetExportSettingsObject();
+                dataMigrationService.ExportData(settings);
             }
             catch (Exception ex)
             {
@@ -55,13 +61,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
             }
         }
 
-        private ExportSettings GetExportSettingsObject()
+        public ExportSettings GetExportSettingsObject()
         {
             ExportSettings settings = new ExportSettings();
+
             if (exportView.FormatJsonSelected)
-                settings.DataFormat = "json";
+            {
+                settings.DataFormat = DataFormat.Json;
+            }
             else if (exportView.FormatCsvSelected)
-                settings.DataFormat = "csv";
+            {
+                settings.DataFormat = DataFormat.Csv;
+            }
 
             settings.SavePath = exportView.SaveExportLocation;
             settings.EnvironmentConnection = exportView.CrmServiceClient;
