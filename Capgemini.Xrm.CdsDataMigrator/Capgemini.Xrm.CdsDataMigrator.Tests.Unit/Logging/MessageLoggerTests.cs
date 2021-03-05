@@ -13,7 +13,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
     public class MessageLoggerTests
     {
         private const string Message = "Test message";
-        private const string dateFormat = "dd/MM/yyyy";
+        private const string DateFormat = "dd-MMM-yyyy";
 
         private MessageLogger systemUnderTest;
 
@@ -33,7 +33,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         [TestMethod]
         public void ErrorWhenVerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
             using (var textBox = new TextBox())
@@ -55,7 +55,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         [TestMethod]
         public void ErrorLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
             using (var textBox = new TextBox())
@@ -78,7 +78,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         public void ErrorWithExceptionParameter()
         {
             var exception = new Exception("Sample exception");
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
             using (var textBox = new TextBox())
@@ -116,7 +116,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         [TestMethod]
         public void InfoLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Info:{Message}";
 
             using (var textBox = new TextBox())
@@ -156,7 +156,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         [TestMethod]
         public void VerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Verbose:{Message}";
 
             using (var textBox = new TextBox())
@@ -196,7 +196,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
         [TestMethod]
         public void WarningWarningLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(dateFormat, CultureInfo.InvariantCulture)} ";
+            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Warning:{Message}";
 
             using (var textBox = new TextBox())

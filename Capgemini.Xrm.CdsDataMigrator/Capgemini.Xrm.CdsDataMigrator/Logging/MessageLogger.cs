@@ -83,7 +83,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
             syncContext.Send(
                 p =>
             {
-                messageTextBox.AppendText($"{DateTime.Now} - {message}{Environment.NewLine}");
+                messageTextBox.AppendText($"{DateTime.Now:dd-MMM-yyyy} - {message}{Environment.NewLine}");
             }, null);
         }
     }
