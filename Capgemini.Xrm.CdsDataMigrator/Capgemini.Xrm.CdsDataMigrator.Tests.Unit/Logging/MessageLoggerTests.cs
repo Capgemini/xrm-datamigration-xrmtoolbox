@@ -13,7 +13,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
     public class MessageLoggerTests
     {
         private const string Message = "Test message";
-        private const string DateFormat = "dd/MM/yyyy";
+        private const string DateFormat = "dd-MMM-yyyy";
 
         private MessageLogger systemUnderTest;
 
