@@ -6,7 +6,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Tests
     [TestClass]
     public class SchemaGeneratorTests
     {
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void SchemaGeneratorInstatiation()
         {
