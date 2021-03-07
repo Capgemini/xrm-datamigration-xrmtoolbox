@@ -13,7 +13,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
     public class ExportPresenterTests
     {
         private Mock<IExportView> exportView;
-        private Mock<Capgemini.DataMigration.Core.ILogger> logger;
+        private Mock<ILogger> logger;
         private Mock<IDataMigrationService> dataMigrationService;
         private ExportPresenter systemUnderTest;
 
@@ -21,7 +21,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
         public void TestSetup()
         {
             exportView = new Mock<IExportView>();
-            logger = new Mock<Capgemini.DataMigration.Core.ILogger>();
+            logger = new Mock<ILogger>();
             dataMigrationService = new Mock<IDataMigrationService>();
 
             systemUnderTest = new ExportPresenter(exportView.Object, logger.Object, dataMigrationService.Object);

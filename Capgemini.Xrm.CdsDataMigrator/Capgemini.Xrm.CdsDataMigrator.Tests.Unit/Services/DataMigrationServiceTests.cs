@@ -83,6 +83,9 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
                 // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
                 SchemaPath = "TestData/ContactSchemaWithOwner.xml",
                 DataFormat = dataFormat,
+                BatchSize = 5000,
+                ExportConfigPath = "TestData",
+                SavePath = "TestData"
             };
 
             var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;
@@ -116,7 +119,9 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
                 // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
                 SchemaPath = "TestData/BusinessUnitSchema.xml",
                 DataFormat = dataFormat,
-                ExportConfigPath = "TestData"
+                ExportConfigPath = "TestData",
+                BatchSize = 5000,
+                SavePath = "TestData"
             };
 
             var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;

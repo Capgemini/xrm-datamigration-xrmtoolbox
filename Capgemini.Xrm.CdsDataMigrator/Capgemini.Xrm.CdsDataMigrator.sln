@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{5E6BB39C-47C6-4920-9B0A-E8433BF144B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator.Tests.Unit", "Capgemini.Xrm.CdsDataMigrator.Tests.Unit\Capgemini.Xrm.CdsDataMigrator.Tests.Unit.csproj", "{02FE1C61-34F2-4F47-9860-CE4B67BE915E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{94CFA298-B643-477B-A329-F184EBF68CF6} = {94CFA298-B643-477B-A329-F184EBF68CF6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator", "Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.csproj", "{94CFA298-B643-477B-A329-F184EBF68CF6}"
 EndProject

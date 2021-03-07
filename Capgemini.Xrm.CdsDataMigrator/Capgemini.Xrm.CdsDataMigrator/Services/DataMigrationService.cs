@@ -62,16 +62,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services
 
             var schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
 
-            if (exportSettings.DataFormat == DataFormat.Json)
-            {
-                var exporter = new CrmFileDataExporter(logger, repo, exportConfig, tokenSource.Token);
-                exporter.MigrateData();
-            }
-            else
-            {
-                var exporter = new CrmFileDataExporterCsv(logger, repo, exportConfig, schema, tokenSource.Token);
-                exporter.MigrateData();
-            }
+            var exporter = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
+            exporter.MigrateData();
         }
 
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)
