@@ -40,7 +40,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
             actual.Count.Should().Be(0);
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void RetrieveEntitiesEmptyResponse()
         {

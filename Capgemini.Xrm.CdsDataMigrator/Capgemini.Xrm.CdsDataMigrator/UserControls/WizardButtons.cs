@@ -8,7 +8,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class WizardButtons : UserControl
     {
-        public AeroWizard.WizardPageContainer Container { get; set; }
+        public AeroWizard.WizardPageContainer PageContainer { get; set; }
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -27,9 +27,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void Container_SelectedPageChanged(object sender, EventArgs e)
         {
-            btnExecute.Visible = Container.SelectedPage.IsFinishPage;
+            btnExecute.Visible = PageContainer.SelectedPage.IsFinishPage;
 
-            if (Container.SelectedPage.IsFinishPage)
+            if (PageContainer.SelectedPage.IsFinishPage)
             {
                 btnExecute.BackColor = Color.Green;
             }
@@ -38,8 +38,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 btnExecute.BackColor = SystemColors.ControlDarkDark;
             }
 
-            btnNext.Enabled = Container.SelectedPage != Container.Pages[Container.Pages.Count-1];
-            btnBack.Enabled = Container.SelectedPage != Container.Pages[0];
+            btnNext.Enabled = PageContainer.SelectedPage != PageContainer.Pages[PageContainer.Pages.Count - 1];
+            btnBack.Enabled = PageContainer.SelectedPage != PageContainer.Pages[0];
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
             else
             {
-                Container.PreviousPage();
+                PageContainer.PreviousPage();
             }
         }
 
@@ -62,7 +62,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
             else
             {
-                Container.NextPage();
+                PageContainer.NextPage();
             }
         }
 
@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void WizardButtons_Load(object sender, EventArgs e)
         {
-            Container.SelectedPageChanged += Container_SelectedPageChanged;
+            PageContainer.SelectedPageChanged += Container_SelectedPageChanged;
         }
 
         public event EventHandler<EventArgs> OnExecute;

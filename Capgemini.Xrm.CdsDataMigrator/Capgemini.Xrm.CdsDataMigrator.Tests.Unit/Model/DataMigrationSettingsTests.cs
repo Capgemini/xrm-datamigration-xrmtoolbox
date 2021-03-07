@@ -28,7 +28,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model.Tests
                                 .NotThrow();
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void ValidateExportNullSchemaFilePath()
         {
@@ -65,7 +64,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model.Tests
             systemUnderTest.FailedValidationMessage.Should().NotContain(batchSizeErrorMessage);
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void ValidateExportSchemaFilePathWithLessThan5Characters()
         {
@@ -138,7 +136,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model.Tests
             systemUnderTest.FailedValidationMessage.Should().NotContain(batchSizeErrorMessage);
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void ValidateExportNullJsonFolderPath()
         {

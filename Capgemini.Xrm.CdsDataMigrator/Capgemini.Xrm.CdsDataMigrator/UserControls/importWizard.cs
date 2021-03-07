@@ -170,18 +170,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void WizardNavigation(WizardButtons wizardButtons)
         {
-            if (wizardButtons.Container.SelectedPage.Name == "wizardPage2")
+            if (wizardButtons.PageContainer.SelectedPage.Name == "wizardPage2")
             {
                 ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
 
                 if (!labelFolderPathValidation.Visible)
                 {
-                    wizardButtons.Container.NextPage();
+                    wizardButtons.PageContainer.NextPage();
                 }
             }
-            else if (!wizardButtons.Container.SelectedPage.IsFinishPage)
+            else if (!wizardButtons.PageContainer.SelectedPage.IsFinishPage)
             {
-                wizardButtons.Container.NextPage();
+                wizardButtons.PageContainer.NextPage();
             }
         }
 

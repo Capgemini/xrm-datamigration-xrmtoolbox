@@ -42,7 +42,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             var stringBuilder = new StringBuilder();
             FailedValidationMessage = string.Empty;
             FailedValidation = false;
-            if (string.IsNullOrWhiteSpace(SchemaFilePath) && SchemaFilePath.Length < 5)
+            if (string.IsNullOrWhiteSpace(SchemaFilePath) || SchemaFilePath.Length < 5)
             {
                 FailedValidation = true;
                 stringBuilder.AppendLine("Enter correct Schema file Path");
@@ -59,8 +59,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 FailedValidation = true;
                 stringBuilder.AppendLine("Enter correct Json file Path");
             }
-
-            if (!Directory.Exists(JsonFolderPath))
+            else if (!Directory.Exists(JsonFolderPath))
             {
                 Directory.CreateDirectory(JsonFolderPath);
             }
@@ -79,6 +78,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
             var stringBuilder = new StringBuilder();
             FailedValidationMessage = string.Empty;
             FailedValidation = false;
+
             if (string.IsNullOrWhiteSpace(TargetConnectionString) && TargetServiceClient == null)
             {
                 FailedValidation = true;

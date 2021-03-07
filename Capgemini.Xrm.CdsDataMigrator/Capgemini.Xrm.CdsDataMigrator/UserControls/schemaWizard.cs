@@ -215,30 +215,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                             var entitymeta = MetadataHelper.RetrieveEntities(entityLogicalName, service);
                             var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
                             var sourceAttributesList = new List<ListViewItem>();
-                            var attributes = entitymeta.Attributes.ToArray();
-
-                            if (!cbShowSystemAttributes.Checked)
-                            {
-                                attributes = attributes.Where(p => p.IsLogical != null
-                                && !p.IsLogical.Value
-                                && p.IsValidForRead != null
-                                && p.IsValidForRead.Value
-                                && ((p.IsValidForCreate != null && p.IsValidForCreate.Value) || (p.IsValidForUpdate != null && p.IsValidForUpdate.Value))).ToArray();
-                            }
+                            var attributes = ProcessShowSystemAttributesChecked(entitymeta);
 
                             attributes = attributes.OrderByDescending(p => p.IsPrimaryId).ThenByDescending(p => p.IsPrimaryName).ThenByDescending(p => p.IsCustomAttribute.Value).ThenBy(p => p.IsLogical.Value).ThenBy(p => p.LogicalName).ToArray();
 
-                            foreach (AttributeMetadata attribute in attributes)
-                            {
-                                var name = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
-                                var typename = attribute.AttributeTypeName == null ? string.Empty : attribute.AttributeTypeName.Value;
-                                var item = new ListViewItem(name);
-                                AddAttribute(attribute, item, typename);
-                                InvalidUpdate(attribute, item);
-                                item.Checked = unmarkedattributes.Contains(attribute.LogicalName);
-                                UpdateCheckBoxesAttribute(attribute, item);
-                                sourceAttributesList.Add(item);
-                            }
+                            ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributes);
 
                             e.Result = sourceAttributesList;
                         };
@@ -250,6 +231,37 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     }
                 }
             }
+        }
+
+        private void ProcessAllAttributeMetadata(List<string> unmarkedattributes, List<ListViewItem> sourceAttributesList, AttributeMetadata[] attributes)
+        {
+            foreach (AttributeMetadata attribute in attributes)
+            {
+                var name = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
+                var typename = attribute.AttributeTypeName == null ? string.Empty : attribute.AttributeTypeName.Value;
+                var item = new ListViewItem(name);
+                AddAttribute(attribute, item, typename);
+                InvalidUpdate(attribute, item);
+                item.Checked = unmarkedattributes.Contains(attribute.LogicalName);
+                UpdateCheckBoxesAttribute(attribute, item);
+                sourceAttributesList.Add(item);
+            }
+        }
+
+        private AttributeMetadata[] ProcessShowSystemAttributesChecked(EntityMetadata entitymeta)
+        {
+            var attributes = entitymeta.Attributes.ToArray();
+
+            if (!cbShowSystemAttributes.Checked)
+            {
+                attributes = attributes.Where(p => p.IsLogical != null
+                && !p.IsLogical.Value
+                && p.IsValidForRead != null
+                && p.IsValidForRead.Value
+                && ((p.IsValidForCreate != null && p.IsValidForCreate.Value) || (p.IsValidForUpdate != null && p.IsValidForUpdate.Value))).ToArray();
+            }
+
+            return attributes;
         }
 
         private void AsyncRunnerCompleteAttributeOperation(RunWorkerCompletedEventArgs e)
@@ -288,32 +300,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 item.ToolTipText = "Not createable, ";
             }
 
-            if (attribute.IsValidForUpdate != null && !attribute.IsValidForUpdate.Value)
-            {
-                item.ForeColor = Color.Gray;
-                item.ToolTipText += "Not updateable, ";
-            }
+            CheckForPrimaryIdAndName(attribute, item);
 
-            if (attribute.IsCustomAttribute != null && attribute.IsCustomAttribute.Value)
-            {
-                item.ForeColor = Color.DarkGreen;
-            }
-
-            if (attribute.IsPrimaryId != null && attribute.IsPrimaryId.Value)
-            {
-                item.ForeColor = Color.DarkBlue;
-            }
-
-            if (attribute.IsPrimaryName != null && attribute.IsPrimaryName.Value)
-            {
-                item.ForeColor = Color.DarkBlue;
-            }
-
-            if (attribute.AttributeType == AttributeTypeCode.Virtual || attribute.AttributeType == AttributeTypeCode.ManagedProperty)
-            {
-                item.ForeColor = Color.Red;
-                item.ToolTipText += "Virtual or managed property, ";
-            }
+            CheckForVirtual(attribute, item);
 
             if (attribute.IsLogical != null && attribute.IsLogical.Value)
             {
@@ -345,6 +334,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
 
             item.SubItems.Add(item.ToolTipText);
+        }
+
+        private static void CheckForVirtual(AttributeMetadata attribute, ListViewItem item)
+        {
+            if (attribute.AttributeType == AttributeTypeCode.Virtual || attribute.AttributeType == AttributeTypeCode.ManagedProperty)
+            {
+                item.ForeColor = Color.Red;
+                item.ToolTipText += "Virtual or managed property, ";
+            }
+        }
+
+        private static void CheckForPrimaryIdAndName(AttributeMetadata attribute, ListViewItem item)
+        {
+            if (attribute.IsValidForUpdate != null && !attribute.IsValidForUpdate.Value)
+            {
+                item.ForeColor = Color.Gray;
+                item.ToolTipText += "Not updateable, ";
+            }
+
+            if (attribute.IsCustomAttribute != null && attribute.IsCustomAttribute.Value)
+            {
+                item.ForeColor = Color.DarkGreen;
+            }
+
+            if (attribute.IsPrimaryId != null && attribute.IsPrimaryId.Value)
+            {
+                item.ForeColor = Color.DarkBlue;
+            }
+
+            if (attribute.IsPrimaryName != null && attribute.IsPrimaryName.Value)
+            {
+                item.ForeColor = Color.DarkBlue;
+            }
         }
 
         private void AddAttribute(AttributeMetadata attribute, ListViewItem item, string typename)
@@ -1387,6 +1409,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 OnConnectionRequested(this, args);
             }
         }
-
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using FluentAssertions;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Moq;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
@@ -44,7 +47,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
                          .Throw<ArgumentNullException>();
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void WriteDataToCSV()
         {
@@ -86,7 +88,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
             }
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void ExecuteRecordsCount()
         {
@@ -95,12 +96,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
             var mockService = new Mock<IOrganizationService>();
 
             var response = new FetchXmlToQueryExpressionResponse();
+            response.Results["Query"] = new QueryExpression();
 
             mockService.Setup(a => a.Execute(It.IsAny<FetchXmlToQueryExpressionRequest>()))
                        .Returns(response);
 
-            using (BackgroundWorker worker = new BackgroundWorker())
+            using (var worker = new BackgroundWorker())
             {
+                worker.WorkerReportsProgress = true;
+
                 using (DataGridView gridView = new DataGridView())
                 {
                     FluentActions.Invoking(() => RecordCounterProcessor.ExecuteRecordsCount(exportConfigFilePath, schemaFilePath, mockService.Object, worker, gridView))
@@ -110,6 +114,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
             }
 
             mockService.Verify(a => a.Execute(It.IsAny<FetchXmlToQueryExpressionRequest>()), Times.Once);
+        }
+
+        protected static void SetFieldValue(object input, string fieldName, object newValue)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            var field = input.GetType().GetRuntimeFields().First(a => a.Name == fieldName);
+            field.SetValue(input, newValue);
         }
     }
 }

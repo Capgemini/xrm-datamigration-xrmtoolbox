@@ -33,6 +33,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             dataMigrationService = new DataMigrationService(logger, migratorFactory);
             presenter = new ExportPresenter(this, logger, dataMigrationService);
 
+            logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;
@@ -47,7 +48,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             var wizardButtons = ((WizardButtons)sender);
 
             WizardValidation(wizardButtons);
-            wizardButtons.Container.PreviousPage();
+            wizardButtons.PageContainer.PreviousPage();
         }
 
         private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
@@ -55,25 +56,25 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             var wizardButtons = ((WizardButtons)sender);
 
             if (WizardValidation(wizardButtons))
-                wizardButtons.Container.NextPage();
+                wizardButtons.PageContainer.NextPage();
         }
 
         private bool WizardValidation(WizardButtons wizardButtons)
         {
             bool valResults = true;
 
-            if (wizardButtons.Container.SelectedPage.Name == "exportConfig")
+            if (wizardButtons.PageContainer.SelectedPage.Name == "exportConfig")
             {
                 if (!string.IsNullOrWhiteSpace(ExportConfigFileLocation))
                 {
                     valResults = LoadSettingsFromConfig();
                 }
             }
-            else if (wizardButtons.Container.SelectedPage.Name == "exportLocation")
+            else if (wizardButtons.PageContainer.SelectedPage.Name == "exportLocation")
             {
                 valResults = ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, textBoxExportLocation);
             }
-            else if (wizardButtons.Container.SelectedPage.Name == "executeExport")
+            else if (wizardButtons.PageContainer.SelectedPage.Name == "executeExport")
             {
                 valResults = ValidationHelpers.IsTextControlNotEmpty(labelSchemaLocationFileValidation, textBoxSchemaLocation) &&
                              ValidationHelpers.IsTextControlNotEmpty(labelExportConnectionValidation, labelTargetConnectionString);

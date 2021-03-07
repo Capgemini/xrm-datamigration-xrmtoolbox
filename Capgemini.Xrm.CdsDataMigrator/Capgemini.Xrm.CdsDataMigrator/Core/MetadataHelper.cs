@@ -13,30 +13,33 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
     {
         private static Dictionary<string, EntityMetadata> entityMetadataCache = new Dictionary<string, EntityMetadata>();
 
-        public static List<EntityMetadata> RetrieveEntities(IOrganizationService oService)
+        public static List<EntityMetadata> RetrieveEntities(IOrganizationService orgService)
         {
             entityMetadataCache.Clear();
 
-            List<EntityMetadata> entities = new List<EntityMetadata>();
+            var entities = new List<EntityMetadata>();
 
-            if (oService == null)
+            if (orgService == null)
             {
                 return entities;
             }
 
-            RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
+            var request = new RetrieveAllEntitiesRequest
             {
                 RetrieveAsIfPublished = true,
                 EntityFilters = EntityFilters.Entity
             };
 
-            RetrieveAllEntitiesResponse response = (RetrieveAllEntitiesResponse)oService.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)orgService.Execute(request);
 
-            foreach (EntityMetadata emd in response.EntityMetadata)
+            if (response.EntityMetadata != null)
             {
-                if (emd.DisplayName.UserLocalizedLabel != null)
+                foreach (EntityMetadata emd in response.EntityMetadata)
                 {
-                    entities.Add(emd);
+                    if (emd.DisplayName.UserLocalizedLabel != null)
+                    {
+                        entities.Add(emd);
+                    }
                 }
             }
 
@@ -45,9 +48,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             return entities;
         }
 
-        public static EntityMetadata RetrieveEntities(string logicalName, IOrganizationService oService)
+        public static EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService)
         {
-            oService.ThrowArgumentNullExceptionIfNull(nameof(oService));
+            orgService.ThrowArgumentNullExceptionIfNull(nameof(orgService));
 
             try
             {
@@ -61,10 +64,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                     var request = new RetrieveEntityRequest
                     {
                         LogicalName = logicalName,
-                        EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships 
+                        EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships
                     };
 
-                    var response = (RetrieveEntityResponse)oService.Execute(request);
+                    var response = (RetrieveEntityResponse)orgService.Execute(request);
 
                     entityMetadataCache.Add(logicalName, response.EntityMetadata);
                     return response.EntityMetadata;
