@@ -265,7 +265,6 @@
     <Compile Include="Forms\MappingListLookup.Designer.cs">
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\ValidationHelpers.cs" />
     <Compile Include="Logging\MessageLogger.cs" />
     <Compile Include="Model\DataMigrationSettings.cs" />

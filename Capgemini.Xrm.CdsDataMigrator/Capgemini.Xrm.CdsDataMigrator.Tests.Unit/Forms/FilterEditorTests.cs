@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
 {
     [TestClass]
     public class FilterEditorTests

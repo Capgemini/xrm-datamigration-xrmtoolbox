@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +12,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Moq;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
     public class RecordCounterProcessorTests

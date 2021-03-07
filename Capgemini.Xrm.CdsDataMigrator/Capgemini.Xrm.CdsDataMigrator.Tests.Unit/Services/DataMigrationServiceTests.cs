@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
 
-namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
     public class DataMigrationServiceTests

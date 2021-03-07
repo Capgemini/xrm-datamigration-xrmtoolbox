@@ -1,13 +1,15 @@
 ﻿using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
     [TestClass]
     public class ExportPresenterTests
@@ -88,7 +90,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters.Tests
         {
             exportView.SetupGet(a => a.FormatCsvSelected).Returns(false);
             dataMigrationService.Setup(a => a.ExportData(It.IsAny<ExportSettings>()))
-                                .Throws<Exceptions.OrganizationalServiceException>();
+                                .Throws<OrganizationalServiceException>();
             logger.Setup(a => a.LogError(It.IsAny<string>()));
 
             FluentActions.Invoking(() => systemUnderTest.ExportDataAction())

@@ -3,8 +3,9 @@ using McTools.Xrm.Connection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
+using MyXrmToolBoxPlugin3;
 
-namespace MyXrmToolBoxPlugin3.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 {
     [TestClass]
     public class MyPluginControlTests

@@ -2,7 +2,6 @@
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using System.Threading;
 

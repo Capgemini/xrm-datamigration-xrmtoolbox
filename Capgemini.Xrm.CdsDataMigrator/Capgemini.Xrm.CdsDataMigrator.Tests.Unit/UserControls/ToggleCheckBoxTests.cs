@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
     [TestClass]
     public class ToggleCheckBoxTests

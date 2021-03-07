@@ -1,8 +1,9 @@
 ﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
 {
     [TestClass]
     public class ExportSettingsTests

@@ -2,13 +2,10 @@
 using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services

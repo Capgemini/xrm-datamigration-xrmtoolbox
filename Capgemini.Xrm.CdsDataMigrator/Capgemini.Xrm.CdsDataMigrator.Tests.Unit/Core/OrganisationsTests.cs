@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
     public class OrganisationsTests
@@ -9,7 +10,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
         [TestMethod]
         public void OrganisationsInstantiation()
         {
-            Organisations systemUnderTest = new Organisations();
+            var systemUnderTest = new Organisations();
 
             systemUnderTest.Sortcolumns.Count.Should().Be(0);
             systemUnderTest.Mappings.Count.Should().Be(0);

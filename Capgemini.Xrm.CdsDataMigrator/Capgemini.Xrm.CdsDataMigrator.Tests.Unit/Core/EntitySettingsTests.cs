@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
     public class EntitySettingsTests
@@ -9,7 +10,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
         [TestMethod]
         public void EntitySettingsInstantiation()
         {
-            EntitySettings systemUnderTest = new EntitySettings();
+            var systemUnderTest = new EntitySettings();
 
             systemUnderTest.UnmarkedAttributes.Should().NotBeNull();
             systemUnderTest.Filter.Should().BeNullOrEmpty();

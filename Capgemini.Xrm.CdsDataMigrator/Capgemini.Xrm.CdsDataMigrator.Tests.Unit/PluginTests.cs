@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MyXrmToolBoxPlugin3;
 
-namespace MyXrmToolBoxPlugin3.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 {
     [TestClass]
     public class PluginTests

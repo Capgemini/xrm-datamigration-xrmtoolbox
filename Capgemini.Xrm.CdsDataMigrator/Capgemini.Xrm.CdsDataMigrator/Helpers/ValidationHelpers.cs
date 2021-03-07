@@ -5,10 +5,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers
 {
     public static class ValidationHelpers
     {
-
         public static bool IsTextControlNotEmpty(Control validationLabelName, Control toValidateControlName)
         {
-
             if (!string.IsNullOrWhiteSpace(toValidateControlName.Text))
             {
                 validationLabelName.Visible = false;
@@ -20,7 +18,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers
 
             return !validationLabelName.Visible;
         }
-
     }
-
 }

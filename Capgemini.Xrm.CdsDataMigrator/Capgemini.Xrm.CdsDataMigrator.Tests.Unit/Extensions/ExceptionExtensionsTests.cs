@@ -1,9 +1,10 @@
 ﻿using System;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Extensions;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Extensions.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Extensions
 {
     [TestClass]
     public class ExceptionExtensionsTests

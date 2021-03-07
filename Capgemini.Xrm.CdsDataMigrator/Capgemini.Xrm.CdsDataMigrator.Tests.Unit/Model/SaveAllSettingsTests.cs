@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Model
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
 {
     [TestClass]
     public class SaveAllSettingsTests

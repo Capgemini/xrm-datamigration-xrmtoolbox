@@ -7,7 +7,7 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Models.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 {
     [TestClass]
     public class MessageLoggerTests

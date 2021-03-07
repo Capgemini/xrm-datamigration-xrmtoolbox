@@ -13,8 +13,8 @@
     <ProjectGuid>{02FE1C61-34F2-4F47-9860-CE4B67BE915E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit</RootNamespace>
-    <AssemblyName>Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit</AssemblyName>
+    <RootNamespace>Capgemini.Xrm.CdsDataMigrator.Tests.Unit</RootNamespace>
+    <AssemblyName>Capgemini.Xrm.CdsDataMigrator.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -217,6 +217,7 @@
     <Compile Include="Forms\FilterEditorTests.cs" />
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
+    <Compile Include="Helpers\ValidationHelpersTests.cs" />
     <Compile Include="Logging\MessageLoggerTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
     <Compile Include="Model\DeserializationSettingsTests.cs" />
@@ -275,6 +276,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.csproj">
+      <Project>{94CFA298-B643-477B-A329-F184EBF68CF6}</Project>
+      <Name>Capgemini.Xrm.CdsDataMigrator</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

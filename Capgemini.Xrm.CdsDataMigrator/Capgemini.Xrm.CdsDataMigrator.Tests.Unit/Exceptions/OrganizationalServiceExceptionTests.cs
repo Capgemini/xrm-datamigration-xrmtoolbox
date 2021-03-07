@@ -1,8 +1,9 @@
 ﻿using System;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Exceptions
 {
     [TestClass]
     public class OrganizationalServiceExceptionTests

@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
     public class AttributeTypeMappingTests

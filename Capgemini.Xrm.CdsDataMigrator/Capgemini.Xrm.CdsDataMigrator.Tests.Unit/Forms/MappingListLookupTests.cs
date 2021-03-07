@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms.Tests
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
 {
     [TestClass]
     public class MappingListLookupTests

@@ -1,8 +1,18 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+﻿using System;
+using System.IO;
+using System.Threading;
+using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.Config;
+using Capgemini.Xrm.DataMigration.Core;
+using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.Engine;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
-namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
     public class CrmGenericMigratorFactoryTests
@@ -23,53 +33,53 @@ namespace Capgemini.Xrm.XrmToolBoxPluginBase.Tests.Unit.Services
                             .NotThrow();
         }
 
-        //[TestMethod]
-        //public void RequestJsonMigrator()
-        //{
-        //    var logger = new Mock<ILogger>().Object;
-        //    var entityRepo = new Mock<IEntityRepository>().Object;
-        //    var exportConfig = new CrmExporterConfig
-        //    {
-        //        JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
-        //    };
-        //    var cancellationToken = CancellationToken.None;
-        //    var schema = new CrmSchemaConfiguration();
+        [TestMethod]
+        public void RequestJsonMigrator()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var entityRepo = new Mock<IEntityRepository>().Object;
+            var exportConfig = new CrmExporterConfig
+            {
+                JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
+            };
+            var cancellationToken = CancellationToken.None;
+            var schema = new CrmSchemaConfiguration();
 
-        //    var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Json, logger, entityRepo, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Json, logger, entityRepo, exportConfig, cancellationToken, schema);
 
-        //    migrator.Should().BeOfType<CrmFileDataExporter>();
-        //}
+            migrator.Should().BeOfType<CrmFileDataExporter>();
+        }
 
-        //[TestMethod]
-        //public void RequestCSVMigrator()
-        //{
-        //    var logger = new Mock<ILogger>().Object;
-        //    var entityRepo = new Mock<IEntityRepository>().Object;
-        //    var exportConfig = new CrmExporterConfig
-        //    {
-        //        JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
-        //    };
-        //    var cancellationToken = CancellationToken.None;
-        //    var schema = new CrmSchemaConfiguration();
-        //    schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
+        [TestMethod]
+        public void RequestCSVMigrator()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var entityRepo = new Mock<IEntityRepository>().Object;
+            var exportConfig = new CrmExporterConfig
+            {
+                JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
+            };
+            var cancellationToken = CancellationToken.None;
+            var schema = new CrmSchemaConfiguration();
+            schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
 
-        //    var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Csv, logger, entityRepo, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Csv, logger, entityRepo, exportConfig, cancellationToken, schema);
 
-        //    migrator.Should().BeOfType<CrmFileDataExporterCsv>();
-        //}
+            migrator.Should().BeOfType<CrmFileDataExporterCsv>();
+        }
 
-        //[TestMethod]
-        //public void RequestUnknownMigrator()
-        //{
-        //    var logger = new Mock<ILogger>().Object;
-        //    var entityRepo = new Mock<IEntityRepository>().Object;
-        //    var exportConfig = new CrmExporterConfig();
-        //    var cancellationToken = CancellationToken.None;
-        //    var schema = new CrmSchemaConfiguration();
+        [TestMethod]
+        public void RequestUnknownMigrator()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var entityRepo = new Mock<IEntityRepository>().Object;
+            var exportConfig = new CrmExporterConfig();
+            var cancellationToken = CancellationToken.None;
+            var schema = new CrmSchemaConfiguration();
 
-        //    FluentActions.Invoking(() => systemUnderTest.GetCrmDataMigrator(DataFormat.Unknown, logger, entityRepo, exportConfig, cancellationToken, schema))
-        //        .Should()
-        //        .Throw<NotSupportedException>();
-        //}
+            FluentActions.Invoking(() => systemUnderTest.GetCrmDataMigrator(DataFormat.Unknown, logger, entityRepo, exportConfig, cancellationToken, schema))
+                .Should()
+                .Throw<NotSupportedException>();
+        }
     }
 }
