@@ -9,8 +9,11 @@
             <ModulePaths>
               <Include>
                 <!--<ModulePath>.*\.XrmToolBox.dll</ModulePath>-->
-                <ModulePath>.*\Capgemini.Xrm.DataMigration.XrmToolBox.*</ModulePath>
+                <ModulePath>*Capgemini.Xrm.DataMigration.XrmToolBox.*</ModulePath>
               </Include>
+              <Exclude>
+                <ModulePath>*Polly.*</ModulePath>
+              </Exclude>
             </ModulePaths>
           </CodeCoverage>
         </Configuration>
