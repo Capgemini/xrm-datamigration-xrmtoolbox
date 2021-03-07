@@ -92,7 +92,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Tests
         public void ExecuteRecordsCount()
         {
             string exportConfigFilePath = "TestData/ExportConfig.json";
-            string schemaFilePath = "TestData/apointmentsSchema.xml";
+            string schemaFilePath = "TestData/ContactSchemaWithOwner.xml";
             var mockService = new Mock<IOrganizationService>();
 
             var response = new FetchXmlToQueryExpressionResponse();
