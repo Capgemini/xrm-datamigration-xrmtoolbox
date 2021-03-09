@@ -52,6 +52,7 @@ jobs:
           searchFolder: Capgemini.Xrm.CdsDataMigrator
           platform: '$(buildPlatform)'
           configuration: '$(buildConfiguration)'
+          runSettingsFile: '$(Build.SourcesDirectory)\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.Tests.Unit\CodeCoverage.runsettings'
           codeCoverageEnabled: true
           testAssemblyVer2: |
             **\*Tests*.dll

@@ -8,13 +8,17 @@
           <CodeCoverage>
             <ModulePaths>
               <Include>
-                <!--<ModulePath>.*\.XrmToolBox.dll</ModulePath>-->
-                <ModulePath>*Capgemini.Xrm.DataMigration.XrmToolBox.*</ModulePath>
+                <ModulePath>.*\.xrmtoolbox.dll</ModulePath>
               </Include>
               <Exclude>
-                <ModulePath>*Polly.*</ModulePath>
               </Exclude>
             </ModulePaths>
+            <Functions>
+              <Include>
+                <Function>^MyXrmToolBoxPlugin3\..*</Function>
+                <Function>^Capgemini\..*</Function>
+              </Include>
+            </Functions>
           </CodeCoverage>
         </Configuration>
       </DataCollector>

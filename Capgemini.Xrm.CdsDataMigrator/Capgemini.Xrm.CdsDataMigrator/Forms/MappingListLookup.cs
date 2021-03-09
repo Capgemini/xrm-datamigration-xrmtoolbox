@@ -16,18 +16,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> mappings;
         private readonly IOrganizationService orgService;
-        private readonly List<EntityMetadata> metCache;
+        private readonly List<EntityMetadata> metaDataCache;
         private readonly string selctedValue;
 
         public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue)
         {
-            metCache = metadata.ToList();
+            metaDataCache = metadata.ToList();
             selctedValue = selectedValue;
             this.mappings = mappings;
             this.orgService = orgService;
             InitializeComponent();
 
-            Column1.Items.AddRange(metCache.Select(e => e.LogicalName).OrderBy(n => n).ToArray());
+            Column1.Items.AddRange(metaDataCache.Select(e => e.LogicalName).OrderBy(n => n).ToArray());
         }
 
         public void RefreshMappingList()
@@ -61,11 +61,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             }
         }
 
-        private void MappingListLoad(object sender, EventArgs e)
+        public void LoadMappedItems()
         {
-            dgvMappings.Rows.Clear();
-            dgvMappings.Refresh();
-
             int rowCount = 0;
             foreach (var m in mappings)
             {
@@ -83,6 +80,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                     }
                 }
             }
+        }
+
+        private void MappingListLoad(object sender, EventArgs e)
+        {
+            dgvMappings.Rows.Clear();
+            dgvMappings.Refresh();
+            LoadMappedItems();
         }
 
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)

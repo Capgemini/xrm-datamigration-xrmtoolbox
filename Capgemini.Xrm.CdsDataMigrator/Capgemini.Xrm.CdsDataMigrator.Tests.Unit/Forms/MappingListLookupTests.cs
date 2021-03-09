@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,14 +21,73 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         [TestInitialize]
         public void Setup()
         {
-            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
             orgService = null;
-            metadata = new List<EntityMetadata>();
+
             selectedValue = string.Empty;
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { "samplekey", new List<string>() { "contactattnoentity1" } }
+            };
+            mappings.Add(selectedValue, values);
+
+            var entityMetadata = new EntityMetadata();
+            var attributeList = new List<AttributeMetadata>()
+            {
+                new AttributeMetadata{ LogicalName = "contactattnoentity1" }
+            };
+            entityMetadata.LogicalName = "contact";
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            field.SetValue(entityMetadata, attributeList.ToArray());
+
+            metadata = new List<EntityMetadata>
+            {
+                entityMetadata
+            };
         }
 
         [TestMethod]
         public void MappingListLookupInstantiation()
+        {
+            FluentActions.Invoking(() => new MappingListLookup(
+                                                                mappings,
+                                                                orgService,
+                                                                new List<EntityMetadata>(),
+                                                                selectedValue))
+                         .Should()
+                         .NotThrow();
+        }
+
+        [TestMethod]
+        public void MappingListLookupInstantiationNoMetaDataLogicalNameFails()
+        {
+            var entityMetadata = new EntityMetadata();
+            var attributeList = new List<AttributeMetadata>()
+            {
+                new AttributeMetadata{ LogicalName = "contactattnoentity1" }
+            };
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            field.SetValue(entityMetadata, attributeList.ToArray());
+            metadata = new List<EntityMetadata>
+            {
+                entityMetadata
+            };
+
+            FluentActions.Invoking(() => new MappingListLookup(
+                                                                mappings,
+                                                                orgService,
+                                                                metadata,
+                                                                selectedValue))
+                         .Should()
+                         .Throw<InvalidOperationException>()
+                         .WithMessage("One or more items in the collection are null.");
+        }
+
+        [TestMethod]
+        public void MappingListLookupInstantiationWithMetaDataLogicalNameSucceeds()
         {
             FluentActions.Invoking(() => new MappingListLookup(
                                                                 mappings,
@@ -42,6 +104,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             using (var systemUnderTest = new MappingListLookup(mappings, orgService, metadata, selectedValue))
             {
                 FluentActions.Invoking(() => systemUnderTest.RefreshMappingList())
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void LoadMappedItems()
+        {
+            using (var systemUnderTest = new MappingListLookup(mappings, orgService, metadata, selectedValue))
+            {
+                FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()
                              .NotThrow();
             }
