@@ -11,7 +11,6 @@ using Moq;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
-    [Ignore("Will fix!")]
     [TestClass]
     public class ImportWizardTests
     {
