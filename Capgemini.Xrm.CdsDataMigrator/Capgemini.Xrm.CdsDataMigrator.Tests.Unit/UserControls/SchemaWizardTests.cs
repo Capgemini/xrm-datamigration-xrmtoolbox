@@ -60,7 +60,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
         }
 
-        [Ignore("Will have to fix!")]
         [TestMethod]
         public void ProcessListViewEntitiesSelectedIndexChanged()
         {
@@ -74,7 +73,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
         }
 
-        [Ignore("Will have to fix!")]
         [TestMethod]
         public void PopulateRelationshipActionNoManyToManyRelationships()
         {
