@@ -7,13 +7,13 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
+namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 {
-    public static class MetadataHelper
+    public class MetadataService : IMetadataService
     {
         private static Dictionary<string, EntityMetadata> entityMetadataCache = new Dictionary<string, EntityMetadata>();
 
-        public static List<EntityMetadata> RetrieveEntities(IOrganizationService orgService)
+        public List<EntityMetadata> RetrieveEntities(IOrganizationService orgService)
         {
             entityMetadataCache.Clear();
 
@@ -48,7 +48,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
             return entities;
         }
 
-        public static EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService)
+        public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService)
         {
             orgService.ThrowArgumentNullExceptionIfNull(nameof(orgService));
 

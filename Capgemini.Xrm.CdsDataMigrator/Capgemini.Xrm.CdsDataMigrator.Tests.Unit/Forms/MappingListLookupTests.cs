@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
 {
@@ -14,14 +16,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
     public class MappingListLookupTests
     {
         private Dictionary<string, Dictionary<string, List<string>>> mappings;
-        private IOrganizationService orgService;
+        private Mock<IOrganizationService> orgService;
+        private Mock<IMetadataService> metadataService;
         private List<EntityMetadata> metadata;
         private string selectedValue;
 
         [TestInitialize]
         public void Setup()
         {
-            orgService = null;
+            orgService = new Mock<IOrganizationService>();
+            metadataService = new Mock<IMetadataService>();
 
             selectedValue = string.Empty;
 
@@ -35,7 +39,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var entityMetadata = new EntityMetadata();
             var attributeList = new List<AttributeMetadata>()
             {
-                new AttributeMetadata{ LogicalName = "contactattnoentity1" }
+                new AttributeMetadata
+                {
+                    LogicalName = "contactattnoentity1"
+                }
             };
             entityMetadata.LogicalName = "contact";
 
@@ -53,9 +60,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             FluentActions.Invoking(() => new MappingListLookup(
                                                                 mappings,
-                                                                orgService,
+                                                                orgService.Object,
                                                                 new List<EntityMetadata>(),
-                                                                selectedValue))
+                                                                selectedValue,
+                                                                metadataService.Object))
                          .Should()
                          .NotThrow();
         }
@@ -66,7 +74,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var entityMetadata = new EntityMetadata();
             var attributeList = new List<AttributeMetadata>()
             {
-                new AttributeMetadata{ LogicalName = "contactattnoentity1" }
+                new AttributeMetadata { LogicalName = "contactattnoentity1" }
             };
 
             var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
@@ -78,9 +86,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
 
             FluentActions.Invoking(() => new MappingListLookup(
                                                                 mappings,
-                                                                orgService,
+                                                                orgService.Object,
                                                                 metadata,
-                                                                selectedValue))
+                                                                selectedValue,
+                                                                metadataService.Object))
                          .Should()
                          .Throw<InvalidOperationException>()
                          .WithMessage("One or more items in the collection are null.");
@@ -91,9 +100,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             FluentActions.Invoking(() => new MappingListLookup(
                                                                 mappings,
-                                                                orgService,
+                                                                orgService.Object,
                                                                 metadata,
-                                                                selectedValue))
+                                                                selectedValue,
+                                                                metadataService.Object))
                          .Should()
                          .NotThrow();
         }
@@ -101,7 +111,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         [TestMethod]
         public void RefreshMappingList()
         {
-            using (var systemUnderTest = new MappingListLookup(mappings, orgService, metadata, selectedValue))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgService.Object, metadata, selectedValue, metadataService.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.RefreshMappingList())
                              .Should()
@@ -113,7 +123,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         [TestMethod]
         public void LoadMappedItems()
         {
-            using (var systemUnderTest = new MappingListLookup(mappings, orgService, metadata, selectedValue))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgService.Object, metadata, selectedValue, metadataService.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()

@@ -45,9 +45,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void WizardButtons1_OnCustomPreviousNavigation(object sender, EventArgs e)
         {
-            var wizardButtons = ((WizardButtons)sender);
+            var wizardButtons = (WizardButtons)sender;
 
-            WizardValidation(wizardButtons);
+            WizardValidation(wizardButtons.PageContainer.SelectedPage.Name);
             wizardButtons.PageContainer.PreviousPage();
         }
 
@@ -55,26 +55,28 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             var wizardButtons = ((WizardButtons)sender);
 
-            if (WizardValidation(wizardButtons))
+            if (WizardValidation(wizardButtons.PageContainer.SelectedPage.Name))
+            {
                 wizardButtons.PageContainer.NextPage();
+            }
         }
 
-        private bool WizardValidation(WizardButtons wizardButtons)
+        public bool WizardValidation(string selectedPage)
         {
             bool valResults = true;
 
-            if (wizardButtons.PageContainer.SelectedPage.Name == "exportConfig")
+            if (selectedPage == "exportConfig")
             {
                 if (!string.IsNullOrWhiteSpace(ExportConfigFileLocation))
                 {
                     valResults = LoadSettingsFromConfig();
                 }
             }
-            else if (wizardButtons.PageContainer.SelectedPage.Name == "exportLocation")
+            else if (selectedPage == "exportLocation")
             {
                 valResults = ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, textBoxExportLocation);
             }
-            else if (wizardButtons.PageContainer.SelectedPage.Name == "executeExport")
+            else if (selectedPage == "executeExport")
             {
                 valResults = ValidationHelpers.IsTextControlNotEmpty(labelSchemaLocationFileValidation, textBoxSchemaLocation) &&
                              ValidationHelpers.IsTextControlNotEmpty(labelExportConnectionValidation, labelTargetConnectionString);

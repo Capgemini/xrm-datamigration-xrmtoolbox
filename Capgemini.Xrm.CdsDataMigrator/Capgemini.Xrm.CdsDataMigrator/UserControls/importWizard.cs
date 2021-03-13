@@ -5,6 +5,7 @@ using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
@@ -21,6 +22,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     public partial class importWizard : UserControl
     {
         private CrmImportConfig importConfig;
+        private Capgemini.DataMigration.Core.ILogger logger;
+        private IEntityRepositoryService entityRepositoryService;
 
         public importWizard()
         {
@@ -37,16 +40,51 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             wizardButtons1.OnExecute += button2_Click;
             logger = new MessageLogger(tbLogger, SynchronizationContext.Current);
+            entityRepositoryService = new EntityRepositoryService(CrmServiceClient);
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 
-        public MessageLogger logger { get; }
-
         public string TargetConnectionString { get; set; }
 
         public CrmServiceClient CrmServiceClient { get; set; }
+
+        public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
+        {
+            if (maxThreads > 1)
+            {
+                currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
+                var repos = new List<IEntityRepository>();
+                int threadCount = maxThreads;
+
+                while (threadCount > 0)
+                {
+                    threadCount--;
+                    repos.Add(entityRepositoryService.InstantiateEntityRepository(true));
+                }
+
+                var fileExporter = new CrmFileDataImporter(currentLogger, repos, currentImportConfig, tokenSource.Token);
+                fileExporter.MigrateData();
+            }
+            else
+            {
+                currentLogger.LogInfo("Starting Single Threaded processing, you must set up max threads to more than 1");
+                var entityRepo = entityRepositoryService.InstantiateEntityRepository(false);
+
+                if (jsonFormat)
+                {
+                    var fileExporter = new CrmFileDataImporter(currentLogger, entityRepo, currentImportConfig, tokenSource.Token);
+                    fileExporter.MigrateData();
+                }
+                else
+                {
+                    var schema = CrmSchemaConfiguration.ReadFromFile(importSchemaFilePath);
+                    var fileExporter = new CrmFileDataImporterCsv(currentLogger, entityRepo, currentImportConfig, schema, tokenSource.Token);
+                    fileExporter.MigrateData();
+                }
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -76,15 +114,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            radioButton1.Checked = !radioButton2.Checked;
+            radioButtonCSVFormat.Checked = !radioButtonJsonFormat.Checked;
             groupBox1.Visible = false;
             stepWizardControl1.Pages[0].AllowNext = true;
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            stepWizardControl1.Pages[0].AllowNext = radioButton1.Checked && tbImportSchema.Text != string.Empty;
-            radioButton2.Checked = !radioButton1.Checked;
+            stepWizardControl1.Pages[0].AllowNext = radioButtonCSVFormat.Checked && tbImportSchema.Text != string.Empty;
+            radioButtonJsonFormat.Checked = !radioButtonCSVFormat.Checked;
             groupBox1.Visible = true;
         }
 
@@ -99,38 +137,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             tbLogger.Clear();
             Task.Run(() =>
             {
-                if (nudMaxThreads.Value > 1)
-                {
-                    logger.Info("Starting MultiThreaded Processing, using " + nudMaxThreads.Value + " threads");
-                    List<IEntityRepository> repos = new List<IEntityRepository>();
-                    int threadCount = Convert.ToInt32(nudMaxThreads.Value);
-
-                    while (threadCount > 0)
-                    {
-                        threadCount--;
-                        repos.Add(new EntityRepository(CrmServiceClient.Clone(), new ServiceRetryExecutor()));
-                    }
-
-                    CrmFileDataImporter fileExporter = new CrmFileDataImporter(logger, repos, importConfig, tokenSource.Token);
-                    fileExporter.MigrateData();
-                }
-                else
-                {
-                    logger.Info("Starting Single Threaded processing, you must set up max threads to more than 1");
-                    EntityRepository entityRepo = new EntityRepository(CrmServiceClient, new ServiceRetryExecutor());
-
-                    if (radioButton2.Checked)
-                    {
-                        CrmFileDataImporter fileExporter = new CrmFileDataImporter(logger, entityRepo, importConfig, tokenSource.Token);
-                        fileExporter.MigrateData();
-                    }
-                    else
-                    {
-                        CrmSchemaConfiguration schema = CrmSchemaConfiguration.ReadFromFile(tbImportSchema.Text);
-                        CrmFileDataImporterCsv fileExporter = new CrmFileDataImporterCsv(logger, entityRepo, importConfig, schema, tokenSource.Token);
-                        fileExporter.MigrateData();
-                    }
-                }
+                PerformImportAction(tbImportSchema.Text, Convert.ToInt32(nudMaxThreads.Value), radioButtonJsonFormat.Checked, logger, entityRepositoryService, importConfig, tokenSource);
             });
         }
 
@@ -156,7 +163,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void tbimportSchema_textChanged(object sender, EventArgs e)
         {
-            if (radioButton1.Checked)
+            if (radioButtonCSVFormat.Checked)
             {
                 stepWizardControl1.Pages[0].AllowNext = true;
             }

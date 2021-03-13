@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Windows.Forms;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
 {

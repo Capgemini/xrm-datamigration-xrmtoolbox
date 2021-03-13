@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using Microsoft.Xrm.Sdk;
@@ -16,10 +17,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
     {
         private readonly Dictionary<string, Dictionary<string, List<string>>> mappings;
         private readonly IOrganizationService orgService;
+        private readonly IMetadataService metadataService;
         private readonly List<EntityMetadata> metaDataCache;
         private readonly string selctedValue;
 
-        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue)
+        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue, IMetadataService metadataService)
         {
             metaDataCache = metadata.ToList();
             selctedValue = selectedValue;
@@ -28,6 +30,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             InitializeComponent();
 
             Column1.Items.AddRange(metaDataCache.Select(e => e.LogicalName).OrderBy(n => n).ToArray());
+            this.metadataService = metadataService;
         }
 
         public void RefreshMappingList()
@@ -112,21 +115,21 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
             if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
             {
-                var entitymeta = MetadataHelper.RetrieveEntities(attr.EntityLogicalName, orgService);
+                var entitymeta = metadataService.RetrieveEntities(attr.EntityLogicalName, orgService);
                 var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
                 (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
             //Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
             else if (attr.AttributeType == AttributeTypeCode.Owner)
             {
-                var entitymeta = MetadataHelper.RetrieveEntities("systemuser", orgService);
+                var entitymeta = metadataService.RetrieveEntities("systemuser", orgService);
                 var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
                 (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
             else if (attr.AttributeType == AttributeTypeCode.Lookup)
             {
                 var lookup = attr as LookupAttributeMetadata;
-                var entitymeta = MetadataHelper.RetrieveEntities(lookup.Targets[0], orgService);
+                var entitymeta = metadataService.RetrieveEntities(lookup.Targets[0], orgService);
                 var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
                 (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
@@ -138,7 +141,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void ValidateEntitytColumn(int rowIndex, string newValue)
         {
-            var entitymeta = MetadataHelper.RetrieveEntities(newValue, orgService);
+            var entitymeta = metadataService.RetrieveEntities(newValue, orgService);
             var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
 
             if (dgvMappings.Rows != null && dgvMappings.Rows.Count > rowIndex && dgvMappings.Rows[rowIndex].Cells.Count > 0)

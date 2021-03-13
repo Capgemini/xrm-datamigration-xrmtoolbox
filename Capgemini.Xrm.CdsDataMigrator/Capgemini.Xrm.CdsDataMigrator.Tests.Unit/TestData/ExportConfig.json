@@ -10,13 +10,13 @@
     "businessunitid"
   ],
   "CrmMigrationToolSchemaPaths": [
-    "C:\\GitRepos\\UserSettings\\usersettingsschema.xml"
+    "TestData\\usersettingsschema.xml"
   ],
   "PageSize": 500,
   "BatchSize": 500,
   "TopCount": 100000,
   "OnlyActiveRecords": false,
-  "JsonFolderPath": "C:\\GitRepos\\ExtractedData",
+  "JsonFolderPath": "TestData",
   "OneEntityPerBatch": true,
   "FilePrefix": "ExportedData",
   "SeperateFilesPerEntity": true,

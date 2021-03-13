@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,16 +12,20 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
-    public class MetadataHelperTests
+    public class MetadataServiceTests
     {
         private Mock<IOrganizationService> mockService;
         private List<EntityMetadata> metaDataList;
         private RetrieveAllEntitiesResponse entityResponse;
 
+        private IMetadataService systemUnderTest;
+
         [TestInitialize]
         public void Setup()
         {
             mockService = new Mock<IOrganizationService>();
+
+            systemUnderTest = new MetadataService();
 
             metaDataList = new List<EntityMetadata>
             {
@@ -35,7 +40,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         [TestMethod]
         public void RetrieveEntitiesNullOrganizationService()
         {
-            var actual = MetadataHelper.RetrieveEntities(null);
+            var actual = systemUnderTest.RetrieveEntities(null);
 
             actual.Should().BeOfType<List<EntityMetadata>>();
             actual.Count.Should().Be(0);
@@ -49,7 +54,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
             mockService.Setup(a => a.Execute(It.IsAny<OrganizationRequest>()))
                        .Returns(response);
 
-            var actual = MetadataHelper.RetrieveEntities(mockService.Object);
+            var actual = systemUnderTest.RetrieveEntities(mockService.Object);
 
             mockService.VerifyAll();
             actual.Should().NotBeNull();
@@ -61,7 +66,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
             mockService.Setup(a => a.Execute(It.IsAny<OrganizationRequest>()))
                        .Returns(entityResponse);
 
-            var actual = MetadataHelper.RetrieveEntities(mockService.Object);
+            var actual = systemUnderTest.RetrieveEntities(mockService.Object);
 
             mockService.VerifyAll();
             actual.Count.Should().Be(2);
@@ -73,7 +78,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         {
             string logicalName = "account";
 
-            FluentActions.Invoking(() => MetadataHelper.RetrieveEntities(logicalName, null))
+            FluentActions.Invoking(() => systemUnderTest.RetrieveEntities(logicalName, null))
                 .Should()
                 .Throw<ArgumentNullException>();
         }
@@ -88,9 +93,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             mockService.Setup(a => a.Execute(It.IsAny<OrganizationRequest>())).Returns(response);
 
-            MetadataHelper.RetrieveEntities(logicalName, mockService.Object);
+            systemUnderTest.RetrieveEntities(logicalName, mockService.Object);
 
-            var actual = MetadataHelper.RetrieveEntities(logicalName, mockService.Object);
+            var actual = systemUnderTest.RetrieveEntities(logicalName, mockService.Object);
 
             mockService.Verify(a => a.Execute(It.IsAny<OrganizationRequest>()), Times.Once);
             actual.Should().BeNull();

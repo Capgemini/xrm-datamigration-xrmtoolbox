@@ -14,5 +14,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                         .Should()
                         .NotThrow();
         }
+
+        [Ignore("To be fix!")]
+        [TestMethod]
+        public void PopulateRelationshipActionTest()
+        {
+            Assert.Fail();
+        }
+
+        [Ignore("To be fix!")]
+        [TestMethod]
+        public void PopulateRelationshipTest()
+        {
+            Assert.Fail();
+        }
     }
 }
