@@ -96,7 +96,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.VerifyAll();
         }
 
-        [Ignore("Will have to fix!")]
         [TestMethod]
         public void PopulateRelationshipAction()
         {
@@ -137,7 +136,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.VerifyAll();
         }
 
-        [Ignore("Will have to fix!")]
         [TestMethod]
         public void PopulateRelationship()
         {
