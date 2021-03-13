@@ -12,7 +12,6 @@ using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
-    [Ignore("Will fix!")]
     [TestClass]
     public class SchemaWizardTests
     {
