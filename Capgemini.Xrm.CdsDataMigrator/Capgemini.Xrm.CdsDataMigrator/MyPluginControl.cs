@@ -10,7 +10,7 @@ namespace MyXrmToolBoxPlugin3
 {
     public partial class MyPluginControl : PluginControlBase
     {
-        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings settings;
+        private readonly Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings settings;
 
         public MyPluginControl()
         {
@@ -31,36 +31,34 @@ namespace MyXrmToolBoxPlugin3
         {
             if (detail != null)
             {
-                if (actionName == "SchemaConnection" || actionName == "" )
+                if (actionName == "SchemaConnection" || actionName == "")
                 {
-                    SchemaGeneratorWizard.CrmServiceClient = detail.ServiceClient;
-                    SchemaGeneratorWizard.OnConnectionUpdated();
+                    SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
+                    SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 
                 if (actionName == "SourceConnection" || actionName == "")
                 {
-                    DataExportWizard.CrmServiceClient = detail.ServiceClient;
-                    DataExportWizard.OnConnectionUpdated();
+                    DataExportWizard.OrganizationService = detail.ServiceClient;
+                    DataExportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
-                
+
                 if (actionName == "TargetConnection" || actionName == "")
                 {
-                    DataImportWizard.CrmServiceClient = detail.ServiceClient;
-                    DataImportWizard.OnConnectionUpdated();
-                } 
+                    DataImportWizard.OrganizationService = detail.ServiceClient;
+                    DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
+                }
             }
 
             if (actionName == "")
             {
                 base.UpdateConnection(newService, detail, actionName, parameter);
             }
-
         }
 
         private void ImportWizard1_onConnectionRequested(object sender, RequestConnectionEventArgs e)
         {
             RaiseRequestConnectionEvent(e);
-
         }
 
         private void toolStripButtonSchemaConfig_Click(object sender, EventArgs e)

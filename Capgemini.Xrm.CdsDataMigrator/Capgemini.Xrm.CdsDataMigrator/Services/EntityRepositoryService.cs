@@ -14,22 +14,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 {
     public class EntityRepositoryService : IEntityRepositoryService
     {
-        public EntityRepositoryService(CrmServiceClient crmServiceClient)
+        public EntityRepositoryService(IOrganizationService orgService)
         {
-            CrmServiceClient = crmServiceClient;
+            OrganizationService = orgService;
         }
 
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public IOrganizationService OrganizationService { get; set; }
 
         public IEntityRepository InstantiateEntityRepository(bool useCloneConnection)
         {
             if (useCloneConnection)
             {
-                return new EntityRepository(CrmServiceClient.Clone(), new ServiceRetryExecutor());
+                return new EntityRepository(((CrmServiceClient)OrganizationService).Clone(), new ServiceRetryExecutor());
             }
             else
             {
-                return new EntityRepository(CrmServiceClient, new ServiceRetryExecutor());
+                return new EntityRepository(OrganizationService, new ServiceRetryExecutor());
             }
         }
     }

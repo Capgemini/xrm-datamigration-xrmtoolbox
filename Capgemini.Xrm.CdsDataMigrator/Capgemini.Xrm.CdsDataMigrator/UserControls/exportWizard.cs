@@ -12,17 +12,18 @@ using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+using Microsoft.Xrm.Sdk;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
-    public partial class exportWizard : UserControl, IExportView
+    public partial class ExportWizard : UserControl, IExportView
     {
         private readonly MessageLogger logger;
         private readonly ExportPresenter presenter;
         private readonly IDataMigrationService dataMigrationService;
         private readonly ICrmGenericMigratorFactory migratorFactory;
 
-        public exportWizard()
+        public ExportWizard()
         {
             InitializeComponent();
 
@@ -99,7 +100,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public bool FormatCsvSelected { get => radioButtonFormatCsv.Checked; set => radioButtonFormatCsv.Checked = value; }
 
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public IOrganizationService OrganizationService { get; set; }
 
         public string SaveExportLocation { get => textBoxExportLocation.Text; set => textBoxExportLocation.Text = value; }
 
@@ -145,15 +146,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)
         {
-            if (OnConnectionRequested != null)
-            {
-                OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (MyPluginControl)Parent });
-            }
+            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (MyPluginControl)Parent });
         }
 
-        internal void OnConnectionUpdated()
+        public void OnConnectionUpdated(string connectedOrgFriendlyName)
         {
-            labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
+            labelTargetConnectionString.Text = connectedOrgFriendlyName;
         }
 
         public string ShowFolderBrowserDialog()

@@ -56,7 +56,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
                     if (mappings[mapKey][entKey].Contains(row.Cells[2].Value.ToString()))
                     {
-                        throw new MappingException($"Duplicated entry {mapKey} {entKey} {row.Cells[2].Value.ToString()}");
+                        throw new MappingException($"Duplicated entry {mapKey} {entKey} {row.Cells[2].Value}");
                     }
 
                     mappings[mapKey][entKey].Add(row.Cells[2].Value.ToString());

@@ -18,7 +18,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         private List<EntityMetadata> metaDataList;
         private RetrieveAllEntitiesResponse entityResponse;
 
-        private IMetadataService systemUnderTest;
+        private MetadataService systemUnderTest;
 
         [TestInitialize]
         public void Setup()
@@ -92,8 +92,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
             var response = new RetrieveEntityResponse();
 
             mockService.Setup(a => a.Execute(It.IsAny<OrganizationRequest>())).Returns(response);
-
-            systemUnderTest.RetrieveEntities(logicalName, mockService.Object);
 
             var actual = systemUnderTest.RetrieveEntities(logicalName, mockService.Object);
 

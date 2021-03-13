@@ -11,11 +11,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 {
     public class MetadataService : IMetadataService
     {
-        private static Dictionary<string, EntityMetadata> entityMetadataCache = new Dictionary<string, EntityMetadata>();
+        private readonly static Dictionary<string, EntityMetadata> EntityMetadataCache = new Dictionary<string, EntityMetadata>();
 
         public List<EntityMetadata> RetrieveEntities(IOrganizationService orgService)
         {
-            entityMetadataCache.Clear();
+            EntityMetadataCache.Clear();
 
             var entities = new List<EntityMetadata>();
 
@@ -43,7 +43,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
                 }
             }
 
-            entityMetadataCache.Clear();
+            EntityMetadataCache.Clear();
 
             return entities;
         }
@@ -54,11 +54,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 
             try
             {
-                lock (entityMetadataCache)
+                lock (EntityMetadataCache)
                 {
-                    if (entityMetadataCache.ContainsKey(logicalName))
+                    if (EntityMetadataCache.ContainsKey(logicalName))
                     {
-                        return entityMetadataCache[logicalName];
+                        return EntityMetadataCache[logicalName];
                     }
 
                     var request = new RetrieveEntityRequest
@@ -69,7 +69,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 
                     var response = (RetrieveEntityResponse)orgService.Execute(request);
 
-                    entityMetadataCache.Add(logicalName, response.EntityMetadata);
+                    EntityMetadataCache.Add(logicalName, response.EntityMetadata);
                     return response.EntityMetadata;
                 }
             }

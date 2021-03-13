@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
     /// <summary>
     /// Implementation of PluginControl.
     /// </summary>
-    public partial class SchemaGenerator : UserControl
+    public partial class SchemaWizard : UserControl
     {
         private readonly CrmSchemaConfiguration crmSchemaConfiguration = new CrmSchemaConfiguration();
         private readonly AttributeTypeMapping attributeMapping = new AttributeTypeMapping();
@@ -36,18 +36,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly Dictionary<string, HashSet<string>> entityAttributes = new Dictionary<string, HashSet<string>>();
         private readonly Dictionary<string, HashSet<string>> entityRelationships = new Dictionary<string, HashSet<string>>();
 
+        private readonly IMetadataService metadataService;
         private bool workingstate;
         private Panel informationPanel;
         private Guid organisationId = Guid.Empty;
 
         private string entityLogicalName;
         private Dictionary<string, string> filterQuery = new Dictionary<string, string>();
+
         private Dictionary<string, Dictionary<string, List<string>>> lookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
         private Dictionary<string, Dictionary<Guid, Guid>> mapper = new Dictionary<string, Dictionary<Guid, Guid>>();
         private List<EntityMetadata> cachedMetadata;
-        private IMetadataService metadataService;
 
-        public SchemaGenerator()
+        public SchemaWizard()
         {
             InitializeComponent();
 
@@ -56,14 +57,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 
-        public CrmServiceClient CrmServiceClient { get; internal set; }
+        public IOrganizationService OrganizationService { get; set; }
 
         public Core.Settings Settings { get; internal set; }
 
-        public void OnConnectionUpdated()
+        public void OnConnectionUpdated(Guid ConnectedOrgId, string ConnectedOrgFriendlyName)
         {
-            organisationId = CrmServiceClient.ConnectedOrgId;
-            toolStripLabelConnection.Text = $"Connected to: {CrmServiceClient.ConnectedOrgFriendlyName}";
+            organisationId = ConnectedOrgId;
+            toolStripLabelConnection.Text = $"Connected to: {ConnectedOrgFriendlyName}";
             RefreshEntities(true);
         }
 
@@ -71,7 +72,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
             var sourceAttributesList = new List<ListViewItem>();
-            if (entitymeta.ManyToManyRelationships.Any())
+            if (entitymeta.ManyToManyRelationships != null && entitymeta.ManyToManyRelationships.Any())
             {
                 foreach (var relationship in entitymeta.ManyToManyRelationships)
                 {
@@ -82,6 +83,27 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
 
             return sourceAttributesList;
+        }
+
+        public void GetEntityLogicalName()
+        {
+            if (lvEntities.SelectedItems.Count > 0)
+            {
+                var entityitem = lvEntities.SelectedItems[0];
+                if (entityitem != null && entityitem.Tag != null)
+                {
+                    var entity = (EntityMetadata)entityitem.Tag;
+                    entityLogicalName = entity.LogicalName;
+                }
+            }
+        }
+
+        public void ProcessListViewEntitiesSelectedIndexChanged()
+        {
+            GetEntityLogicalName();
+            PopulateAttributes(entityLogicalName, OrganizationService);
+            PopulateRelationship(entityLogicalName, OrganizationService);
+            AddSelectedEntities();
         }
 
         public void PopulateRelationship(string entityLogicalName, IOrganizationService service)
@@ -142,10 +164,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            GetEntityLogicalName();
-            PopulateAttributes(entityLogicalName, CrmServiceClient);
-            PopulateRelationship(entityLogicalName, CrmServiceClient);
-            AddSelectedEntities();
+            ProcessListViewEntitiesSelectedIndexChanged();
         }
 
         private void AddSelectedEntities()
@@ -153,19 +172,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             if (lvEntities.SelectedItems.Count > 0 && !(string.IsNullOrEmpty(entityLogicalName) && selectedEntity.Contains(entityLogicalName)))
             {
                 selectedEntity.Add(entityLogicalName);
-            }
-        }
-
-        private void GetEntityLogicalName()
-        {
-            if (lvEntities.SelectedItems.Count > 0)
-            {
-                var entityitem = lvEntities.SelectedItems[0];
-                if (entityitem != null && entityitem.Tag != null)
-                {
-                    var entity = (EntityMetadata)entityitem.Tag;
-                    entityLogicalName = entity.LogicalName;
-                }
             }
         }
 
@@ -416,7 +422,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     bwFill.DoWork += (sender, e) =>
                     {
-                        List<EntityMetadata> sourceList = metadataService.RetrieveEntities(CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
+                        var sourceList = metadataService.RetrieveEntities(OrganizationService);
+
                         if (!cbShowSystemAttributes.Checked)
                         {
                             sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
@@ -598,7 +605,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void OpenMappingForm()
         {
-            using (var mappingDialog = new MappingListLookup(lookupMaping, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy, cachedMetadata, entityLogicalName, metadataService)
+            //using (var mappingDialog = new MappingListLookup(lookupMaping, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy, cachedMetadata, entityLogicalName, metadataService)
+            using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService)
             {
                 StartPosition = FormStartPosition.CenterParent
             })
@@ -792,7 +800,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in checkedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy);
+                    var sourceList = metadataService.RetrieveEntities(item, OrganizationService);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
 
                     if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
@@ -833,7 +841,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in checkedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, CrmServiceClient);
+                    var sourceList = metadataService.RetrieveEntities(item, OrganizationService);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
                 }
 

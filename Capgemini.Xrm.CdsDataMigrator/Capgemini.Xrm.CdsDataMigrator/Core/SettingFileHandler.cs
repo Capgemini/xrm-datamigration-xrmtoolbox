@@ -7,7 +7,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
     {
         public static bool GetConfigData(out Settings config)
         {
-            var allok = SettingsManager.Instance.TryLoad(typeof(SchemaGenerator), out config);
+            var allok = SettingsManager.Instance.TryLoad(typeof(SchemaWizard), out config);
 
             if (config == null)
             {
@@ -21,7 +21,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
         {
             try
             {
-                SettingsManager.Instance.Save(typeof(SchemaGenerator), config);
+                SettingsManager.Instance.Save(typeof(SchemaWizard), config);
                 return true;
             }
             catch (Exception)

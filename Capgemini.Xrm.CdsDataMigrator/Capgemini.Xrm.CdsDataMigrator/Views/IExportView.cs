@@ -32,11 +32,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views
         bool MinimizeJsonChecked { get; set; }
 
         decimal BatchSize { get; set; }
-        CrmServiceClient CrmServiceClient { get; set; }
+
+        IOrganizationService OrganizationService { get; set; }
 
         string ShowFolderBrowserDialog();
 
         string ShowFileDialog();
-
     }
 }

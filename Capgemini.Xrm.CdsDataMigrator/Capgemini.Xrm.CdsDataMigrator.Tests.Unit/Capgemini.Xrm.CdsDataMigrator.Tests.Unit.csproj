@@ -237,7 +237,7 @@
     <Compile Include="Services\DataMigrationServiceTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
-    <Compile Include="UserControls\SchemaGeneratorTests.cs" />
+    <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
   </ItemGroup>
   <ItemGroup>

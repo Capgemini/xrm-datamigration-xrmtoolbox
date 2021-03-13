@@ -42,7 +42,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
-            using (var systemUnderTest = new importWizard())
+            using (var systemUnderTest = new ImportWizard())
             {
                 using (var tokenSource = new CancellationTokenSource())
                 {
@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
-            using (var systemUnderTest = new importWizard())
+            using (var systemUnderTest = new ImportWizard())
             {
                 using (var tokenSource = new CancellationTokenSource())
                 {
@@ -108,7 +108,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
-            using (var systemUnderTest = new importWizard())
+            using (var systemUnderTest = new ImportWizard())
             {
                 using (var tokenSource = new CancellationTokenSource())
                 {
@@ -141,7 +141,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
-            using (var systemUnderTest = new importWizard())
+            using (var systemUnderTest = new ImportWizard())
             {
                 using (var tokenSource = new CancellationTokenSource())
                 {

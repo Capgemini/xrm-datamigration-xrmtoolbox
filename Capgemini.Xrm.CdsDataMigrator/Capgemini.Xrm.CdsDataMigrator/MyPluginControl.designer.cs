@@ -39,9 +39,9 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDataExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripPluginOptionMenu = new System.Windows.Forms.ToolStrip();
-            this.SchemaGeneratorWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaGenerator();
-            this.DataImportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.importWizard();
-            this.DataExportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.exportWizard();
+            this.SchemaGeneratorWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaWizard();
+            this.DataImportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ImportWizard();
+            this.DataExportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ExportWizard();
             this.toolStripPluginOptionMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,7 +131,7 @@
             // DataImportWizard
             // 
             this.DataImportWizard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.DataImportWizard.CrmServiceClient = null;
+            this.DataImportWizard./*CrmServiceClient*/OrganizationService = null;
             this.DataImportWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataImportWizard.Location = new System.Drawing.Point(0, 0);
             this.DataImportWizard.Name = "DataImportWizard";
@@ -147,7 +147,7 @@
             0,
             0,
             0});
-            this.DataExportWizard.CrmServiceClient = null;
+            this.DataExportWizard./*CrmServiceClient*/OrganizationService = null;
             this.DataExportWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataExportWizard.ExportConfigFileLocation = "";
             this.DataExportWizard.ExportInactiveRecordsChecked = false;
@@ -187,9 +187,9 @@
         private System.Windows.Forms.FolderBrowserDialog fbSchemaPath;
         private System.Windows.Forms.OpenFileDialog fdSchemaFile;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.importWizard DataImportWizard;
-        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.exportWizard DataExportWizard;
-        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaGenerator SchemaGeneratorWizard;
+        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ImportWizard DataImportWizard;
+        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ExportWizard DataExportWizard;
+        private Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaWizard SchemaGeneratorWizard;
         private System.Windows.Forms.ToolStripButton toolStripButtonSchemaConfig;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonDataImport;

@@ -19,13 +19,13 @@ using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
-    public partial class importWizard : UserControl
+    public partial class ImportWizard : UserControl
     {
         private CrmImportConfig importConfig;
-        private Capgemini.DataMigration.Core.ILogger logger;
-        private IEntityRepositoryService entityRepositoryService;
+        private readonly Capgemini.DataMigration.Core.ILogger logger;
+        private readonly IEntityRepositoryService entityRepositoryService;
 
-        public importWizard()
+        public ImportWizard()
         {
             InitializeComponent();
 
@@ -40,7 +40,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             wizardButtons1.OnExecute += button2_Click;
             logger = new MessageLogger(tbLogger, SynchronizationContext.Current);
-            entityRepositoryService = new EntityRepositoryService(CrmServiceClient);
+            entityRepositoryService = new EntityRepositoryService(OrganizationService);
             wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
         }
 
@@ -48,7 +48,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public string TargetConnectionString { get; set; }
 
-        public CrmServiceClient CrmServiceClient { get; set; }
+        public IOrganizationService OrganizationService { get; set; }
 
         public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
         {
@@ -100,15 +100,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)
         {
-            if (OnConnectionRequested != null)
-            {
-                OnConnectionRequested(this, new RequestConnectionEventArgs { ActionName = "TargetConnection", Control = (MyPluginControl)Parent });
-            }
+            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "TargetConnection", Control = (MyPluginControl)Parent });
         }
 
-        internal void OnConnectionUpdated()
+        public void OnConnectionUpdated(string connectedOrgFriendlyName)
         {
-            labelTargetConnectionString.Text = CrmServiceClient.ConnectedOrgFriendlyName;
+            labelTargetConnectionString.Text = connectedOrgFriendlyName;
             stepWizardControl1.Pages[3].AllowNext = true;
         }
 

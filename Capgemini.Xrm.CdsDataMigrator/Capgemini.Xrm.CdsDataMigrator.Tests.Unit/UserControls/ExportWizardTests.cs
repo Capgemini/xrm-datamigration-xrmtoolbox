@@ -10,7 +10,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationExportConfigIsNull()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = null;
 
@@ -27,7 +27,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationExportConfig()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
 
@@ -45,7 +45,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationExportLocation()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
                 var actual = systemUnderTest.WizardValidation("exportLocation");
@@ -57,7 +57,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationExecuteExport()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
                 var actual = systemUnderTest.WizardValidation("executeExport");
@@ -69,7 +69,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationEmptySelectedPage()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
                 var actual = systemUnderTest.WizardValidation(string.Empty);
@@ -81,7 +81,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationNonExistingSelectedPage()
         {
-            using (var systemUnderTest = new exportWizard())
+            using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
                 var actual = systemUnderTest.WizardValidation(string.Empty);

@@ -300,23 +300,23 @@
     <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
     <Compile Include="Services\IDataMigrationService.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="UserControls\exportWizard.cs">
+    <Compile Include="UserControls\ExportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\exportWizard.Designer.cs">
-      <DependentUpon>exportWizard.cs</DependentUpon>
+    <Compile Include="UserControls\ExportWizard.Designer.cs">
+      <DependentUpon>ExportWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\importWizard.cs">
+    <Compile Include="UserControls\ImportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\importWizard.Designer.cs">
-      <DependentUpon>importWizard.cs</DependentUpon>
+    <Compile Include="UserControls\ImportWizard.Designer.cs">
+      <DependentUpon>ImportWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\schemaWizard.cs">
+    <Compile Include="UserControls\SchemaWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\schemaWizard.Designer.cs">
-      <DependentUpon>schemaWizard.cs</DependentUpon>
+    <Compile Include="UserControls\SchemaWizard.Designer.cs">
+      <DependentUpon>SchemaWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
@@ -365,14 +365,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\exportWizard.resx">
-      <DependentUpon>exportWizard.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\ExportWizard.resx">
+      <DependentUpon>ExportWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\importWizard.resx">
-      <DependentUpon>importWizard.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\ImportWizard.resx">
+      <DependentUpon>ImportWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\schemaWizard.resx">
-      <DependentUpon>schemaWizard.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\SchemaWizard.resx">
+      <DependentUpon>SchemaWizard.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WizardButtons.resx">

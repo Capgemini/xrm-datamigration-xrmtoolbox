@@ -2,7 +2,7 @@
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
-    partial class SchemaGenerator
+    partial class SchemaWizard
     {
         /// <summary> 
         /// Required designer variable.

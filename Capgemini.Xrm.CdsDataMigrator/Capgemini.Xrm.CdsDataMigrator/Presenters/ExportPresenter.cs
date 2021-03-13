@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters
             }
 
             settings.SavePath = exportView.SaveExportLocation;
-            settings.EnvironmentConnection = exportView.CrmServiceClient;
+            settings.EnvironmentConnection = exportView.OrganizationService;
             settings.ExportConfigPath = exportView.ExportConfigFileLocation;
             settings.SchemaPath = exportView.ExportSchemaFileLocation;
             settings.ExportInactiveRecords = exportView.ExportInactiveRecordsChecked;

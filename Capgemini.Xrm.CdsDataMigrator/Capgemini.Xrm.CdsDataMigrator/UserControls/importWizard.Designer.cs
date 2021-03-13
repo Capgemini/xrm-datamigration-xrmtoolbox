@@ -1,6 +1,6 @@
 ﻿namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
-    partial class importWizard
+    partial class ImportWizard
     {
         /// <summary> 
         /// Required designer variable.
