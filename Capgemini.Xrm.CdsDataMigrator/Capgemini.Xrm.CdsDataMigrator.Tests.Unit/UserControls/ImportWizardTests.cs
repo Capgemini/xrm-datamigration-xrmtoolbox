@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using Capgemini.DataMigration.Core;
-using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
