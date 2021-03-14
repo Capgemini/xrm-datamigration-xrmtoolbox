@@ -52,5 +52,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                 systemUnderTest.QueryString.Should().BeNullOrEmpty();
             }
         }
+
+        [TestMethod]
+        public void FilterContainsFetchXml()
+        {
+            var currentfilter = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
+
+            using (var systemUnderTest = new FilterEditor(currentfilter))
+            {
+                systemUnderTest.Filter.Should().Be(currentfilter);
+            }
+        }
     }
 }
