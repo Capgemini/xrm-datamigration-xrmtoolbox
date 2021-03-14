@@ -52,14 +52,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             return dictionary;
         }
 
-        private void MappingListLoad(object sender, EventArgs e)
+        public void PopulateMappingGrid()
         {
-            // Add mappings
             foreach (var m in mappings)
             {
                 var vals = new object[2] { m.Key.Id.ToString(), m.Value.Id.ToString() };
                 dgvMappings.Rows.Add(vals);
             }
+        }
+
+        public bool PerformMappingsCellValidation(string column, object formattedValue, int rowIndex, int columnIndex)
+        {
+            // Abort validation if cell is not in the CompanyName column.
+            if (column.Equals("clEntity", StringComparison.InvariantCulture))
+            {
+                if (formattedValue == null)
+                {
+                    dgvMappings.Rows[rowIndex].ErrorText = "Entity must not be empty";
+                    return true;
+                }
+            }
+            else if (!Guid.TryParse(formattedValue.ToString(), out Guid dummy))
+            {
+                // Check on valid GUID
+                dgvMappings.Rows[rowIndex].ErrorText = $"{dgvMappings.Columns[columnIndex].HeaderText} is not a valid GUID";
+                return true;
+            }
+
+            return false;
+        }
+
+        private void MappingListLoad(object sender, EventArgs e)
+        {
+            PopulateMappingGrid();
         }
 
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
@@ -70,23 +95,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void DataGridViewMappingsCellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            string column = dgvMappings.Columns[e.ColumnIndex].Name;
-
-            // Abort validation if cell is not in the CompanyName column.
-            if (column.Equals("clEntity", StringComparison.InvariantCulture))
-            {
-                if (e.FormattedValue == null)
-                {
-                    dgvMappings.Rows[e.RowIndex].ErrorText = "Entity must not be empty";
-                    e.Cancel = true;
-                }
-            }
-            else if (!Guid.TryParse(e.FormattedValue.ToString(), out Guid dummy))
-            {
-                // Check on valid GUID
-                dgvMappings.Rows[e.RowIndex].ErrorText = string.Format("{0} is not a valid GUID", dgvMappings.Columns[e.ColumnIndex].HeaderText);
-                e.Cancel = true;
-            }
+            var column = dgvMappings.Columns[e.ColumnIndex].Name;
+            e.Cancel = PerformMappingsCellValidation(column, e.FormattedValue, e.RowIndex, e.ColumnIndex);
         }
 
         private void ButtonCloseClick(object sender, EventArgs e)
