@@ -112,12 +112,45 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         [TestMethod]
         public void RefreshMappingList()
         {
+            string entityName = "contactattnoattributes";
+
+            selectedValue = "contactattnoattributes1";
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { selectedValue, new List<string>() { entityName } }
+            };
+            mappings.Add(selectedValue, values);
+
+            var attributeMetaDataItem = new UniqueIdentifierAttributeMetadata
+            {
+                LogicalName = selectedValue
+            };
+
+            var attributes = new List<AttributeMetadata>
+            {
+                attributeMetaDataItem
+            };
+
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
             using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
             {
+                systemUnderTest.LoadMappedItems();
+
                 FluentActions.Invoking(() => systemUnderTest.RefreshMappingList())
                              .Should()
                              .NotThrow();
             }
+
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
         }
 
         [TestMethod]

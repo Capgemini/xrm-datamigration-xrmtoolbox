@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             {
                 systemUnderTest.PopulateMappingGrid();
 
-                var actual = systemUnderTest.PerformMappingsCellValidation(column, mappings[0].Value.Id, 6, 0);
+                var actual = systemUnderTest.PerformMappingsCellValidation(column, null, 6, 0);
 
                 actual.Should().BeTrue();
             }
