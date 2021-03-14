@@ -47,8 +47,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
             string str = txtFilter.Text;
 
-            int st, en;
+            int st = 0;
+            int en = 0;
             int lasten = -1;
+
             while (k < str.Length)
             {
                 st = str.IndexOf('<', k);

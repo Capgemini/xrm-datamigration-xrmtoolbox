@@ -16,5 +16,41 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
              .Should()
              .NotThrow();
         }
+
+        [TestMethod]
+        public void FilterAppliesTrim()
+        {
+            string currentfilter = " TestValue  ";
+
+            using (var systemUnderTest = new FilterEditor(currentfilter))
+            {
+                systemUnderTest.Filter.Should().Be("TestValue");
+                systemUnderTest.QueryString.Should().BeNullOrEmpty();
+            }
+        }
+
+        [TestMethod]
+        public void FilterZeroLengthFilter()
+        {
+            string currentfilter = string.Empty;
+
+            using (var systemUnderTest = new FilterEditor(currentfilter))
+            {
+                systemUnderTest.Filter.Should().Be(currentfilter);
+                systemUnderTest.QueryString.Should().BeNullOrEmpty();
+            }
+        }
+
+        [TestMethod]
+        public void FilterContainsNoLessThanCharacter()
+        {
+            string currentfilter = "TestValue";
+
+            using (var systemUnderTest = new FilterEditor(currentfilter))
+            {
+                systemUnderTest.Filter.Should().Be(currentfilter);
+                systemUnderTest.QueryString.Should().BeNullOrEmpty();
+            }
+        }
     }
 }
