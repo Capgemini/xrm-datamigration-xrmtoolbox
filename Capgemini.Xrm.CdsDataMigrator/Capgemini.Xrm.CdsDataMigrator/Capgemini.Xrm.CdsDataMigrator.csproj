@@ -299,7 +299,6 @@
     <Compile Include="Services\DataMigrationService.cs" />
     <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
     <Compile Include="Services\IDataMigrationService.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="UserControls\ExportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
