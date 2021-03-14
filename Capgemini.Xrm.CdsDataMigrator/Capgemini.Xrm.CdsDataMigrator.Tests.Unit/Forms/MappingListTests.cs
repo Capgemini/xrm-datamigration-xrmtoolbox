@@ -183,7 +183,29 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             {
                 systemUnderTest.PopulateMappingGrid();
 
-                var actual = systemUnderTest.PerformMappingsCellValidation(column, null, 6, 0);
+                var actual = systemUnderTest.PerformMappingsCellValidation(column, null, 3, 0);
+
+                actual.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void PerformMappingsCellValidationFormatedValueIsNotAGuidForIdColumn()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var entityRef = new EntityReference($"TestEntity{i}", Guid.NewGuid());
+                var mapping = new Item<EntityReference, EntityReference>(entityRef, entityRef);
+                mappings.Add(mapping);
+            }
+
+            var column = $"Id";
+
+            using (var systemUnderTest = new MappingList(mappings))
+            {
+                systemUnderTest.PopulateMappingGrid();
+
+                var actual = systemUnderTest.PerformMappingsCellValidation(column, "fjkghfjk", 3, 0);
 
                 actual.Should().BeTrue();
             }

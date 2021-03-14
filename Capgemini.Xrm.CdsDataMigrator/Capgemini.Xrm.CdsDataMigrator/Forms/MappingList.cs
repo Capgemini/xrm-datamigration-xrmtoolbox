@@ -72,7 +72,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                     return true;
                 }
             }
-            else if (!Guid.TryParse(formattedValue.ToString(), out Guid dummy))
+            else if (formattedValue == null || !Guid.TryParse(formattedValue.ToString(), out Guid dummy))
             {
                 // Check on valid GUID
                 dgvMappings.Rows[rowIndex].ErrorText = $"{dgvMappings.Columns[columnIndex].HeaderText} is not a valid GUID";
