@@ -13,21 +13,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
     [TestClass]
     public class WizardButtonsTests
     {
-        private WizardButtons systemUnderTest;
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            if (systemUnderTest != null)
-            {
-                systemUnderTest.Dispose();
-            }
-        }
-
         [TestMethod]
         public void InitializeWizardButtons()
         {
-            FluentActions.Invoking(() => systemUnderTest = new WizardButtons())
+            FluentActions.Invoking(() => new WizardButtons())
                              .Should()
                              .NotThrow();
         }
@@ -35,7 +24,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void ShowExecuteButton()
         {
-            using (systemUnderTest = new WizardButtons())
+            using (var systemUnderTest = new WizardButtons())
             {
                 systemUnderTest.ShowExecuteButton = true;
 
@@ -46,7 +35,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void ShowExecuteButton2()
         {
-            using (systemUnderTest = new WizardButtons())
+            using (var systemUnderTest = new WizardButtons())
             {
                 systemUnderTest.PageContainer = new WizardPageContainer();
                 systemUnderTest.PageContainer.Pages.Add(new WizardPage());
