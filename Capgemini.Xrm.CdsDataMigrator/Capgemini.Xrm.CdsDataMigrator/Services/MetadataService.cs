@@ -32,7 +32,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 
             var response = (RetrieveAllEntitiesResponse)orgService.Execute(request);
 
-            if (response.EntityMetadata != null)
+            if (response != null && response.EntityMetadata != null)
             {
                 foreach (EntityMetadata emd in response.EntityMetadata)
                 {

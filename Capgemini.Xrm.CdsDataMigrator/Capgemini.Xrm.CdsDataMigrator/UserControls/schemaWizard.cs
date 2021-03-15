@@ -36,8 +36,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly Dictionary<string, HashSet<string>> entityAttributes = new Dictionary<string, HashSet<string>>();
         private readonly Dictionary<string, HashSet<string>> entityRelationships = new Dictionary<string, HashSet<string>>();
 
-        private readonly IMetadataService metadataService;
+        //private readonly IMetadataService metadataService;
         private bool workingstate;
+
         private Panel informationPanel;
         private Guid organisationId = Guid.Empty;
 
@@ -51,13 +52,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         public SchemaWizard()
         {
             InitializeComponent();
-
-            metadataService = new MetadataService();
+            //metadataService = new MetadataService();
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 
         public IOrganizationService OrganizationService { get; set; }
+
+        public IMetadataService MetadataService { get; set; }
 
         public Core.Settings Settings { get; internal set; }
 
@@ -98,15 +100,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void ProcessListViewEntitiesSelectedIndexChanged()
+        public void ProcessListViewEntitiesSelectedIndexChanged(IMetadataService metadataService)
         {
             GetEntityLogicalName();
-            PopulateAttributes(entityLogicalName, OrganizationService);
-            PopulateRelationship(entityLogicalName, OrganizationService);
+            PopulateAttributes(entityLogicalName, OrganizationService, metadataService);
+            PopulateRelationship(entityLogicalName, OrganizationService, metadataService);
             AddSelectedEntities();
         }
 
-        public void PopulateRelationship(string entityLogicalName, IOrganizationService service)
+        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService)
         {
             if (!workingstate)
             {
@@ -128,6 +130,36 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     }
                 }
             }
+        }
+
+        public List<ListViewItem> RetrieveSourceEntitiesList(bool showSystemAttributes, IOrganizationService organizationService, IMetadataService metadataService)
+        {
+            var sourceList = metadataService.RetrieveEntities(organizationService);
+
+            if (!showSystemAttributes)
+            {
+                sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
+            }
+
+            cachedMetadata = sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList();
+
+            var sourceEntitiesList = new List<ListViewItem>();
+
+            foreach (EntityMetadata entity in cachedMetadata)
+            {
+                var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
+                var item = new ListViewItem(name)
+                {
+                    Tag = entity
+                };
+                item.SubItems.Add(entity.LogicalName);
+                IsInvalidForCustomization(entity, item);
+                UpdateCheckBoxesEntities(entity, item);
+
+                sourceEntitiesList.Add(item);
+            }
+
+            return sourceEntitiesList;
         }
 
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
@@ -164,7 +196,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            ProcessListViewEntitiesSelectedIndexChanged();
+            ProcessListViewEntitiesSelectedIndexChanged(MetadataService);
         }
 
         private void AddSelectedEntities()
@@ -214,7 +246,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             sourceAttributesList.Add(item);
         }
 
-        private void PopulateAttributes(string entityLogicalName, IOrganizationService service)
+        private void PopulateAttributes(string entityLogicalName, IOrganizationService service, IMetadataService metadataService)
         {
             if (!workingstate)
             {
@@ -422,32 +454,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     bwFill.DoWork += (sender, e) =>
                     {
-                        var sourceList = metadataService.RetrieveEntities(OrganizationService);
-
-                        if (!cbShowSystemAttributes.Checked)
-                        {
-                            sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
-                        }
-
-                        cachedMetadata = sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList();
-
-                        var sourceEntitiesList = new List<ListViewItem>();
-
-                        foreach (EntityMetadata entity in cachedMetadata)
-                        {
-                            var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
-                            var item = new ListViewItem(name)
-                            {
-                                Tag = entity
-                            };
-                            item.SubItems.Add(entity.LogicalName);
-                            IsInvalidForCustomization(entity, item);
-                            UpdateCheckBoxesEntities(entity, item);
-
-                            sourceEntitiesList.Add(item);
-                        }
-
-                        e.Result = sourceEntitiesList;
+                        e.Result = RetrieveSourceEntitiesList(cbShowSystemAttributes.Checked, OrganizationService, MetadataService);
                     };
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
@@ -603,7 +610,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             InitMappings();
         }
 
-        private void OpenMappingForm()
+        private void OpenMappingForm(IMetadataService metadataService)
         {
             //using (var mappingDialog = new MappingListLookup(lookupMaping, CrmServiceClient.OrganizationWebProxyClient != null ? (IOrganizationService)CrmServiceClient.OrganizationWebProxyClient : (IOrganizationService)CrmServiceClient.OrganizationServiceProxy, cachedMetadata, entityLogicalName, metadataService)
             using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService)
@@ -790,7 +797,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private bool AreCrmEntityFieldsSelected()
+        private bool AreCrmEntityFieldsSelected(IMetadataService metadataService)
         {
             var fieldsSelected = false;
             if (checkedEntity.Count > 0)
@@ -820,9 +827,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TbSaveSchemaClick(object sender, EventArgs e)
         {
-            if (AreCrmEntityFieldsSelected())
+            if (AreCrmEntityFieldsSelected(MetadataService))
             {
-                CollectCrmEntityFields();
+                CollectCrmEntityFields(MetadataService);
                 GenerateXMLFile();
                 crmSchemaConfiguration.Entities.Clear();
             }
@@ -832,7 +839,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void CollectCrmEntityFields()
+        private void CollectCrmEntityFields(IMetadataService metadataService)
         {
             if (checkedEntity.Count > 0)
             {
@@ -1360,14 +1367,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             GenerateImportConfigFile();
             GenerateExportConfigFile();
-            CollectCrmEntityFields();
+            CollectCrmEntityFields(MetadataService);
             GenerateXMLFile();
             crmSchemaConfiguration.Entities.Clear();
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
         {
-            OpenMappingForm();
+            OpenMappingForm(MetadataService);
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

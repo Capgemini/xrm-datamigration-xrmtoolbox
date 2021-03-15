@@ -7,6 +7,7 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 
@@ -66,10 +67,67 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessListViewEntitiesSelectedIndexChanged())
+                FluentActions.Invoking(() => systemUnderTest.ProcessListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object))
                         .Should()
                         .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListShowSystemAttributes()
+        {
+            var showSystemAttributes = true;
+            string entityLogicalName = "account_contact";
+
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+
+            var attributeList = new List<AttributeMetadata>()
+            {
+                new AttributeMetadata { LogicalName = "contactattnoentity1" }
+            };
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            field.SetValue(entityMetadata, attributeList.ToArray());
+
+            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            isIntersectField.SetValue(entityMetadata, (bool?)false);
+
+            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
+            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
+
+            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
+            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
+
+            var metadataList = new List<EntityMetadata>
+            {
+                entityMetadata
+            };
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                                .Returns(metadataList)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+
+                var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object);
+
+                actual.Count.Should().Be(1);
             }
         }
 
@@ -86,6 +144,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
 
                 var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object);
 
@@ -96,7 +155,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.VerifyAll();
         }
 
-        //[Ignore("Will have to fix!")]
+        [Ignore("Will have to fix!")]
         [TestMethod]
         public void PopulateRelationshipAction()
         {
@@ -127,6 +186,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                //                systemUnderTest.GetEntityLogicalName();
 
                 var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object);
 
@@ -145,8 +206,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object))
                         .Should()
                         .NotThrow();
             }
