@@ -103,6 +103,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Extensions
         }
 
         [TestMethod]
+        public void ThrowArgumentOutOfRangeExceptionIfTrueDefaultMessage()
+        {
+            bool testVariable = true;
+
+            FluentActions.Invoking(() => testVariable.ThrowArgumentOutOfRangeExceptionIfTrue(nameof(testVariable)))
+                         .Should()
+                         .Throw<ArgumentOutOfRangeException>()
+                         .Where(a => a.Message.Contains(string.Empty) && a.Message.Contains(nameof(testVariable)));
+        }
+
+        [TestMethod]
         public void ThrowArgumentOutOfRangeExceptionIfTrueDoesNotThrow()
         {
             string message = "Test message";
