@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             btnBack.Enabled = false;
         }
 
-        private void Container_SelectedPageChanged(object sender, EventArgs e)
+        public void HandleSelectedPageChanged()
         {
             btnExecute.Visible = PageContainer.SelectedPage.IsFinishPage;
 
@@ -40,6 +40,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             btnNext.Enabled = PageContainer.SelectedPage != PageContainer.Pages[PageContainer.Pages.Count - 1];
             btnBack.Enabled = PageContainer.SelectedPage != PageContainer.Pages[0];
+        }
+
+        private void Container_SelectedPageChanged(object sender, EventArgs e)
+        {
+            HandleSelectedPageChanged();
         }
 
         private void button1_Click(object sender, EventArgs e)

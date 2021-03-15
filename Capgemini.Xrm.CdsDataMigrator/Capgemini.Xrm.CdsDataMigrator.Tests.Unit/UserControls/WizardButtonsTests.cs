@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using AeroWizard;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
@@ -13,11 +14,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
     public class WizardButtonsTests
     {
         private WizardButtons systemUnderTest;
-
-        [TestCleanup]
-        public void Setup()
-        {
-        }
 
         [TestCleanup]
         public void Cleanup()
@@ -44,6 +40,21 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 systemUnderTest.ShowExecuteButton = true;
 
                 systemUnderTest.ShowExecuteButton.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void ShowExecuteButton2()
+        {
+            using (systemUnderTest = new WizardButtons())
+            {
+                systemUnderTest.PageContainer = new WizardPageContainer();
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+
+                FluentActions.Invoking(() => systemUnderTest.HandleSelectedPageChanged())
+                             .Should()
+                             .NotThrow();
             }
         }
     }
