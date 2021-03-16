@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
             }
             catch (Exception error)
             {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+                string errorMessage = error.Message;//TODO: fix dependency issue!!! CrmExceptionHelper.GetErrorMessage(error, false);
                 throw new OrganizationalServiceException($"Error while retrieving entity: {errorMessage}");
             }
         }
