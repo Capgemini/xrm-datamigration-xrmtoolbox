@@ -34,13 +34,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                         .NotThrow();
         }
 
-        [Ignore("Will have to fix!")]
+        //[Ignore("Will have to fix!")]
         [TestMethod]
         public void OnConnectionUpdated()
         {
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.OnConnectionUpdated(Guid.NewGuid(), "TestOrg"))
                         .Should()
@@ -80,45 +84,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var showSystemAttributes = true;
             string entityLogicalName = "account_contact";
-
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = entityLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
-                }
-            };
-
-            var attributeList = new List<AttributeMetadata>()
-            {
-                new AttributeMetadata { LogicalName = "contactattnoentity1" }
-            };
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
-            field.SetValue(entityMetadata, attributeList.ToArray());
-
-            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            isIntersectField.SetValue(entityMetadata, (bool?)false);
-
-            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
-            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
-
-            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
-            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
-
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
+            SetupMockObjects(entityLogicalName);
 
             using (var systemUnderTest = new SchemaWizard())
             {
@@ -187,7 +153,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
-                //                systemUnderTest.GetEntityLogicalName();
+                systemUnderTest.GetEntityLogicalName();
 
                 var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object);
 
@@ -215,6 +181,48 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             serviceMock.VerifyAll();
             metadataServiceMock.VerifyAll();
+        }
+
+        private void SetupMockObjects(string entityLogicalName)
+        {
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+
+            var attributeList = new List<AttributeMetadata>()
+            {
+                new AttributeMetadata { LogicalName = "contactattnoentity1" }
+            };
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            field.SetValue(entityMetadata, attributeList.ToArray());
+
+            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            isIntersectField.SetValue(entityMetadata, (bool?)false);
+
+            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
+            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
+
+            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
+            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
+
+            var metadataList = new List<EntityMetadata>
+            {
+                entityMetadata
+            };
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                                .Returns(metadataList)
+                                .Verifiable();
         }
     }
 }
