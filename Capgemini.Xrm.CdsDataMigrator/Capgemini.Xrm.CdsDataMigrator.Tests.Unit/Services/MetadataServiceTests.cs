@@ -141,8 +141,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         {
             var entityLogicalName = "testentity";
 
-            CrmExceptionHelper.GetErrorMessage(new Exception(), false);
-
             var response = new RetrieveEntityResponse
             {
                 Results = new ParameterCollection
