@@ -139,7 +139,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         [TestMethod]
         public void RetrieveEntitiesOrgServiceDoesNotReturnAnEntity()
         {
-            var entityLogicalName = "testentity";
+            var entityLogicalName = Guid.NewGuid().ToString();
 
             var response = new RetrieveEntityResponse
             {
