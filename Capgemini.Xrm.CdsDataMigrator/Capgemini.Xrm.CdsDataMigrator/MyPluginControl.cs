@@ -36,6 +36,7 @@ namespace MyXrmToolBoxPlugin3
                 {
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
+                    SchemaGeneratorWizard.FeedbackManager = new FeedbackManager();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 

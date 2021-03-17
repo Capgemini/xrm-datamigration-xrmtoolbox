@@ -18,12 +18,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
     {
         private Mock<IOrganizationService> serviceMock;
         private Mock<IMetadataService> metadataServiceMock;
+        private Mock<IFeedbackManager> feedbackManagerMock;
+        private Dictionary<string, HashSet<string>> inputEntityRelationships;
 
         [TestInitialize]
         public void Setup()
         {
             serviceMock = new Mock<IOrganizationService>();
             metadataServiceMock = new Mock<IMetadataService>();
+            feedbackManagerMock = new Mock<IFeedbackManager>();
+
+            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
         }
 
         [TestMethod]
@@ -34,7 +39,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                         .NotThrow();
         }
 
-        //[Ignore("Will have to fix!")]
         [TestMethod]
         public void OnConnectionUpdated()
         {
@@ -68,12 +72,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void ProcessListViewEntitiesSelectedIndexChanged()
         {
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.PopulateEntitiesListView(items, null);
+                systemUnderTest.GetEntityLogicalName();
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.ProcessListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object, inputEntityRelationships))
                         .Should()
                         .NotThrow();
             }
@@ -112,7 +122,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object);
+                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
 
                 actual.Count.Should().Be(0);
             }
@@ -121,11 +131,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.VerifyAll();
         }
 
-        [Ignore("Will have to fix!")]
         [TestMethod]
         public void PopulateRelationshipAction()
         {
             string entityLogicalName = "account_contact";
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
             var entityMetadata = new EntityMetadata();
 
             var relationship = new ManyToManyRelationshipMetadata
@@ -153,9 +165,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.PopulateEntitiesListView(items, null);
                 systemUnderTest.GetEntityLogicalName();
 
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object);
+                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
 
                 actual.Count.Should().BeGreaterThan(0);
             }
@@ -174,13 +187,109 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships))
                         .Should()
                         .NotThrow();
             }
 
             serviceMock.VerifyAll();
             metadataServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void LoadSchemaFile()
+        {
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile())
+                        .Should()
+                        .NotThrow();
+            }
+
+            serviceMock.VerifyAll();
+            metadataServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void PopulateEntitiesListViewWhenThereIsAnException()
+        {
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            Exception exception = new Exception();
+
+            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
+                        .Should()
+                        .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
+            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void PopulateEntitiesListViewWhenThereIsNoException()
+        {
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            Exception exception = null;
+
+            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
+                        .Should()
+                        .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void PopulateEntitiesListViewWhenThereAreListItems()
+        {
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            Exception exception = null;
+
+            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
+                        .Should()
+                        .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
         private void SetupMockObjects(string entityLogicalName)

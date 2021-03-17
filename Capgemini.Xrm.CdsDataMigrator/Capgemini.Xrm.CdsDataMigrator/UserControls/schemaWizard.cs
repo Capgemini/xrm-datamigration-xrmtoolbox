@@ -61,6 +61,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public IMetadataService MetadataService { get; set; }
 
+        public IFeedbackManager FeedbackManager { get; set; }
+
         public Core.Settings Settings { get; internal set; }
 
         public void OnConnectionUpdated(Guid ConnectedOrgId, string ConnectedOrgFriendlyName)
@@ -70,9 +72,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             RefreshEntities(true);
         }
 
-        public List<ListViewItem> PopulateRelationshipAction(string entityLogicalName, IOrganizationService service, IMetadataService metadataService)
+        public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
-            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
+            var entitymeta = metadataService.RetrieveEntities(inputEntityLogicalName, service);
             var sourceAttributesList = new List<ListViewItem>();
             if (entitymeta.ManyToManyRelationships != null && entitymeta.ManyToManyRelationships.Any())
             {
@@ -80,7 +82,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     var item = new ListViewItem(relationship.IntersectEntityName);
                     AddRelationship(relationship, item, sourceAttributesList);
-                    UpdateCheckBoxesRelationShip(relationship, item);
+                    UpdateCheckBoxesRelationShip(relationship, item, inputEntityRelationships, inputEntityLogicalName);
                 }
             }
 
@@ -100,15 +102,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void ProcessListViewEntitiesSelectedIndexChanged(IMetadataService metadataService)
+        public void ProcessListViewEntitiesSelectedIndexChanged(IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             GetEntityLogicalName();
             PopulateAttributes(entityLogicalName, OrganizationService, metadataService);
-            PopulateRelationship(entityLogicalName, OrganizationService, metadataService);
+            PopulateRelationship(entityLogicalName, OrganizationService, metadataService, inputEntityRelationships);
             AddSelectedEntities();
         }
 
-        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService)
+        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             if (!workingstate)
             {
@@ -120,7 +122,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         bwFill.DoWork += (sender, e) =>
                         {
-                            e.Result = PopulateRelationshipAction(entityLogicalName, service, metadataService);
+                            e.Result = PopulateRelationshipAction(entityLogicalName, service, metadataService, inputEntityRelationships);
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
@@ -162,6 +164,66 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return sourceEntitiesList;
         }
 
+        public void PopulateEntitiesListView(List<ListViewItem> items, Exception exception)//RunWorkerCompletedEventArgs e)
+        {
+            if (/*e.Error*/ exception != null)
+            {
+                // MessageBox.Show(this, $"An error occured: {exception.Message}" /*+ e.Error.Message*/, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {exception.Message}");
+            }
+            else
+            {
+                //var items = (List<ListViewItem>)e.Result;
+                if (items != null && items.Count > 0)
+                {
+                    lvEntities.Items.AddRange(items.ToArray());
+                }
+                else
+                {
+                    //MessageBox.Show(this, "The system does not contain any entities", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    FeedbackManager.DisplayWarningFeedback(this, "The system does not contain any entities");
+                }
+            }
+
+            ManageWorkingState(false);
+        }
+
+        public void AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception) //RunWorkerCompletedEventArgs e)
+        {
+            if (/*e.Error*/ exception != null)
+            {
+                //MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {exception.Message}");
+            }
+            else if (items != null)
+            {
+                //var items = (List<ListViewItem>)e.Result;
+                lvAttributes.Items.AddRange(items.ToArray());
+            }
+
+            ManageWorkingState(false);
+        }
+
+        public void LoadSchemaFile()
+        {
+            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
+            {
+                try
+                {
+                    var crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
+                    StoreEntityData(crmSchema.Entities?.ToArray());
+                    ClearAllListViews();
+                    PopulateEntities();
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show("Schema File load error, ensure to load correct Schema file, Error:" + ex.Message);
+                    FeedbackManager.DisplayErrorFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
+                }
+            }
+        }
+
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
         {
             ClearMemory();
@@ -196,7 +258,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            ProcessListViewEntitiesSelectedIndexChanged(MetadataService);
+            ProcessListViewEntitiesSelectedIndexChanged(MetadataService, entityRelationships);
         }
 
         private void AddSelectedEntities()
@@ -227,18 +289,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             ManageWorkingState(false);
         }
 
-        private void UpdateCheckBoxesRelationShip(ManyToManyRelationshipMetadata relationship, ListViewItem item)
+        private static void UpdateCheckBoxesRelationShip(ManyToManyRelationshipMetadata relationship, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
         {
-            if (entityRelationships.ContainsKey(entityLogicalName))
+            if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
             {
-                foreach (string attr in entityRelationships[entityLogicalName])
+                foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
                 {
                     item.Checked |= attr.Equals(relationship.IntersectEntityName, StringComparison.InvariantCulture);
                 }
             }
         }
 
-        private void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
+        private static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
         {
             item.SubItems.Add(relationship.IntersectEntityName);
             item.SubItems.Add(relationship.Entity2LogicalName);
@@ -272,7 +334,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            AsyncRunnerCompleteAttributeOperation(e);
+                            AsyncRunnerCompleteAttributeOperation(e.Result as List<ListViewItem>, e.Error);// e);
                         };
                         bwFill.RunWorkerAsync();
                     }
@@ -309,21 +371,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
 
             return attributes;
-        }
-
-        private void AsyncRunnerCompleteAttributeOperation(RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                var items = (List<ListViewItem>)e.Result;
-                lvAttributes.Items.AddRange(items.ToArray());
-            }
-
-            ManageWorkingState(false);
         }
 
         private void UpdateCheckBoxesAttribute(AttributeMetadata attribute, ListViewItem item)
@@ -459,7 +506,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
                         informationPanel.Dispose();
-                        AsyncRunnerCompleteEntitiesOperation(e);
+                        //var
+                        PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error);// e);
                     };
                     bwFill.RunWorkerAsync();
                 }
@@ -489,28 +537,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void UpdateCheckBoxesEntities(EntityMetadata entity, ListViewItem item)
         {
             item.Checked |= entityAttributes.ContainsKey(entity.LogicalName);
-        }
-
-        private void AsyncRunnerCompleteEntitiesOperation(RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                var items = (List<ListViewItem>)e.Result;
-                if (items.Count == 0)
-                {
-                    MessageBox.Show(this, "The system does not contain any entities", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    lvEntities.Items.AddRange(items.ToArray());
-                }
-            }
-
-            ManageWorkingState(false);
         }
 
         private void ManageWorkingState(bool working)
@@ -1005,24 +1031,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 else if (result == DialogResult.Cancel)
                 {
                     tbSchemaPath.Text = null;
-                }
-            }
-        }
-
-        private void LoadSchemaFile()
-        {
-            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
-            {
-                try
-                {
-                    CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
-                    StoreEntityData(crmSchema.Entities?.ToArray());
-                    ClearAllListViews();
-                    PopulateEntities();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Schema File load error, ensure to load correct Schema file, Error:" + ex.Message);
                 }
             }
         }

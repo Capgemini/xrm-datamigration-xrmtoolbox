@@ -235,6 +235,7 @@
     <Compile Include="Core\EntitySettings.cs" />
     <Compile Include="Core\Item.cs" />
     <Compile Include="Core\ListViewItemComparer.cs" />
+    <Compile Include="Services\FeedbackManager.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
     <Compile Include="Services\IEntityRepositoryService.cs" />
     <Compile Include="Services\IMetadataService.cs" />
