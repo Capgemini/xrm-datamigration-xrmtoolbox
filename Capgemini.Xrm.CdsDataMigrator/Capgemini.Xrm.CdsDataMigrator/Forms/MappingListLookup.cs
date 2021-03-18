@@ -77,12 +77,58 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                         dgvMappings.Rows.Add(vals);
 
                         ValidateEntitytColumn(rowCount, m.Key);
-                        ValidateLookupColumn(rowCount, m2.Key);
+                        ValidateLookupColumn(rowCount, m2.Key, (AttributeMetadata[])dgvMappings.Rows[rowCount].Tag);
 
                         rowCount++;
                     }
                 }
             }
+        }
+
+        public void ValidateLookupColumn(int rowIndex, string newValue, AttributeMetadata[] allAttributes)
+        {
+            //var allAttributes = (AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag;
+            var attr = allAttributes.SingleOrDefault(a => a.LogicalName == newValue);
+
+            string[] fields = null;
+            string logicalName = string.Empty;
+
+            if (attr == null)
+            {
+                throw new MappingException($"schema logical name {newValue} does not exist in the attribue metadata. Please ensure the field exists with that name and the schema is updated accordingly.");
+            }
+
+            if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
+            {
+                logicalName = attr.EntityLogicalName;
+                // var entitymeta = metadataService.RetrieveEntities(attr.EntityLogicalName, orgService);
+                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            //Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
+            else if (attr.AttributeType == AttributeTypeCode.Owner)
+            {
+                logicalName = "systemuser";
+                //var entitymeta = metadataService.RetrieveEntities("systemuser", orgService);
+                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            else if (attr.AttributeType == AttributeTypeCode.Lookup)
+            {
+                var lookup = attr as LookupAttributeMetadata;
+                logicalName = lookup.Targets[0];
+                //var entitymeta = metadataService.RetrieveEntities(lookup.Targets[0], orgService);
+                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
+            }
+            else
+            {
+                throw new MappingException($"schema logical name {newValue}, not supported attribute type: {attr.AttributeType} .");
+            }
+
+            var entitymeta = metadataService.RetrieveEntities(logicalName, orgService);
+            fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
+            (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
         }
 
         private void MappingListLoad(object sender, EventArgs e)
@@ -100,42 +146,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             if (!string.IsNullOrWhiteSpace(selctedValue))
             {
                 ValidateEntitytColumn(e.Row.Index, selctedValue);
-            }
-        }
-
-        private void ValidateLookupColumn(int rowIndex, string newValue)
-        {
-            var allAttributes = (AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag;
-            var attr = allAttributes.SingleOrDefault(a => a.LogicalName == newValue);
-
-            if (attr == null)
-            {
-                throw new MappingException($"schema logical name {newValue} does not exist in the attribue metadata. Please ensure the field exists with that name and the schema is updated accordingly.");
-            }
-
-            if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
-            {
-                var entitymeta = metadataService.RetrieveEntities(attr.EntityLogicalName, orgService);
-                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
-            }
-            //Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
-            else if (attr.AttributeType == AttributeTypeCode.Owner)
-            {
-                var entitymeta = metadataService.RetrieveEntities("systemuser", orgService);
-                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
-            }
-            else if (attr.AttributeType == AttributeTypeCode.Lookup)
-            {
-                var lookup = attr as LookupAttributeMetadata;
-                var entitymeta = metadataService.RetrieveEntities(lookup.Targets[0], orgService);
-                var fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
-            }
-            else
-            {
-                throw new MappingException($"schema logical name {newValue}, not supported attribute type: {attr.AttributeType} .");
             }
         }
 
@@ -180,7 +190,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                     {
                         dgvMappings.Rows[cell.RowIndex].Cells[2].Value = null;
                         var newValue = cell.FormattedValue.ToString();
-                        ValidateLookupColumn(cell.RowIndex, newValue);
+                        ValidateLookupColumn(cell.RowIndex, newValue, (AttributeMetadata[])dgvMappings.Rows[cell.RowIndex].Tag);
                         dgvMappings.CurrentCell = dgvMappings.Rows[cell.RowIndex].Cells[2];
                     }
                     else if (cell.ColumnIndex == 2)

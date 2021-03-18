@@ -312,5 +312,182 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
 
             metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
         }
+
+        [TestMethod]
+        public void ValidateLookupColumnLookupAttributeMetadata()
+        {
+            string entityName = "contactattnoattributes";
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { entityName, new List<string>() { entityName } }
+            };
+            mappings.Add(entityName, values);
+
+            var attributeMetaDataItem = new LookupAttributeMetadata
+            {
+                LogicalName = entityName
+            };
+            attributeMetaDataItem.Targets = new List<string> { entityName }.ToArray();
+
+            var attributes = new List<AttributeMetadata>
+            {
+                attributeMetaDataItem
+            };
+
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            int rowIndex = 0;
+
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            {
+                FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
+                             .Should()
+                             .NotThrow();
+            }
+
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public void ValidateLookupColumnUniqueIdentifierAttributeMetadata()
+        {
+            string entityName = "contactattnoattributes";
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { entityName, new List<string>() { entityName } }
+            };
+            mappings.Add(entityName, values);
+
+            var attributeMetaDataItem = new UniqueIdentifierAttributeMetadata
+            {
+                LogicalName = entityName
+            };
+
+            var attributes = new List<AttributeMetadata>
+            {
+                attributeMetaDataItem
+            };
+
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            int rowIndex = 0;
+
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            {
+                FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
+                             .Should()
+                             .NotThrow();
+            }
+
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public void ValidateLookupColumnAttributeTypeCodeOwner()
+        {
+            string entityName = "contactattnoattributes";
+
+            //selectedValue = "contactattnoattributes1";
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { entityName, new List<string>() { entityName } }
+            };
+            mappings.Add(selectedValue, values);
+
+            var attributeMetaDataItem = new AttributeMetadata
+            {
+                LogicalName = entityName
+            };
+            var attributeTypeField = attributeMetaDataItem.GetType().GetRuntimeFields().First(a => a.Name == "_attributeType");
+            attributeTypeField.SetValue(attributeMetaDataItem, AttributeTypeCode.Owner);
+
+            var attributes = new List<AttributeMetadata>
+            {
+                attributeMetaDataItem
+            };
+
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            int rowIndex = 0;
+
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            {
+                FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
+                             .Should()
+                             .NotThrow();
+            }
+
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+        }
+
+        [TestMethod]
+        public void ValidateLookupColumnUnsupportedAttributeTypeCode()
+        {
+            string entityName = "contactattnoattributes";
+
+            //selectedValue = "contactattnoattributes1";
+
+            mappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var values = new Dictionary<string, List<string>>
+            {
+                { entityName, new List<string>() { entityName } }
+            };
+            mappings.Add(selectedValue, values);
+
+            var attributeMetaDataItem = new AttributeMetadata
+            {
+                LogicalName = entityName
+            };
+            var attributeTypeField = attributeMetaDataItem.GetType().GetRuntimeFields().First(a => a.Name == "_attributeType");
+            attributeTypeField.SetValue(attributeMetaDataItem, AttributeTypeCode.CalendarRules);
+
+            var attributes = new List<AttributeMetadata>
+            {
+                attributeMetaDataItem
+            };
+
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            int rowIndex = 0;
+
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            {
+                FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
+                             .Should()
+                             .Throw<MappingException>();
+            }
+
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Never);
+        }
     }
 }

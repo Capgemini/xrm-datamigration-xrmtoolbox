@@ -208,7 +208,6 @@
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
-    <Compile Include="Core\MetadataServiceTests.cs" />
     <Compile Include="Core\OrganisationsTests.cs" />
     <Compile Include="Core\RecordCounterProcessorTests.cs" />
     <Compile Include="Core\SettingsTest.cs" />
