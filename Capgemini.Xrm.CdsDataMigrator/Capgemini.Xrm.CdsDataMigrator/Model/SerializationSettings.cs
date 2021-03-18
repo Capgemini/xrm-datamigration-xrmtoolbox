@@ -34,7 +34,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model
                 stringBuilder.AppendLine("Select file path");
             }
 
-            if (Entity == null)
+            if (Entity.Count == 0)
             {
                 FailedValidation = true;
                 stringBuilder.AppendLine("Select entity");
