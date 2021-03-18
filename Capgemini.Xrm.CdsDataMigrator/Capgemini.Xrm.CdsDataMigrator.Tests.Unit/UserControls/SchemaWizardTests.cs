@@ -349,24 +349,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
-        public void LoadSchemaFile()
-        {
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile())
-                        .Should()
-                        .NotThrow();
-            }
-
-            serviceMock.VerifyAll();
-            metadataServiceMock.VerifyAll();
-        }
-
-        [TestMethod]
         public void PopulateEntitiesListViewWhenThereIsAnException()
         {
             var items = new List<System.Windows.Forms.ListViewItem>();
@@ -526,6 +508,186 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                              .Should()
                              .NotThrow();
             }
+        }
+
+        [TestMethod]
+        public void LoadExportConfigFileWithEmptyExportConfigPath()
+        {
+            string exportConfigFilename = string.Empty;
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void LoadExportConfigFileWithInValidExportConfigPath()
+        {
+            string exportConfigFilename = "hello.txt";
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Export Config File"))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("Invalid Export Config File"), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadExportConfigFileWithValidExportConfigPath()
+        {
+            string exportConfigFilename = "TestData\\ExportConfig.json";
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadExportConfigFileThrowsException()
+        {
+            string exportConfigFilename = "TestData\\ExportConfig.json";
+            var exception = new Exception("TestException here!");
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
+                               .Throws(exception);
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadSchemaFileWithEmptyExportConfigPath()
+        {
+            string schemaFilename = string.Empty;
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(schemaFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void LoadSchemaFileWithInValidPath()
+        {
+            string configFilename = "hello.txt";
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadSchemaFileWithValidPath()
+        {
+            string configFilename = "TestData\\testschemafile.xml";
+
+            //feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
+            //                   .Verifiable();
+            //var sourceList = metadataService.RetrieveEntities(organizationService);
+
+            var entityLogicalName = "account";
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+
+            InsertAttributeList(entityMetadata);
+
+            var metadataList = new List<EntityMetadata>
+            {
+                entityMetadata
+            };
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                                .Returns(metadataList)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename))
+                             .Should()
+                             .NotThrow();
+            }
+
+            metadataServiceMock.VerifyAll();
+            //feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
         }
 
         private void SetupMockObjects(string entityLogicalName)

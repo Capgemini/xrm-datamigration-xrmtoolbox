@@ -211,13 +211,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             ManageWorkingState(false);
         }
 
-        public void LoadSchemaFile()
+        public void LoadSchemaFile(string schemaFilePath)
         {
-            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
+            if (!string.IsNullOrWhiteSpace(schemaFilePath))
             {
                 try
                 {
-                    var crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
+                    var crmSchema = CrmSchemaConfiguration.ReadFromFile(schemaFilePath);
                     StoreEntityData(crmSchema.Entities?.ToArray());
                     ClearAllListViews();
                     PopulateEntities();
@@ -259,13 +259,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void LoadExportConfigFile()
+        public void LoadExportConfigFile(string exportConfigFilename)
         {
-            if (!string.IsNullOrWhiteSpace(tbExportConfig.Text))
+            if (!string.IsNullOrWhiteSpace(exportConfigFilename))
             {
                 try
                 {
-                    var configFile = CrmExporterConfig.GetConfiguration(tbExportConfig.Text);
+                    var configFile = CrmExporterConfig.GetConfiguration(exportConfigFilename);
                     if (!configFile.CrmMigrationToolSchemaPaths.Any())
                     {
                         //MessageBox.Show("Invalid Export Config File");
@@ -1067,7 +1067,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbSchemaPath.Text))
                     {
-                        LoadSchemaFile();
+                        LoadSchemaFile(tbSchemaPath.Text);
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -1230,7 +1230,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbExportConfig.Text))
                     {
-                        LoadExportConfigFile();
+                        LoadExportConfigFile(tbExportConfig.Text);
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -1368,12 +1368,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarLoadSchemaFileClick(object sender, EventArgs e)
         {
-            LoadSchemaFile();
+            LoadSchemaFile(tbSchemaPath.Text);
         }
 
         private void ToolBarLoadFiltersFileClick(object sender, EventArgs e)
         {
-            LoadExportConfigFile();
+            LoadExportConfigFile(tbExportConfig.Text);
         }
 
         private void LoadAllToolStripMenuItemClick(object sender, EventArgs e)
@@ -1383,8 +1383,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void LoadAllFiles()
         {
-            LoadSchemaFile();
-            LoadExportConfigFile();
+            LoadSchemaFile(tbSchemaPath.Text);
+            LoadExportConfigFile(tbExportConfig.Text);
             LoadImportConfigFile();
         }
 

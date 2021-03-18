@@ -279,6 +279,9 @@
     <Content Include="TestData\ContactSchemaWithOwner.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\testschemafile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\usersettingsschema.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
