@@ -44,8 +44,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
 
             systemUnderTest.ValidateAll();
 
-            systemUnderTest.FailedValidation.Should().BeFalse();
-            systemUnderTest.SuccessValidationMessage.Should().Contain("Successfully created XML file");
+            systemUnderTest.FailedValidation.Should().BeTrue();
+            systemUnderTest.SuccessValidationMessage.Should().NotContain("Successfully created XML file");
             systemUnderTest.FailedValidationMessage.Should().NotContain("Select file path");
             systemUnderTest.FailedValidationMessage.Should().Contain("Select entity");
         }

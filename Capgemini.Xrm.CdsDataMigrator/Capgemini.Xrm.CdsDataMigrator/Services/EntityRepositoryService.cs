@@ -21,9 +21,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
 
         public IOrganizationService OrganizationService { get; set; }
 
-        public IEntityRepository InstantiateEntityRepository(bool useCloneConnection)
+        public IEntityRepository InstantiateEntityRepository(bool cloneConnection)
         {
-            if (useCloneConnection)
+            if (cloneConnection)
             {
                 return new EntityRepository(((CrmServiceClient)OrganizationService).Clone(), new ServiceRetryExecutor());
             }

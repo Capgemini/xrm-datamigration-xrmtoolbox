@@ -672,9 +672,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 entityMetadata
             };
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
+            //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+            //                    .Returns(metadataList)
+            //                   .Verifiable();
 
             using (var systemUnderTest = new SchemaWizard())
             {
@@ -687,7 +687,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                              .NotThrow();
             }
 
-            metadataServiceMock.VerifyAll();
+            //metadataServiceMock.VerifyAll();
             //feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
         }
 
