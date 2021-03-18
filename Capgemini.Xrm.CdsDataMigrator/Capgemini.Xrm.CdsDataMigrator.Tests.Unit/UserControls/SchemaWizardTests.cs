@@ -242,7 +242,25 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
-        public void RetrieveSourceEntitiesListShowSystemAttributes()
+        public void RetrieveSourceEntitiesListShowSystemAttributesIsFalse()
+        {
+            var showSystemAttributes = false;
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+
+                var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object);
+
+                actual.Count.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListShowSystemAttributesIsTrue()
         {
             var showSystemAttributes = true;
             string entityLogicalName = "account_contact";
@@ -722,6 +740,60 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             //metadataServiceMock.VerifyAll();
             //feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
+        }
+
+        [TestMethod]
+        public void AsyncRunnerCompleteAttributeOperationExceptionIsNull()
+        {
+            //List<ListViewItem> items, Exception exception
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            Exception exception = null;
+
+            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
+                FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void AsyncRunnerCompleteAttributeOperationExceptionIsNotNull()
+        {
+            //List<ListViewItem> items, Exception exception
+            var items = new List<System.Windows.Forms.ListViewItem>();
+            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            Exception exception = new Exception();
+
+            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
+                FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.VerifyAll();
         }
 
         private void SetupMockObjects(string entityLogicalName)
