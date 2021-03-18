@@ -290,24 +290,26 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var items = new List<System.Windows.Forms.ListViewItem>();
             items.Add(new System.Windows.Forms.ListViewItem("Item1"));
             items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+
             var entityMetadata = new EntityMetadata();
 
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
+            //var relationship = new ManyToManyRelationshipMetadata
+            //{
+            //    Entity1LogicalName = "account",
+            //    Entity1IntersectAttribute = "accountid",
+            //    IntersectEntityName = "account_contact",
+            //    Entity2LogicalName = "contact",
+            //    Entity2IntersectAttribute = "contactid"
+            //};
 
-            var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
-            {
-                relationship
-            };
+            //var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
+            //{
+            //    relationship
+            //};
 
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
-            field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
+            //var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
+            //field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
+            InsertManyToManyRelationshipMetadata(entityMetadata);
 
             metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
                 .Returns(entityMetadata)
@@ -330,16 +332,47 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
-        public void PopulateRelationship()
+        public void PopulateRelationshipListViewItemSelected()
         {
-            string entityLogicalName = "contact";
+            var entityLogicalName = "contact";
+            var listViewItemSelected = true;
+
+            //SetupMockObjects(entityLogicalName);
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+
+            InsertAttributeList(entityMetadata);
+            InsertManyToManyRelationshipMetadata(entityMetadata);
+
+            //var metadataList = new List<EntityMetadata>
+            //{
+            //    entityMetadata
+            //};
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+            //                    .Returns(metadataList)
+            //                    .Verifiable();
+
+            //var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, service);
+
+            //if (entityMetaData != null && entityMetaData.ManyToManyRelationships != null && entityMetaData.ManyToManyRelationships.Any())
 
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships))
+                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, listViewItemSelected))
                         .Should()
                         .NotThrow();
             }
@@ -716,6 +749,26 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
                                 .Returns(metadataList)
                                 .Verifiable();
+        }
+
+        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata)
+        {
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
+            {
+                relationship
+            };
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
+            field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
         }
 
         private static void InsertAttributeList(EntityMetadata entityMetadata)

@@ -74,11 +74,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
-            var entitymeta = metadataService.RetrieveEntities(inputEntityLogicalName, service);
+            var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, service);
             var sourceAttributesList = new List<ListViewItem>();
-            if (entitymeta.ManyToManyRelationships != null && entitymeta.ManyToManyRelationships.Any())
+            if (entityMetaData != null && entityMetaData.ManyToManyRelationships != null && entityMetaData.ManyToManyRelationships.Any())
             {
-                foreach (var relationship in entitymeta.ManyToManyRelationships)
+                foreach (var relationship in entityMetaData.ManyToManyRelationships)
                 {
                     var item = new ListViewItem(relationship.IntersectEntityName);
                     AddRelationship(relationship, item, sourceAttributesList);
@@ -112,17 +112,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             //}
 
             PopulateAttributes(entityLogicalName, OrganizationService, metadataService);
-            PopulateRelationship(entityLogicalName, OrganizationService, metadataService, inputEntityRelationships);
+
+            var listViewItemSelected = lvEntities.SelectedItems.Count > 0;
+            PopulateRelationship(entityLogicalName, OrganizationService, metadataService, inputEntityRelationships, listViewItemSelected);
             AddSelectedEntities(lvEntities.SelectedItems.Count, entityLogicalName, selectedEntity);
         }
 
-        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, bool listViewItemSelected)
         {
             if (!workingstate)
             {
                 lvRelationship.Items.Clear();
                 InitFilter();
-                if (lvEntities.SelectedItems.Count > 0)
+                if (listViewItemSelected)// lvEntities.SelectedItems.Count > 0)
                 {
                     using (var bwFill = new BackgroundWorker())
                     {
