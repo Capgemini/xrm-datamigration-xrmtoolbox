@@ -89,25 +89,31 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return sourceAttributesList;
         }
 
-        public void GetEntityLogicalName()
+        public string GetEntityLogicalName(ListViewItem entityitem)
         {
-            if (lvEntities.SelectedItems.Count > 0)
+            string logicalName = null;
+            // if (lvEntities.SelectedItems.Count > 0)
+            // {
+            //var entityitem = lvEntities.SelectedItems[0];
+            if (entityitem != null && entityitem.Tag != null)
             {
-                var entityitem = lvEntities.SelectedItems[0];
-                if (entityitem != null && entityitem.Tag != null)
-                {
-                    var entity = (EntityMetadata)entityitem.Tag;
-                    entityLogicalName = entity.LogicalName;
-                }
+                var entity = (EntityMetadata)entityitem.Tag;
+                logicalName = entity.LogicalName;
             }
+            //  }
+            return logicalName;
         }
 
-        public void ProcessListViewEntitiesSelectedIndexChanged(IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        public void ProcessListViewEntitiesSelectedIndexChanged(IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem entityitem)
         {
-            GetEntityLogicalName();
+            //if (lvEntities.SelectedItems.Count > 0)
+            //{
+            entityLogicalName = GetEntityLogicalName(entityitem);// lvEntities.SelectedItems[0]);
+            //}
+
             PopulateAttributes(entityLogicalName, OrganizationService, metadataService);
             PopulateRelationship(entityLogicalName, OrganizationService, metadataService, inputEntityRelationships);
-            AddSelectedEntities();
+            AddSelectedEntities(lvEntities.SelectedItems.Count, entityLogicalName, selectedEntity);
         }
 
         public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
@@ -224,16 +230,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
+        public void RefreshEntities(bool isNewConnection = false)
+        {
+            toolStrip2.Enabled = true;
+            if (cachedMetadata == null || isNewConnection)
+            {
+                ClearMemory();
+                PopulateEntities();
+            }
+        }
+
+        public void ClearMemory()
+        {
+            ClearInternalMemory();
+            ClearUIMemory();
+        }
+
+        public void AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
+        {
+            if (/*lvEntities.SelectedItems.Count*/selectedItemsCount > 0 &&
+                !(
+                    string.IsNullOrEmpty(inputEntityLogicalName) &&
+                    inputSelectedEntity.Contains(inputEntityLogicalName)
+                  )
+                )
+            {
+                inputSelectedEntity.Add(inputEntityLogicalName);
+            }
+        }
+
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
         {
             ClearMemory();
             PopulateEntities();
-        }
-
-        private void ClearMemory()
-        {
-            ClearInternalMemory();
-            ClearUIMemory();
         }
 
         private void ClearInternalMemory()
@@ -258,15 +287,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            ProcessListViewEntitiesSelectedIndexChanged(MetadataService, entityRelationships);
-        }
-
-        private void AddSelectedEntities()
-        {
-            if (lvEntities.SelectedItems.Count > 0 && !(string.IsNullOrEmpty(entityLogicalName) && selectedEntity.Contains(entityLogicalName)))
-            {
-                selectedEntity.Add(entityLogicalName);
-            }
+            var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
+            ProcessListViewEntitiesSelectedIndexChanged(MetadataService, entityRelationships, entityitem);
         }
 
         private void AsyncRunnerCompleteRelationShip(RunWorkerCompletedEventArgs e)
@@ -506,8 +528,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
                         informationPanel.Dispose();
-                        //var
-                        PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error);// e);
+                        PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error);
                     };
                     bwFill.RunWorkerAsync();
                 }
@@ -551,16 +572,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void TabControlSelected(object sender, TabControlEventArgs e)
         {
             RefreshEntities();
-        }
-
-        private void RefreshEntities(bool isNewConnection = false)
-        {
-            toolStrip2.Enabled = true;
-            if (cachedMetadata == null || isNewConnection)
-            {
-                ClearMemory();
-                PopulateEntities();
-            }
         }
 
         private void tsbtMappings_Click(object sender, EventArgs e)
