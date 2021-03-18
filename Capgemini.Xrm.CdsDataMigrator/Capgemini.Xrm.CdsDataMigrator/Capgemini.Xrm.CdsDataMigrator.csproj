@@ -238,6 +238,7 @@
     <Compile Include="Services\FeedbackManager.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
     <Compile Include="Services\IEntityRepositoryService.cs" />
+    <Compile Include="Services\IFeedbackManager.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Core\Organisations.cs" />

@@ -225,7 +225,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 catch (Exception ex)
                 {
                     //MessageBox.Show("Schema File load error, ensure to load correct Schema file, Error:" + ex.Message);
-                    FeedbackManager.DisplayErrorFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
+                    FeedbackManager.DisplayFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
                 }
             }
         }
@@ -256,6 +256,35 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 )
             {
                 inputSelectedEntity.Add(inputEntityLogicalName);
+            }
+        }
+
+        private void LoadExportConfigFile()
+        {
+            if (!string.IsNullOrWhiteSpace(tbExportConfig.Text))
+            {
+                try
+                {
+                    var configFile = CrmExporterConfig.GetConfiguration(tbExportConfig.Text);
+                    if (!configFile.CrmMigrationToolSchemaPaths.Any())
+                    {
+                        //MessageBox.Show("Invalid Export Config File");
+                        FeedbackManager.DisplayFeedback("Invalid Export Config File");
+                        tbExportConfig.Text = "";
+                        return;
+                    }
+
+                    filterQuery = configFile.CrmMigrationToolSchemaFilters;
+                    lookupMaping = configFile.LookupMapping;
+
+                    //MessageBox.Show("Filters and Lookup Mappings loaded from Export Config File");
+                    FeedbackManager.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File");
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show("Load Correct Export Config file, error:" + ex.Message);
+                    FeedbackManager.DisplayFeedback($"Load Correct Export Config file, error:{ex.Message}");
+                }
             }
         }
 
@@ -295,12 +324,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             if (e.Error != null)
             {
-                MessageBox.Show(
-                    this,
-                    $"An error occured: {e.Error.Message}",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                //MessageBox.Show(
+                //    this,
+                //    $"An error occured: {e.Error.Message}",
+                //    "Error",
+                //    MessageBoxButtons.OK,
+                //    MessageBoxIcon.Error);
+                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {e.Error.Message}");
             }
             else
             {
@@ -592,7 +622,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
             else
             {
-                MessageBox.Show("Entity is not selected");
+                //MessageBox.Show("Entity is not selected");
+                FeedbackManager.DisplayFeedback("Entity is not selected");
             }
         }
 
@@ -1209,49 +1240,24 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void LoadExportConfigFile()
-        {
-            if (!string.IsNullOrWhiteSpace(tbExportConfig.Text))
-            {
-                try
-                {
-                    var configFile = CrmExporterConfig.GetConfiguration(tbExportConfig.Text);
-                    if (!configFile.CrmMigrationToolSchemaPaths.Any())
-                    {
-                        MessageBox.Show("Invalid Export Config File");
-                        tbExportConfig.Text = "";
-                        return;
-                    }
-
-                    filterQuery = configFile.CrmMigrationToolSchemaFilters;
-                    lookupMaping = configFile.LookupMapping;
-
-                    MessageBox.Show("Filters and Lookup Mappings loaded from Export Config File");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Load Correct Export Config file, error:" + ex.Message);
-                }
-            }
-        }
-
-        private void ToolBarLoadSchemaClick(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
-            {
-                try
-                {
-                    CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
-                    StoreEntityData(crmSchema.Entities?.ToArray());
-                    ClearAllListViews();
-                    PopulateEntities();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Load Correct Schema file, error:" + ex.Message);
-                }
-            }
-        }
+        //private void ToolBarLoadSchemaClick(object sender, EventArgs e)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
+        //    {
+        //        try
+        //        {
+        //            CrmSchemaConfiguration crmSchema = CrmSchemaConfiguration.ReadFromFile(tbSchemaPath.Text);
+        //            StoreEntityData(crmSchema.Entities?.ToArray());
+        //            ClearAllListViews();
+        //            PopulateEntities();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            //MessageBox.Show("Load Correct Schema file, error:" + ex.Message);
+        //            FeedbackManager.DisplayFeedback($"Load Correct Schema file, error:{ex.Message}");
+        //        }
+        //    }
+        //}
 
         private void ToolBarSaveMappingsClick(object sender, EventArgs e)
         {
