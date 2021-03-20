@@ -698,7 +698,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
-        [Ignore("Will fix")]
+        //[Ignore("Will fix")]
         [TestMethod]
         public void LoadSchemaFileWithValidPath()
         {
@@ -723,6 +723,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 entityMetadata
             };
+
+            //var sourceList = metadataService.RetrieveEntities(organizationService);
             //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
             //                    .Returns(metadataList)
             //                   .Verifiable();

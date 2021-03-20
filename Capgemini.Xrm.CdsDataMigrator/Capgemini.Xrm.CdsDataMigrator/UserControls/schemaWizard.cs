@@ -151,7 +151,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
             }
 
-            cachedMetadata = sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList();
+            if (sourceList != null)
+            {
+                cachedMetadata = sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList();
+            }
 
             var sourceEntitiesList = new List<ListViewItem>();
 
