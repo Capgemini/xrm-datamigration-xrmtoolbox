@@ -357,7 +357,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void PopulateRelationshipListViewItemSelected()
         {
             var entityLogicalName = Guid.NewGuid().ToString();// "contact";
-            var listViewItemSelected = true;
+            System.Windows.Forms.ListViewItem listViewItemSelected = new System.Windows.Forms.ListViewItem();//ListViewItem listViewSelectedItem
 
             //SetupMockObjects(entityLogicalName);
             var entityMetadata = new EntityMetadata
@@ -808,6 +808,63 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
 
             feedbackManagerMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void UpdateCheckBoxesRelationShip()
+        {
+            string inputEntityLogicalName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.UpdateCheckBoxesRelationShip(relationship, item, inputEntityRelationships, inputEntityLogicalName))
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void ProcessAllAttributeMetadata()
+        {
+            string entityLogicalName = "account_contact";
+            List<string> unmarkedattributes = new List<string>();
+            List<System.Windows.Forms.ListViewItem> sourceAttributesList = new List<System.Windows.Forms.ListViewItem>();
+            //AttributeMetadata[] attributes;
+
+            var attributeList = new List<AttributeMetadata>()
+            {
+                new AttributeMetadata {
+                    LogicalName = "contactattnoentity1" ,
+                    DisplayName = new Label
+                    {
+                        UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                    }
+                }
+            };
+
+            /*
+              var name = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
+                var typename = attribute.AttributeTypeName == null ? string.Empty : attribute.AttributeTypeName.Value;
+             */
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                //ProcessAllAttributeMetadata(List<string> unmarkedattributes, List<ListViewItem> sourceAttributesList, AttributeMetadata[] attributes)
+                FluentActions.Invoking(() => systemUnderTest.ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributeList.ToArray(), entityLogicalName))
+                             .Should()
+                             .NotThrow();
+            }
         }
 
         private void SetupMockObjects(string entityLogicalName)
