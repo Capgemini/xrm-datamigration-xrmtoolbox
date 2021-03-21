@@ -500,18 +500,40 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void ProcessFilterQuery(string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, bool silentMode)
+        public void ProcessFilterQuery(string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)// bool silentMode)
         {
             if (listViewItemIsSelected)//lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
             {
+                //var currentFilter = inputFilterQuery.ContainsKey(inputEntityLogicalName) ? inputFilterQuery[inputEntityLogicalName] : null;
+
+                //using (var filterDialog = new FilterEditor(currentFilter, FormStartPosition.CenterParent))
+                //{
+                if (!filterDialog.TestMode)
+                {
+                    filterDialog.ShowDialog(ParentForm);
+                }
+
                 if (inputFilterQuery.ContainsKey(inputEntityLogicalName))
                 {
-                    FilterIfContainsKey(inputEntityLogicalName, inputFilterQuery, silentMode);
+                    //FilterIfContainsKey(inputEntityLogicalName, inputFilterQuery, filterDialog);//, silentMode);
+                    if (string.IsNullOrWhiteSpace(filterDialog.QueryString))
+                    {
+                        inputFilterQuery.Remove(inputEntityLogicalName);
+                    }
+                    else
+                    {
+                        inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+                    }
                 }
                 else
                 {
-                    FilterIfKeyDoesNotExist(inputEntityLogicalName, inputFilterQuery, silentMode);
+                    // FilterIfKeyDoesNotExist(inputEntityLogicalName, inputFilterQuery, filterDialog);//, silentMode);
+                    if (!string.IsNullOrWhiteSpace(filterDialog.QueryString))
+                    {
+                        inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+                    }
                 }
+                //}
             }
             else
             {
@@ -519,6 +541,48 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 FeedbackManager.DisplayFeedback("Entity list is empty");
             }
         }
+
+        //public void FilterIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)//, bool silentMode)
+        //{
+        //    //using (var filterDialog = new FilterEditor(null)
+        //    //{
+        //    //    StartPosition = FormStartPosition.CenterParent
+        //    //})
+        //    //{
+        //    //if (!silentMode)
+        //    //{
+        //    //    filterDialog.ShowDialog(ParentForm);
+        //    //}
+
+        //    //if (!string.IsNullOrWhiteSpace(filterDialog.QueryString))
+        //    //{
+        //    //    inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+        //    //}
+        //    //}
+        //}
+
+        //private void FilterIfContainsKey(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)//, bool silentMode)
+        //{
+        //    // using (var filterDialog = new FilterEditor(inputFilterQuery[inputEntityLogicalName], FormStartPosition.CenterParent))
+        //    //{
+        //    //    StartPosition = FormStartPosition.CenterParent
+        //    //})
+        //    //{
+        //    //if (!silentMode)
+        //    //{
+        //    //    filterDialog.ShowDialog(ParentForm);
+        //    //}
+
+        //    if (string.IsNullOrWhiteSpace(filterDialog.QueryString))
+        //    {
+        //        inputFilterQuery.Remove(inputEntityLogicalName);
+        //    }
+        //    else
+        //    {
+        //        inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+        //    }
+        //    // }
+        //}
 
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
         {
@@ -777,7 +841,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TabStripFiltersClick(object sender, EventArgs e)
         {
-            ProcessFilterQuery(entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, false);
+            var currentFilter = filterQuery.ContainsKey(entityLogicalName) ? filterQuery[entityLogicalName] : null;
+            using (var filterDialog = new FilterEditor(currentFilter, FormStartPosition.CenterParent))
+            {
+                ProcessFilterQuery(entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, filterDialog);// false);
+            }
             //if (lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
             //{
             //    if (filterQuery.ContainsKey(entityLogicalName))
@@ -793,48 +861,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             //{
             //    MessageBox.Show("Entity list is empty");
             //}
-        }
-
-        private void FilterIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, bool silentMode)
-        {
-            using (var filterDialog = new FilterEditor(null)
-            {
-                StartPosition = FormStartPosition.CenterParent
-            })
-            {
-                if (!silentMode)
-                {
-                    filterDialog.ShowDialog(ParentForm);
-                }
-
-                if (!string.IsNullOrWhiteSpace(filterDialog.QueryString))
-                {
-                    inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
-                }
-            }
-        }
-
-        private void FilterIfContainsKey(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, bool silentMode)
-        {
-            using (var filterDialog = new FilterEditor(inputFilterQuery[inputEntityLogicalName])
-            {
-                StartPosition = FormStartPosition.CenterParent
-            })
-            {
-                if (!silentMode)
-                {
-                    filterDialog.ShowDialog(ParentForm);
-                }
-
-                if (string.IsNullOrWhiteSpace(filterDialog.QueryString))
-                {
-                    inputFilterQuery.Remove(inputEntityLogicalName);
-                }
-                else
-                {
-                    inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
-                }
-            }
         }
 
         private void CheckListAllAttributesCheckedChanged(object sender, EventArgs e)

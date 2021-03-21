@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
@@ -1562,9 +1563,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent, true))
+                {
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                              .Should()
                              .NotThrow();
+                }
             }
 
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
@@ -1585,9 +1589,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent, true))
+                {
+                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                              .Should()
                              .NotThrow();
+                }
             }
 
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
@@ -1610,9 +1619,48 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                var currentfilter = inputFilterQuery[inputEntityLogicalName];
+
+                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent, true))
+                {
+                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                              .Should()
                              .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewFilterDialogQueryStringIsEmpty()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                var currentfilter = inputFilterQuery[inputEntityLogicalName];
+
+                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent, true))
+                {
+                    filterDialog.QueryString = string.Empty;
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                             .Should()
+                             .NotThrow();
+                }
             }
 
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);

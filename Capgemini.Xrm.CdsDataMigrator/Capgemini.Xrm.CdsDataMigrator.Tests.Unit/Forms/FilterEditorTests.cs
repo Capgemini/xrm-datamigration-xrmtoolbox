@@ -12,7 +12,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             string currentfilter = string.Empty;
 
-            FluentActions.Invoking(() => new FilterEditor(currentfilter))
+            FluentActions.Invoking(() => new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
              .Should()
              .NotThrow();
         }
@@ -22,7 +22,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             string currentfilter = " TestValue  ";
 
-            using (var systemUnderTest = new FilterEditor(currentfilter))
+            using (var systemUnderTest = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
             {
                 systemUnderTest.Filter.Should().Be("TestValue");
                 systemUnderTest.QueryString.Should().BeNullOrEmpty();
@@ -34,7 +34,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             string currentfilter = string.Empty;
 
-            using (var systemUnderTest = new FilterEditor(currentfilter))
+            using (var systemUnderTest = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
             {
                 systemUnderTest.Filter.Should().Be(currentfilter);
                 systemUnderTest.QueryString.Should().BeNullOrEmpty();
@@ -46,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             string currentfilter = "TestValue";
 
-            using (var systemUnderTest = new FilterEditor(currentfilter))
+            using (var systemUnderTest = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
             {
                 systemUnderTest.Filter.Should().Be(currentfilter);
                 systemUnderTest.QueryString.Should().BeNullOrEmpty();
@@ -58,7 +58,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             var currentfilter = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
 
-            using (var systemUnderTest = new FilterEditor(currentfilter))
+            using (var systemUnderTest = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
             {
                 systemUnderTest.Filter.Should().Be(currentfilter);
             }
