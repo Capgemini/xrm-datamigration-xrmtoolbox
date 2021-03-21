@@ -82,7 +82,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     var item = new ListViewItem(relationship.IntersectEntityName);
                     AddRelationship(relationship, item, sourceAttributesList);
-                    UpdateCheckBoxesRelationShip(relationship, item, inputEntityRelationships, inputEntityLogicalName);
+                    //UpdateCheckBoxesRelationship(relationship, item, inputEntityRelationships, inputEntityLogicalName);
+                    UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, inputEntityLogicalName);
                 }
             }
 
@@ -136,7 +137,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            AsyncRunnerCompleteRelationShip(e);
+                            OnPopulateRelationshipCompletedAction(e);
                         };
                         bwFill.RunWorkerAsync();
                     }
@@ -295,13 +296,35 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void UpdateCheckBoxesRelationShip(ManyToManyRelationshipMetadata relationship, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
+        //public void UpdateCheckBoxesRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
+        //{
+        //    if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
+        //    {
+        //        foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
+        //        {
+        //            item.Checked |= attr.Equals(relationship.IntersectEntityName, StringComparison.InvariantCulture);
+        //        }
+        //    }
+        //}
+
+        //private void UpdateCheckBoxesAttribute(AttributeMetadata attribute, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityAttributes, string inputEntityLogicalName)
+        //{
+        //    if (inputEntityAttributes.ContainsKey(inputEntityLogicalName))
+        //    {
+        //        foreach (string attr in inputEntityAttributes[inputEntityLogicalName])
+        //        {
+        //            item.Checked |= attr.Equals(attribute.LogicalName, StringComparison.InvariantCulture);
+        //        }
+        //    }
+        //}
+
+        public void UpdateAttributeMetadataCheckBoxes(/*T relationship*/string predicate, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
         {
             if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
             {
                 foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
                 {
-                    item.Checked |= attr.Equals(relationship.IntersectEntityName, StringComparison.InvariantCulture);
+                    item.Checked |= attr.Equals(/*relationship.IntersectEntityName*/predicate, StringComparison.InvariantCulture);
                 }
             }
         }
@@ -316,44 +339,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 AddAttribute(attribute, item, typename);
                 InvalidUpdate(attribute, item);
                 item.Checked = unmarkedattributes.Contains(attribute.LogicalName);
-                UpdateCheckBoxesAttribute(attribute, item, inputEntityLogicalName);
+                //UpdateCheckBoxesAttribute(attribute, item, entityAttributes, inputEntityLogicalName);
+                UpdateAttributeMetadataCheckBoxes(attribute.LogicalName, item, entityAttributes, inputEntityLogicalName);
                 sourceAttributesList.Add(item);
             }
         }
 
-        private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
-        {
-            ClearMemory();
-            PopulateEntities(workingstate);
-        }
-
-        private void ClearInternalMemory()
-        {
-            checkedEntity.Clear();
-            entityAttributes.Clear();
-            entityRelationships.Clear();
-            mapper.Clear();
-            lookupMaping.Clear();
-            filterQuery.Clear();
-            selectedEntity.Clear();
-            checkedRelationship.Clear();
-            mapping.Clear();
-        }
-
-        private void ClearUIMemory()
-        {
-            tbSchemaPath.Clear();
-            tbImportConfig.Clear();
-            tbExportConfig.Clear();
-        }
-
-        private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
-        {
-            var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
-            ProcessListViewEntitiesSelectedIndexChanged(MetadataService, entityRelationships, entityitem);
-        }
-
-        private void AsyncRunnerCompleteRelationShip(RunWorkerCompletedEventArgs e)
+        public void OnPopulateRelationshipCompletedAction(RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             {
@@ -374,77 +366,24 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             ManageWorkingState(false);
         }
 
-        private static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
-        {
-            item.SubItems.Add(relationship.IntersectEntityName);
-            item.SubItems.Add(relationship.Entity2LogicalName);
-            item.SubItems.Add(relationship.Entity2IntersectAttribute);
-            sourceAttributesList.Add(item);
-        }
-
-        private void PopulateAttributes(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, /*int listViewSelectedItemsCount,*/ ListViewItem listViewSelectedItem)
-        {
-            if (!workingstate)
-            {
-                lvAttributes.Items.Clear();
-                chkAllAttributes.Checked = true;
-
-                InitFilter(listViewSelectedItem);
-                if (listViewSelectedItem != null)///*lvEntities.SelectedItems.Count*/listViewSelectedItemsCount > 0)
-                {
-                    using (var bwFill = new BackgroundWorker())
-                    {
-                        bwFill.DoWork += (sender, e) =>
-                        {
-                            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
-                            var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            var sourceAttributesList = new List<ListViewItem>();
-                            var attributes = ProcessShowSystemAttributesChecked(entitymeta);
-
-                            attributes = attributes.OrderByDescending(p => p.IsPrimaryId).ThenByDescending(p => p.IsPrimaryName).ThenByDescending(p => p.IsCustomAttribute.Value).ThenBy(p => p.IsLogical.Value).ThenBy(p => p.LogicalName).ToArray();
-
-                            ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributes, entityLogicalName);
-
-                            e.Result = sourceAttributesList;
-                        };
-                        bwFill.RunWorkerCompleted += (sender, e) =>
-                        {
-                            AsyncRunnerCompleteAttributeOperation(e.Result as List<ListViewItem>, e.Error);// e);
-                        };
-                        bwFill.RunWorkerAsync();
-                    }
-                }
-            }
-        }
-
-        private AttributeMetadata[] ProcessShowSystemAttributesChecked(EntityMetadata entitymeta)
+        public AttributeMetadata[] FilterAttributes(EntityMetadata entitymeta, bool showSystemAttributes)
         {
             var attributes = entitymeta.Attributes.ToArray();
 
-            if (!cbShowSystemAttributes.Checked)
+            if (!showSystemAttributes)// cbShowSystemAttributes.Checked)
             {
                 attributes = attributes.Where(p => p.IsLogical != null
-                && !p.IsLogical.Value
-                && p.IsValidForRead != null
-                && p.IsValidForRead.Value
-                && ((p.IsValidForCreate != null && p.IsValidForCreate.Value) || (p.IsValidForUpdate != null && p.IsValidForUpdate.Value))).ToArray();
+                                                    && !p.IsLogical.Value
+                                                    && p.IsValidForRead != null
+                                                    && p.IsValidForRead.Value
+                                                    && ((p.IsValidForCreate != null && p.IsValidForCreate.Value) || (p.IsValidForUpdate != null && p.IsValidForUpdate.Value)))
+                                        .ToArray();
             }
 
             return attributes;
         }
 
-        private void UpdateCheckBoxesAttribute(AttributeMetadata attribute, ListViewItem item, string inputEntityLogicalName)
-        {
-            if (entityAttributes.ContainsKey(inputEntityLogicalName))
-            {
-                foreach (string attr in entityAttributes[inputEntityLogicalName])
-                {
-                    item.Checked |= attr.Equals(attribute.LogicalName, StringComparison.InvariantCulture);
-                }
-            }
-        }
-
-        private void InvalidUpdate(AttributeMetadata attribute, ListViewItem item)
+        public void InvalidUpdate(AttributeMetadata attribute, ListViewItem item)
         {
             item.ToolTipText = string.Empty;
 
@@ -488,6 +427,81 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
 
             item.SubItems.Add(item.ToolTipText);
+        }
+
+        private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
+        {
+            ClearMemory();
+            PopulateEntities(workingstate);
+        }
+
+        private void ClearInternalMemory()
+        {
+            checkedEntity.Clear();
+            entityAttributes.Clear();
+            entityRelationships.Clear();
+            mapper.Clear();
+            lookupMaping.Clear();
+            filterQuery.Clear();
+            selectedEntity.Clear();
+            checkedRelationship.Clear();
+            mapping.Clear();
+        }
+
+        private void ClearUIMemory()
+        {
+            tbSchemaPath.Clear();
+            tbImportConfig.Clear();
+            tbExportConfig.Clear();
+        }
+
+        private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
+            ProcessListViewEntitiesSelectedIndexChanged(MetadataService, entityRelationships, entityitem);
+        }
+
+        private static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
+        {
+            item.SubItems.Add(relationship.IntersectEntityName);
+            item.SubItems.Add(relationship.Entity2LogicalName);
+            item.SubItems.Add(relationship.Entity2IntersectAttribute);
+            sourceAttributesList.Add(item);
+        }
+
+        private void PopulateAttributes(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, /*int listViewSelectedItemsCount,*/ ListViewItem listViewSelectedItem)
+        {
+            if (!workingstate)
+            {
+                lvAttributes.Items.Clear();
+                chkAllAttributes.Checked = true;
+
+                InitFilter(listViewSelectedItem);
+                if (listViewSelectedItem != null)///*lvEntities.SelectedItems.Count*/listViewSelectedItemsCount > 0)
+                {
+                    using (var bwFill = new BackgroundWorker())
+                    {
+                        bwFill.DoWork += (sender, e) =>
+                        {
+                            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
+                            var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
+                            var sourceAttributesList = new List<ListViewItem>();
+                            var attributes = FilterAttributes(entitymeta, cbShowSystemAttributes.Checked);
+
+                            attributes = attributes.OrderByDescending(p => p.IsPrimaryId).ThenByDescending(p => p.IsPrimaryName).ThenByDescending(p => p.IsCustomAttribute.Value).ThenBy(p => p.IsLogical.Value).ThenBy(p => p.LogicalName).ToArray();
+
+                            ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributes, entityLogicalName);
+
+                            e.Result = sourceAttributesList;
+                        };
+                        bwFill.RunWorkerCompleted += (sender, e) =>
+                        {
+                            AsyncRunnerCompleteAttributeOperation(e.Result as List<ListViewItem>, e.Error);// e);
+                        };
+                        bwFill.RunWorkerAsync();
+                    }
+                }
+            }
         }
 
         private static void CheckForVirtual(AttributeMetadata attribute, ListViewItem item)
