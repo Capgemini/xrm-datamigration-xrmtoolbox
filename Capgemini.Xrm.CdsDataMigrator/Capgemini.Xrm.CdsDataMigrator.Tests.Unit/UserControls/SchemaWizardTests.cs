@@ -758,59 +758,59 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             //feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
         }
 
-        [TestMethod]
-        public void AsyncRunnerCompleteAttributeOperationExceptionIsNull()
-        {
-            //List<ListViewItem> items, Exception exception
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-            Exception exception = null;
+        //[TestMethod]
+        //public void AsyncRunnerCompleteAttributeOperationExceptionIsNull()
+        //{
+        //    //List<ListViewItem> items, Exception exception
+        //    var items = new List<System.Windows.Forms.ListViewItem>();
+        //    items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+        //    items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+        //    Exception exception = null;
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                .Verifiable();
+        //    feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+        //        .Verifiable();
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+        //    using (var systemUnderTest = new SchemaWizard())
+        //    {
+        //        systemUnderTest.OrganizationService = serviceMock.Object;
+        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
+        //        systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
-                FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
-                             .Should()
-                             .NotThrow();
-            }
+        //        //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
+        //        FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
+        //                     .Should()
+        //                     .NotThrow();
+        //    }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-        }
+        //    feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        //}
 
-        [TestMethod]
-        public void AsyncRunnerCompleteAttributeOperationExceptionIsNotNull()
-        {
-            //List<ListViewItem> items, Exception exception
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-            Exception exception = new Exception();
+        //[TestMethod]
+        //public void AsyncRunnerCompleteAttributeOperationExceptionIsNotNull()
+        //{
+        //    //List<ListViewItem> items, Exception exception
+        //    var items = new List<System.Windows.Forms.ListViewItem>();
+        //    items.Add(new System.Windows.Forms.ListViewItem("Item1"));
+        //    items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+        //    Exception exception = new Exception();
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                .Verifiable();
+        //    feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+        //        .Verifiable();
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+        //    using (var systemUnderTest = new SchemaWizard())
+        //    {
+        //        systemUnderTest.OrganizationService = serviceMock.Object;
+        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
+        //        systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
-                FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
-                             .Should()
-                             .NotThrow();
-            }
+        //        //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
+        //        FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
+        //                     .Should()
+        //                     .NotThrow();
+        //    }
 
-            feedbackManagerMock.VerifyAll();
-        }
+        //    feedbackManagerMock.VerifyAll();
+        //}
 
         [TestMethod]
         public void UpdateAttributeMetadataCheckBoxesNonExitingsFilterValue()
@@ -993,7 +993,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             string entityLogicalName = "account_contact";
             List<string> unmarkedattributes = new List<string>();
-            List<System.Windows.Forms.ListViewItem> sourceAttributesList = new List<System.Windows.Forms.ListViewItem>();
+            //ist<System.Windows.Forms.ListViewItem> sourceAttributesList = new List<System.Windows.Forms.ListViewItem>();
             //AttributeMetadata[] attributes;
 
             var attributeList = new List<AttributeMetadata>()
@@ -1015,9 +1015,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var systemUnderTest = new SchemaWizard())
             {
                 //ProcessAllAttributeMetadata(List<string> unmarkedattributes, List<ListViewItem> sourceAttributesList, AttributeMetadata[] attributes)
-                FluentActions.Invoking(() => systemUnderTest.ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributeList.ToArray(), entityLogicalName))
-                             .Should()
-                             .NotThrow();
+                var actual = systemUnderTest.ProcessAllAttributeMetadata(unmarkedattributes, attributeList.ToArray(), entityLogicalName);
+
+                actual.Count.Should().BeGreaterThan(0);
             }
         }
 
@@ -1039,7 +1039,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateRelationshipCompletedAction(eventArgs))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs))
                              .Should()
                              .NotThrow();
             }
@@ -1065,7 +1065,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateRelationshipCompletedAction(eventArgs))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs))
                              .Should()
                              .NotThrow();
             }
@@ -1305,6 +1305,317 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
 
             item.ToolTipText.Should().Contain("DeprecatedVersion:");
+        }
+
+        [TestMethod]
+        public void PopulateAttributeList()
+        {
+            string entityLogicalName = "contact";
+            List<string> unmarkedattributes = null;
+            AttributeMetadata[] attributes = null;
+            var entityMetadata = new EntityMetadata();
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                attributes = systemUnderTest.PopulateAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, unmarkedattributes);
+            }
+
+            unmarkedattributes.Should().BeNull();
+            attributes.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void PopulateAttributeListMetaDataServiceReturnsEnities()
+        {
+            string entityLogicalName = "contact";
+            List<string> unmarkedattributes = null;
+            AttributeMetadata[] attributes = null;
+
+            var entityMetadata = new EntityMetadata();
+            InsertAttributeList(entityMetadata);
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                attributes = systemUnderTest.PopulateAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, unmarkedattributes);
+            }
+
+            unmarkedattributes.Should().BeNull();
+            attributes.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void IsInvalidForCustomizationIsCustomEntity()
+        {
+            EntityMetadata entity = new EntityMetadata
+            {
+                LogicalName = "contactattnoentity1"
+            };
+            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
+            isLogicalEntityField.SetValue(entity, (bool?)true);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
+                             .Should()
+                             .NotThrow();
+            }
+
+            item.ForeColor.Should().Be(System.Drawing.Color.DarkGreen);
+        }
+
+        [TestMethod]
+        public void IsInvalidForCustomizationIsIntersect()
+        {
+            EntityMetadata entity = new EntityMetadata
+            {
+                LogicalName = "contactattnoentity1",
+            };
+            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            isLogicalEntityField.SetValue(entity, (bool?)true);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
+                             .Should()
+                             .NotThrow();
+            }
+
+            item.ForeColor.Should().Be(System.Drawing.Color.Red);
+            item.ToolTipText.Should().Contain("Intersect Entity, ");
+        }
+
+        [TestMethod]
+        public void IsInvalidForCustomizationIsIntersectNull()
+        {
+            EntityMetadata entity = new EntityMetadata
+            {
+                LogicalName = "contactattnoentity1",
+            };
+            //var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            //isLogicalEntityField.SetValue(entity, null);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
+                             .Should()
+                             .NotThrow();
+            }
+
+            item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
+            item.ToolTipText.Should().NotContain("Intersect Entity, ");
+        }
+
+        [TestMethod]
+        public void IsInvalidForCustomizationIsLogicalEntity()
+        {
+            EntityMetadata entity = new EntityMetadata
+            {
+                LogicalName = "contactattnoentity1"
+            };
+            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
+            isLogicalEntityField.SetValue(entity, (bool?)true);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
+                             .Should()
+                             .NotThrow();
+            }
+
+            item.ForeColor.Should().Be(System.Drawing.Color.Red);
+            item.ToolTipText.Should().Contain("Logical Entity");
+        }
+
+        [TestMethod]
+        public void IsInvalidForCustomizationIsLogicalEntityNull()
+        {
+            EntityMetadata entity = new EntityMetadata
+            {
+                LogicalName = "contactattnoentity1",
+            };
+            //var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            //isLogicalEntityField.SetValue(entity, null);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
+                             .Should()
+                             .NotThrow();
+            }
+
+            item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
+            item.ToolTipText.Should().NotContain("Logical Entity");
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickNoListViewItemSelected()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = false;
+            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndMappingsDoesNotContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndFilterContainsEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+
+            var entityReference = new EntityReference(inputEntityLogicalName, Guid.NewGuid());
+
+            var mappingItem = new List<DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>();
+            mappingItem.Add(new DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>(entityReference, entityReference));
+
+            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
+            inputMapping.Add(inputEntityLogicalName, mappingItem);
+
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryNoListViewItemSelected()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = false;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterDoesNotContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, true))
+                             .Should()
+                             .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         private void SetupMockObjects(string entityLogicalName)

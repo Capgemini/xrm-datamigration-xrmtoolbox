@@ -63,7 +63,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public IFeedbackManager FeedbackManager { get; set; }
 
-        public Core.Settings Settings { get; internal set; }
+        public Core.Settings Settings { get; /*internal*/ set; }
 
         public void OnConnectionUpdated(Guid ConnectedOrgId, string ConnectedOrgFriendlyName)
         {
@@ -121,6 +121,24 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             AddSelectedEntities(lvEntities.SelectedItems.Count, entityLogicalName, selectedEntity);
         }
 
+        public AttributeMetadata[] PopulateAttributeList(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, List<string> unmarkedattributes)//, AttributeMetadata[] attributes)
+        {
+            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
+            unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
+            var attributes = FilterAttributes(entitymeta, cbShowSystemAttributes.Checked);
+
+            if (attributes != null)
+            {
+                attributes = attributes.OrderByDescending(p => p.IsPrimaryId)
+                                       .ThenByDescending(p => p.IsPrimaryName)
+                                       .ThenByDescending(p => p.IsCustomAttribute != null && p.IsCustomAttribute.Value)
+                                       .ThenBy(p => p.IsLogical != null && p.IsLogical.Value)
+                                       .ThenBy(p => p.LogicalName).ToArray();
+            }
+
+            return attributes;
+        }
+
         public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, /*bool listViewItemSelected, int listViewSelectedItemsCount*/ ListViewItem listViewSelectedItem)
         {
             if (!workingstate)
@@ -137,7 +155,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            OnPopulateRelationshipCompletedAction(e);
+                            OnPopulateCompletedAction(e);
                         };
                         bwFill.RunWorkerAsync();
                     }
@@ -203,17 +221,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             ManageWorkingState(false);
         }
 
-        public void AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception) //RunWorkerCompletedEventArgs e)
+        //public void AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception) //RunWorkerCompletedEventArgs e)
+        //{
+        //    if (/*e.Error*/ exception != null)
+        //    {
+        //        //MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {exception.Message}");
+        //    }
+        //    else if (items != null)
+        //    {
+        //        //var items = (List<ListViewItem>)e.Result;
+        //        lvAttributes.Items.AddRange(items.ToArray());
+        //    }
+
+        //    ManageWorkingState(false);
+        //}
+
+        public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e)
         {
-            if (/*e.Error*/ exception != null)
+            if (e.Error != null)
             {
-                //MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {exception.Message}");
+                //MessageBox.Show(
+                //    this,
+                //    $"An error occured: {e.Error.Message}",
+                //    "Error",
+                //    MessageBoxButtons.OK,
+                //    MessageBoxIcon.Error);
+                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {e.Error.Message}");
             }
-            else if (items != null)
+            else
             {
-                //var items = (List<ListViewItem>)e.Result;
-                lvAttributes.Items.AddRange(items.ToArray());
+                var items = e.Result as List<ListViewItem>;
+                if (items != null)
+                {
+                    //var items = (List<ListViewItem>)e.Result;
+                    lvRelationship.Items.AddRange(items.ToArray());
+                }
             }
 
             ManageWorkingState(false);
@@ -329,8 +372,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void ProcessAllAttributeMetadata(List<string> unmarkedattributes, List<ListViewItem> sourceAttributesList, AttributeMetadata[] attributes, string inputEntityLogicalName)
+        public List<ListViewItem> ProcessAllAttributeMetadata(List<string> unmarkedattributes, /*List<ListViewItem> sourceAttributesList,*/ AttributeMetadata[] attributes, string inputEntityLogicalName)
         {
+            List<ListViewItem> sourceAttributesList = new List<ListViewItem>();
             foreach (AttributeMetadata attribute in attributes)
             {
                 var name = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
@@ -343,34 +387,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 UpdateAttributeMetadataCheckBoxes(attribute.LogicalName, item, entityAttributes, inputEntityLogicalName);
                 sourceAttributesList.Add(item);
             }
+
+            return sourceAttributesList;
         }
 
-        public void OnPopulateRelationshipCompletedAction(RunWorkerCompletedEventArgs e)
+        public AttributeMetadata[] FilterAttributes(EntityMetadata entityMetadata, bool showSystemAttributes)
         {
-            if (e.Error != null)
-            {
-                //MessageBox.Show(
-                //    this,
-                //    $"An error occured: {e.Error.Message}",
-                //    "Error",
-                //    MessageBoxButtons.OK,
-                //    MessageBoxIcon.Error);
-                FeedbackManager.DisplayErrorFeedback(this, $"An error occured: {e.Error.Message}");
-            }
-            else
-            {
-                var items = (List<ListViewItem>)e.Result;
-                lvRelationship.Items.AddRange(items.ToArray());
-            }
+            AttributeMetadata[] attributes = entityMetadata.Attributes != null ? entityMetadata.Attributes.ToArray() : null;
 
-            ManageWorkingState(false);
-        }
-
-        public AttributeMetadata[] FilterAttributes(EntityMetadata entitymeta, bool showSystemAttributes)
-        {
-            var attributes = entitymeta.Attributes.ToArray();
-
-            if (!showSystemAttributes)// cbShowSystemAttributes.Checked)
+            if (attributes != null && !showSystemAttributes)// cbShowSystemAttributes.Checked)
             {
                 attributes = attributes.Where(p => p.IsLogical != null
                                                     && !p.IsLogical.Value
@@ -429,6 +454,72 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             item.SubItems.Add(item.ToolTipText);
         }
 
+        public void IsInvalidForCustomization(EntityMetadata entity, ListViewItem item)
+        {
+            if (entity != null)
+            {
+                if (entity.IsCustomEntity != null && entity.IsCustomEntity.Value)
+                {
+                    item.ForeColor = Color.DarkGreen;
+                }
+
+                if (entity.IsIntersect != null && entity.IsIntersect.Value)
+                {
+                    item.ForeColor = Color.Red;
+                    item.ToolTipText = "Intersect Entity, ";
+                }
+
+                if (entity.IsLogicalEntity != null && entity.IsLogicalEntity.Value)
+                {
+                    item.ForeColor = Color.Red;
+                    item.ToolTipText = "Logical Entity";
+                }
+            }
+        }
+
+        public void HandleMappingControlItemClick(string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, bool silentMode)
+        {
+            if (listViewItemIsSelected)//lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(inputEntityLogicalName))
+                {
+                    if (inputMapping.ContainsKey(inputEntityLogicalName))
+                    {
+                        MappingIfContainsKey(inputEntityLogicalName, inputMapping, inputMapper, silentMode);
+                    }
+                    else
+                    {
+                        MappingIfKeyDoesNotExist(inputEntityLogicalName, inputMapping, inputMapper, silentMode);
+                    }
+                }
+            }
+            else
+            {
+                //MessageBox.Show("Entity is not selected");
+                FeedbackManager.DisplayFeedback("Entity is not selected");
+            }
+        }
+
+        public void ProcessFilterQuery(string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, bool silentMode)
+        {
+            if (listViewItemIsSelected)//lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
+            {
+                if (inputFilterQuery.ContainsKey(inputEntityLogicalName))
+                {
+                    FilterIfContainsKey(inputEntityLogicalName, inputFilterQuery, silentMode);
+                }
+                else
+                {
+                    FilterIfKeyDoesNotExist(inputEntityLogicalName, inputFilterQuery, silentMode);
+                }
+            }
+            else
+            {
+                //MessageBox.Show("Entity list is empty");
+                FeedbackManager.DisplayFeedback("Entity list is empty");
+            }
+        }
+
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
         {
             ClearMemory();
@@ -483,20 +574,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         bwFill.DoWork += (sender, e) =>
                         {
-                            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
-                            var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            var sourceAttributesList = new List<ListViewItem>();
-                            var attributes = FilterAttributes(entitymeta, cbShowSystemAttributes.Checked);
+                            //var sourceAttributesList = new List<ListViewItem>();
+                            List<string> unmarkedattributes = null;
+                            AttributeMetadata[] attributes = PopulateAttributeList(entityLogicalName, service, metadataService, unmarkedattributes);
 
-                            attributes = attributes.OrderByDescending(p => p.IsPrimaryId).ThenByDescending(p => p.IsPrimaryName).ThenByDescending(p => p.IsCustomAttribute.Value).ThenBy(p => p.IsLogical.Value).ThenBy(p => p.LogicalName).ToArray();
-
-                            ProcessAllAttributeMetadata(unmarkedattributes, sourceAttributesList, attributes, entityLogicalName);
-
-                            e.Result = sourceAttributesList;
+                            e.Result = ProcessAllAttributeMetadata(unmarkedattributes, /*sourceAttributesList,*/ attributes, entityLogicalName);
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            AsyncRunnerCompleteAttributeOperation(e.Result as List<ListViewItem>, e.Error);// e);
+                            //AsyncRunnerCompleteAttributeOperation(e.Result as List<ListViewItem>, e.Error);// e);
+                            OnPopulateCompletedAction(e);
                         };
                         bwFill.RunWorkerAsync();
                     }
@@ -587,26 +674,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void IsInvalidForCustomization(EntityMetadata entity, ListViewItem item)
-        {
-            if (entity.IsCustomEntity.Value)
-            {
-                item.ForeColor = Color.DarkGreen;
-            }
-
-            if (entity.IsIntersect.Value)
-            {
-                item.ForeColor = Color.Red;
-                item.ToolTipText = "Intersect Entity, ";
-            }
-
-            if (entity.IsLogicalEntity.Value)
-            {
-                item.ForeColor = Color.Red;
-                item.ToolTipText = "Logical Entity";
-            }
-        }
-
         private void UpdateCheckBoxesEntities(EntityMetadata entity, ListViewItem item)
         {
             item.Checked |= entityAttributes.ContainsKey(entity.LogicalName);
@@ -628,28 +695,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void tsbtMappings_Click(object sender, EventArgs e)
         {
-            if (lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(entityLogicalName))
-                {
-                    if (mapping.ContainsKey(entityLogicalName))
-                    {
-                        MappingIfContainsKey();
-                    }
-                    else
-                    {
-                        MappingIfKeyDoesNotExist();
-                    }
-                }
-            }
-            else
-            {
-                //MessageBox.Show("Entity is not selected");
-                FeedbackManager.DisplayFeedback("Entity is not selected");
-            }
+            HandleMappingControlItemClick(entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, false);
         }
 
-        private void MappingIfKeyDoesNotExist()
+        private void MappingIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, bool silentMode)
         {
             var mappingReference = new List<Item<EntityReference, EntityReference>>();
             using (var mappingDialog = new MappingList(mappingReference)
@@ -657,15 +706,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 StartPosition = FormStartPosition.CenterParent
             })
             {
-                mappingDialog.ShowDialog(ParentForm);
+                if (!silentMode)
+                {
+                    mappingDialog.ShowDialog(ParentForm);
+                }
 
-                var mapList = mappingDialog.GetMappingList(entityLogicalName);
+                var mapList = mappingDialog.GetMappingList(inputEntityLogicalName);
                 var guidMapList = mappingDialog.GetGuidMappingList();
 
                 if (mapList.Count > 0)
                 {
-                    mapping.Add(entityLogicalName, mapList);
-                    mapper.Add(entityLogicalName, guidMapList);
+                    inputMapping.Add(inputEntityLogicalName, mapList);
+                    inputMapper.Add(inputEntityLogicalName, guidMapList);
                 }
             }
 
@@ -673,27 +725,30 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             Settings[organisationId.ToString()].Mappings.Clear();
         }
 
-        private void MappingIfContainsKey()
+        private void MappingIfContainsKey(string inputEntityLogicalName, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, bool silentMode)
         {
-            using (var mappingDialog = new MappingList(mapping[entityLogicalName])
+            using (var mappingDialog = new MappingList(inputMapping[inputEntityLogicalName])
             {
                 StartPosition = FormStartPosition.CenterParent
             })
             {
-                mappingDialog.ShowDialog(ParentForm);
+                if (!silentMode)
+                {
+                    mappingDialog.ShowDialog(ParentForm);
+                }
 
-                var mapList = mappingDialog.GetMappingList(entityLogicalName);
+                var mapList = mappingDialog.GetMappingList(inputEntityLogicalName);
                 var guidMapList = mappingDialog.GetGuidMappingList();
 
                 if (mapList.Count == 0)
                 {
-                    mapping.Remove(entityLogicalName);
-                    mapper.Remove(entityLogicalName);
+                    inputMapping.Remove(inputEntityLogicalName);
+                    inputMapper.Remove(inputEntityLogicalName);
                 }
                 else
                 {
-                    mapping[entityLogicalName] = mapList;
-                    mapper[entityLogicalName] = guidMapList;
+                    inputMapping[inputEntityLogicalName] = mapList;
+                    inputMapper[inputEntityLogicalName] = guidMapList;
                 }
             }
 
@@ -722,55 +777,62 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TabStripFiltersClick(object sender, EventArgs e)
         {
-            if (lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
-            {
-                if (filterQuery.ContainsKey(entityLogicalName))
-                {
-                    FilterIfContainsKey();
-                }
-                else
-                {
-                    FilterIfKeyDoesNotExist();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Entity list is empty");
-            }
+            ProcessFilterQuery(entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, false);
+            //if (lvEntities.Items.Count != 0 && lvEntities.SelectedItems.Count > 0)
+            //{
+            //    if (filterQuery.ContainsKey(entityLogicalName))
+            //    {
+            //        FilterIfContainsKey();
+            //    }
+            //    else
+            //    {
+            //        FilterIfKeyDoesNotExist();
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Entity list is empty");
+            //}
         }
 
-        private void FilterIfKeyDoesNotExist()
+        private void FilterIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, bool silentMode)
         {
             using (var filterDialog = new FilterEditor(null)
             {
                 StartPosition = FormStartPosition.CenterParent
             })
             {
-                filterDialog.ShowDialog(ParentForm);
+                if (!silentMode)
+                {
+                    filterDialog.ShowDialog(ParentForm);
+                }
 
                 if (!string.IsNullOrWhiteSpace(filterDialog.QueryString))
                 {
-                    filterQuery[entityLogicalName] = filterDialog.QueryString;
+                    inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
                 }
             }
         }
 
-        private void FilterIfContainsKey()
+        private void FilterIfContainsKey(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, bool silentMode)
         {
-            using (var filterDialog = new FilterEditor(filterQuery[entityLogicalName])
+            using (var filterDialog = new FilterEditor(inputFilterQuery[inputEntityLogicalName])
             {
                 StartPosition = FormStartPosition.CenterParent
             })
             {
-                filterDialog.ShowDialog(ParentForm);
+                if (!silentMode)
+                {
+                    filterDialog.ShowDialog(ParentForm);
+                }
 
                 if (string.IsNullOrWhiteSpace(filterDialog.QueryString))
                 {
-                    filterQuery.Remove(entityLogicalName);
+                    inputFilterQuery.Remove(inputEntityLogicalName);
                 }
                 else
                 {
-                    filterQuery[entityLogicalName] = filterDialog.QueryString;
+                    inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
                 }
             }
         }
