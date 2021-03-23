@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+using System.Windows;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 {
@@ -8,12 +9,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
 
         public string AttributeMetadataTypeResult { get; set; }
 
-        public void GetMapping()
+        public void GetMapping(IFeedbackManager feedbackManager)
         {
-            AttributeMetadataTypeResult = GetAttributeMetadataTypeResult(AttributeMetadataType);
+            AttributeMetadataTypeResult = GetAttributeMetadataTypeResult(AttributeMetadataType, feedbackManager);
         }
 
-        private static string GetAttributeMetadataTypeResult(string input)
+        private static string GetAttributeMetadataTypeResult(string input, IFeedbackManager feedbackManager)
         {
             var result = "Unknown";
 
@@ -85,7 +86,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                     break;
 
                 default:
-                    MessageBox.Show($"Missing mapping for {input}");
+                    /*MessageBox.Show*/
+                    feedbackManager.DisplayFeedback($"Missing mapping for {input}");
                     break;
             }
 

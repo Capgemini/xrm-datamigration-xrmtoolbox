@@ -372,7 +372,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
             InsertManyToManyRelationshipMetadata(entityMetadata);
 
             //var metadataList = new List<EntityMetadata>
@@ -498,7 +498,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
             {
@@ -532,7 +532,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
             {
@@ -724,7 +724,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
             {
@@ -1078,7 +1078,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void FilterAttributes()
         {
             var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
             bool showSystemAttributes = true;
 
             using (var systemUnderTest = new SchemaWizard())
@@ -1097,7 +1097,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void FilterAttributesHideSystemAttributes()
         {
             var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
             bool showSystemAttributes = false;
 
             using (var systemUnderTest = new SchemaWizard())
@@ -1339,7 +1339,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             AttributeMetadata[] attributes = null;
 
             var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
                                 .Returns(entityMetadata)
@@ -1666,18 +1666,199 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
+        [TestMethod]
+        public void LoadImportConfigFileWithNoImportConfig()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void LoadImportConfigFileWithInvalidImportConfigFilePath()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))//It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                importConfig.Text = "Hello.txt";
+
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadImportConfigFileWithValidImportConfigFilePathButNoMigrationConfig()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))//It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                importConfig.Text = "TestData\\ImportConfig.json";
+
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadImportConfigFileWithValidImportConfigFilePathAndMigrationConfig()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))//It.IsAny<string>()))
+                                .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                importConfig.Text = "TestData/ImportConfig2.json";
+
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void LoadImportConfigFileHandleException()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))//It.IsAny<string>()))
+                                .Throws<Exception>();
+
+            //feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            //                    .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                importConfig.Text = "TestData/ImportConfig2.json";
+
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+                }
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Exactly(2));
+        }
+
+        [TestMethod]
+        public void AreCrmEntityFieldsSelectedCheckedEntityCountIsZero()
+        {
+            var inputCheckedEntity = new HashSet<string>();
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
+
+                actual.Should().BeFalse();
+            }
+        }
+
+        [TestMethod]
+        public void AreCrmEntityFieldsSelected()
+        {
+            var entityLogicalName = "contact";
+            var inputCheckedEntity = new HashSet<string>
+            {
+                entityLogicalName
+            };
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
+
+                actual.Should().BeTrue();
+                metadataServiceMock.VerifyAll();
+            }
+        }
+
         private void SetupMockObjects(string entityLogicalName)
         {
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = entityLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
-                }
-            };
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
 
-            InsertAttributeList(entityMetadata);
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
             {
@@ -1691,6 +1872,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
                                 .Returns(metadataList)
                                 .Verifiable();
+        }
+
+        private EntityMetadata InstantiateEntityMetaData(string logicalName)
+        {
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = logicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = logicalName }
+                }
+            };
+
+            return entityMetadata;
         }
 
         private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata)
@@ -1713,12 +1908,30 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
         }
 
-        private static void InsertAttributeList(EntityMetadata entityMetadata)
+        private static void InsertAttributeList(EntityMetadata entityMetadata, List<string> attributeLogicalNames)
         {
-            var attributeList = new List<AttributeMetadata>()
+            var attributeList = new List<AttributeMetadata>();
+            //{
+            //    new AttributeMetadata { LogicalName = "contactattnoentity1" }
+            //};
+
+            foreach (var item in attributeLogicalNames)
             {
-                new AttributeMetadata { LogicalName = "contactattnoentity1" }
-            };
+                var attribute = new AttributeMetadata
+                {
+                    LogicalName = item,
+                    DisplayName = new Label
+                    {
+                        UserLocalizedLabel = new LocalizedLabel { Label = item }
+                    }
+                };
+
+                var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
+                attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = item });
+
+                //AttributeTypeName
+                attributeList.Add(attribute);
+            }
 
             var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             field.SetValue(entityMetadata, attributeList.ToArray());

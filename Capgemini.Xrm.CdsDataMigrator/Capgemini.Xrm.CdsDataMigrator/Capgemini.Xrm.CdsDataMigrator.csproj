@@ -319,6 +319,7 @@
     <Compile Include="UserControls\SchemaWizard.Designer.cs">
       <DependentUpon>SchemaWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\SchemaWizardDelegate.cs" />
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -542,6 +542,35 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
+        public void LoadImportConfigFile(TextBox importConfig, Dictionary<string, Dictionary<Guid, Guid>> inputMapper)
+        {
+            if (!string.IsNullOrWhiteSpace(importConfig.Text))
+            {
+                try
+                {
+                    var configImport = CrmImportConfig.GetConfiguration(importConfig.Text);
+                    if (configImport.MigrationConfig == null)
+                    {
+                        //MessageBox.Show("Invalid Import Config File");
+                        FeedbackManager.DisplayFeedback("Invalid Import Config File");
+                        importConfig.Text = "";
+                        return;
+                    }
+
+                    inputMapper = configImport.MigrationConfig.Mappings;
+                    DataConversion();
+
+                    /*MessageBox.Show*/
+                    FeedbackManager.DisplayFeedback("Guid Id Mappings loaded from Import Config File");
+                }
+                catch (Exception ex)
+                {
+                    /*MessageBox.Show*/
+                    FeedbackManager.DisplayFeedback($"Load Correct Import Config file, error:{ex.Message}");
+                }
+            }
+        }
+
         //public void FilterIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)//, bool silentMode)
         //{
         //    //using (var filterDialog = new FilterEditor(null)
@@ -975,18 +1004,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private bool AreCrmEntityFieldsSelected(IMetadataService metadataService)
+        public bool AreCrmEntityFieldsSelected(IMetadataService metadataService, HashSet<string> inputCheckedEntity, IOrganizationService organizationService, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
         {
             var fieldsSelected = false;
-            if (checkedEntity.Count > 0)
+            if (inputCheckedEntity.Count > 0)
             {
                 var crmEntityList = new List<CrmEntity>();
 
-                foreach (var item in checkedEntity)
+                foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, OrganizationService);
-                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
+                    var sourceList = metadataService.RetrieveEntities(item, organizationService);
+                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
 
                     if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
                     {
@@ -1005,61 +1034,68 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TbSaveSchemaClick(object sender, EventArgs e)
         {
-            if (AreCrmEntityFieldsSelected(MetadataService))
+            if (AreCrmEntityFieldsSelected(MetadataService, checkedEntity, OrganizationService, entityRelationships, entityAttributes, attributeMapping, FeedbackManager))
             {
-                CollectCrmEntityFields(MetadataService);
+                CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager);
                 GenerateXMLFile();
                 crmSchemaConfiguration.Entities.Clear();
             }
             else
             {
-                MessageBox.Show("Please select at least one attribute for each selected entity!");
+                /*MessageBox.Show*/
+                FeedbackManager.DisplayFeedback("Please select at least one attribute for each selected entity!");
             }
         }
 
-        private void CollectCrmEntityFields(IMetadataService metadataService)
+        public static void CollectCrmEntityFields(IMetadataService metadataService, IOrganizationService organizationService, HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
         {
-            if (checkedEntity.Count > 0)
+            if (inputCheckedEntity.Count > 0)
             {
                 var crmEntityList = new List<CrmEntity>();
 
-                foreach (var item in checkedEntity)
+                foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, OrganizationService);
-                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList);
+                    var sourceList = metadataService.RetrieveEntities(item, organizationService);
+                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
                 }
 
-                crmSchemaConfiguration.Entities.Clear();
-                crmSchemaConfiguration.Entities.AddRange(crmEntityList);
+                schemaConfiguration.Entities.Clear();
+                schemaConfiguration.Entities.AddRange(crmEntityList);
             }
         }
 
-        private void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList)
+        public static void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
         {
             crmEntity.Name = sourceList.LogicalName;
-            crmEntity.DisplayName = sourceList.DisplayName.UserLocalizedLabel == null ? string.Empty : sourceList.DisplayName.UserLocalizedLabel.Label;
+
+            crmEntity.DisplayName = sourceList.DisplayName?.UserLocalizedLabel == null ? string.Empty : sourceList.DisplayName.UserLocalizedLabel.Label;
+
             crmEntity.EntityCode = sourceList.ObjectTypeCode.ToString();
             crmEntity.PrimaryIdField = sourceList.PrimaryIdAttribute;
             crmEntity.PrimaryNameField = sourceList.PrimaryNameAttribute;
-            CollectCrmEntityRelationShip(sourceList, crmEntity);
-            CollectCrmAttributesFields(sourceList, crmEntity);
+            CollectCrmEntityRelationShip(sourceList, crmEntity, inputEntityRelationships);
+            CollectCrmAttributesFields(sourceList, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManager);
             crmEntityList.Add(crmEntity);
         }
 
-        private void CollectCrmEntityRelationShip(EntityMetadata sourceList, CrmEntity crmEntity)
+        public static void CollectCrmEntityRelationShip(EntityMetadata sourceList, CrmEntity crmEntity, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             var manyToManyRelationship = sourceList.ManyToManyRelationships;
             var relationshipList = new List<CrmRelationship>();
-            foreach (var relationship in manyToManyRelationship)
+
+            if (manyToManyRelationship != null)
             {
-                if (entityRelationships.ContainsKey(sourceList.LogicalName))
+                foreach (var relationship in manyToManyRelationship)
                 {
-                    foreach (var relationshipName in entityRelationships[sourceList.LogicalName])
+                    if (inputEntityRelationships.ContainsKey(sourceList.LogicalName))
                     {
-                        if (relationshipName == relationship.IntersectEntityName)
+                        foreach (var relationshipName in inputEntityRelationships[sourceList.LogicalName])
                         {
-                            StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList);
+                            if (relationshipName == relationship.IntersectEntityName)
+                            {
+                                StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList);
+                            }
                         }
                     }
                 }
@@ -1069,7 +1105,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             crmEntity.CrmRelationships.AddRange(relationshipList);
         }
 
-        private void StoreCrmEntityRelationShipData(CrmEntity crmEntity, ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
+        public static void StoreCrmEntityRelationShipData(CrmEntity crmEntity, ManyToManyRelationshipMetadata relationship, List<CrmRelationship> relationshipList)
         {
             CrmRelationship crmRelationShip = new CrmRelationship
             {
@@ -1083,19 +1119,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             relationshipList.Add(crmRelationShip);
         }
 
-        private void CollectCrmAttributesFields(EntityMetadata sourceList, CrmEntity crmEntity)
+        public static void CollectCrmAttributesFields(EntityMetadata sourceList, CrmEntity crmEntity, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
         {
-            if (entityAttributes != null)
+            if (inputEntityAttributes != null)
             {
                 var attributes = sourceList.Attributes.ToArray();
 
                 var primaryAttribute = sourceList.PrimaryIdAttribute;
-                if (entityAttributes.ContainsKey(sourceList.LogicalName))
+                if (sourceList.LogicalName != null && inputEntityAttributes.ContainsKey(sourceList.LogicalName))
                 {
                     var crmFieldList = new List<CrmField>();
                     foreach (AttributeMetadata attribute in attributes)
                     {
-                        StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList);
+                        StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManager);
                     }
 
                     crmEntity.CrmFields.Clear();
@@ -1104,26 +1140,26 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void StoreAttributeMetadata(AttributeMetadata attribute, EntityMetadata sourceList, string primaryAttribute, List<CrmField> crmFieldList)
+        public static void StoreAttributeMetadata(AttributeMetadata attribute, EntityMetadata sourceList, string primaryAttribute, List<CrmField> crmFieldList, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
         {
             CrmField crmField = new CrmField();
-            foreach (var attributeLogicalName in entityAttributes[sourceList.LogicalName])
+            foreach (var attributeLogicalName in inputEntityAttributes[sourceList.LogicalName])
             {
                 if (attribute.LogicalName.Equals(attributeLogicalName, StringComparison.InvariantCulture))
                 {
                     crmField.DisplayName = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
                     crmField.FieldName = attribute.LogicalName;
-                    attributeMapping.AttributeMetadataType = attribute.AttributeTypeName.Value.ToString(CultureInfo.InvariantCulture);
-                    attributeMapping.GetMapping();
-                    crmField.FieldType = attributeMapping.AttributeMetadataTypeResult;
-                    StoreLookUpAttribute(attribute, crmField);
+                    inputAttributeMapping.AttributeMetadataType = attribute.AttributeTypeName.Value.ToString(CultureInfo.InvariantCulture);
+                    inputAttributeMapping.GetMapping(feedbackManager);
+                    crmField.FieldType = inputAttributeMapping.AttributeMetadataTypeResult;
+                    StoreLookUpAttribute(attribute, crmField, feedbackManager);
                     StoreAttributePrimaryKey(primaryAttribute, crmField);
                     crmFieldList.Add(crmField);
                 }
             }
         }
 
-        private void StoreAttributePrimaryKey(string primaryAttribute, CrmField crmField)
+        public static void StoreAttributePrimaryKey(string primaryAttribute, CrmField crmField)
         {
             if (crmField.FieldName.Equals(primaryAttribute, StringComparison.InvariantCulture))
             {
@@ -1131,7 +1167,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void StoreLookUpAttribute(AttributeMetadata attribute, CrmField crmField)
+        public static void StoreLookUpAttribute(AttributeMetadata attribute, CrmField crmField, IFeedbackManager feedbackManager)
         {
             if (crmField.FieldType.Equals("entityreference", StringComparison.InvariantCulture))
             {
@@ -1148,7 +1184,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (InvalidCastException exception)
                 {
-                    MessageBox.Show(exception.Message);
+                    /*MessageBox.Show*/
+                    feedbackManager.DisplayFeedback(exception.Message);
                 }
             }
         }
@@ -1288,38 +1325,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbImportConfig.Text))
                     {
-                        LoadImportConfigFile();
+                        LoadImportConfigFile(tbImportConfig, mapper);
                     }
                 }
                 else if (result == DialogResult.Cancel)
                 {
                     tbImportConfig.Text = null;
-                }
-            }
-        }
-
-        private void LoadImportConfigFile()
-        {
-            if (!string.IsNullOrWhiteSpace(tbImportConfig.Text))
-            {
-                try
-                {
-                    var configImport = CrmImportConfig.GetConfiguration(tbImportConfig.Text);
-                    if (configImport.MigrationConfig == null)
-                    {
-                        MessageBox.Show("Invalid Import Config File");
-                        tbImportConfig.Text = "";
-                        return;
-                    }
-
-                    mapper = configImport.MigrationConfig.Mappings;
-                    DataConversion();
-
-                    MessageBox.Show("Guid Id Mappings loaded from Import Config File");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Load Correct Import Config file, error:" + ex.Message);
                 }
             }
         }
@@ -1473,7 +1484,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarLoadMappingsFileClick(object sender, EventArgs e)
         {
-            LoadImportConfigFile();
+            LoadImportConfigFile(tbImportConfig, mapper);
         }
 
         private void ToolBarLoadSchemaFileClick(object sender, EventArgs e)
@@ -1495,14 +1506,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             LoadSchemaFile(tbSchemaPath.Text, workingstate);
             LoadExportConfigFile(tbExportConfig.Text);
-            LoadImportConfigFile();
+            LoadImportConfigFile(tbImportConfig, mapper);
         }
 
         private void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
             GenerateImportConfigFile();
             GenerateExportConfigFile();
-            CollectCrmEntityFields(MetadataService);
+            CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager);
             GenerateXMLFile();
             crmSchemaConfiguration.Entities.Clear();
         }
