@@ -6,6 +6,7 @@ using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -164,6 +165,95 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
             }
 
             entityRepositoryService.VerifyAll();
+        }
+
+        [TestMethod]
+        public void WizardNavigation()
+        {
+            using (var selectedPage = new AeroWizard.WizardPage())
+            {
+                using (var pageContainer = new AeroWizard.WizardPageContainer())
+                {
+                    using (var folderPathValidationLabel = new System.Windows.Forms.Label())
+                    {
+                        using (var sourceDataLocationTextBox = new System.Windows.Forms.TextBox())
+                        {
+                            using (var systemUnderTest = new ImportWizard())
+                            {
+                                using (var tokenSource = new CancellationTokenSource())
+                                {
+                                    FluentActions.Invoking(() => systemUnderTest.WizardNavigation(folderPathValidationLabel, sourceDataLocationTextBox, selectedPage, pageContainer))
+                                                   .Should()
+                                                   .Throw<NullReferenceException>()
+                                                   .WithMessage("Object reference not set to an instance of an object.");
+                                }
+                            }
+                        }
+
+                        folderPathValidationLabel.Visible.Should().BeTrue();
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void WizardNavigationwizardPage2AndSourceDataLocationTextBoxHasText()
+        {
+            using (var selectedPage = new AeroWizard.WizardPage())
+            {
+                selectedPage.Name = "wizardPage2";
+                using (var pageContainer = new AeroWizard.WizardPageContainer())
+                {
+                    using (var folderPathValidationLabel = new System.Windows.Forms.Label())
+                    {
+                        using (var sourceDataLocationTextBox = new System.Windows.Forms.TextBox())
+                        {
+                            sourceDataLocationTextBox.Text = "Sample text";
+                            using (var systemUnderTest = new ImportWizard())
+                            {
+                                using (var tokenSource = new CancellationTokenSource())
+                                {
+                                    FluentActions.Invoking(() => systemUnderTest.WizardNavigation(folderPathValidationLabel, sourceDataLocationTextBox, selectedPage, pageContainer))
+                                                   .Should()
+                                                   .Throw<NullReferenceException>()
+                                                   .WithMessage("Object reference not set to an instance of an object.");
+                                }
+                            }
+                        }
+
+                        folderPathValidationLabel.Visible.Should().BeFalse();
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void WizardNavigationwizardPage2AndSourceDataLocationTextBoxHasNoText()
+        {
+            using (var selectedPage = new AeroWizard.WizardPage())
+            {
+                selectedPage.Name = "wizardPage2";
+                using (var pageContainer = new AeroWizard.WizardPageContainer())
+                {
+                    using (var folderPathValidationLabel = new System.Windows.Forms.Label())
+                    {
+                        using (var sourceDataLocationTextBox = new System.Windows.Forms.TextBox())
+                        {
+                            using (var systemUnderTest = new ImportWizard())
+                            {
+                                using (var tokenSource = new CancellationTokenSource())
+                                {
+                                    FluentActions.Invoking(() => systemUnderTest.WizardNavigation(folderPathValidationLabel, sourceDataLocationTextBox, selectedPage, pageContainer))
+                                                   .Should()
+                                                   .NotThrow();
+                                }
+                            }
+                        }
+
+                        folderPathValidationLabel.Visible.Should().BeTrue();
+                    }
+                }
+            }
         }
     }
 }

@@ -109,6 +109,25 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             stepWizardControl1.Pages[3].AllowNext = true;
         }
 
+        public void WizardNavigation(/*WizardButtons wizardButtons, */System.Windows.Forms.Label folderPathValidationLabel, TextBox sourceDataLocationTextBox, AeroWizard.WizardPage selectedPage, AeroWizard.WizardPageContainer pageContainer)
+        {
+            if (/*wizardButtons.PageContainer.SelectedPage*/selectedPage.Name == "wizardPage2")
+            {
+                ValidationHelpers.IsTextControlNotEmpty(folderPathValidationLabel, sourceDataLocationTextBox);
+
+                if (!folderPathValidationLabel.Visible)
+                {
+                    /*wizardButtons.PageContainer*/
+                    pageContainer.NextPage();
+                }
+            }
+            else if (!/*wizardButtons.PageContainer.SelectedPage*/selectedPage.IsFinishPage)
+            {
+                /*wizardButtons.PageContainer*/
+                pageContainer.NextPage();
+            }
+        }
+
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             radioButtonCSVFormat.Checked = !radioButtonJsonFormat.Checked;
@@ -169,24 +188,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
         {
             var wizardButtons = ((WizardButtons)sender);
-            WizardNavigation(wizardButtons);
-        }
-
-        private void WizardNavigation(WizardButtons wizardButtons)
-        {
-            if (wizardButtons.PageContainer.SelectedPage.Name == "wizardPage2")
-            {
-                ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
-
-                if (!labelFolderPathValidation.Visible)
-                {
-                    wizardButtons.PageContainer.NextPage();
-                }
-            }
-            else if (!wizardButtons.PageContainer.SelectedPage.IsFinishPage)
-            {
-                wizardButtons.PageContainer.NextPage();
-            }
+            WizardNavigation(/*wizardButtons, */labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
         }
 
         private void tbSourceDataLocation_TextChanged(object sender, EventArgs e)
