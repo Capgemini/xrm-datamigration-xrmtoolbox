@@ -86,7 +86,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core
                     break;
 
                 default:
-                    /*MessageBox.Show*/
                     feedbackManager.DisplayFeedback($"Missing mapping for {input}");
                     break;
             }

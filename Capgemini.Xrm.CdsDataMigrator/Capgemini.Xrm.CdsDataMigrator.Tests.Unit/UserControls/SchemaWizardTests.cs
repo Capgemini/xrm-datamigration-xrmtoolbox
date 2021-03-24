@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
@@ -318,14 +319,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var entityMetadata = new EntityMetadata();
 
-            //var relationship = new ManyToManyRelationshipMetadata
-            //{
-            //    Entity1LogicalName = "account",
-            //    Entity1IntersectAttribute = "accountid",
-            //    IntersectEntityName = "account_contact",
-            //    Entity2LogicalName = "contact",
-            //    Entity2IntersectAttribute = "contactid"
-            //};
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
 
             //var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
             //{
@@ -334,7 +335,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             //var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
             //field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
-            InsertManyToManyRelationshipMetadata(entityMetadata);
+            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
             metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
                 .Returns(entityMetadata)
@@ -372,8 +373,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-            InsertManyToManyRelationshipMetadata(entityMetadata);
+            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
             //var metadataList = new List<EntityMetadata>
             //{
@@ -1825,10 +1835,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void AreCrmEntityFieldsSelected()
         {
             var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string>
-            {
-                entityLogicalName
-            };
+            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
 
@@ -1852,6 +1859,640 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 actual.Should().BeTrue();
                 metadataServiceMock.VerifyAll();
             }
+        }
+
+        [TestMethod]
+        public void CollectCrmEntityFieldsCheckedEntityCountIsZero()
+        {
+            var entityLogicalName = "contact";
+            var inputCheckedEntity = new HashSet<string>();
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+            var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void CollectCrmEntityFields()
+        {
+            var entityLogicalName = "contact";
+            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+
+                metadataServiceMock.VerifyAll();
+            }
+        }
+
+        [TestMethod]
+        public void StoreCrmEntityData()
+        {
+            var entityLogicalName = "contact";
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
+            var crmEntityList = new List<Capgemini.Xrm.DataMigration.Model.CrmEntity>();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityData(crmEntity, entityMetadata, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+
+                crmEntityList.Count.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
+        public void CollectCrmEntityRelationShipNoInputEntityRelationships()
+        {
+            var entityLogicalName = "contact";
+            //var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            //var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
+            //var crmEntityList = new List<Capgemini.Xrm.DataMigration.Model.CrmEntity>();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityRelationShip(entityMetadata, crmEntity, inputEntityRelationships))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmEntity.CrmRelationships.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void CollectCrmEntityRelationShipWithInputEntityRelationships()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { intersectEntityName };
+
+            inputEntityRelationships.Add(entityLogicalName, entityRelationshipSet);
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityRelationShip(entityMetadata, crmEntity, inputEntityRelationships))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmEntity.CrmRelationships.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void StoreCrmEntityRelationShipData()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            relationshipList.Count.Should().Be(1);
+            relationshipList[0].RelatedEntityName.Should().Be(relationship.IntersectEntityName);
+            relationshipList[0].RelationshipName.Should().Be(relationship.IntersectEntityName);
+            relationshipList[0].IsReflexive.Should().Be(relationship.IsCustomizable.Value);
+            relationshipList[0].ManyToMany.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void CollectCrmAttributesFields()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmEntity.CrmFields.Count.Should().Be(3);
+        }
+
+        [TestMethod]
+        public void CollectCrmAttributesFieldsWithNoInputEntityAttributes()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmEntity.CrmFields.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeMetadataWithNullInputEntityAttributes()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            Dictionary<string, HashSet<string>> inputEntityAttributes = null;
+            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            string primaryAttribute = "contactId";
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmFieldList.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeMetadataWithNoInputEntityAttributes()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            string primaryAttribute = "contactId";
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmFieldList.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeMetadata()
+        {
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+
+            string primaryAttribute = "contactId";
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
+
+            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
+            {
+                Name = entityLogicalName,
+                DisplayName = entityLogicalName
+            };
+
+            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmFieldList.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void StoreAttributePrimaryKey()
+        {
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField() { PrimaryKey = false, FieldName = primaryAttribute };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributePrimaryKey(primaryAttribute, crmField))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmField.PrimaryKey.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void StoreAttributePrimaryKeyWithWrongPrimaryAttributeName()
+        {
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField() { PrimaryKey = false, FieldName = "contactId2" };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributePrimaryKey(primaryAttribute, crmField))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            crmField.PrimaryKey.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreLookUpAttributeNotEntityReference()
+        {
+            var attributeLogicalName = "contactId";
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
+            {
+                PrimaryKey = false,
+                FieldName = primaryAttribute,
+                FieldType = "string"
+            };
+
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = attributeLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
+                }
+            };
+
+            var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
+            attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+                              .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+        }
+
+        [TestMethod]
+        public void StoreLookUpAttributeNotLookupAttributeMetadata()
+        {
+            var attributeLogicalName = "contactId";
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
+            {
+                PrimaryKey = false,
+                FieldName = primaryAttribute,
+                FieldType = "entityreference"
+            };
+
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = attributeLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
+                }
+            };
+
+            var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
+            attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
+        }
+
+        [TestMethod]
+        public void StoreLookUpAttributeWithLookupAttributeMetadata()
+        {
+            var attributeLogicalName = "contactId";
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
+            {
+                PrimaryKey = false,
+                FieldName = primaryAttribute,
+                FieldType = "entityreference"
+            };
+
+            var attribute = new LookupAttributeMetadata
+            {
+                LogicalName = attributeLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
+                }
+            };
+            attribute.Targets = new List<string> { "Test" }.ToArray();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+            crmField.LookupType.Should().Be("Test");
+        }
+
+        [TestMethod]
+        public void StoreLookUpAttributeWithLookupAttributeMetadataButEmptyTargetList()
+        {
+            var attributeLogicalName = "contactId";
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
+            {
+                PrimaryKey = false,
+                FieldName = primaryAttribute,
+                FieldType = "entityreference"
+            };
+
+            var attribute = new LookupAttributeMetadata
+            {
+                LogicalName = attributeLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
+                }
+            };
+            //attribute.Targets = new List<string> { "Test" }.ToArray();
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+            crmField.LookupType.Should().BeNull();
         }
 
         private void SetupMockObjects(string entityLogicalName)
@@ -1888,17 +2529,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             return entityMetadata;
         }
 
-        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata)
+        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
             var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
             {
                 relationship
