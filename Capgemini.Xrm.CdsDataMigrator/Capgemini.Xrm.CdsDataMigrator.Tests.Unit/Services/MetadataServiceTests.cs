@@ -11,24 +11,6 @@ using Moq;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
 {
-    //    [TestClass]
-    //    public class MetadataServiceTests
-    //    {
-    //        private Mock<IOrganizationService> serviceMock;
-
-    //        private MetadataService systemUnderTest;
-
-    //        [TestInitialize]
-    //        public void Setup()
-
-    //        {
-    //            serviceMock = new Mock<IOrganizationService>();
-
-    //            systemUnderTest = new MetadataService();
-    //        }
-
-    //    }
-
     [TestClass]
     public class MetadataServiceTests
     {
@@ -90,7 +72,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
             actual.Count.Should().Be(2);
         }
 
-        //[Ignore("To be fixed!")]
         [TestMethod]
         public void RetrieveEntitiesInputLogicalNameNullService()
         {
@@ -101,11 +82,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
                 .Throw<ArgumentNullException>();
         }
 
-        //[Ignore("To be fixed!")]
         [TestMethod]
         public void RetrieveEntitiesInputLogicalNameNotExistAndServiceNotNull()
         {
-            string logicalName = Guid.NewGuid().ToString();// "account";
+            string logicalName = Guid.NewGuid().ToString();
 
             var response = new RetrieveEntityResponse();
 

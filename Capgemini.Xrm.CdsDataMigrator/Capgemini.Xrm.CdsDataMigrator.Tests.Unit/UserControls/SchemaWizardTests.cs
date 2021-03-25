@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
@@ -22,7 +19,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         private Mock<IMetadataService> metadataServiceMock;
         private Mock<IFeedbackManager> feedbackManagerMock;
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
-
         private bool workingstate;
 
         [TestInitialize]
@@ -63,307 +59,33 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
-        public void GetEntityLogicalNameNullListViewItem()
+        public void HandleListViewEntitiesSelectedIndexChanged()
         {
-            using (var systemUnderTest = new SchemaWizard())
+            string inputEntityLogicalName = "account";
+            HashSet<string> inputSelectedEntity = new HashSet<string>();
+
+            using (var listView = new System.Windows.Forms.ListView())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                System.Windows.Forms.ListViewItem entityitem = null;
+                var selectedItems = new System.Windows.Forms.ListView.SelectedListViewItemCollection(listView);
 
-                var actual = systemUnderTest.GetEntityLogicalName(entityitem);
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.OrganizationService = serviceMock.Object;
+                    systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                actual.Should().BeNull();
+                    FluentActions.Invoking(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object, serviceMock.Object, inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity, selectedItems))
+                            .Should()
+                            .NotThrow();
+                }
             }
-        }
-
-        [TestMethod]
-        public void GetEntityLogicalNameInstantiatedListViewItemWithNullTag()
-        {
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                System.Windows.Forms.ListViewItem entityitem = new System.Windows.Forms.ListViewItem();
-
-                var actual = systemUnderTest.GetEntityLogicalName(entityitem);
-
-                actual.Should().BeNull();
-            }
-        }
-
-        [TestMethod]
-        public void GetEntityLogicalNameInstantiatedListViewItemWithEntityMetadataTag()
-        {
-            var entityMetadata = new EntityMetadata() { LogicalName = "account" };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                System.Windows.Forms.ListViewItem entityitem = new System.Windows.Forms.ListViewItem();
-                entityitem.Tag = entityMetadata;
-
-                var actual = systemUnderTest.GetEntityLogicalName(entityitem);
-
-                actual.Should().Be(entityMetadata.LogicalName);
-            }
-        }
-
-        [TestMethod]
-        public void AddSelectedEntitiesWhenSelectedEntitySetIsNullAndSelectedItemCountIsZero()
-        {
-            //var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            // SetupMockObjects(entityLogicalName);
-
-            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-            var selectedItemsCount = 0;
-            //var selectedEntity = new HashSet<string>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                ////AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
-
-                FluentActions.Invoking(() => systemUnderTest.AddSelectedEntities(selectedItemsCount, entityLogicalName, null))
-                             .Should()
-                             .NotThrow();
-
-                //selectedEntity.Count.Should().Be(0);
-            }
-        }
-
-        [TestMethod]
-        public void AddSelectedEntitiesWhenSelectedEntitySetIsNullAndSelectedItemCountIsNotZero()
-        {
-            //var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            // SetupMockObjects(entityLogicalName);
-
-            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-            var selectedItemsCount = 2;
-            //var selectedEntity = new HashSet<string>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                ////AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
-
-                FluentActions.Invoking(() => systemUnderTest.AddSelectedEntities(selectedItemsCount, entityLogicalName, null))
-                             .Should()
-                             .Throw<NullReferenceException>();
-
-                //selectedEntity.Count.Should().Be(0);
-            }
-        }
-
-        [TestMethod]
-        public void AddSelectedEntitiesWhenSelectedEntitySetIsNotNullAndSelectedEntityDoesNotContainLogicalName()
-        {
-            //var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            // SetupMockObjects(entityLogicalName);
-
-            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-            var selectedItemsCount = 2;
-            var selectedEntity = new HashSet<string>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                ////AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
-
-                FluentActions.Invoking(() => systemUnderTest.AddSelectedEntities(selectedItemsCount, entityLogicalName, selectedEntity))
-                             .Should()
-                             .NotThrow();
-
-                selectedEntity.Count.Should().Be(1);
-            }
-        }
-
-        [TestMethod]
-        public void AddSelectedEntitiesWhenSelectedEntitySetIsNotNullAndSelectedEntityContainsLogicalName()
-        {
-            //var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            // SetupMockObjects(entityLogicalName);
-
-            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-            var selectedItemsCount = 2;
-            var selectedEntity = new HashSet<string>
-            {
-                entityLogicalName
-            };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.AddSelectedEntities(selectedItemsCount, entityLogicalName, selectedEntity))
-                             .Should()
-                             .NotThrow();
-
-                selectedEntity.Count.Should().Be(1);
-            }
-        }
-
-        [TestMethod]
-        public void AddSelectedEntitiesWhenSelectedItemCountIsZero()
-        {
-            //var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            // SetupMockObjects(entityLogicalName);
-
-            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-            var selectedItemsCount = 0;
-            var selectedEntity = new HashSet<string>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                ////AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
-
-                FluentActions.Invoking(() => systemUnderTest.AddSelectedEntities(selectedItemsCount, entityLogicalName, selectedEntity))
-                             .Should()
-                             .NotThrow();
-
-                selectedEntity.Count.Should().Be(0);
-            }
-        }
-
-        [TestMethod]
-        public void ProcessListViewEntitiesSelectedIndexChanged()
-        {
-            var items = new List<System.Windows.Forms.ListViewItem>
-            {
-                new System.Windows.Forms.ListViewItem("Item1"),
-                new System.Windows.Forms.ListViewItem("Item2")
-            };
-
-            var entityMetadata = new EntityMetadata() { LogicalName = "account" };
-            System.Windows.Forms.ListViewItem entityitem = new System.Windows.Forms.ListViewItem();
-            entityitem.Tag = entityMetadata;
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                //systemUnderTest.PopulateEntitiesListView(items, null);
-                //systemUnderTest.GetEntityLogicalName();
-
-                FluentActions.Invoking(() => systemUnderTest.ProcessListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object, inputEntityRelationships, entityitem))
-                        .Should()
-                        .NotThrow();
-            }
-        }
-
-        [TestMethod]
-        public void RetrieveSourceEntitiesListShowSystemAttributesIsFalse()
-        {
-            var showSystemAttributes = false;
-            string entityLogicalName = "account_contact";
-            SetupMockObjects(entityLogicalName);
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-
-                var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object);
-
-                actual.Count.Should().Be(1);
-            }
-        }
-
-        [TestMethod]
-        public void RetrieveSourceEntitiesListShowSystemAttributesIsTrue()
-        {
-            var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            SetupMockObjects(entityLogicalName);
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-
-                var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object);
-
-                actual.Count.Should().Be(1);
-            }
-        }
-
-        [TestMethod]
-        public void PopulateRelationshipActionNoManyToManyRelationships()
-        {
-            string entityLogicalName = "contact";
-            var entityMetadata = new EntityMetadata();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                .Returns(entityMetadata)
-                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
-
-                actual.Count.Should().Be(0);
-            }
-
-            serviceMock.VerifyAll();
-            metadataServiceMock.VerifyAll();
-        }
-
-        [TestMethod]
-        public void PopulateRelationshipAction()
-        {
-            string entityLogicalName = "account_contact";
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-
-            var entityMetadata = new EntityMetadata();
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            //var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
-            //{
-            //    relationship
-            //};
-
-            //var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
-            //field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
-            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                .Returns(entityMetadata)
-                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.PopulateEntitiesListView(items, null);
-                //systemUnderTest.GetEntityLogicalName();
-
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
-
-                actual.Count.Should().BeGreaterThan(0);
-            }
-
-            serviceMock.VerifyAll();
-            metadataServiceMock.VerifyAll();
         }
 
         [TestMethod]
         public void PopulateRelationshipListViewItemSelected()
         {
-            var entityLogicalName = Guid.NewGuid().ToString();// "contact";
-            System.Windows.Forms.ListViewItem listViewItemSelected = new System.Windows.Forms.ListViewItem();//ListViewItem listViewSelectedItem
+            var entityLogicalName = Guid.NewGuid().ToString();
+            System.Windows.Forms.ListViewItem listViewItemSelected = new System.Windows.Forms.ListViewItem();
 
-            //SetupMockObjects(entityLogicalName);
             var entityMetadata = new EntityMetadata
             {
                 LogicalName = entityLogicalName,
@@ -385,23 +107,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
             InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
-            //var metadataList = new List<EntityMetadata>
-            //{
-            //    entityMetadata
-            //};
-
-            //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-            //                    .Returns(entityMetadata)
-            //                    .Verifiable();
-
-            //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-            //                    .Returns(metadataList)
-            //                    .Verifiable();
-
-            //var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, service);
-
-            //if (entityMetaData != null && entityMetaData.ManyToManyRelationships != null && entityMetaData.ManyToManyRelationships.Any())
-
             using (var systemUnderTest = new SchemaWizard())
             {
                 systemUnderTest.OrganizationService = serviceMock.Object;
@@ -413,85 +118,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
 
             serviceMock.VerifyAll();
-            //metadataServiceMock.VerifyAll();
-        }
-
-        [TestMethod]
-        public void PopulateEntitiesListViewWhenThereIsAnException()
-        {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-            Exception exception = new Exception();
-
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
-                        .Should()
-                        .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void PopulateEntitiesListViewWhenThereIsNoException()
-        {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            Exception exception = null;
-
-            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
-                        .Should()
-                        .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void PopulateEntitiesListViewWhenThereAreListItems()
-        {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-            Exception exception = null;
-
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception))
-                        .Should()
-                        .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
         [Ignore("Will fix")]
@@ -508,6 +134,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
+            List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
+            bool inputWorkingstate = true;
+
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
@@ -520,7 +149,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             using (var systemUnderTest = new SchemaWizard())
             {
-                FluentActions.Invoking(() => systemUnderTest.RefreshEntities())
+                FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate))
                              .Should()
                              .NotThrow();
             }
@@ -542,6 +171,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
+            List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
+            bool inputWorkingstate = true;
+
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
             var metadataList = new List<EntityMetadata>
@@ -557,7 +189,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.OrganizationService = serviceMock.Object;
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.RefreshEntities(true))
+                FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate, true))
                              .Should()
                              .NotThrow();
             }
@@ -580,101 +212,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
-        public void LoadExportConfigFileWithEmptyExportConfigPath()
-        {
-            string exportConfigFilename = string.Empty;
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void LoadExportConfigFileWithInValidExportConfigPath()
-        {
-            string exportConfigFilename = "hello.txt";
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Export Config File"))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("Invalid Export Config File"), Times.Once);
-        }
-
-        [TestMethod]
-        public void LoadExportConfigFileWithValidExportConfigPath()
-        {
-            string exportConfigFilename = "TestData\\ExportConfig.json";
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
-        }
-
-        [TestMethod]
-        public void LoadExportConfigFileThrowsException()
-        {
-            string exportConfigFilename = "TestData\\ExportConfig.json";
-            var exception = new Exception("TestException here!");
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
-                               .Throws(exception);
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(exportConfigFilename))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"), Times.Once);
-        }
-
-        [TestMethod]
         public void LoadSchemaFileWithEmptyExportConfigPath()
         {
             string schemaFilename = string.Empty;
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
             feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                 .Verifiable();
@@ -685,7 +226,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(schemaFilename, workingstate))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(schemaFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
@@ -698,6 +239,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             string configFilename = "hello.txt";
 
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
             feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
@@ -707,7 +250,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
@@ -715,14 +258,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
-        //[Ignore("Will fix")]
         [TestMethod]
         public void LoadSchemaFileWithValidPath()
         {
             string configFilename = "TestData\\testschemafile.xml";
-            //feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
-            //                   .Verifiable();
-            //var sourceList = metadataService.RetrieveEntities(organizationService);
 
             var entityLogicalName = "account";
             var entityMetadata = new EntityMetadata
@@ -736,15 +275,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-
-            //var sourceList = metadataService.RetrieveEntities(organizationService);
-            //metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-            //                    .Returns(metadataList)
-            //                   .Verifiable();
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
             workingstate = true;
 
@@ -754,1745 +285,85 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.MetadataService = metadataServiceMock.Object;
                 systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate))
-                             .Should()
-                             .NotThrow();
-            }
-            /*
-             Moq.MockException: The following setups on mock 'Mock<Capgemini.Xrm.DataMigration.XrmToolBox.Services.IMetadataService:0000001e>' were not matched:
-    IMetadataService x => x.RetrieveEntities(It.IsAny<IOrganizationService>())
-             */
-            //metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()), Times.AtLeastOnce);
-
-            //metadataServiceMock.VerifyAll();
-
-            //feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
-        }
-
-        //[TestMethod]
-        //public void AsyncRunnerCompleteAttributeOperationExceptionIsNull()
-        //{
-        //    //List<ListViewItem> items, Exception exception
-        //    var items = new List<System.Windows.Forms.ListViewItem>();
-        //    items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-        //    items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-        //    Exception exception = null;
-
-        //    feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-        //        .Verifiable();
-
-        //    using (var systemUnderTest = new SchemaWizard())
-        //    {
-        //        systemUnderTest.OrganizationService = serviceMock.Object;
-        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
-        //        systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-        //        //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
-        //        FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
-        //                     .Should()
-        //                     .NotThrow();
-        //    }
-
-        //    feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-        //}
-
-        //[TestMethod]
-        //public void AsyncRunnerCompleteAttributeOperationExceptionIsNotNull()
-        //{
-        //    //List<ListViewItem> items, Exception exception
-        //    var items = new List<System.Windows.Forms.ListViewItem>();
-        //    items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-        //    items.Add(new System.Windows.Forms.ListViewItem("Item2"));
-        //    Exception exception = new Exception();
-
-        //    feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-        //        .Verifiable();
-
-        //    using (var systemUnderTest = new SchemaWizard())
-        //    {
-        //        systemUnderTest.OrganizationService = serviceMock.Object;
-        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
-        //        systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-        //        //AsyncRunnerCompleteAttributeOperation(List<ListViewItem> items, Exception exception)
-        //        FluentActions.Invoking(() => systemUnderTest.AsyncRunnerCompleteAttributeOperation(items, exception))
-        //                     .Should()
-        //                     .NotThrow();
-        //    }
-
-        //    feedbackManagerMock.VerifyAll();
-        //}
-
-        [TestMethod]
-        public void UpdateAttributeMetadataCheckBoxesNonExitingsFilterValue()
-        {
-            string inputEntityLogicalName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, "Fake Logical name"))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.Checked.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void UpdateAttributeMetadataCheckBoxesValueDoesNotExistInEntityRelationships()
-        {
-            string inputEntityLogicalName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, inputEntityLogicalName))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.Checked.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void UpdateAttributeMetadataCheckBoxesIntersectEntityNameDoesNotExist()
-        {
-            string inputEntityLogicalName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact2",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, inputEntityLogicalName))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.Checked.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void UpdateAttributeMetadataCheckBoxesIntersectEntityNameExist()
-        {
-            string inputEntityLogicalName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, inputEntityLogicalName))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.Checked.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void UpdateCheckBoxesRelationshipNullEntityLogicalName()
-        {
-            string inputEntityLogicalName = "account";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, null))
-                             .Should()
-                             .Throw<ArgumentNullException>();
-            }
-        }
-
-        [TestMethod]
-        public void UpdateCheckBoxesRelationshipNonExistingEntityLogicalName()
-        {
-            string inputEntityLogicalName = "account";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
-
-            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, item, inputEntityRelationships, "Random Text"))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
         }
 
         [TestMethod]
-        public void ProcessAllAttributeMetadata()
+        public void ManageWorkingStateSetWorkingStateToTrue()
         {
-            string entityLogicalName = "account_contact";
-            List<string> unmarkedattributes = new List<string>();
-            //ist<System.Windows.Forms.ListViewItem> sourceAttributesList = new List<System.Windows.Forms.ListViewItem>();
-            //AttributeMetadata[] attributes;
-
-            var attributeList = new List<AttributeMetadata>()
+            using (var systemUnderTest = new SchemaWizard())
             {
-                new AttributeMetadata {
-                    LogicalName = "contactattnoentity1" ,
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(true))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void ManageWorkingStateSetWorkingStateToFalse()
+        {
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                systemUnderTest.OrganizationService = serviceMock.Object;
+                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(false))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
+        {
+            var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
+            {
+                relationship
+            };
+
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
+            field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
+        }
+
+        private static void InsertAttributeList(EntityMetadata entityMetadata, List<string> attributeLogicalNames)
+        {
+            var attributeList = new List<AttributeMetadata>();
+
+            foreach (var item in attributeLogicalNames)
+            {
+                var attribute = new AttributeMetadata
+                {
+                    LogicalName = item,
                     DisplayName = new Label
                     {
-                        UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                        UserLocalizedLabel = new LocalizedLabel { Label = item }
                     }
-                }
-            };
+                };
 
-            /*
-              var name = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
-                var typename = attribute.AttributeTypeName == null ? string.Empty : attribute.AttributeTypeName.Value;
-             */
+                var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
+                attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = item });
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                //ProcessAllAttributeMetadata(List<string> unmarkedattributes, List<ListViewItem> sourceAttributesList, AttributeMetadata[] attributes)
-                var actual = systemUnderTest.ProcessAllAttributeMetadata(unmarkedattributes, attributeList.ToArray(), entityLogicalName);
-
-                actual.Count.Should().BeGreaterThan(0);
-            }
-        }
-
-        [TestMethod]
-        public void OnPopulateRelationshipCompletedActionWithException()
-        {
-            Exception exception = new Exception();
-            bool cancelled = false;
-            var result = new List<System.Windows.Forms.ListViewItem>();
-
-            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
-
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs))
-                             .Should()
-                             .NotThrow();
+                attributeList.Add(attribute);
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
-        }
+            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            field.SetValue(entityMetadata, attributeList.ToArray());
 
-        [TestMethod]
-        public void OnPopulateRelationshipCompletedActionWithoutException()
-        {
-            Exception exception = null;
-            bool cancelled = false;
-            var result = new List<System.Windows.Forms.ListViewItem>();
+            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
+            isIntersectField.SetValue(entityMetadata, (bool?)false);
 
-            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
+            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
+            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void FilterAttributes()
-        {
-            var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-            bool showSystemAttributes = true;
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var actual = systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes);
-
-                actual.Length.Should().Be(entityMetadata.Attributes.Length);
-            }
-        }
-
-        [TestMethod]
-        public void FilterAttributesHideSystemAttributes()
-        {
-            var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-            bool showSystemAttributes = false;
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var actual = systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes);
-
-                actual.Length.Should().Be(0);
-            }
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsValidForCreate()
-        {
-            AttributeMetadata attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)true
-            };
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().NotContain("Not createable, ");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsLogicalFalse()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isLogical");
-            isLogicalEntityField.SetValue(attribute, (bool?)false);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().NotContain("Logical attribute, ");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsLogicalTrue()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isLogical");
-            isLogicalEntityField.SetValue(attribute, (bool?)true);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().Contain("Logical attribute, ");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsValidForReadTrue()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_validForRead");
-            isLogicalEntityField.SetValue(attribute, (bool?)true);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().NotContain("Not readable, ");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsValidForReadFalse()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_validForRead");
-            isLogicalEntityField.SetValue(attribute, (bool?)false);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().Contain("Not readable, ");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsValidForCreateAndIsValidForUpdateFalse()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)false,
-                IsValidForUpdate = (bool?)false
-            };
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().Be(System.Drawing.Color.Red);
-        }
-
-        [TestMethod]
-        public void InvalidUpdateIsValidForCreateAndIsValidForUpdateTrue()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)true,
-                IsValidForUpdate = (bool?)true
-            };
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
-        }
-
-        [TestMethod]
-        public void InvalidUpdateDeprecatedVersionNull()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_deprecatedVersion");
-            isLogicalEntityField.SetValue(attribute, null);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().NotContain("DeprecatedVersion:");
-        }
-
-        [TestMethod]
-        public void InvalidUpdateDeprecatedVersionContainsValue()
-        {
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_deprecatedVersion");
-            isLogicalEntityField.SetValue(attribute, "1.0.0.0");
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.InvalidUpdate(attribute, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ToolTipText.Should().Contain("DeprecatedVersion:");
-        }
-
-        [TestMethod]
-        public void PopulateAttributeList()
-        {
-            string entityLogicalName = "contact";
-            List<string> unmarkedattributes = null;
-            AttributeMetadata[] attributes = null;
-            var entityMetadata = new EntityMetadata();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-
-                attributes = systemUnderTest.PopulateAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, unmarkedattributes);
-            }
-
-            unmarkedattributes.Should().BeNull();
-            attributes.Should().BeNull();
-        }
-
-        [TestMethod]
-        public void PopulateAttributeListMetaDataServiceReturnsEnities()
-        {
-            string entityLogicalName = "contact";
-            List<string> unmarkedattributes = null;
-            AttributeMetadata[] attributes = null;
-
-            var entityMetadata = new EntityMetadata();
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-
-                attributes = systemUnderTest.PopulateAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, unmarkedattributes);
-            }
-
-            unmarkedattributes.Should().BeNull();
-            attributes.Should().NotBeNull();
-        }
-
-        [TestMethod]
-        public void IsInvalidForCustomizationIsCustomEntity()
-        {
-            EntityMetadata entity = new EntityMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
-            isLogicalEntityField.SetValue(entity, (bool?)true);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().Be(System.Drawing.Color.DarkGreen);
-        }
-
-        [TestMethod]
-        public void IsInvalidForCustomizationIsIntersect()
-        {
-            EntityMetadata entity = new EntityMetadata
-            {
-                LogicalName = "contactattnoentity1",
-            };
-            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            isLogicalEntityField.SetValue(entity, (bool?)true);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().Be(System.Drawing.Color.Red);
-            item.ToolTipText.Should().Contain("Intersect Entity, ");
-        }
-
-        [TestMethod]
-        public void IsInvalidForCustomizationIsIntersectNull()
-        {
-            EntityMetadata entity = new EntityMetadata
-            {
-                LogicalName = "contactattnoentity1",
-            };
-            //var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            //isLogicalEntityField.SetValue(entity, null);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
-            item.ToolTipText.Should().NotContain("Intersect Entity, ");
-        }
-
-        [TestMethod]
-        public void IsInvalidForCustomizationIsLogicalEntity()
-        {
-            EntityMetadata entity = new EntityMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
-            isLogicalEntityField.SetValue(entity, (bool?)true);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().Be(System.Drawing.Color.Red);
-            item.ToolTipText.Should().Contain("Logical Entity");
-        }
-
-        [TestMethod]
-        public void IsInvalidForCustomizationIsLogicalEntityNull()
-        {
-            EntityMetadata entity = new EntityMetadata
-            {
-                LogicalName = "contactattnoentity1",
-            };
-            //var isLogicalEntityField = entity.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            //isLogicalEntityField.SetValue(entity, null);
-
-            var item = new System.Windows.Forms.ListViewItem("Item1");
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.IsInvalidForCustomization(entity, item))
-                             .Should()
-                             .NotThrow();
-            }
-
-            item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
-            item.ToolTipText.Should().NotContain("Logical Entity");
-        }
-
-        [TestMethod]
-        public void HandleMappingControlItemClickNoListViewItemSelected()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = false;
-            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndMappingsDoesNotContainEntityLogicalName()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = true;
-            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndFilterContainsEntityLogicalName()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = true;
-
-            var entityReference = new EntityReference(inputEntityLogicalName, Guid.NewGuid());
-
-            var mappingItem = new List<DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>();
-            mappingItem.Add(new DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>(entityReference, entityReference));
-
-            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
-            inputMapping.Add(inputEntityLogicalName, mappingItem);
-
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, true))
-                             .Should()
-                             .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void ProcessFilterQueryNoListViewItemSelected()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = false;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent, true))
-                {
-                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
-                             .Should()
-                             .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterDoesNotContainEntityLogicalName()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = true;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent, true))
-                {
-                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
-
-                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
-                             .Should()
-                             .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterContainEntityLogicalName()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = true;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var currentfilter = inputFilterQuery[inputEntityLogicalName];
-
-                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent, true))
-                {
-                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
-
-                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
-                             .Should()
-                             .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void ProcessFilterQueryListViewFilterDialogQueryStringIsEmpty()
-        {
-            string inputEntityLogicalName = "contact";
-            bool listViewItemIsSelected = true;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.Settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var currentfilter = inputFilterQuery[inputEntityLogicalName];
-
-                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent, true))
-                {
-                    filterDialog.QueryString = string.Empty;
-
-                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
-                             .Should()
-                             .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void LoadImportConfigFileWithNoImportConfig()
-        {
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var importConfig = new System.Windows.Forms.TextBox())
-            {
-                using (var systemUnderTest = new SchemaWizard())
-                {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
-                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
-                                 .Should()
-                                 .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
-        public void LoadImportConfigFileWithInvalidImportConfigFilePath()
-        {
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))//It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var importConfig = new System.Windows.Forms.TextBox())
-            {
-                importConfig.Text = "Hello.txt";
-
-                using (var systemUnderTest = new SchemaWizard())
-                {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
-                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
-                                 .Should()
-                                 .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void LoadImportConfigFileWithValidImportConfigFilePathButNoMigrationConfig()
-        {
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))//It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var importConfig = new System.Windows.Forms.TextBox())
-            {
-                importConfig.Text = "TestData\\ImportConfig.json";
-
-                using (var systemUnderTest = new SchemaWizard())
-                {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
-                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
-                                 .Should()
-                                 .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void LoadImportConfigFileWithValidImportConfigFilePathAndMigrationConfig()
-        {
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))//It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var importConfig = new System.Windows.Forms.TextBox())
-            {
-                importConfig.Text = "TestData/ImportConfig2.json";
-
-                using (var systemUnderTest = new SchemaWizard())
-                {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
-                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
-                                 .Should()
-                                 .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void LoadImportConfigFileHandleException()
-        {
-            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))//It.IsAny<string>()))
-                                .Throws<Exception>();
-
-            //feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
-            //                    .Verifiable();
-
-            using (var importConfig = new System.Windows.Forms.TextBox())
-            {
-                importConfig.Text = "TestData/ImportConfig2.json";
-
-                using (var systemUnderTest = new SchemaWizard())
-                {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
-                    systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                    FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(importConfig, inputMapper))
-                                 .Should()
-                                 .NotThrow();
-                }
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Exactly(2));
-        }
-
-        [TestMethod]
-        public void AreCrmEntityFieldsSelectedCheckedEntityCountIsZero()
-        {
-            var inputCheckedEntity = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
-
-                actual.Should().BeFalse();
-            }
-        }
-
-        [TestMethod]
-        public void AreCrmEntityFieldsSelected()
-        {
-            var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
-
-                actual.Should().BeTrue();
-                metadataServiceMock.VerifyAll();
-            }
-        }
-
-        [TestMethod]
-        public void CollectCrmEntityFieldsCheckedEntityCountIsZero()
-        {
-            var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-            var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-        }
-
-        [TestMethod]
-        public void CollectCrmEntityFields()
-        {
-            var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-
-                metadataServiceMock.VerifyAll();
-            }
-        }
-
-        [TestMethod]
-        public void StoreCrmEntityData()
-        {
-            var entityLogicalName = "contact";
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
-            var crmEntityList = new List<Capgemini.Xrm.DataMigration.Model.CrmEntity>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityData(crmEntity, entityMetadata, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-
-                crmEntityList.Count.Should().Be(1);
-            }
-        }
-
-        [TestMethod]
-        public void CollectCrmEntityRelationShipNoInputEntityRelationships()
-        {
-            var entityLogicalName = "contact";
-            //var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            //var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
-            //var crmEntityList = new List<Capgemini.Xrm.DataMigration.Model.CrmEntity>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityRelationShip(entityMetadata, crmEntity, inputEntityRelationships))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmEntity.CrmRelationships.Count.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void CollectCrmEntityRelationShipWithInputEntityRelationships()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var entityRelationshipSet = new HashSet<string>() { intersectEntityName };
-
-            inputEntityRelationships.Add(entityLogicalName, entityRelationshipSet);
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityRelationShip(entityMetadata, crmEntity, inputEntityRelationships))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmEntity.CrmRelationships.Count.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void StoreCrmEntityRelationShipData()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            relationshipList.Count.Should().Be(1);
-            relationshipList[0].RelatedEntityName.Should().Be(relationship.IntersectEntityName);
-            relationshipList[0].RelationshipName.Should().Be(relationship.IntersectEntityName);
-            relationshipList[0].IsReflexive.Should().Be(relationship.IsCustomizable.Value);
-            relationshipList[0].ManyToMany.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void CollectCrmAttributesFields()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmEntity.CrmFields.Count.Should().Be(3);
-        }
-
-        [TestMethod]
-        public void CollectCrmAttributesFieldsWithNoInputEntityAttributes()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmEntity.CrmFields.Count.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void StoreAttributeMetadataWithNullInputEntityAttributes()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            Dictionary<string, HashSet<string>> inputEntityAttributes = null;
-            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            string primaryAttribute = "contactId";
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmFieldList.Count.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void StoreAttributeMetadataWithNoInputEntityAttributes()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            //var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            //inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            string primaryAttribute = "contactId";
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmFieldList.Count.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void StoreAttributeMetadata()
-        {
-            var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = intersectEntityName,
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid",
-                IsCustomizable = new BooleanManagedProperty() { Value = true }
-            };
-
-            var relationshipList = new List<Capgemini.Xrm.DataMigration.Model.CrmRelationship>();
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-            inputEntityAttributes.Add(entityLogicalName, attributeSet);
-            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
-
-            string primaryAttribute = "contactId";
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-            InsertAttributeList(entityMetadata, new List<string> { primaryAttribute, "firstname", "lastname" });
-
-            var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity
-            {
-                Name = entityLogicalName,
-                DisplayName = entityLogicalName
-            };
-
-            var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmFieldList.Count.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void StoreAttributePrimaryKey()
-        {
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField() { PrimaryKey = false, FieldName = primaryAttribute };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreAttributePrimaryKey(primaryAttribute, crmField))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmField.PrimaryKey.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public void StoreAttributePrimaryKeyWithWrongPrimaryAttributeName()
-        {
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField() { PrimaryKey = false, FieldName = "contactId2" };
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreAttributePrimaryKey(primaryAttribute, crmField))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            crmField.PrimaryKey.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public void StoreLookUpAttributeNotEntityReference()
-        {
-            var attributeLogicalName = "contactId";
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
-            {
-                PrimaryKey = false,
-                FieldName = primaryAttribute,
-                FieldType = "string"
-            };
-
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = attributeLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
-                }
-            };
-
-            var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
-            attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
-                              .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
-        }
-
-        [TestMethod]
-        public void StoreLookUpAttributeNotLookupAttributeMetadata()
-        {
-            var attributeLogicalName = "contactId";
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
-            {
-                PrimaryKey = false,
-                FieldName = primaryAttribute,
-                FieldType = "entityreference"
-            };
-
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = attributeLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
-                }
-            };
-
-            var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
-            attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
-        }
-
-        [TestMethod]
-        public void StoreLookUpAttributeWithLookupAttributeMetadata()
-        {
-            var attributeLogicalName = "contactId";
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
-            {
-                PrimaryKey = false,
-                FieldName = primaryAttribute,
-                FieldType = "entityreference"
-            };
-
-            var attribute = new LookupAttributeMetadata
-            {
-                LogicalName = attributeLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
-                }
-            };
-            attribute.Targets = new List<string> { "Test" }.ToArray();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
-            crmField.LookupType.Should().Be("Test");
-        }
-
-        [TestMethod]
-        public void StoreLookUpAttributeWithLookupAttributeMetadataButEmptyTargetList()
-        {
-            var attributeLogicalName = "contactId";
-            string primaryAttribute = "contactId";
-            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
-            {
-                PrimaryKey = false,
-                FieldName = primaryAttribute,
-                FieldType = "entityreference"
-            };
-
-            var attribute = new LookupAttributeMetadata
-            {
-                LogicalName = attributeLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = attributeLogicalName }
-                }
-            };
-            //attribute.Targets = new List<string> { "Test" }.ToArray();
-
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
-                               .Verifiable();
-
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
-
-                FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
-                                 .Should()
-                                 .NotThrow();
-            }
-
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
-            crmField.LookupType.Should().BeNull();
+            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
+            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
         }
 
         private void SetupMockObjects(string entityLogicalName)
@@ -2527,55 +398,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             };
 
             return entityMetadata;
-        }
-
-        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
-        {
-            var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
-            {
-                relationship
-            };
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
-            field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
-        }
-
-        private static void InsertAttributeList(EntityMetadata entityMetadata, List<string> attributeLogicalNames)
-        {
-            var attributeList = new List<AttributeMetadata>();
-            //{
-            //    new AttributeMetadata { LogicalName = "contactattnoentity1" }
-            //};
-
-            foreach (var item in attributeLogicalNames)
-            {
-                var attribute = new AttributeMetadata
-                {
-                    LogicalName = item,
-                    DisplayName = new Label
-                    {
-                        UserLocalizedLabel = new LocalizedLabel { Label = item }
-                    }
-                };
-
-                var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
-                attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = item });
-
-                //AttributeTypeName
-                attributeList.Add(attribute);
-            }
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
-            field.SetValue(entityMetadata, attributeList.ToArray());
-
-            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            isIntersectField.SetValue(entityMetadata, (bool?)false);
-
-            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
-            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
-
-            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
-            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
         }
     }
 }

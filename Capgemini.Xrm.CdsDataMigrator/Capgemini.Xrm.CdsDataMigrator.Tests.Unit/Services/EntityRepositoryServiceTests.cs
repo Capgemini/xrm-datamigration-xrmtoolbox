@@ -16,18 +16,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
     {
         private Mock<IOrganizationService> serviceMock;
 
-        private MetadataService systemUnderTest;
+        private EntityRepositoryService systemUnderTest;
 
         [TestInitialize]
         public void Setup()
         {
             serviceMock = new Mock<IOrganizationService>();
+
+            systemUnderTest = new EntityRepositoryService(serviceMock.Object);
         }
 
         [TestMethod]
         public void EntityRepositoryServiceTest()
         {
-            var systemUnderTest = new EntityRepositoryService(serviceMock.Object);
+            systemUnderTest = new EntityRepositoryService(serviceMock.Object);
 
             systemUnderTest.Should().NotBeNull();
         }
@@ -35,8 +37,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         [TestMethod]
         public void InstantiateEntityRepository()
         {
-            var systemUnderTest = new EntityRepositoryService(serviceMock.Object);
-
             var actual = systemUnderTest.InstantiateEntityRepository(false);
 
             actual.Should().NotBeNull();
@@ -45,11 +45,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         [TestMethod]
         public void InstantiateEntityRepositoryCloneConnection()
         {
-            var systemUnderTest = new EntityRepositoryService(serviceMock.Object);
-
             FluentActions.Invoking(() => systemUnderTest.InstantiateEntityRepository(true))
-                         .Should()
-                         .Throw<InvalidCastException>();
+             .Should()
+             .Throw<InvalidCastException>();
         }
     }
 }

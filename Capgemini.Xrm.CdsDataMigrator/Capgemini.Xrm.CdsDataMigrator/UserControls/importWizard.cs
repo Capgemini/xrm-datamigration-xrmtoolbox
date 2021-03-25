@@ -1,14 +1,11 @@
-﻿using Capgemini.DataMigration.Resiliency.Polly;
-using Capgemini.Xrm.DataMigration.Config;
+﻿using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
-using Capgemini.Xrm.DataMigration.Repositories;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
 using MyXrmToolBoxPlugin3;
 using System;
 using System.Collections.Generic;
@@ -109,21 +106,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             stepWizardControl1.Pages[3].AllowNext = true;
         }
 
-        public void WizardNavigation(/*WizardButtons wizardButtons, */System.Windows.Forms.Label folderPathValidationLabel, TextBox sourceDataLocationTextBox, AeroWizard.WizardPage selectedPage, AeroWizard.WizardPageContainer pageContainer)
+        public void WizardNavigation(System.Windows.Forms.Label folderPathValidationLabel, TextBox sourceDataLocationTextBox, AeroWizard.WizardPage selectedPage, AeroWizard.WizardPageContainer pageContainer)
         {
-            if (/*wizardButtons.PageContainer.SelectedPage*/selectedPage.Name == "wizardPage2")
+            if (selectedPage.Name == "wizardPage2")
             {
                 ValidationHelpers.IsTextControlNotEmpty(folderPathValidationLabel, sourceDataLocationTextBox);
 
                 if (!folderPathValidationLabel.Visible)
                 {
-                    /*wizardButtons.PageContainer*/
                     pageContainer.NextPage();
                 }
             }
-            else if (!/*wizardButtons.PageContainer.SelectedPage*/selectedPage.IsFinishPage)
+            else if (!selectedPage.IsFinishPage)
             {
-                /*wizardButtons.PageContainer*/
                 pageContainer.NextPage();
             }
         }

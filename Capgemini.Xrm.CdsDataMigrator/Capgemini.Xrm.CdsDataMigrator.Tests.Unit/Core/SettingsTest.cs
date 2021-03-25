@@ -46,12 +46,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
                 organisation.Mappings.Add(mapping);
             }
 
-            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>
-            (Guid.NewGuid(), new Organisations() { }));
-            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>
-            (organisation.Mappings[1].Key.Id, organisation));
-            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>
-            (Guid.NewGuid(), new Organisations() { }));
+            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>(Guid.NewGuid(), new Organisations() { }));
+            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>(organisation.Mappings[1].Key.Id, organisation));
+            systemUnderTest.Organisations.Add(new KeyValuePair<Guid, Organisations>(Guid.NewGuid(), new Organisations() { }));
 
             var actual = systemUnderTest[organisation.Mappings[1].Key.Id.ToString()];
 

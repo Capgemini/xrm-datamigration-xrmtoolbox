@@ -403,8 +403,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             string entityName = "contactattnoattributes";
 
-            //selectedValue = "contactattnoattributes1";
-
             mappings = new Dictionary<string, Dictionary<string, List<string>>>();
             var values = new Dictionary<string, List<string>>
             {
@@ -448,8 +446,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         public void ValidateLookupColumnUnsupportedAttributeTypeCode()
         {
             string entityName = "contactattnoattributes";
-
-            //selectedValue = "contactattnoattributes1";
 
             mappings = new Dictionary<string, Dictionary<string, List<string>>>();
             var values = new Dictionary<string, List<string>>

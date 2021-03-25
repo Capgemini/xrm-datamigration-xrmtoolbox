@@ -87,7 +87,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         public void ValidateLookupColumn(int rowIndex, string newValue, AttributeMetadata[] allAttributes)
         {
-            //var allAttributes = (AttributeMetadata[])dgvMappings.Rows[rowIndex].Tag;
             var attr = allAttributes.SingleOrDefault(a => a.LogicalName == newValue);
 
             string[] fields = null;
@@ -101,25 +100,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
             if (attr.AttributeType == AttributeTypeCode.Uniqueidentifier)
             {
                 logicalName = attr.EntityLogicalName;
-                // var entitymeta = metadataService.RetrieveEntities(attr.EntityLogicalName, orgService);
-                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
-            //Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
+            // Temporary fix to support Owner as SystemUser only, needs fixing data migration engine to support OwningUser , OwningTeam or OwningBu
             else if (attr.AttributeType == AttributeTypeCode.Owner)
             {
                 logicalName = "systemuser";
-                //var entitymeta = metadataService.RetrieveEntities("systemuser", orgService);
-                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
             else if (attr.AttributeType == AttributeTypeCode.Lookup)
             {
                 var lookup = attr as LookupAttributeMetadata;
                 logicalName = lookup.Targets[0];
-                //var entitymeta = metadataService.RetrieveEntities(lookup.Targets[0], orgService);
-                // fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
-                //(dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
             }
             else
             {

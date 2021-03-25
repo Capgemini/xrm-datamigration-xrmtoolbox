@@ -16,15 +16,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private static readonly Color HcComment = Color.GreenYellow;
         private static readonly Color HcInnerText = Color.Black;
 
-        public FilterEditor(string currentfilter, FormStartPosition formStartPosition, bool testMode = false)
+        public FilterEditor(string currentfilter, FormStartPosition formStartPosition)
         {
             InitializeComponent();
             Filter = currentfilter;
             StartPosition = FormStartPosition.CenterParent;
-            TestMode = testMode;
         }
-
-        public bool TestMode { get; private set; }
 
         public string QueryString { get; set; }
 
