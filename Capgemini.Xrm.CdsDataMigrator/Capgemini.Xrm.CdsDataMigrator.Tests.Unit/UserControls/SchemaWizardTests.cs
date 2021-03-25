@@ -80,122 +80,123 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             }
         }
 
-        [TestMethod]
-        public void PopulateRelationshipListViewItemSelected()
-        {
-            var entityLogicalName = Guid.NewGuid().ToString();
-            System.Windows.Forms.ListViewItem listViewItemSelected = new System.Windows.Forms.ListViewItem();
+        //[Ignore("delete")]
+        //[TestMethod]
+        //public void PopulateRelationshipListViewItemSelected()
+        //{
+        //    var entityLogicalName = Guid.NewGuid().ToString();
+        //    System.Windows.Forms.ListViewItem listViewItemSelected = new System.Windows.Forms.ListViewItem();
 
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = entityLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
-                }
-            };
+        //    var entityMetadata = new EntityMetadata
+        //    {
+        //        LogicalName = entityLogicalName,
+        //        DisplayName = new Label
+        //        {
+        //            UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+        //        }
+        //    };
 
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
+        //    var relationship = new ManyToManyRelationshipMetadata
+        //    {
+        //        Entity1LogicalName = "account",
+        //        Entity1IntersectAttribute = "accountid",
+        //        IntersectEntityName = "account_contact",
+        //        Entity2LogicalName = "contact",
+        //        Entity2IntersectAttribute = "contactid"
+        //    };
 
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
+        //    InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
+        //    InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
+        //    using (var systemUnderTest = new SchemaWizard())
+        //    {
+        //        systemUnderTest.OrganizationService = serviceMock.Object;
+        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, listViewItemSelected))
-                        .Should()
-                        .NotThrow();
-            }
+        //        FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, listViewItemSelected))
+        //                .Should()
+        //                .NotThrow();
+        //    }
 
-            serviceMock.VerifyAll();
-        }
+        //    serviceMock.VerifyAll();
+        //}
 
-        [Ignore("Will fix")]
-        [TestMethod]
-        public void RefreshEntitiesUsedefaultParamater()
-        {
-            var entityLogicalName = "contact";
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = entityLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
-                }
-            };
+        //[Ignore("Will fix")]
+        //[TestMethod]
+        //public void RefreshEntitiesUsedefaultParamater()
+        //{
+        //    var entityLogicalName = "contact";
+        //    var entityMetadata = new EntityMetadata
+        //    {
+        //        LogicalName = entityLogicalName,
+        //        DisplayName = new Label
+        //        {
+        //            UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+        //        }
+        //    };
 
-            List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
-            bool inputWorkingstate = true;
+        //    List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
+        //    bool inputWorkingstate = true;
 
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
+        //    InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
+        //    var metadataList = new List<EntityMetadata>
+        //    {
+        //        entityMetadata
+        //    };
+        //    metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+        //                        .Returns(metadataList)
+        //                        .Verifiable();
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate))
-                             .Should()
-                             .NotThrow();
-            }
+        //    using (var systemUnderTest = new SchemaWizard())
+        //    {
+        //        FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate))
+        //                     .Should()
+        //                     .NotThrow();
+        //    }
 
-            metadataServiceMock.VerifyAll();
-        }
+        //    metadataServiceMock.VerifyAll();
+        //}
 
-        [Ignore("Will fix")]
-        [TestMethod]
-        public void RefreshEntitiesSetParamaterToTrue()
-        {
-            var entityLogicalName = "contact";
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = entityLogicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
-                }
-            };
+        //[Ignore("Will fix")]
+        //[TestMethod]
+        //public void RefreshEntitiesSetParamaterToTrue()
+        //{
+        //    var entityLogicalName = "contact";
+        //    var entityMetadata = new EntityMetadata
+        //    {
+        //        LogicalName = entityLogicalName,
+        //        DisplayName = new Label
+        //        {
+        //            UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+        //        }
+        //    };
 
-            List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
-            bool inputWorkingstate = true;
+        //    List<EntityMetadata> inputCachedMetadata = new List<EntityMetadata>();
+        //    bool inputWorkingstate = true;
 
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
+        //    InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
+        //    var metadataList = new List<EntityMetadata>
+        //    {
+        //        entityMetadata
+        //    };
+        //    metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+        //                        .Returns(metadataList)
+        //                        .Verifiable();
 
-            using (var systemUnderTest = new SchemaWizard())
-            {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
+        //    using (var systemUnderTest = new SchemaWizard())
+        //    {
+        //        systemUnderTest.OrganizationService = serviceMock.Object;
+        //        systemUnderTest.MetadataService = metadataServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate, true))
-                             .Should()
-                             .NotThrow();
-            }
+        //        FluentActions.Invoking(() => systemUnderTest.RefreshEntities(inputCachedMetadata, inputWorkingstate, true))
+        //                     .Should()
+        //                     .NotThrow();
+        //    }
 
-            metadataServiceMock.VerifyAll();
-        }
+        //    metadataServiceMock.VerifyAll();
+        //}
 
         [TestMethod]
         public void ClearMemory()
