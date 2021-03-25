@@ -38,11 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void GetEntityLogicalNameNullListViewItem()
         {
-            var entityMetadata = new EntityMetadata() { LogicalName = "account" };
-            var entityitem = new System.Windows.Forms.ListViewItem
-            {
-                Tag = entityMetadata
-            };
+            System.Windows.Forms.ListViewItem entityitem = null;
 
             var actual = systemUnderTest.GetEntityLogicalName(entityitem);
 
@@ -55,7 +51,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityMetadata = new EntityMetadata() { LogicalName = "account" };
             var entityitem = new System.Windows.Forms.ListViewItem
             {
-                Tag = entityMetadata
+                Tag = null
             };
             var actual = systemUnderTest.GetEntityLogicalName(entityitem);
 
