@@ -1,6 +1,7 @@
 ﻿using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Model;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
@@ -20,9 +21,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public partial class SchemaWizardDelegate
     {
-        public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, IOrganizationService organizationService, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
-            var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, service);
+            var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, organizationService, dataMigratorExceptionHelper);
             var sourceAttributesList = new List<ListViewItem>();
             if (entityMetaData != null && entityMetaData.ManyToManyRelationships != null && entityMetaData.ManyToManyRelationships.Any())
             {
@@ -48,9 +49,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return logicalName;
         }
 
-        public AttributeMetadata[] GetAttributeList(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, bool showSystemAttributes)
+        public AttributeMetadata[] GetAttributeList(string entityLogicalName, IOrganizationService organizationService, IMetadataService metadataService, bool showSystemAttributes, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
-            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, service);
+            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, organizationService, dataMigratorExceptionHelper);
 
             var attributes = FilterAttributes(entitymeta, showSystemAttributes);
 
@@ -161,8 +162,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         return;
                     }
 
-                    inputFilterQuery = configFile.CrmMigrationToolSchemaFilters;
-                    inputLookupMaping = configFile.LookupMapping;
+                    inputFilterQuery.Clear();
+                    inputFilterQuery.AddRange(configFile.CrmMigrationToolSchemaFilters);
+
+                    inputLookupMaping.Clear();
+                    inputLookupMaping.AddRange(configFile.LookupMapping);
 
                     feedbackManager.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File");
                 }
@@ -204,7 +208,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public AttributeMetadata[] FilterAttributes(EntityMetadata entityMetadata, bool showSystemAttributes)
         {
-            AttributeMetadata[] attributes = entityMetadata.Attributes != null ? entityMetadata.Attributes.ToArray() : null;
+            AttributeMetadata[] attributes = entityMetadata.Attributes?.ToArray();
 
             if (attributes != null && !showSystemAttributes)
             {
@@ -475,7 +479,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
         }
 
-        public bool AreCrmEntityFieldsSelected(IMetadataService metadataService, HashSet<string> inputCheckedEntity, IOrganizationService organizationService, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
+        public bool AreCrmEntityFieldsSelected(IMetadataService metadataService, HashSet<string> inputCheckedEntity, IOrganizationService organizationService, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
             var fieldsSelected = false;
             if (inputCheckedEntity.Count > 0)
@@ -485,7 +489,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, organizationService);
+                    var sourceList = metadataService.RetrieveEntities(item, organizationService, dataMigratorExceptionHelper);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
 
                     if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
@@ -503,7 +507,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return fieldsSelected;
         }
 
-        public void CollectCrmEntityFields(IMetadataService metadataService, IOrganizationService organizationService, HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
+        public void CollectCrmEntityFields(IMetadataService metadataService, IOrganizationService organizationService, HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
             if (inputCheckedEntity.Count > 0)
             {
@@ -512,7 +516,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, organizationService);
+                    var sourceList = metadataService.RetrieveEntities(item, organizationService, dataMigratorExceptionHelper);
                     StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
                 }
 
@@ -630,9 +634,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             if (crmField.FieldType.Equals("entityreference", StringComparison.InvariantCulture))
             {
-                var lookUpAttribute = attribute as LookupAttributeMetadata;
-
-                if (lookUpAttribute != null)
+                if (attribute is LookupAttributeMetadata lookUpAttribute)
                 {
                     if (lookUpAttribute.Targets != null && lookUpAttribute.Targets.Any())
                     {

@@ -233,6 +233,8 @@
     <Compile Include="Attributes\ValidatedNotNullAttribute.cs" />
     <Compile Include="Core\AttributeTypeMapping.cs" />
     <Compile Include="Core\EntitySettings.cs" />
+    <Compile Include="Exceptions\DataMigratorExceptionHelper.cs" />
+    <Compile Include="Exceptions\IDataMigratorExceptionHelper.cs" />
     <Compile Include="Core\Item.cs" />
     <Compile Include="Core\ListViewItemComparer.cs" />
     <Compile Include="Services\FeedbackManager.cs" />

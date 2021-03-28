@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
@@ -31,6 +32,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly Dictionary<string, List<Item<EntityReference, EntityReference>>> mapping = new Dictionary<string, List<Item<EntityReference, EntityReference>>>();
         private readonly Dictionary<string, HashSet<string>> entityAttributes = new Dictionary<string, HashSet<string>>();
         private readonly Dictionary<string, HashSet<string>> entityRelationships = new Dictionary<string, HashSet<string>>();
+        private readonly Dictionary<string, string> filterQuery = new Dictionary<string, string>();
+        private readonly Dictionary<string, Dictionary<string, List<string>>> lookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
+        private readonly Dictionary<string, Dictionary<Guid, Guid>> mapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+        private readonly SchemaWizardDelegate schemaWizardDelegate = new SchemaWizardDelegate();
 
         private bool workingstate;
 
@@ -38,18 +43,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private Guid organisationId = Guid.Empty;
 
         private string entityLogicalName;
-        private Dictionary<string, string> filterQuery = new Dictionary<string, string>();
-
-        private Dictionary<string, Dictionary<string, List<string>>> lookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
-        private Dictionary<string, Dictionary<Guid, Guid>> mapper = new Dictionary<string, Dictionary<Guid, Guid>>();
         private List<EntityMetadata> cachedMetadata = null;
-        private readonly SchemaWizardDelegate schemaWizardDelegate;
 
         public SchemaWizard()
         {
             InitializeComponent();
-
-            schemaWizardDelegate = new SchemaWizardDelegate();
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -59,6 +57,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         public IMetadataService MetadataService { get; set; }
 
         public IFeedbackManager FeedbackManager { get; set; }
+
+        public IDataMigratorExceptionHelper DataMigratorExceptionHelper { get; set; }
 
         public Core.Settings Settings { get; set; }
 
@@ -92,7 +92,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         bwFill.DoWork += (sender, e) =>
                         {
-                            e.Result = schemaWizardDelegate.PopulateRelationshipAction(entityLogicalName, service, metadataService, inputEntityRelationships);
+                            e.Result = schemaWizardDelegate.PopulateRelationshipAction(entityLogicalName, service, metadataService, inputEntityRelationships, DataMigratorExceptionHelper);
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
@@ -195,7 +195,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         bwFill.DoWork += (sender, e) =>
                         {
                             var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            AttributeMetadata[] attributes = schemaWizardDelegate.GetAttributeList(entityLogicalName, service, metadataService, cbShowSystemAttributes.Checked);
+                            AttributeMetadata[] attributes = schemaWizardDelegate.GetAttributeList(entityLogicalName, service, metadataService, cbShowSystemAttributes.Checked, DataMigratorExceptionHelper);
 
                             e.Result = schemaWizardDelegate.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
                         };
@@ -223,7 +223,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             tsbtFilters.ForeColor = string.IsNullOrEmpty(filter) ? Color.Black : Color.Blue;
         }
 
-        public void PopulateEntities(bool working)
+        private void PopulateEntities(bool working)
         {
             if (!working)
             {
@@ -260,9 +260,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             schemaWizardDelegate.HandleMappingControlItemClick(FeedbackManager, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
         }
 
-        private void OpenMappingForm(IMetadataService metadataService)
+        private void OpenMappingForm(IMetadataService metadataService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
-            using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService)
+            using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService, dataMigratorExceptionHelper)
             {
                 StartPosition = FormStartPosition.CenterParent
             })
@@ -402,9 +402,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TbSaveSchemaClick(object sender, EventArgs e)
         {
-            if (schemaWizardDelegate.AreCrmEntityFieldsSelected(MetadataService, checkedEntity, OrganizationService, entityRelationships, entityAttributes, attributeMapping, FeedbackManager))
+            if (schemaWizardDelegate.AreCrmEntityFieldsSelected(MetadataService, checkedEntity, OrganizationService, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper))
             {
-                schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager);
+                schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper);
                 GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
                 crmSchemaConfiguration.Entities.Clear();
             }
@@ -626,14 +626,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             schemaWizardDelegate.GenerateImportConfigFile(FeedbackManager, tbImportConfig, mapper);
             schemaWizardDelegate.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping);
-            schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager);
+            schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper);
             GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
             crmSchemaConfiguration.Entities.Clear();
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
         {
-            OpenMappingForm(MetadataService);
+            OpenMappingForm(MetadataService, DataMigratorExceptionHelper);
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Extensions;
 using McTools.Xrm.Connection;
@@ -48,7 +49,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
             return entities;
         }
 
-        public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService)
+        public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
             orgService.ThrowArgumentNullExceptionIfNull(nameof(orgService));
 
@@ -75,7 +76,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
             }
             catch (Exception error)
             {
-                string errorMessage = error.Message;//TODO: fix dependency issue!!!/**/ CrmExceptionHelper.GetErrorMessage(error, false);
+                string errorMessage = dataMigratorExceptionHelper.GetErrorMessage(error, false);
                 throw new OrganizationalServiceException($"Error while retrieving entity: {errorMessage}");
             }
         }

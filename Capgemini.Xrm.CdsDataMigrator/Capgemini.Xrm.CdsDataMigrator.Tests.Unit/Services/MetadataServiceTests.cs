@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
@@ -15,6 +16,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
     public class MetadataServiceTests
     {
         private Mock<IOrganizationService> serviceMock;
+        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
         private List<EntityMetadata> metaDataList;
         private RetrieveAllEntitiesResponse entityResponse;
 
@@ -24,6 +26,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         public void Setup()
         {
             serviceMock = new Mock<IOrganizationService>();
+            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
 
             systemUnderTest = new MetadataService();
 
@@ -77,7 +80,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         {
             string logicalName = "account";
 
-            FluentActions.Invoking(() => systemUnderTest.RetrieveEntities(logicalName, null))
+            FluentActions.Invoking(() => systemUnderTest.RetrieveEntities(logicalName, null, dataMigratorExceptionHelperMock.Object))
                 .Should()
                 .Throw<ArgumentNullException>();
         }
@@ -91,7 +94,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
 
             serviceMock.Setup(a => a.Execute(It.IsAny<OrganizationRequest>())).Returns(response);
 
-            var actual = systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object);
+            var actual = systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object, dataMigratorExceptionHelperMock.Object);
 
             serviceMock.Verify(a => a.Execute(It.IsAny<OrganizationRequest>()), Times.Once);
             actual.Should().BeNull();
@@ -106,9 +109,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
 
             serviceMock.Setup(a => a.Execute(It.IsAny<OrganizationRequest>())).Returns(response);
 
-            systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object);
+            systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object, dataMigratorExceptionHelperMock.Object);
 
-            var actual = systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object);
+            var actual = systemUnderTest.RetrieveEntities(logicalName, serviceMock.Object, dataMigratorExceptionHelperMock.Object);
 
             serviceMock.Verify(a => a.Execute(It.IsAny<OrganizationRequest>()));
             actual.Should().BeNull();
@@ -213,7 +216,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
                     .Returns(response)
                     .Verifiable();
 
-            var actual = systemUnderTest.RetrieveEntities(entityLogicalName, serviceMock.Object);
+            var actual = systemUnderTest.RetrieveEntities(entityLogicalName, serviceMock.Object, dataMigratorExceptionHelperMock.Object);
 
             actual.LogicalName.Should().Be(entityLogicalName);
             serviceMock.VerifyAll();
@@ -236,7 +239,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
                     .Returns(response)
                     .Verifiable();
 
-            var actual = systemUnderTest.RetrieveEntities(entityLogicalName, serviceMock.Object);
+            var actual = systemUnderTest.RetrieveEntities(entityLogicalName, serviceMock.Object, dataMigratorExceptionHelperMock.Object);
 
             actual.Should().BeNull();
             serviceMock.VerifyAll();

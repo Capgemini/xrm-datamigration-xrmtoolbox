@@ -6,6 +6,7 @@ using System.Threading;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using McTools.Xrm.Connection;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 
 namespace MyXrmToolBoxPlugin3
 {
@@ -37,6 +38,7 @@ namespace MyXrmToolBoxPlugin3
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.FeedbackManager = new FeedbackManager();
+                    SchemaGeneratorWizard.DataMigratorExceptionHelper = new DataMigratorExceptionHelper();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 

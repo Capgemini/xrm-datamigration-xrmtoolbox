@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
@@ -18,15 +19,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private readonly Dictionary<string, Dictionary<string, List<string>>> mappings;
         private readonly IOrganizationService orgService;
         private readonly IMetadataService metadataService;
+        private readonly IDataMigratorExceptionHelper dataMigratorExceptionHelper;
         private readonly List<EntityMetadata> metaDataCache;
         private readonly string selctedValue;
 
-        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue, IMetadataService metadataService)
+        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue, IMetadataService metadataService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
         {
             metaDataCache = metadata.ToList();
             selctedValue = selectedValue;
             this.mappings = mappings;
             this.orgService = orgService;
+            this.dataMigratorExceptionHelper = dataMigratorExceptionHelper;
             InitializeComponent();
 
             Column1.Items.AddRange(metaDataCache.Select(e => e.LogicalName).OrderBy(n => n).ToArray());
@@ -116,7 +119,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
                 throw new MappingException($"schema logical name {newValue}, not supported attribute type: {attr.AttributeType} .");
             }
 
-            var entitymeta = metadataService.RetrieveEntities(logicalName, orgService);
+            var entitymeta = metadataService.RetrieveEntities(logicalName, orgService, dataMigratorExceptionHelper);
             fields = entitymeta.Attributes.OrderBy(p => p.LogicalName).Select(a => a.LogicalName).ToArray();
             (dgvMappings.Rows[rowIndex].Cells[2] as DataGridViewComboBoxCell).DataSource = fields;
         }
@@ -141,7 +144,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
 
         private void ValidateEntitytColumn(int rowIndex, string newValue)
         {
-            var entitymeta = metadataService.RetrieveEntities(newValue, orgService);
+            var entitymeta = metadataService.RetrieveEntities(newValue, orgService, dataMigratorExceptionHelper);
             var lookups = entitymeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
 
             if (dgvMappings.Rows != null && dgvMappings.Rows.Count > rowIndex && dgvMappings.Rows[rowIndex].Cells.Count > 0)

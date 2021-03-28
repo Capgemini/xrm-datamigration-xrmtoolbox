@@ -1,5 +1,5 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
-using Capgemini.Xrm.DataMigration.Model;
+﻿using Capgemini.Xrm.DataMigration.Model;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

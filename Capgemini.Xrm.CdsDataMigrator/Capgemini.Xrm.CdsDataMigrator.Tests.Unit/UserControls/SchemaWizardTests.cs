@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using FluentAssertions;
@@ -18,7 +19,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         private Mock<IOrganizationService> serviceMock;
         private Mock<IMetadataService> metadataServiceMock;
         private Mock<IFeedbackManager> feedbackManagerMock;
+
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
+
         private bool workingstate;
 
         [TestInitialize]
@@ -249,7 +252,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 entityMetadata
             };
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 

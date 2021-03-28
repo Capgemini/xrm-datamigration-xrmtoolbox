@@ -1,8 +1,8 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
+﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {

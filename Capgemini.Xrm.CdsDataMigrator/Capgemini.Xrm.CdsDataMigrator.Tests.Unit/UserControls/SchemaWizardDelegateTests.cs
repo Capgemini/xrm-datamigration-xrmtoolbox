@@ -1,4 +1,9 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
 using FluentAssertions;
@@ -6,10 +11,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
@@ -19,6 +20,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         private Mock<IOrganizationService> serviceMock;
         private Mock<IMetadataService> metadataServiceMock;
         private Mock<IFeedbackManager> feedbackManagerMock;
+        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
 
         private SchemaWizardDelegate systemUnderTest;
@@ -29,6 +31,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             serviceMock = new Mock<IOrganizationService>();
             metadataServiceMock = new Mock<IMetadataService>();
             feedbackManagerMock = new Mock<IFeedbackManager>();
+            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
 
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
 
@@ -48,7 +51,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void GetEntityLogicalNameInstantiatedListViewItemWithNullTag()
         {
-            var entityMetadata = new EntityMetadata() { LogicalName = "account" };
             var entityitem = new System.Windows.Forms.ListViewItem
             {
                 Tag = null
@@ -184,11 +186,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             string entityLogicalName = "contact";
             var entityMetadata = new EntityMetadata();
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
+            var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, dataMigratorExceptionHelperMock.Object);
 
             actual.Count.Should().Be(0);
 
@@ -200,9 +202,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void PopulateRelationshipAction()
         {
             string entityLogicalName = "account_contact";
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            var items = new List<System.Windows.Forms.ListViewItem>
+            {
+                new System.Windows.Forms.ListViewItem("Item1"),
+                new System.Windows.Forms.ListViewItem("Item2")
+            };
 
             var entityMetadata = new EntityMetadata();
 
@@ -217,7 +221,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -225,7 +229,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 systemUnderTest.PopulateEntitiesListView(items, null, null, listView, feedbackManagerMock.Object);
 
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships);
+                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, dataMigratorExceptionHelperMock.Object);
 
                 actual.Count.Should().BeGreaterThan(0);
             }
@@ -237,9 +241,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void PopulateEntitiesListViewWhenThereIsAnException()
         {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            var items = new List<System.Windows.Forms.ListViewItem>
+            {
+                new System.Windows.Forms.ListViewItem("Item1"),
+                new System.Windows.Forms.ListViewItem("Item2")
+            };
             Exception exception = new Exception();
 
             feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
@@ -279,9 +285,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void PopulateEntitiesListViewWhenThereAreListItems()
         {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            items.Add(new System.Windows.Forms.ListViewItem("Item1"));
-            items.Add(new System.Windows.Forms.ListViewItem("Item2"));
+            var items = new List<System.Windows.Forms.ListViewItem>
+            {
+                new System.Windows.Forms.ListViewItem("Item1"),
+                new System.Windows.Forms.ListViewItem("Item2")
+            };
             Exception exception = null;
 
             feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
@@ -817,11 +825,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityMetadata = new EntityMetadata();
             bool showSystemAttributes = true;
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes);
+            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes, dataMigratorExceptionHelperMock.Object);
 
             attributes.Should().BeNull();
         }
@@ -837,11 +845,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityMetadata = new EntityMetadata();
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes);
+            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes, dataMigratorExceptionHelperMock.Object);
 
             attributes.Should().NotBeNull();
         }
@@ -984,11 +992,15 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var entityReference = new EntityReference(inputEntityLogicalName, Guid.NewGuid());
 
-            var mappingItem = new List<DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>();
-            mappingItem.Add(new DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>(entityReference, entityReference));
+            var mappingItem = new List<DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>
+            {
+                new DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>(entityReference, entityReference)
+            };
 
-            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
-            inputMapping.Add(inputEntityLogicalName, mappingItem);
+            var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>
+            {
+                { inputEntityLogicalName, mappingItem }
+            };
 
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
 
@@ -1074,9 +1086,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             string inputEntityLogicalName = "contact";
             bool listViewItemIsSelected = true;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>
+            {
+                { inputEntityLogicalName, inputEntityLogicalName }
+            };
 
             feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
@@ -1205,7 +1218,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
 
-            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
+            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object);
 
             actual.Should().BeFalse();
         }
@@ -1223,11 +1236,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object);
+            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object);
 
             actual.Should().BeTrue();
             metadataServiceMock.VerifyAll();
@@ -1241,7 +1254,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
             var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object))
                                 .Should()
                                 .NotThrow();
         }
@@ -1260,11 +1273,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1407,7 +1420,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void CollectCrmAttributesFieldsWithNoInputEntityAttributes()
         {
             var entityLogicalName = "contact";
-            var intersectEntityName = "account_contact";
 
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
@@ -1587,6 +1599,27 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void StoreLookUpAttributeLookupAttributeMetadataIsNull()
+        {
+            string primaryAttribute = "contactId";
+            var crmField = new Capgemini.Xrm.DataMigration.Model.CrmField()
+            {
+                PrimaryKey = false,
+                FieldName = primaryAttribute,
+                FieldType = "entityreference"
+            };
+
+            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+                               .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(null, crmField, feedbackManagerMock.Object))
+                             .Should()
+                             .NotThrow();
+
+            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
+        }
+
+        [TestMethod]
         public void StoreLookUpAttributeWithLookupAttributeMetadata()
         {
             var attributeLogicalName = "contactId";
@@ -1707,7 +1740,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 entityMetadata
             };
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 

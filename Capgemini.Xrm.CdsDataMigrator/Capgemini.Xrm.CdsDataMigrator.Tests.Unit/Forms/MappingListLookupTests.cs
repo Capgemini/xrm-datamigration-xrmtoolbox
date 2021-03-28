@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Exceptions;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
@@ -19,6 +20,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         private Dictionary<string, Dictionary<string, List<string>>> mappings;
         private Mock<IOrganizationService> orgServiceMock;
         private Mock<IMetadataService> metadataServiceMock;
+        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
+
         private List<EntityMetadata> metadata;
         private string selectedValue;
 
@@ -27,6 +30,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             orgServiceMock = new Mock<IOrganizationService>();
             metadataServiceMock = new Mock<IMetadataService>();
+            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
 
             selectedValue = "samplekey";
 
@@ -64,7 +68,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                                                                 orgServiceMock.Object,
                                                                 new List<EntityMetadata>(),
                                                                 selectedValue,
-                                                                metadataServiceMock.Object))
+                                                                metadataServiceMock.Object,
+                                                                dataMigratorExceptionHelperMock.Object))
                          .Should()
                          .NotThrow();
         }
@@ -90,7 +95,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                                                                 orgServiceMock.Object,
                                                                 metadata,
                                                                 selectedValue,
-                                                                metadataServiceMock.Object))
+                                                                metadataServiceMock.Object,
+                                                                dataMigratorExceptionHelperMock.Object))
                          .Should()
                          .Throw<InvalidOperationException>()
                          .WithMessage("One or more items in the collection are null.");
@@ -104,7 +110,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                                                                 orgServiceMock.Object,
                                                                 metadata,
                                                                 selectedValue,
-                                                                metadataServiceMock.Object))
+                                                                metadataServiceMock.Object,
+                                                                dataMigratorExceptionHelperMock.Object))
                          .Should()
                          .NotThrow();
         }
@@ -137,11 +144,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 systemUnderTest.LoadMappedItems();
 
@@ -150,7 +157,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -170,11 +177,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             field.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()
@@ -212,18 +219,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -256,18 +263,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -299,18 +306,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.LoadMappedItems())
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -340,20 +347,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
             int rowIndex = 0;
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -382,20 +389,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
             int rowIndex = 0;
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -426,20 +433,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
             int rowIndex = 0;
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
                              .Should()
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -470,20 +477,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
             int rowIndex = 0;
 
-            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object))
+            using (var systemUnderTest = new MappingListLookup(mappings, orgServiceMock.Object, metadata, selectedValue, metadataServiceMock.Object, dataMigratorExceptionHelperMock.Object))
             {
                 FluentActions.Invoking(() => systemUnderTest.ValidateLookupColumn(rowIndex, entityName, attributes.ToArray()))
                              .Should()
                              .Throw<MappingException>();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>()), Times.Never);
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Never);
         }
     }
 }
