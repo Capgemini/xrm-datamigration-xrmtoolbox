@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             wizardButtons1.OnExecute += button2_Click;
             logger = new MessageLogger(tbLogger, SynchronizationContext.Current);
             entityRepositoryService = new EntityRepositoryService(OrganizationService);
-            wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
+            wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -172,7 +172,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void tbimportSchema_textChanged(object sender, EventArgs e)
+        private void TbImportSchemeTextChanged(object sender, EventArgs e)
         {
             if (radioButtonCSVFormat.Checked)
             {
@@ -180,7 +180,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
+        private void WizardButtons1OnNavigateToNextPage(object sender, EventArgs e)
         {
             var wizardButtons = ((WizardButtons)sender);
             WizardNavigation(/*wizardButtons, */labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);

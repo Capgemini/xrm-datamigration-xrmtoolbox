@@ -144,7 +144,7 @@
             this.tbImportSchema.Name = "tbImportSchema";
             this.tbImportSchema.Size = new System.Drawing.Size(589, 32);
             this.tbImportSchema.TabIndex = 4;
-            this.tbImportSchema.TextChanged += new System.EventHandler(this.tbimportSchema_textChanged);
+            this.tbImportSchema.TextChanged += new System.EventHandler(this.TbImportSchemeTextChanged);
             // 
             // btnImportSchema
             // 
