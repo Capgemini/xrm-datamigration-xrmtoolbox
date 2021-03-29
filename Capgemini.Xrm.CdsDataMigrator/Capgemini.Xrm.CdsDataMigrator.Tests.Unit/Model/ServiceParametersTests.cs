@@ -10,6 +10,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
         [TestMethod]
         public void CanInstantiate()
         {
+            SetupServiceMocks();
+
             var systemUndertest = new ServiceParameters(ServiceMock.Object, MetadataServiceMock.Object, NotificationServiceMock.Object, ExceptionServicerMock.Object);
 
             systemUndertest.OrganizationService.Should().NotBeNull();
