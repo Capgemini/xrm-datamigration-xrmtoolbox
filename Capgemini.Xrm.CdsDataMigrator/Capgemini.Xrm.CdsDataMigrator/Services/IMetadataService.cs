@@ -9,6 +9,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
     {
         List<EntityMetadata> RetrieveEntities(IOrganizationService orgService);
 
-        EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IDataMigratorExceptionHelper dataMigratorExceptionHelper);
+        EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IExceptionService dataMigratorExceptionHelper);
     }
 }

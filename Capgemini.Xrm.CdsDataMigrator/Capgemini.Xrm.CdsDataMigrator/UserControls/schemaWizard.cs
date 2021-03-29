@@ -1,9 +1,11 @@
-﻿using Capgemini.Xrm.DataMigration.Config;
+﻿using Capgemini.Xrm.CdsDataMigrator.Services;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MyXrmToolBoxPlugin3;
@@ -56,9 +58,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public IMetadataService MetadataService { get; set; }
 
-        public IFeedbackManager FeedbackManager { get; set; }
+        public INotificationService NotificationService { get; set; }
 
-        public IDataMigratorExceptionHelper DataMigratorExceptionHelper { get; set; }
+        public IExceptionService ExceptionService { get; set; }
 
         public Core.Settings Settings { get; set; }
 
@@ -70,17 +72,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             RefreshEntities(cachedMetadata, workingstate, true);
         }
 
-        public void HandleListViewEntitiesSelectedIndexChanged(IMetadataService metadataService, IOrganizationService organizationService, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems)
+        public void HandleListViewEntitiesSelectedIndexChanged(Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems, ServiceParameters serviceParameters)
         {
             ListViewItem listViewSelectedItem = selectedItems.Count > 0 ? selectedItems[0] : null;
 
-            PopulateAttributes(inputEntityLogicalName, organizationService, metadataService, listViewSelectedItem);
+            PopulateAttributes(inputEntityLogicalName, listViewSelectedItem, serviceParameters);
 
-            PopulateRelationship(inputEntityLogicalName, organizationService, metadataService, inputEntityRelationships, listViewSelectedItem);
+            PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, listViewSelectedItem, serviceParameters);
             schemaWizardDelegate.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
         }
 
-        public void PopulateRelationship(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem)
+        public void PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)
         {
             if (!workingstate)
             {
@@ -92,11 +94,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         bwFill.DoWork += (sender, e) =>
                         {
-                            e.Result = schemaWizardDelegate.PopulateRelationshipAction(entityLogicalName, service, metadataService, inputEntityRelationships, DataMigratorExceptionHelper);
+                            e.Result = schemaWizardDelegate.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            schemaWizardDelegate.OnPopulateCompletedAction(e, FeedbackManager, this, lvRelationship);
+                            schemaWizardDelegate.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship);
                             ManageWorkingState(false);
                         };
                         bwFill.RunWorkerAsync();
@@ -105,7 +107,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void LoadSchemaFile(string schemaFilePath, bool working, IFeedbackManager feedbackManager, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        public void LoadSchemaFile(string schemaFilePath, bool working, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             if (!string.IsNullOrWhiteSpace(schemaFilePath))
             {
@@ -118,7 +120,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 catch (Exception ex)
                 {
-                    feedbackManager.DisplayFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
+                    notificationService.DisplayFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
                 }
             }
         }
@@ -175,12 +177,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
+            var migratorParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
+
             var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
             entityLogicalName = schemaWizardDelegate.GetEntityLogicalName(entityitem);
-            HandleListViewEntitiesSelectedIndexChanged(MetadataService, OrganizationService, entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems);
+            HandleListViewEntitiesSelectedIndexChanged(entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems, migratorParameters);
         }
 
-        private void PopulateAttributes(string entityLogicalName, IOrganizationService service, IMetadataService metadataService, ListViewItem listViewSelectedItem)
+        private void PopulateAttributes(string entityLogicalName, ListViewItem listViewSelectedItem, ServiceParameters serviceParameters)
         {
             if (!workingstate)
             {
@@ -195,13 +199,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         bwFill.DoWork += (sender, e) =>
                         {
                             var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            AttributeMetadata[] attributes = schemaWizardDelegate.GetAttributeList(entityLogicalName, service, metadataService, cbShowSystemAttributes.Checked, DataMigratorExceptionHelper);
+
+                            AttributeMetadata[] attributes = schemaWizardDelegate.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
 
                             e.Result = schemaWizardDelegate.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
                         };
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
-                            schemaWizardDelegate.OnPopulateCompletedAction(e, FeedbackManager, this, lvRelationship);
+                            schemaWizardDelegate.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship);
                             ManageWorkingState(false);
                         };
                         bwFill.RunWorkerAsync();
@@ -236,12 +241,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 {
                     bwFill.DoWork += (sender, e) =>
                     {
-                        e.Result = schemaWizardDelegate.RetrieveSourceEntitiesList(cbShowSystemAttributes.Checked, OrganizationService, MetadataService, cachedMetadata, entityAttributes);
+                        var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
+
+                        e.Result = schemaWizardDelegate.RetrieveSourceEntitiesList(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes, serviceParameters);
                     };
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
                         informationPanel.Dispose();
-                        schemaWizardDelegate.PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error, this, lvEntities, FeedbackManager);
+                        schemaWizardDelegate.PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error, this, lvEntities, NotificationService);
                         ManageWorkingState(false);
                     };
                     bwFill.RunWorkerAsync();
@@ -257,10 +264,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void tsbtMappings_Click(object sender, EventArgs e)
         {
-            schemaWizardDelegate.HandleMappingControlItemClick(FeedbackManager, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
+            schemaWizardDelegate.HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
         }
 
-        private void OpenMappingForm(IMetadataService metadataService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        private void OpenMappingForm(IMetadataService metadataService, IExceptionService dataMigratorExceptionHelper)
         {
             using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService, dataMigratorExceptionHelper)
             {
@@ -284,7 +291,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var currentFilter = filterQuery.ContainsKey(entityLogicalName) ? filterQuery[entityLogicalName] : null;
             using (var filterDialog = new FilterEditor(currentFilter, FormStartPosition.CenterParent))
             {
-                schemaWizardDelegate.ProcessFilterQuery(FeedbackManager, ParentForm, entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, filterDialog);
+                schemaWizardDelegate.ProcessFilterQuery(NotificationService, ParentForm, entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, filterDialog);
             }
         }
 
@@ -402,15 +409,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TbSaveSchemaClick(object sender, EventArgs e)
         {
-            if (schemaWizardDelegate.AreCrmEntityFieldsSelected(MetadataService, checkedEntity, OrganizationService, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper))
+            var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
+
+            if (schemaWizardDelegate.AreCrmEntityFieldsSelected(checkedEntity, entityRelationships, entityAttributes, attributeMapping, serviceParameters))
             {
-                schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper);
+                schemaWizardDelegate.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
                 GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
                 crmSchemaConfiguration.Entities.Clear();
             }
             else
             {
-                FeedbackManager.DisplayFeedback("Please select at least one attribute for each selected entity!");
+                NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
             }
         }
 
@@ -438,7 +447,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbSchemaPath.Text))
                     {
-                        LoadSchemaFile(tbSchemaPath.Text, workingstate, FeedbackManager, entityAttributes, entityRelationships);
+                        LoadSchemaFile(tbSchemaPath.Text, workingstate, NotificationService, entityAttributes, entityRelationships);
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -549,7 +558,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbImportConfig.Text))
                     {
-                        schemaWizardDelegate.LoadImportConfigFile(FeedbackManager, tbImportConfig, mapper, mapping);
+                        schemaWizardDelegate.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -575,7 +584,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbExportConfig.Text))
                     {
-                        schemaWizardDelegate.LoadExportConfigFile(FeedbackManager, tbExportConfig, filterQuery, lookupMaping);
+                        schemaWizardDelegate.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
                     }
                 }
                 else if (result == DialogResult.Cancel)
@@ -587,7 +596,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarSaveMappingsClick(object sender, EventArgs e)
         {
-            schemaWizardDelegate.GenerateImportConfigFile(FeedbackManager, tbImportConfig, mapper);
+            schemaWizardDelegate.GenerateImportConfigFile(NotificationService, tbImportConfig, mapper);
         }
 
         private void ToolBarSaveFiltersClick(object sender, EventArgs e)
@@ -597,25 +606,25 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarLoadMappingsFileClick(object sender, EventArgs e)
         {
-            schemaWizardDelegate.LoadImportConfigFile(FeedbackManager, tbImportConfig, mapper, mapping);
+            schemaWizardDelegate.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
         }
 
         private void ToolBarLoadSchemaFileClick(object sender, EventArgs e)
         {
-            LoadSchemaFile(tbSchemaPath.Text, workingstate, FeedbackManager, entityAttributes, entityRelationships);
+            LoadSchemaFile(tbSchemaPath.Text, workingstate, NotificationService, entityAttributes, entityRelationships);
         }
 
         private void ToolBarLoadFiltersFileClick(object sender, EventArgs e)
         {
-            schemaWizardDelegate.LoadExportConfigFile(FeedbackManager, tbExportConfig, filterQuery, lookupMaping);
+            schemaWizardDelegate.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
         }
 
         private void LoadAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            LoadAllFiles(FeedbackManager, tbSchemaPath, tbExportConfig, tbImportConfig, workingstate, entityAttributes, entityRelationships, filterQuery, lookupMaping, mapper, mapping);
+            LoadAllFiles(NotificationService, tbSchemaPath, tbExportConfig, tbImportConfig, workingstate, entityAttributes, entityRelationships, filterQuery, lookupMaping, mapper, mapping);
         }
 
-        public void LoadAllFiles(IFeedbackManager feedbackManager, System.Windows.Forms.TextBox schemaPath, System.Windows.Forms.TextBox exportConfig, System.Windows.Forms.TextBox importConfig, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
+        public void LoadAllFiles(INotificationService feedbackManager, System.Windows.Forms.TextBox schemaPath, System.Windows.Forms.TextBox exportConfig, System.Windows.Forms.TextBox importConfig, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
         {
             LoadSchemaFile(schemaPath.Text, inputWorkingstate, feedbackManager, inputEntityAttributes, inputEntityRelationships);
             schemaWizardDelegate.LoadExportConfigFile(feedbackManager, exportConfig, inputFilterQuery, inputLookupMaping);
@@ -624,16 +633,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            schemaWizardDelegate.GenerateImportConfigFile(FeedbackManager, tbImportConfig, mapper);
+            schemaWizardDelegate.GenerateImportConfigFile(NotificationService, tbImportConfig, mapper);
             schemaWizardDelegate.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping);
-            schemaWizardDelegate.CollectCrmEntityFields(MetadataService, OrganizationService, checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, FeedbackManager, DataMigratorExceptionHelper);
+
+            var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
+            schemaWizardDelegate.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
             GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
             crmSchemaConfiguration.Entities.Clear();
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
         {
-            OpenMappingForm(MetadataService, DataMigratorExceptionHelper);
+            OpenMappingForm(MetadataService, ExceptionService);
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

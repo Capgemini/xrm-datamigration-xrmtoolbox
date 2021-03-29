@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigrator.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,7 +15,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";
 
-        private MessageLogger systemUnderTest;
+        private LoggerService systemUnderTest;
 
         [TestMethod]
         public void MessageLogger()
@@ -24,7 +24,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
             {
                 SynchronizationContext syncContext = SynchronizationContext.Current;
 
-                FluentActions.Invoking(() => systemUnderTest = new MessageLogger(textBox, syncContext))
+                FluentActions.Invoking(() => systemUnderTest = new LoggerService(textBox, syncContext))
                             .Should()
                             .NotThrow();
             }
@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Verbose
                 };
@@ -60,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Error
                 };
@@ -83,7 +83,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current);
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current);
 
                 FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
                             .Should()
@@ -100,7 +100,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Warning
                 };
@@ -121,7 +121,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Info
                 };
@@ -140,7 +140,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Warning
                 };
@@ -161,7 +161,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Verbose
                 };
@@ -180,7 +180,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Error
                 };
@@ -201,7 +201,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new MessageLogger(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
                 {
                     LogLevel = LogLevel.Warning
                 };

@@ -6,6 +6,7 @@ using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -15,12 +16,8 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
     [TestClass]
-    public class SchemaWizardDelegateTests
+    public class SchemaWizardDelegateTests : TestBase
     {
-        private Mock<IOrganizationService> serviceMock;
-        private Mock<IMetadataService> metadataServiceMock;
-        private Mock<IFeedbackManager> feedbackManagerMock;
-        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
 
         private SchemaWizardDelegate systemUnderTest;
@@ -28,11 +25,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestInitialize]
         public void Setup()
         {
-            serviceMock = new Mock<IOrganizationService>();
-            metadataServiceMock = new Mock<IMetadataService>();
-            feedbackManagerMock = new Mock<IFeedbackManager>();
-            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
-
+            SetupServiceMocks();
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
 
             systemUnderTest = new SchemaWizardDelegate();
@@ -161,7 +154,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputCachedMetadata = new List<EntityMetadata>();
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object, inputCachedMetadata, inputEntityAttributes);
+            var serviceParameters = GenerateMigratorParameters();
+
+            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
 
             actual.Count.Should().Be(1);
         }
@@ -174,8 +169,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             SetupMockObjects(entityLogicalName);
             var inputCachedMetadata = new List<EntityMetadata>();
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var serviceParameters = GenerateMigratorParameters();
 
-            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, serviceMock.Object, metadataServiceMock.Object, inputCachedMetadata, inputEntityAttributes);
+            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
 
             actual.Count.Should().Be(1);
         }
@@ -186,16 +182,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             string entityLogicalName = "contact";
             var entityMetadata = new EntityMetadata();
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            var migratorServiceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
-            var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, dataMigratorExceptionHelperMock.Object);
+            var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorServiceParameters);
 
             actual.Count.Should().Be(0);
 
-            serviceMock.VerifyAll();
-            metadataServiceMock.VerifyAll();
+            ServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
         }
 
         [TestMethod]
@@ -221,21 +219,23 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            var migratorServiceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
             using (var listView = new System.Windows.Forms.ListView())
             {
-                systemUnderTest.PopulateEntitiesListView(items, null, null, listView, feedbackManagerMock.Object);
+                systemUnderTest.PopulateEntitiesListView(items, null, null, listView, NotificationServiceMock.Object);
 
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, inputEntityRelationships, dataMigratorExceptionHelperMock.Object);
+                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorServiceParameters);
 
                 actual.Count.Should().BeGreaterThan(0);
             }
 
-            serviceMock.VerifyAll();
-            metadataServiceMock.VerifyAll();
+            ServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
         }
 
         [TestMethod]
@@ -248,19 +248,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             };
             Exception exception = new Exception();
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                 .Verifiable();
-            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, feedbackManagerMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, NotificationServiceMock.Object))
                         .Should()
                         .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -269,17 +269,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var items = new List<System.Windows.Forms.ListViewItem>();
             Exception exception = null;
 
-            feedbackManagerMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, feedbackManagerMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, NotificationServiceMock.Object))
                         .Should()
                         .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -292,18 +292,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             };
             Exception exception = null;
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                 .Verifiable();
 
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, feedbackManagerMock.Object))
+                FluentActions.Invoking(() => systemUnderTest.PopulateEntitiesListView(items, exception, null, listView, NotificationServiceMock.Object))
                         .Should()
                         .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            feedbackManagerMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -313,19 +313,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputFilterQuery = new Dictionary<string, string>();
             var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                 .Verifiable();
 
             using (System.Windows.Forms.TextBox exportConfigTextBox = new System.Windows.Forms.TextBox())
             {
                 exportConfigTextBox.Text = exportConfigFilename;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(feedbackManagerMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(NotificationServiceMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -335,19 +335,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputFilterQuery = new Dictionary<string, string>();
             var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Export Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Invalid Export Config File"))
                                 .Verifiable();
 
             using (System.Windows.Forms.TextBox exportConfigTextBox = new System.Windows.Forms.TextBox())
             {
                 exportConfigTextBox.Text = exportConfigFilename;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(feedbackManagerMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(NotificationServiceMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("Invalid Export Config File"), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("Invalid Export Config File"), Times.Once);
         }
 
         [TestMethod]
@@ -357,19 +357,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputFilterQuery = new Dictionary<string, string>();
             var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
                                 .Verifiable();
 
             using (System.Windows.Forms.TextBox exportConfigTextBox = new System.Windows.Forms.TextBox())
             {
                 exportConfigTextBox.Text = exportConfigFilename;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(feedbackManagerMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(NotificationServiceMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"), Times.Once);
         }
 
         [TestMethod]
@@ -380,22 +380,22 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputFilterQuery = new Dictionary<string, string>();
             var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File"))
                                .Throws(exception);
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"))
                                 .Verifiable();
 
             using (System.Windows.Forms.TextBox exportConfigTextBox = new System.Windows.Forms.TextBox())
             {
                 exportConfigTextBox.Text = exportConfigFilename;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(feedbackManagerMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
+                FluentActions.Invoking(() => systemUnderTest.LoadExportConfigFile(NotificationServiceMock.Object, exportConfigTextBox, inputFilterQuery, inputLookupMaping))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback($"Load Correct Export Config file, error:{exception.Message}"), Times.Once);
         }
 
         [TestMethod]
@@ -590,16 +590,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, feedbackManagerMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
              .Should()
              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -611,16 +611,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
 
-            feedbackManagerMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, feedbackManagerMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -824,12 +824,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             AttributeMetadata[] attributes = null;
             var entityMetadata = new EntityMetadata();
             bool showSystemAttributes = true;
+            var serviceParameters = GenerateMigratorParameters();
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes, dataMigratorExceptionHelperMock.Object);
+            attributes = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes, serviceParameters);
 
             attributes.Should().BeNull();
         }
@@ -842,14 +843,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             AttributeMetadata[] attributes = null;
             bool showSystemAttributes = true;
 
+            var serviceParameters = GenerateMigratorParameters();
+
             var entityMetadata = new EntityMetadata();
             InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            attributes = systemUnderTest.GetAttributeList(entityLogicalName, serviceMock.Object, metadataServiceMock.Object, showSystemAttributes, dataMigratorExceptionHelperMock.Object);
+            attributes = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes, serviceParameters);
 
             attributes.Should().NotBeNull();
         }
@@ -956,14 +959,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(feedbackManagerMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
                          .Should()
                          .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -974,14 +977,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(feedbackManagerMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
                          .Should()
                          .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1004,13 +1007,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(feedbackManagerMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+            FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
                          .Should()
                          .NotThrow();
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1020,17 +1023,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             bool listViewItemIsSelected = false;
             Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
             using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent))
             {
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(feedbackManagerMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                          .Should()
                          .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -1040,19 +1043,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             bool listViewItemIsSelected = true;
             Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
             using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent))
             {
                 filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(feedbackManagerMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                          .Should()
                          .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1064,7 +1067,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
             var currentfilter = inputFilterQuery[inputEntityLogicalName];
@@ -1073,12 +1076,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(feedbackManagerMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                          .Should()
                          .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1091,7 +1094,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 { inputEntityLogicalName, inputEntityLogicalName }
             };
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
             var currentfilter = inputFilterQuery[inputEntityLogicalName];
@@ -1100,12 +1103,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 filterDialog.QueryString = string.Empty;
 
-                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(feedbackManagerMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
                          .Should()
                          .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1114,17 +1117,17 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                 .Verifiable();
 
             using (var importConfig = new System.Windows.Forms.TextBox())
             {
-                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(feedbackManagerMock.Object, importConfig, inputMapper, inputMapping))
+                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper, inputMapping))
                                  .Should()
                                  .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -1133,19 +1136,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))
                                 .Verifiable();
 
             using (var importConfig = new System.Windows.Forms.TextBox())
             {
                 importConfig.Text = "Hello.txt";
 
-                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(feedbackManagerMock.Object, importConfig, inputMapper, inputMapping))
+                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper, inputMapping))
                                 .Should()
                                 .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -1154,19 +1157,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Invalid Import Config File"))
                                 .Verifiable();
 
             using (var importConfig = new System.Windows.Forms.TextBox())
             {
                 importConfig.Text = "TestData\\ImportConfig.json";
 
-                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(feedbackManagerMock.Object, importConfig, inputMapper, inputMapping))
+                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper, inputMapping))
                                  .Should()
                                  .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -1175,19 +1178,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))
                                 .Verifiable();
 
             using (var importConfig = new System.Windows.Forms.TextBox())
             {
                 importConfig.Text = "TestData/ImportConfig2.json";
 
-                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(feedbackManagerMock.Object, importConfig, inputMapper, inputMapping))
+                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper, inputMapping))
                                  .Should()
                                  .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -1196,19 +1199,19 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
             var inputMapping = new Dictionary<string, List<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Item<EntityReference, EntityReference>>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Guid Id Mappings loaded from Import Config File"))
                 .Throws<Exception>();
 
             using (var importConfig = new System.Windows.Forms.TextBox())
             {
                 importConfig.Text = "TestData/ImportConfig2.json";
 
-                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(feedbackManagerMock.Object, importConfig, inputMapper, inputMapping))
+                FluentActions.Invoking(() => systemUnderTest.LoadImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper, inputMapping))
                                  .Should()
                                  .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Exactly(2));
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -1217,8 +1220,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputCheckedEntity = new HashSet<string>();
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+            var serviceParameters = GenerateMigratorParameters();
 
-            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object);
+            var actual = systemUnderTest.AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
 
             actual.Should().BeFalse();
         }
@@ -1235,15 +1239,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+            var serviceParameters = GenerateMigratorParameters();
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            var actual = systemUnderTest.AreCrmEntityFieldsSelected(metadataServiceMock.Object, inputCheckedEntity, serviceMock.Object, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object);
+            var actual = systemUnderTest.AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
 
             actual.Should().BeTrue();
-            metadataServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
         }
 
         [TestMethod]
@@ -1252,9 +1257,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var inputCheckedEntity = new HashSet<string>();
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+            var serviceParameters = GenerateMigratorParameters();
+
             var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters))
                                 .Should()
                                 .NotThrow();
         }
@@ -1273,15 +1280,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+
+            var serviceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(metadataServiceMock.Object, serviceMock.Object, inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object, dataMigratorExceptionHelperMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmEntityFields(inputCheckedEntity, schemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters))
                                  .Should()
                                  .NotThrow();
 
-            metadataServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
         }
 
         [TestMethod]
@@ -1299,7 +1309,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var crmEntity = new Capgemini.Xrm.DataMigration.Model.CrmEntity();
             var crmEntityList = new List<Capgemini.Xrm.DataMigration.Model.CrmEntity>();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityData(crmEntity, entityMetadata, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreCrmEntityData(crmEntity, entityMetadata, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1409,7 +1419,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 DisplayName = entityLogicalName
             };
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1434,7 +1444,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 DisplayName = entityLogicalName
             };
 
-            FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.CollectCrmAttributesFields(entityMetadata, crmEntity, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1454,7 +1464,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1475,7 +1485,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1498,7 +1508,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var crmFieldList = new List<Capgemini.Xrm.DataMigration.Model.CrmField>();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeMetadata(entityMetadata.Attributes[0], entityMetadata, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
                                  .Should()
                                  .NotThrow();
 
@@ -1555,13 +1565,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
             attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
                               .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
         }
 
         [TestMethod]
@@ -1588,14 +1598,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
             attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = attributeLogicalName });
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
         }
 
         [TestMethod]
@@ -1609,14 +1619,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 FieldType = "entityreference"
             };
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(null, crmField, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(null, crmField, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Once);
         }
 
         [TestMethod]
@@ -1641,14 +1651,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             };
             attribute.Targets = new List<string> { "Test" }.ToArray();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
             crmField.LookupType.Should().Be("Test");
         }
 
@@ -1673,94 +1683,15 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 }
             };
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"))
                                .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, feedbackManagerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest.StoreLookUpAttribute(attribute, crmField, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!"), Times.Never);
             crmField.LookupType.Should().BeNull();
-        }
-
-        private static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
-        {
-            var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
-            {
-                relationship
-            };
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_manyToManyRelationships");
-            field.SetValue(entityMetadata, manyToManyRelationshipMetadataList.ToArray());
-        }
-
-        private static void InsertAttributeList(EntityMetadata entityMetadata, List<string> attributeLogicalNames)
-        {
-            var attributeList = new List<AttributeMetadata>();
-
-            foreach (var item in attributeLogicalNames)
-            {
-                var attribute = new AttributeMetadata
-                {
-                    LogicalName = item,
-                    DisplayName = new Label
-                    {
-                        UserLocalizedLabel = new LocalizedLabel { Label = item }
-                    }
-                };
-
-                var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
-                attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = item });
-
-                attributeList.Add(attribute);
-            }
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
-            field.SetValue(entityMetadata, attributeList.ToArray());
-
-            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            isIntersectField.SetValue(entityMetadata, (bool?)false);
-
-            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
-            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
-
-            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
-            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
-        }
-
-        private void SetupMockObjects(string entityLogicalName)
-        {
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
-        }
-
-        private EntityMetadata InstantiateEntityMetaData(string logicalName)
-        {
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = logicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = logicalName }
-                }
-            };
-
-            return entityMetadata;
         }
     }
 }

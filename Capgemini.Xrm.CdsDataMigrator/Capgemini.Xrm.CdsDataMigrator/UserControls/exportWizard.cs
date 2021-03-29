@@ -4,7 +4,6 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters;
 using System.Threading;
 using Microsoft.Xrm.Tooling.Connector;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using XrmToolBox.Extensibility;
 using MyXrmToolBoxPlugin3;
 using System.Linq;
@@ -13,12 +12,13 @@ using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Microsoft.Xrm.Sdk;
+using Capgemini.Xrm.CdsDataMigrator.Services;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class ExportWizard : UserControl, IExportView
     {
-        private readonly MessageLogger logger;
+        private readonly LoggerService logger;
         private readonly ExportPresenter presenter;
         private readonly IDataMigrationService dataMigrationService;
         private readonly ICrmGenericMigratorFactory migratorFactory;
@@ -27,10 +27,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             InitializeComponent();
 
-            logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
+            logger = new LoggerService(textBoxLogs, SynchronizationContext.Current);
 
             migratorFactory = new CrmGenericMigratorFactory();
-            logger = new MessageLogger(textBoxLogs, SynchronizationContext.Current);
+            logger = new LoggerService(textBoxLogs, SynchronizationContext.Current);
             dataMigrationService = new DataMigrationService(logger, migratorFactory);
             presenter = new ExportPresenter(this, logger, dataMigrationService);
 

@@ -19,11 +19,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms
         private readonly Dictionary<string, Dictionary<string, List<string>>> mappings;
         private readonly IOrganizationService orgService;
         private readonly IMetadataService metadataService;
-        private readonly IDataMigratorExceptionHelper dataMigratorExceptionHelper;
+        private readonly IExceptionService dataMigratorExceptionHelper;
         private readonly List<EntityMetadata> metaDataCache;
         private readonly string selctedValue;
 
-        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue, IMetadataService metadataService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public MappingListLookup(Dictionary<string, Dictionary<string, List<string>>> mappings, IOrganizationService orgService, List<EntityMetadata> metadata, string selectedValue, IMetadataService metadataService, IExceptionService dataMigratorExceptionHelper)
         {
             metaDataCache = metadata.ToList();
             selctedValue = selectedValue;

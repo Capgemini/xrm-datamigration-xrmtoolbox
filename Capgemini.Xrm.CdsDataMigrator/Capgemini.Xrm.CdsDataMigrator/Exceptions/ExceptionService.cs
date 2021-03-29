@@ -3,7 +3,7 @@ using McTools.Xrm.Connection;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Core
 {
-    public class DataMigratorExceptionHelper : IDataMigratorExceptionHelper
+    public class ExceptionService : IExceptionService
     {
         public string GetErrorMessage(Exception error, bool returnWithStackTrace)
         {

@@ -5,6 +5,7 @@ using System.Reflection;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -14,12 +15,8 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 {
     [TestClass]
-    public class SchemaWizardTests
+    public class SchemaWizardTests : TestBase
     {
-        private Mock<IOrganizationService> serviceMock;
-        private Mock<IMetadataService> metadataServiceMock;
-        private Mock<IFeedbackManager> feedbackManagerMock;
-
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
 
         private bool workingstate;
@@ -29,9 +26,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             workingstate = false;
 
-            serviceMock = new Mock<IOrganizationService>();
-            metadataServiceMock = new Mock<IMetadataService>();
-            feedbackManagerMock = new Mock<IFeedbackManager>();
+            SetupServiceMocks();
 
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
         }
@@ -52,8 +47,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.OnConnectionUpdated(Guid.NewGuid(), "TestOrg"))
                         .Should()
@@ -73,10 +68,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
                 using (var systemUnderTest = new SchemaWizard())
                 {
-                    systemUnderTest.OrganizationService = serviceMock.Object;
-                    systemUnderTest.MetadataService = metadataServiceMock.Object;
+                    systemUnderTest.OrganizationService = ServiceMock.Object;
+                    systemUnderTest.MetadataService = MetadataServiceMock.Object;
 
-                    FluentActions.Invoking(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(metadataServiceMock.Object, serviceMock.Object, inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity, selectedItems))
+                    var serviceParameters = GenerateMigratorParameters();
+
+                    FluentActions.Invoking(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity, selectedItems, serviceParameters))
                             .Should()
                             .NotThrow();
                 }
@@ -88,8 +85,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.ClearMemory())
                              .Should()
@@ -103,21 +100,21 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             string schemaFilename = string.Empty;
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                 .Verifiable();
 
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(schemaFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(schemaFilename, workingstate, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
         }
 
         [TestMethod]
@@ -127,21 +124,21 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
 
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -167,11 +164,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
-                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, feedbackManagerMock.Object, inputEntityAttributes, inputEntityRelationships))
+                FluentActions.Invoking(() => systemUnderTest.LoadSchemaFile(configFilename, workingstate, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
                              .Should()
                              .NotThrow();
             }
@@ -182,9 +179,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(true))
                                  .Should()
@@ -197,82 +194,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             using (var systemUnderTest = new SchemaWizard())
             {
-                systemUnderTest.OrganizationService = serviceMock.Object;
-                systemUnderTest.MetadataService = metadataServiceMock.Object;
-                systemUnderTest.FeedbackManager = feedbackManagerMock.Object;
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(false))
                                  .Should()
                                  .NotThrow();
             }
-        }
-
-        private static void InsertAttributeList(EntityMetadata entityMetadata, List<string> attributeLogicalNames)
-        {
-            var attributeList = new List<AttributeMetadata>();
-
-            foreach (var item in attributeLogicalNames)
-            {
-                var attribute = new AttributeMetadata
-                {
-                    LogicalName = item,
-                    DisplayName = new Label
-                    {
-                        UserLocalizedLabel = new LocalizedLabel { Label = item }
-                    }
-                };
-
-                var attributeTypeName = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_attributeTypeDisplayName");
-                attributeTypeName.SetValue(attribute, new AttributeTypeDisplayName { Value = item });
-
-                attributeList.Add(attribute);
-            }
-
-            var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
-            field.SetValue(entityMetadata, attributeList.ToArray());
-
-            var isIntersectField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isIntersect");
-            isIntersectField.SetValue(entityMetadata, (bool?)false);
-
-            var isLogicalEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isLogicalEntity");
-            isLogicalEntityField.SetValue(entityMetadata, (bool?)false);
-
-            var isCustomEntityField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomEntity");
-            isCustomEntityField.SetValue(entityMetadata, (bool?)true);
-        }
-
-        private void SetupMockObjects(string entityLogicalName)
-        {
-            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-
-            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
-
-            var metadataList = new List<EntityMetadata>
-            {
-                entityMetadata
-            };
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
-                                .Returns(entityMetadata)
-                                .Verifiable();
-
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                                .Returns(metadataList)
-                                .Verifiable();
-        }
-
-        private EntityMetadata InstantiateEntityMetaData(string logicalName)
-        {
-            var entityMetadata = new EntityMetadata
-            {
-                LogicalName = logicalName,
-                DisplayName = new Label
-                {
-                    UserLocalizedLabel = new LocalizedLabel { Label = logicalName }
-                }
-            };
-
-            return entityMetadata;
         }
     }
 }

@@ -4,7 +4,7 @@ using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
+using Capgemini.Xrm.CdsDataMigrator.Services;
 using Microsoft.Xrm.Sdk;
 using MyXrmToolBoxPlugin3;
 using System;
@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             };
 
             wizardButtons1.OnExecute += button2_Click;
-            logger = new MessageLogger(tbLogger, SynchronizationContext.Current);
+            logger = new LoggerService(tbLogger, SynchronizationContext.Current);
             entityRepositoryService = new EntityRepositoryService(OrganizationService);
             wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
         }

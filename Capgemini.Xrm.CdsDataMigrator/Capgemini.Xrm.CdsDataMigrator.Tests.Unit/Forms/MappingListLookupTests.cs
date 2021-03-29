@@ -20,7 +20,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         private Dictionary<string, Dictionary<string, List<string>>> mappings;
         private Mock<IOrganizationService> orgServiceMock;
         private Mock<IMetadataService> metadataServiceMock;
-        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
+        private Mock<IExceptionService> dataMigratorExceptionHelperMock;
 
         private List<EntityMetadata> metadata;
         private string selectedValue;
@@ -30,7 +30,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
         {
             orgServiceMock = new Mock<IOrganizationService>();
             metadataServiceMock = new Mock<IMetadataService>();
-            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
+            dataMigratorExceptionHelperMock = new Mock<IExceptionService>();
 
             selectedValue = "samplekey";
 
@@ -144,7 +144,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -157,7 +157,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -177,7 +177,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var field = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             field.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -219,7 +219,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -230,7 +230,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -263,7 +263,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -274,7 +274,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -306,7 +306,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -317,7 +317,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(2));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -347,7 +347,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -360,7 +360,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -389,7 +389,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -402,7 +402,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -433,7 +433,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -446,7 +446,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .NotThrow();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Exactly(1));
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Exactly(1));
         }
 
         [TestMethod]
@@ -477,7 +477,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
             var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
             attributesField.SetValue(entityMetadata, attributes.ToArray());
 
-            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()))
+            metadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
                 .Returns(entityMetadata)
                 .Verifiable();
 
@@ -490,7 +490,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Forms
                              .Throw<MappingException>();
             }
 
-            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IDataMigratorExceptionHelper>()), Times.Never);
+            metadataServiceMock.Verify(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()), Times.Never);
         }
     }
 }

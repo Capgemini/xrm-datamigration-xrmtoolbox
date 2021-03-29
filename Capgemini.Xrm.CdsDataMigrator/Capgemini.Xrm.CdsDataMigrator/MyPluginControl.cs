@@ -3,10 +3,10 @@ using XrmToolBox.Extensibility;
 using Microsoft.Xrm.Sdk;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using System.Threading;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging;
 using McTools.Xrm.Connection;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
+using Capgemini.Xrm.CdsDataMigrator.Services;
 
 namespace MyXrmToolBoxPlugin3
 {
@@ -27,7 +27,7 @@ namespace MyXrmToolBoxPlugin3
 
         protected CancellationTokenSource TokenSource { get; set; } = null;
 
-        protected MessageLogger Logger { get; set; } = null;
+        protected LoggerService Logger { get; set; } = null;
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
@@ -37,8 +37,8 @@ namespace MyXrmToolBoxPlugin3
                 {
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
-                    SchemaGeneratorWizard.FeedbackManager = new FeedbackManager();
-                    SchemaGeneratorWizard.DataMigratorExceptionHelper = new DataMigratorExceptionHelper();
+                    SchemaGeneratorWizard.NotificationService = new NotificationService();
+                    SchemaGeneratorWizard.ExceptionService = new ExceptionService();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 

@@ -4,14 +4,14 @@ using System.Windows.Forms;
 using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
+namespace Capgemini.Xrm.CdsDataMigrator.Services
 {
-    public class MessageLogger : ILogger
+    public class LoggerService : ILogger
     {
         private readonly SynchronizationContext syncContext;
         private readonly TextBox messageTextBox;
 
-        public MessageLogger(TextBox messageTextBox, SynchronizationContext syncContext)
+        public LoggerService(TextBox messageTextBox, SynchronizationContext syncContext)
         {
             this.messageTextBox = messageTextBox;
             this.syncContext = syncContext;
@@ -39,27 +39,27 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Logging
 
         public void LogError(string message)
         {
-            this.Error(message);
+            Error(message);
         }
 
         public void LogError(string message, Exception ex)
         {
-            this.Error(message, ex);
+            Error(message, ex);
         }
 
         public void LogInfo(string message)
         {
-            this.Info(message);
+            Info(message);
         }
 
         public void LogVerbose(string message)
         {
-            this.Verbose(message);
+            Verbose(message);
         }
 
         public void LogWarning(string message)
         {
-            this.Warning(message);
+            Warning(message);
         }
 
         public void Verbose(string message)

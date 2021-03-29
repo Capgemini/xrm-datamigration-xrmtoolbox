@@ -49,7 +49,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
             return entities;
         }
 
-        public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IExceptionService dataMigratorExceptionHelper)
         {
             orgService.ThrowArgumentNullExceptionIfNull(nameof(orgService));
 

@@ -233,14 +233,15 @@
     <Compile Include="Attributes\ValidatedNotNullAttribute.cs" />
     <Compile Include="Core\AttributeTypeMapping.cs" />
     <Compile Include="Core\EntitySettings.cs" />
-    <Compile Include="Exceptions\DataMigratorExceptionHelper.cs" />
-    <Compile Include="Exceptions\IDataMigratorExceptionHelper.cs" />
+    <Compile Include="Exceptions\ExceptionService.cs" />
+    <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="Core\Item.cs" />
     <Compile Include="Core\ListViewItemComparer.cs" />
-    <Compile Include="Services\FeedbackManager.cs" />
+    <Compile Include="Model\ServiceParameters.cs" />
+    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
     <Compile Include="Services\IEntityRepositoryService.cs" />
-    <Compile Include="Services\IFeedbackManager.cs" />
+    <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Core\Organisations.cs" />
@@ -273,7 +274,7 @@
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Logging\MessageLogger.cs" />
+    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Model\DataMigrationSettings.cs" />
     <Compile Include="Model\DeserializationSettings.cs" />
     <Compile Include="Model\ExportConfigSettings.cs" />
@@ -383,6 +384,7 @@
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (

@@ -1,4 +1,4 @@
-﻿using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
+﻿using Capgemini.Xrm.CdsDataMigrator.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,13 +11,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
     {
         private AttributeTypeMapping systemUnderTest;
 
-        private Mock<IFeedbackManager> feedbackManagerMock;
+        private Mock<INotificationService> notificationServiceMock;
 
         [TestInitialize]
         public void Setup()
         {
+            notificationServiceMock = new Mock<INotificationService>();
+
             systemUnderTest = new AttributeTypeMapping();
-            feedbackManagerMock = new Mock<IFeedbackManager>();
         }
 
         [TestMethod]
@@ -27,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("string");
         }
@@ -39,7 +40,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("guid");
         }
@@ -51,7 +52,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("optionsetvalue");
         }
@@ -63,7 +64,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("money");
         }
@@ -75,7 +76,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("bool");
         }
@@ -87,7 +88,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("entityreference");
         }
@@ -99,7 +100,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("integer");
         }
@@ -111,7 +112,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("datetime");
         }
@@ -123,7 +124,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("double");
         }
@@ -135,7 +136,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("decimal");
         }
@@ -147,7 +148,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("memo");
         }
@@ -159,7 +160,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("image");
         }
@@ -171,7 +172,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("entityname");
         }
@@ -183,7 +184,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("state");
         }
@@ -195,7 +196,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("status");
         }
@@ -207,7 +208,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
             systemUnderTest.AttributeMetadataTypeResult.Should().Be("entityreference");
         }
@@ -217,14 +218,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         {
             var input = "Unknown";
 
-            feedbackManagerMock.Setup(x => x.DisplayFeedback($"Missing mapping for {input}"))
+            notificationServiceMock.Setup(x => x.DisplayFeedback($"Missing mapping for {input}"))
                                 .Verifiable();
 
             systemUnderTest.AttributeMetadataType = input;
 
-            systemUnderTest.GetMapping(feedbackManagerMock.Object);
+            systemUnderTest.GetMapping(notificationServiceMock.Object);
 
-            feedbackManagerMock.Verify(x => x.DisplayFeedback($"Missing mapping for {input}"), Times.Once);
+            notificationServiceMock.Verify(x => x.DisplayFeedback($"Missing mapping for {input}"), Times.Once);
             systemUnderTest.AttributeMetadataTypeResult.Should().Be(input);
         }
     }

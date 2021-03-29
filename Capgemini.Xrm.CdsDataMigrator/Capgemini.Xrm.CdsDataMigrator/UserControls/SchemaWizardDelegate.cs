@@ -1,10 +1,12 @@
-﻿using Capgemini.Xrm.DataMigration.Config;
+﻿using Capgemini.Xrm.CdsDataMigrator.Services;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Model;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using NuGet;
@@ -21,9 +23,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public partial class SchemaWizardDelegate
     {
-        public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, IOrganizationService organizationService, IMetadataService metadataService, Dictionary<string, HashSet<string>> inputEntityRelationships, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ServiceParameters migratorParameters)
         {
-            var entityMetaData = metadataService.RetrieveEntities(inputEntityLogicalName, organizationService, dataMigratorExceptionHelper);
+            var entityMetaData = migratorParameters.MetadataService.RetrieveEntities(inputEntityLogicalName, migratorParameters.OrganizationService, migratorParameters.ExceptionService);
             var sourceAttributesList = new List<ListViewItem>();
             if (entityMetaData != null && entityMetaData.ManyToManyRelationships != null && entityMetaData.ManyToManyRelationships.Any())
             {
@@ -49,9 +51,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return logicalName;
         }
 
-        public AttributeMetadata[] GetAttributeList(string entityLogicalName, IOrganizationService organizationService, IMetadataService metadataService, bool showSystemAttributes, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public AttributeMetadata[] GetAttributeList(string entityLogicalName, bool showSystemAttributes, ServiceParameters serviceParameters)
         {
-            var entitymeta = metadataService.RetrieveEntities(entityLogicalName, organizationService, dataMigratorExceptionHelper);
+            var entitymeta = serviceParameters.MetadataService.RetrieveEntities(entityLogicalName, serviceParameters.OrganizationService, serviceParameters.ExceptionService);
 
             var attributes = FilterAttributes(entitymeta, showSystemAttributes);
 
@@ -67,9 +69,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return attributes;
         }
 
-        public List<ListViewItem> RetrieveSourceEntitiesList(bool showSystemAttributes, IOrganizationService organizationService, IMetadataService metadataService, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes)
+        public List<ListViewItem> RetrieveSourceEntitiesList(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
         {
-            var sourceList = metadataService.RetrieveEntities(organizationService);
+            var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
 
             if (!showSystemAttributes)
             {
@@ -100,11 +102,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return sourceEntitiesList;
         }
 
-        public void PopulateEntitiesListView(List<ListViewItem> items, Exception exception, IWin32Window owner, ListView listView, IFeedbackManager feedbackManager)
+        public void PopulateEntitiesListView(List<ListViewItem> items, Exception exception, IWin32Window owner, ListView listView, INotificationService notificationService)
         {
             if (exception != null)
             {
-                feedbackManager.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
+                notificationService.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
             }
             else
             {
@@ -114,16 +116,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 else
                 {
-                    feedbackManager.DisplayWarningFeedback(owner, "The system does not contain any entities");
+                    notificationService.DisplayWarningFeedback(owner, "The system does not contain any entities");
                 }
             }
         }
 
-        public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e, IFeedbackManager feedbackManager, IWin32Window owner, ListView listView)
+        public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner, ListView listView)
         {
             if (e.Error != null)
             {
-                feedbackManager.DisplayErrorFeedback(owner, $"An error occured: {e.Error.Message}");
+                notificationService.DisplayErrorFeedback(owner, $"An error occured: {e.Error.Message}");
             }
             else
             {
@@ -148,7 +150,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void LoadExportConfigFile(IFeedbackManager feedbackManager, TextBox exportConfigTextBox, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping)
+        public void LoadExportConfigFile(INotificationService notificationService, TextBox exportConfigTextBox, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping)
         {
             if (!string.IsNullOrWhiteSpace(exportConfigTextBox.Text))
             {
@@ -157,7 +159,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var configFile = CrmExporterConfig.GetConfiguration(exportConfigTextBox.Text);
                     if (!configFile.CrmMigrationToolSchemaPaths.Any())
                     {
-                        feedbackManager.DisplayFeedback("Invalid Export Config File");
+                        notificationService.DisplayFeedback("Invalid Export Config File");
                         exportConfigTextBox.Text = "";
                         return;
                     }
@@ -168,11 +170,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     inputLookupMaping.Clear();
                     inputLookupMaping.AddRange(configFile.LookupMapping);
 
-                    feedbackManager.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File");
+                    notificationService.DisplayFeedback("Filters and Lookup Mappings loaded from Export Config File");
                 }
                 catch (Exception ex)
                 {
-                    feedbackManager.DisplayFeedback($"Load Correct Export Config file, error:{ex.Message}");
+                    notificationService.DisplayFeedback($"Load Correct Export Config file, error:{ex.Message}");
                 }
             }
         }
@@ -292,7 +294,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void HandleMappingControlItemClick(IFeedbackManager feedbackManager, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
+        public void HandleMappingControlItemClick(INotificationService notificationService, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
         {
             if (listViewItemIsSelected)
             {
@@ -310,7 +312,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
             else
             {
-                feedbackManager.DisplayFeedback("Entity is not selected");
+                notificationService.DisplayFeedback("Entity is not selected");
             }
         }
 
@@ -366,7 +368,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void ProcessFilterQuery(IFeedbackManager feedbackManager, Form parentForm, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)
+        public void ProcessFilterQuery(INotificationService notificationService, Form parentForm, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)
         {
             if (listViewItemIsSelected)
             {
@@ -396,11 +398,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
             else
             {
-                feedbackManager.DisplayFeedback("Entity list is empty");
+                notificationService.DisplayFeedback("Entity list is empty");
             }
         }
 
-        public void LoadImportConfigFile(IFeedbackManager feedbackManager, TextBox importConfig, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
+        public void LoadImportConfigFile(INotificationService notificationService, TextBox importConfig, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
         {
             if (!string.IsNullOrWhiteSpace(importConfig.Text))
             {
@@ -409,7 +411,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var configImport = CrmImportConfig.GetConfiguration(importConfig.Text);
                     if (configImport.MigrationConfig == null)
                     {
-                        feedbackManager.DisplayFeedback("Invalid Import Config File");
+                        notificationService.DisplayFeedback("Invalid Import Config File");
                         importConfig.Text = "";
                         return;
                     }
@@ -417,11 +419,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     inputMapper = configImport.MigrationConfig.Mappings;
                     DataConversion(inputMapping, inputMapper);
 
-                    feedbackManager.DisplayFeedback("Guid Id Mappings loaded from Import Config File");
+                    notificationService.DisplayFeedback("Guid Id Mappings loaded from Import Config File");
                 }
                 catch (Exception ex)
                 {
-                    feedbackManager.DisplayFeedback($"Load Correct Import Config file, error:{ex.Message}");
+                    notificationService.DisplayFeedback($"Load Correct Import Config file, error:{ex.Message}");
                 }
             }
         }
@@ -479,7 +481,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
         }
 
-        public bool AreCrmEntityFieldsSelected(IMetadataService metadataService, HashSet<string> inputCheckedEntity, IOrganizationService organizationService, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public bool AreCrmEntityFieldsSelected(HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, ServiceParameters serviceParameters)
         {
             var fieldsSelected = false;
             if (inputCheckedEntity.Count > 0)
@@ -489,8 +491,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, organizationService, dataMigratorExceptionHelper);
-                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
+                    var sourceList = serviceParameters.MetadataService.RetrieveEntities(item, serviceParameters.OrganizationService, serviceParameters.ExceptionService);
+                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters.NotificationService);
 
                     if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
                     {
@@ -507,7 +509,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             return fieldsSelected;
         }
 
-        public void CollectCrmEntityFields(IMetadataService metadataService, IOrganizationService organizationService, HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager, IDataMigratorExceptionHelper dataMigratorExceptionHelper)
+        public void CollectCrmEntityFields(HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, ServiceParameters serviceParameters)
         {
             if (inputCheckedEntity.Count > 0)
             {
@@ -516,8 +518,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 foreach (var item in inputCheckedEntity)
                 {
                     var crmEntity = new CrmEntity();
-                    var sourceList = metadataService.RetrieveEntities(item, organizationService, dataMigratorExceptionHelper);
-                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, feedbackManager);
+                    var sourceList = serviceParameters.MetadataService.RetrieveEntities(item, serviceParameters.OrganizationService, serviceParameters.ExceptionService);
+                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters.NotificationService);
                 }
 
                 schemaConfiguration.Entities.Clear();
@@ -525,7 +527,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
+        public void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, INotificationService notificationService)
         {
             crmEntity.Name = sourceList.LogicalName;
 
@@ -535,7 +537,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             crmEntity.PrimaryIdField = sourceList.PrimaryIdAttribute;
             crmEntity.PrimaryNameField = sourceList.PrimaryNameAttribute;
             CollectCrmEntityRelationShip(sourceList, crmEntity, inputEntityRelationships);
-            CollectCrmAttributesFields(sourceList, crmEntity, inputEntityAttributes, inputAttributeMapping, feedbackManager);
+            CollectCrmAttributesFields(sourceList, crmEntity, inputEntityAttributes, inputAttributeMapping, notificationService);
             crmEntityList.Add(crmEntity);
         }
 
@@ -579,7 +581,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             relationshipList.Add(crmRelationShip);
         }
 
-        public void CollectCrmAttributesFields(EntityMetadata sourceList, CrmEntity crmEntity, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
+        public void CollectCrmAttributesFields(EntityMetadata sourceList, CrmEntity crmEntity, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, INotificationService notificationService)
         {
             if (inputEntityAttributes != null)
             {
@@ -591,7 +593,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var crmFieldList = new List<CrmField>();
                     foreach (AttributeMetadata attribute in attributes)
                     {
-                        StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, feedbackManager);
+                        StoreAttributeMetadata(attribute, sourceList, primaryAttribute, crmFieldList, inputEntityAttributes, inputAttributeMapping, notificationService);
                     }
 
                     crmEntity.CrmFields.Clear();
@@ -600,7 +602,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void StoreAttributeMetadata(AttributeMetadata attribute, EntityMetadata entityMetadata, string primaryAttribute, List<CrmField> crmFieldList, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, IFeedbackManager feedbackManager)
+        public void StoreAttributeMetadata(AttributeMetadata attribute, EntityMetadata entityMetadata, string primaryAttribute, List<CrmField> crmFieldList, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, INotificationService notificationService)
         {
             if (inputEntityAttributes != null && inputEntityAttributes.ContainsKey(entityMetadata.LogicalName))
             {
@@ -612,9 +614,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         crmField.DisplayName = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
                         crmField.FieldName = attribute.LogicalName;
                         inputAttributeMapping.AttributeMetadataType = attribute.AttributeTypeName.Value.ToString(CultureInfo.InvariantCulture);
-                        inputAttributeMapping.GetMapping(feedbackManager);
+                        inputAttributeMapping.GetMapping(notificationService);
                         crmField.FieldType = inputAttributeMapping.AttributeMetadataTypeResult;
-                        StoreLookUpAttribute(attribute, crmField, feedbackManager);
+                        StoreLookUpAttribute(attribute, crmField, notificationService);
                         StoreAttributePrimaryKey(primaryAttribute, crmField);
                         crmFieldList.Add(crmField);
                     }
@@ -630,7 +632,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        public void StoreLookUpAttribute(AttributeMetadata attribute, CrmField crmField, IFeedbackManager feedbackManager)
+        public void StoreLookUpAttribute(AttributeMetadata attribute, CrmField crmField, INotificationService notificationService)
         {
             if (crmField.FieldType.Equals("entityreference", StringComparison.InvariantCulture))
             {
@@ -643,12 +645,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
                 else
                 {
-                    feedbackManager.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!");
+                    notificationService.DisplayFeedback("The supplied attribute is null. Expecting an Entity Reference!");
                 }
             }
         }
 
-        public void GenerateImportConfigFile(IFeedbackManager feedbackManager, TextBox importConfig, Dictionary<string, Dictionary<Guid, Guid>> inputMapper)
+        public void GenerateImportConfigFile(INotificationService notificationService, TextBox importConfig, Dictionary<string, Dictionary<Guid, Guid>> inputMapper)
         {
             try
             {
@@ -685,7 +687,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
             catch (Exception ex)
             {
-                feedbackManager.DisplayFeedback($"Error Saving Import Config file, Error:{ex.Message}");
+                notificationService.DisplayFeedback($"Error Saving Import Config file, Error:{ex.Message}");
             }
         }
 

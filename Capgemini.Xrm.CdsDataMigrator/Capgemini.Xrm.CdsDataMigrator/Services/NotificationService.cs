@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services
+namespace Capgemini.Xrm.CdsDataMigrator.Services
 {
-    public class FeedbackManager : IFeedbackManager
+    public class NotificationService : INotificationService
     {
         public void DisplayFeedback(string message)
         {

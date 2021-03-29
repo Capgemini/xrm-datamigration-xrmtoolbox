@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Core
 {
-    public interface IDataMigratorExceptionHelper
+    public interface IExceptionService
     {
         string GetErrorMessage(Exception error, bool returnWithStackTrace);
     }

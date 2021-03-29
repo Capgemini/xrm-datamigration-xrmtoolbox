@@ -16,7 +16,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
     public class MetadataServiceTests
     {
         private Mock<IOrganizationService> serviceMock;
-        private Mock<IDataMigratorExceptionHelper> dataMigratorExceptionHelperMock;
+        private Mock<IExceptionService> dataMigratorExceptionHelperMock;
         private List<EntityMetadata> metaDataList;
         private RetrieveAllEntitiesResponse entityResponse;
 
@@ -26,7 +26,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
         public void Setup()
         {
             serviceMock = new Mock<IOrganizationService>();
-            dataMigratorExceptionHelperMock = new Mock<IDataMigratorExceptionHelper>();
+            dataMigratorExceptionHelperMock = new Mock<IExceptionService>();
 
             systemUnderTest = new MetadataService();
 
