@@ -21,8 +21,59 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
-    public partial class SchemaWizardDelegate
+    public class SchemaWizardDelegate
     {
+        public void GenerateXMLFile(TextBox tbSchemaPath, CrmSchemaConfiguration schemaConfiguration)
+        {
+            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
+            {
+                schemaConfiguration.SaveToFile(tbSchemaPath.Text);
+            }
+        }
+
+        public void StoreAttributeIfRequiresKey(string logicalName, ItemCheckEventArgs e, Dictionary<string, HashSet<string>> inputEntityAttributes, string inputEntityLogicalName)
+        {
+            var attributeSet = new HashSet<string>();
+            if (e.CurrentValue.ToString() != "Checked")
+            {
+                attributeSet.Add(logicalName);
+            }
+
+            inputEntityAttributes.Add(inputEntityLogicalName, attributeSet);
+        }
+
+        public void StoreAttriubteIfKeyExists(string logicalName, ItemCheckEventArgs e, Dictionary<string, HashSet<string>> inputEntityAttributes, string inputEntityLogicalName)
+        {
+            var attributeSet = inputEntityAttributes[inputEntityLogicalName];
+
+            if (e.CurrentValue.ToString() == "Checked")
+            {
+                if (attributeSet.Contains(logicalName))
+                {
+                    attributeSet.Remove(logicalName);
+                }
+            }
+            else
+            {
+                attributeSet.Add(logicalName);
+            }
+        }
+
+        public void OpenMappingForm(ServiceParameters serviceParameters, IWin32Window owner, List<EntityMetadata> inputCachedMetadata, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, string inputEntityLogicalName)
+        {
+            using (var mappingDialog = new MappingListLookup(inputLookupMaping, serviceParameters.OrganizationService, inputCachedMetadata, inputEntityLogicalName, serviceParameters.MetadataService, serviceParameters.ExceptionService)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            })
+            {
+                if (owner != null)
+                {
+                    mappingDialog.ShowDialog(owner);
+                }
+                mappingDialog.RefreshMappingList();
+            }
+        }
+
         public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ServiceParameters migratorParameters)
         {
             var entityMetaData = migratorParameters.MetadataService.RetrieveEntities(inputEntityLogicalName, migratorParameters.OrganizationService, migratorParameters.ExceptionService);

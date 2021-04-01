@@ -32,6 +32,156 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void GenerateXMLFileEmptyFilePath()
+        {
+            using (var tbSchemaPath = new System.Windows.Forms.TextBox())
+            {
+                var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
+
+                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath, schemaConfiguration))
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void GenerateXMLFile()
+        {
+            using (var tbSchemaPath = new System.Windows.Forms.TextBox())
+            {
+                tbSchemaPath.Text = $"{Guid.NewGuid()}.json";
+
+                var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
+
+                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath, schemaConfiguration))
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsInputEntityAttributesDoesNotContainEntityLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .Throw<KeyNotFoundException>();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
+            {
+                { entityLogicalName, attributeSet }
+            };
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsCheckedAndAttributeSetAlreadyContainsLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>() { attributeLogicalName };
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
+            {
+                { entityLogicalName, attributeSet }
+            };
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
+            {
+                { entityLogicalName, attributeSet }
+            };
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void OpenMappingForm()
+        {
+            var serviceParameters = GenerateMigratorParameters();
+
+            string entityLogicalName = "contact";
+            var inputCachedMetadata = new List<EntityMetadata>();
+            var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
+
+            FluentActions.Invoking(() => systemUnderTest.OpenMappingForm(serviceParameters, null, inputCachedMetadata, inputLookupMaping, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+        }
+
+        [TestMethod]
         public void GetEntityLogicalNameNullListViewItem()
         {
             System.Windows.Forms.ListViewItem entityitem = null;

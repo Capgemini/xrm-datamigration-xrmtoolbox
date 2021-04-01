@@ -267,24 +267,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             schemaWizardDelegate.HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
         }
 
-        private void OpenMappingForm(IMetadataService metadataService, IExceptionService dataMigratorExceptionHelper)
-        {
-            using (var mappingDialog = new MappingListLookup(lookupMaping, OrganizationService, cachedMetadata, entityLogicalName, metadataService, dataMigratorExceptionHelper)
-            {
-                StartPosition = FormStartPosition.CenterParent
-            })
-            {
-                mappingDialog.ShowDialog(ParentForm);
-                mappingDialog.RefreshMappingList();
-                InitMappings();
-                Settings[organisationId.ToString()].Mappings.Clear();
-            }
-        }
-
-        private void InitMappings()
-        {
-            tsbtMappings.ForeColor = Settings[organisationId.ToString()].Mappings.Count == 0 ? Color.Black : Color.Blue;
-        }
+        //private void OpenMappingForm(ServiceParameters serviceParameters, IWin32Window owner, List<EntityMetadata> inputCachedMetadata, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, string inputEntityLogicalName)
+        //{
+        //    using (var mappingDialog = new MappingListLookup(inputLookupMaping, serviceParameters.OrganizationService, inputCachedMetadata, inputEntityLogicalName, serviceParameters.MetadataService, serviceParameters.ExceptionService)
+        //    {
+        //        StartPosition = FormStartPosition.CenterParent
+        //    })
+        //    {
+        //        if (owner != null)
+        //        {
+        //            mappingDialog.ShowDialog(owner);
+        //        }
+        //        mappingDialog.RefreshMappingList();
+        //    }
+        //}
 
         private void TabStripFiltersClick(object sender, EventArgs e)
         {
@@ -354,39 +350,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var logicalName = lvAttributes.Items[indexNumber].SubItems[1].Text;
             if (entityAttributes.ContainsKey(entityLogicalName))
             {
-                StoreAttriubteIfKeyExists(logicalName, e);
+                schemaWizardDelegate.StoreAttriubteIfKeyExists(logicalName, e, entityAttributes, entityLogicalName);
             }
             else
             {
-                StoreAttributeIfRequiresKey(logicalName, e);
-            }
-        }
-
-        private void StoreAttributeIfRequiresKey(string logicalName, ItemCheckEventArgs e)
-        {
-            var attributeSet = new HashSet<string>();
-            if (e.CurrentValue.ToString() != "Checked")
-            {
-                attributeSet.Add(logicalName);
-            }
-
-            entityAttributes.Add(entityLogicalName, attributeSet);
-        }
-
-        private void StoreAttriubteIfKeyExists(string logicalName, ItemCheckEventArgs e)
-        {
-            HashSet<string> attributeSet = entityAttributes[entityLogicalName];
-
-            if (e.CurrentValue.ToString() == "Checked")
-            {
-                if (attributeSet.Contains(logicalName))
-                {
-                    attributeSet.Remove(logicalName);
-                }
-            }
-            else
-            {
-                attributeSet.Add(logicalName);
+                schemaWizardDelegate.StoreAttributeIfRequiresKey(logicalName, e, entityAttributes, entityLogicalName);
             }
         }
 
@@ -414,20 +382,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             if (schemaWizardDelegate.AreCrmEntityFieldsSelected(checkedEntity, entityRelationships, entityAttributes, attributeMapping, serviceParameters))
             {
                 schemaWizardDelegate.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
-                GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
+                schemaWizardDelegate.GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
                 crmSchemaConfiguration.Entities.Clear();
             }
             else
             {
                 NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
-            }
-        }
-
-        private static void GenerateXMLFile(TextBox tbSchemaPath, CrmSchemaConfiguration schemaConfiguration)
-        {
-            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
-            {
-                schemaConfiguration.SaveToFile(tbSchemaPath.Text);
             }
         }
 
@@ -638,13 +598,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
             schemaWizardDelegate.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
-            GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
+            schemaWizardDelegate.GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
             crmSchemaConfiguration.Entities.Clear();
         }
 
         private void ToolStripButton1Click(object sender, EventArgs e)
         {
-            OpenMappingForm(MetadataService, ExceptionService);
+            var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
+
+            schemaWizardDelegate.OpenMappingForm(serviceParameters, ParentForm, cachedMetadata, lookupMaping, entityLogicalName);
+
+            tsbtMappings.ForeColor = Settings[organisationId.ToString()].Mappings.Count == 0 ? Color.Black : Color.Blue;
+            Settings[organisationId.ToString()].Mappings.Clear();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
