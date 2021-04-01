@@ -267,21 +267,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             schemaWizardDelegate.HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
         }
 
-        //private void OpenMappingForm(ServiceParameters serviceParameters, IWin32Window owner, List<EntityMetadata> inputCachedMetadata, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, string inputEntityLogicalName)
-        //{
-        //    using (var mappingDialog = new MappingListLookup(inputLookupMaping, serviceParameters.OrganizationService, inputCachedMetadata, inputEntityLogicalName, serviceParameters.MetadataService, serviceParameters.ExceptionService)
-        //    {
-        //        StartPosition = FormStartPosition.CenterParent
-        //    })
-        //    {
-        //        if (owner != null)
-        //        {
-        //            mappingDialog.ShowDialog(owner);
-        //        }
-        //        mappingDialog.RefreshMappingList();
-        //    }
-        //}
-
         private void TabStripFiltersClick(object sender, EventArgs e)
         {
             var currentFilter = filterQuery.ContainsKey(entityLogicalName) ? filterQuery[entityLogicalName] : null;
