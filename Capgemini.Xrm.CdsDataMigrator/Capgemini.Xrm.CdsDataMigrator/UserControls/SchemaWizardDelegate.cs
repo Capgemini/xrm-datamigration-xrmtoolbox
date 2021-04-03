@@ -27,22 +27,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
     Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
     )
         {
-            //using (var fileDialog = new SaveFileDialog
-            //{
-            //    Filter = "XML Files|*.xml",
-            //    OverwritePrompt = false
-            //})
-            //{
-            //  var result = fileDialog.ShowDialog();
-
             if (dialogResult == DialogResult.OK)
             {
                 schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
 
                 if (File.Exists(schemaPathTextBox.Text))
                 {
-                    //LoadSchemaFile(string schemaFilePath, bool working, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
-                    //LoadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
                     loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
                 }
             }
@@ -50,7 +40,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             {
                 schemaPathTextBox.Text = null;
             }
-            //}
         }
 
         public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, System.Windows.Forms.TextBox schemaPathTextBox)
