@@ -7,10 +7,10 @@ using Capgemini.Xrm.DataMigration.XrmToolBox.Enums;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Logging
+namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
-    public class MessageLoggerTests
+    public class LoggerServiceTests
     {
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";

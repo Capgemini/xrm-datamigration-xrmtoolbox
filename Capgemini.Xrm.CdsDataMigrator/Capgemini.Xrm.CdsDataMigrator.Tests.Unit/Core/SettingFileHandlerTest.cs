@@ -28,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             var actual = SettingFileHandler.SaveConfigData(config);
 
-            actual.Should().BeTrue();
+            actual.Should().BeFalse();
         }
     }
 }
