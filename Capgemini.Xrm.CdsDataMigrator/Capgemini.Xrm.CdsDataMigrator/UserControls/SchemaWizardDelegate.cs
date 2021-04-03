@@ -23,6 +23,50 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public class SchemaWizardDelegate
     {
+        public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, DialogResult dialogResult, SaveFileDialog fileDialog,
+    Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
+    )
+        {
+            //using (var fileDialog = new SaveFileDialog
+            //{
+            //    Filter = "XML Files|*.xml",
+            //    OverwritePrompt = false
+            //})
+            //{
+            //  var result = fileDialog.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
+
+                if (File.Exists(schemaPathTextBox.Text))
+                {
+                    //LoadSchemaFile(string schemaFilePath, bool working, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
+                    //LoadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
+                    loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
+                }
+            }
+            else if (dialogResult == DialogResult.Cancel)
+            {
+                schemaPathTextBox.Text = null;
+            }
+            //}
+        }
+
+        public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, System.Windows.Forms.TextBox schemaPathTextBox)
+        {
+            if (AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters))
+            {
+                CollectCrmEntityFields(inputCheckedEntity, inputCrmSchemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
+                GenerateXMLFile(schemaPathTextBox, inputCrmSchemaConfiguration);
+                inputCrmSchemaConfiguration.Entities.Clear();
+            }
+            else
+            {
+                serviceParameters.NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
+            }
+        }
+
         public void StoreRelationshipIfRequiresKey(string logicalName, ItemCheckEventArgs e, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             var relationshipSet = new HashSet<string>();

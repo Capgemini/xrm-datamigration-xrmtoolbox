@@ -32,6 +32,133 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void SchemaFolderPathActionWithDialogResultCancel()
+        {
+            using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+                {
+                    var inputWorkingstate = true;
+                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
+                    var dialogResult = System.Windows.Forms.DialogResult.Cancel;
+
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                                 .Should()
+                                 .NotThrow();
+
+                    schemaPathTextBox.Text.Should().BeEmpty();
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SchemaFolderPathActionWithDialogResultOk()
+        {
+            var filename = "TestData\\usersettingsschema.xml";
+
+            using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                fileDialog.FileName = filename;
+
+                using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+                {
+                    var inputWorkingstate = true;
+                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
+                    var dialogResult = System.Windows.Forms.DialogResult.OK;
+
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                                 .Should()
+                                 .NotThrow();
+
+                    schemaPathTextBox.Text.Should().Be(filename);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SchemaFolderPathActionWithDialogResultOkAndNonExistingFile()
+        {
+            var filename = "TestData\\nonexistingfile.xml";
+
+            using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                fileDialog.FileName = filename;
+
+                using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+                {
+                    var inputWorkingstate = true;
+                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
+                    var dialogResult = System.Windows.Forms.DialogResult.OK;
+
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                                 .Should()
+                                 .NotThrow();
+
+                    schemaPathTextBox.Text.Should().Be(filename);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void SaveSchemaNoEntityAttributeSelected()
+        {
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Please select at least one attribute for each selected entity!"))
+                                   .Verifiable();
+
+            using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+            {
+                var serviceParameters = GenerateMigratorParameters();
+                var inputCheckedEntity = new HashSet<string>();
+
+                var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+                var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+                var inputCrmSchemaConfiguration = new DataMigration.Config.CrmSchemaConfiguration();
+
+                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox))
+                             .Should()
+                             .NotThrow();
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("Please select at least one attribute for each selected entity!"), Times.Once);
+        }
+
+        [TestMethod]
+        public void SaveSchemaEntityAttributeSelected()
+        {
+            NotificationServiceMock.Setup(x => x.DisplayFeedback("Please select at least one attribute for each selected entity!"))
+                                   .Verifiable();
+            var entityLogicalName = "contact";
+            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
+            var serviceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+            {
+                var inputCrmSchemaConfiguration = new DataMigration.Config.CrmSchemaConfiguration();
+
+                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox))
+                             .Should()
+                             .NotThrow();
+            }
+
+            MetadataServiceMock.VerifyAll();
+            NotificationServiceMock.Verify(x => x.DisplayFeedback("Please select at least one attribute for each selected entity!"), Times.Never);
+        }
+
+        [TestMethod]
         public void SetListViewSortingWithEmptySettings()
         {
             using (var listview = new System.Windows.Forms.ListView())

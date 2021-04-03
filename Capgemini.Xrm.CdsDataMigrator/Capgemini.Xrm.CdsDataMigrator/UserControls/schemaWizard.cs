@@ -335,16 +335,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
 
-            if (schemaWizardDelegate.AreCrmEntityFieldsSelected(checkedEntity, entityRelationships, entityAttributes, attributeMapping, serviceParameters))
-            {
-                schemaWizardDelegate.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
-                schemaWizardDelegate.GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
-                crmSchemaConfiguration.Entities.Clear();
-            }
-            else
-            {
-                NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
-            }
+            schemaWizardDelegate.SaveSchema(serviceParameters, checkedEntity, entityRelationships, entityAttributes, attributeMapping, crmSchemaConfiguration, tbSchemaPath);
         }
 
         private void ButtonSchemaFolderPathClick(object sender, EventArgs e)
@@ -355,23 +346,41 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 OverwritePrompt = false
             })
             {
-                var result = fileDialog.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    tbSchemaPath.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
-
-                    if (File.Exists(tbSchemaPath.Text))
-                    {
-                        LoadSchemaFile(tbSchemaPath.Text, workingstate, NotificationService, entityAttributes, entityRelationships);
-                    }
-                }
-                else if (result == DialogResult.Cancel)
-                {
-                    tbSchemaPath.Text = null;
-                }
+                var dialogResult = fileDialog.ShowDialog();
+                schemaWizardDelegate.SchemaFolderPathAction(NotificationService, tbSchemaPath, workingstate, entityAttributes, entityRelationships, dialogResult, fileDialog, LoadSchemaFile);
             }
         }
+
+        //private static void SchemaFolderPathAction(System.Windows.Forms.TextBox schemaPathTextBox, bool inputWorkingstate, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships,
+
+        //    Action<string, bool , INotificationService, Dictionary<string, HashSet<string>> , Dictionary<string, HashSet<string>> > loadSchemaFile
+        //    )
+        //{
+        //    using (var fileDialog = new SaveFileDialog
+        //    {
+        //        Filter = "XML Files|*.xml",
+        //        OverwritePrompt = false
+        //    })
+        //    {
+        //        var result = fileDialog.ShowDialog();
+
+        //        if (result == DialogResult.OK)
+        //        {
+        //            schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
+
+        //            if (File.Exists(schemaPathTextBox.Text))
+        //            {
+        //                //LoadSchemaFile(string schemaFilePath, bool working, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        //                //LoadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
+        //                loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
+        //            }
+        //        }
+        //        else if (result == DialogResult.Cancel)
+        //        {
+        //            schemaPathTextBox.Text = null;
+        //        }
+        //    }
+        //}
 
         public void ClearAllListViews()
         {
