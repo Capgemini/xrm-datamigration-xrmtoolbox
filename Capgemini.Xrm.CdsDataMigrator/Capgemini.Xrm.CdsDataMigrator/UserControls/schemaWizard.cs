@@ -347,6 +347,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             })
             {
                 var dialogResult = fileDialog.ShowDialog();
+
                 schemaWizardDelegate.SchemaFolderPathAction(NotificationService, tbSchemaPath, workingstate, entityAttributes, entityRelationships, dialogResult, fileDialog, LoadSchemaFile);
             }
         }
