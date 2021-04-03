@@ -23,6 +23,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public class SchemaWizardDelegate
     {
+        public void StoreEntityData(CrmEntity[] crmEntity, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        {
+            inputEntityAttributes.Clear();
+            inputEntityRelationships.Clear();
+            if (crmEntity != null)
+            {
+                foreach (var entities in crmEntity)
+                {
+                    var logicalName = entities.Name;
+                    var attributeSet = new HashSet<string>();
+                    var relationShipSet = new HashSet<string>();
+                    if (entities.CrmFields != null)
+                    {
+                        foreach (var attributes in entities.CrmFields)
+                        {
+                            attributeSet.Add(attributes.FieldName);
+                        }
+                    }
+
+                    if (entities.CrmRelationships != null)
+                    {
+                        foreach (var relationship in entities.CrmRelationships)
+                        {
+                            relationShipSet.Add(relationship.RelationshipName);
+                        }
+                    }
+
+                    inputEntityAttributes.Add(logicalName, attributeSet);
+                    inputEntityRelationships.Add(logicalName, relationShipSet);
+                }
+            }
+        }
+
         public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, DialogResult dialogResult, SaveFileDialog fileDialog,
     Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
     )

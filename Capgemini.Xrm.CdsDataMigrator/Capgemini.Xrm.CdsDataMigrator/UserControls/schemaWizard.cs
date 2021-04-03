@@ -114,7 +114,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 try
                 {
                     var crmSchema = CrmSchemaConfiguration.ReadFromFile(schemaFilePath);
-                    StoreEntityData(crmSchema.Entities?.ToArray(), inputEntityAttributes, inputEntityRelationships);
+                    schemaWizardDelegate.StoreEntityData(crmSchema.Entities?.ToArray(), inputEntityAttributes, inputEntityRelationships);
                     ClearAllListViews();
                     PopulateEntities(working);
                 }
@@ -352,72 +352,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        //private static void SchemaFolderPathAction(System.Windows.Forms.TextBox schemaPathTextBox, bool inputWorkingstate, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships,
-
-        //    Action<string, bool , INotificationService, Dictionary<string, HashSet<string>> , Dictionary<string, HashSet<string>> > loadSchemaFile
-        //    )
-        //{
-        //    using (var fileDialog = new SaveFileDialog
-        //    {
-        //        Filter = "XML Files|*.xml",
-        //        OverwritePrompt = false
-        //    })
-        //    {
-        //        var result = fileDialog.ShowDialog();
-
-        //        if (result == DialogResult.OK)
-        //        {
-        //            schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
-
-        //            if (File.Exists(schemaPathTextBox.Text))
-        //            {
-        //                //LoadSchemaFile(string schemaFilePath, bool working, INotificationService notificationService, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
-        //                //LoadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
-        //                loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
-        //            }
-        //        }
-        //        else if (result == DialogResult.Cancel)
-        //        {
-        //            schemaPathTextBox.Text = null;
-        //        }
-        //    }
-        //}
-
         public void ClearAllListViews()
         {
             lvEntities.Items.Clear();
             lvAttributes.Items.Clear();
             lvRelationship.Items.Clear();
-        }
-
-        private static void StoreEntityData(CrmEntity[] crmEntity, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships)
-        {
-            inputEntityAttributes.Clear();
-            inputEntityRelationships.Clear();
-            foreach (var entities in crmEntity)
-            {
-                var logicalName = entities.Name;
-                HashSet<string> attributeSet = new HashSet<string>();
-                HashSet<string> relationShipSet = new HashSet<string>();
-                if (entities.CrmFields != null)
-                {
-                    foreach (var attributes in entities.CrmFields)
-                    {
-                        attributeSet.Add(attributes.FieldName);
-                    }
-                }
-
-                if (entities.CrmRelationships != null)
-                {
-                    foreach (var relationship in entities.CrmRelationships)
-                    {
-                        relationShipSet.Add(relationship.RelationshipName);
-                    }
-                }
-
-                inputEntityAttributes.Add(logicalName, attributeSet);
-                inputEntityRelationships.Add(logicalName, relationShipSet);
-            }
         }
 
         private void CheckBoxAllRelationshipsCheckedChanged(object sender, EventArgs e)

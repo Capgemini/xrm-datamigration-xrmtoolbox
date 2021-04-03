@@ -19,6 +19,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
     public class SchemaWizardDelegateTests : TestBase
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
+        private Dictionary<string, HashSet<string>> inputEntityAttributes;
+        private bool inputWorkingstate;
+        private HashSet<string> inputCheckedEntity;
 
         private SchemaWizardDelegate systemUnderTest;
 
@@ -27,8 +30,140 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             SetupServiceMocks();
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            inputWorkingstate = true;
+            inputCheckedEntity = new HashSet<string>();
 
             systemUnderTest = new SchemaWizardDelegate();
+        }
+
+        [TestMethod]
+        public void StoreEntityDataNullEntityList()
+        {
+            FluentActions.Invoking(() => systemUnderTest.StoreEntityData(null, inputEntityAttributes, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(0);
+            inputEntityRelationships.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreEntityDataNoEntities()
+        {
+            var crmEntity = new List<DataMigration.Model.CrmEntity>();
+
+            FluentActions.Invoking(() => systemUnderTest.StoreEntityData(crmEntity.ToArray(), inputEntityAttributes, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(0);
+            inputEntityRelationships.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreEntityDataHasEntitiesDuplicateEntityLogicalName()
+        {
+            var maxAttributes = 6;
+            var maxRelationships = 3;
+
+            var crmEntity = new List<DataMigration.Model.CrmEntity>();
+
+            for (int entityCount = 0; entityCount < 5; entityCount++)
+            {
+                var entity = new DataMigration.Model.CrmEntity
+                {
+                    Name = "TestEntity"
+                };
+
+                for (int attributeCount = 0; attributeCount < maxAttributes; attributeCount++)
+                {
+                    entity.CrmFields.Add(new Capgemini.Xrm.DataMigration.Model.CrmField { FieldName = $"FieldName{attributeCount}" });
+                }
+
+                for (int relationshipCount = 0; relationshipCount < maxRelationships; relationshipCount++)
+                {
+                    entity.CrmRelationships.Add(new Capgemini.Xrm.DataMigration.Model.CrmRelationship { RelationshipName = $"RelationshipName{relationshipCount}" });
+                }
+
+                crmEntity.Add(entity);
+            }
+
+            FluentActions.Invoking(() => systemUnderTest.StoreEntityData(crmEntity.ToArray(), inputEntityAttributes, inputEntityRelationships))
+                         .Should()
+                         .Throw<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void StoreEntityDataHasEntities()
+        {
+            var maxAttributes = 6;
+            var maxRelationships = 3;
+            var maxEntityCount = 5;
+            var index = 3;
+
+            var crmEntity = new List<DataMigration.Model.CrmEntity>();
+
+            for (int entityCount = 0; entityCount < maxEntityCount; entityCount++)
+            {
+                var entity = new DataMigration.Model.CrmEntity
+                {
+                    Name = $"TestEntity{entityCount}"
+                };
+
+                for (int attributeCount = 0; attributeCount < maxAttributes; attributeCount++)
+                {
+                    entity.CrmFields.Add(new Capgemini.Xrm.DataMigration.Model.CrmField { FieldName = $"FieldName{attributeCount}" });
+                }
+
+                for (int relationshipCount = 0; relationshipCount < maxRelationships; relationshipCount++)
+                {
+                    entity.CrmRelationships.Add(new Capgemini.Xrm.DataMigration.Model.CrmRelationship { RelationshipName = $"RelationshipName{relationshipCount}" });
+                }
+
+                crmEntity.Add(entity);
+            }
+
+            FluentActions.Invoking(() => systemUnderTest.StoreEntityData(crmEntity.ToArray(), inputEntityAttributes, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(maxEntityCount);
+            inputEntityRelationships.Count.Should().Be(maxEntityCount);
+
+            inputEntityAttributes[$"TestEntity{index}"].Count.Should().Be(maxAttributes);
+            inputEntityRelationships[$"TestEntity{index}"].Count.Should().Be(maxRelationships);
+        }
+
+        [TestMethod]
+        public void StoreEntityDataHasEntitiesWithNoAttributesAndRelationships()
+        {
+            var maxAttributes = 0;
+            var maxRelationships = 0;
+            var maxEntityCount = 5;
+            var index = 3;
+
+            var crmEntity = new List<DataMigration.Model.CrmEntity>();
+
+            for (int entityCount = 0; entityCount < maxEntityCount; entityCount++)
+            {
+                var entity = new DataMigration.Model.CrmEntity
+                {
+                    Name = $"TestEntity{entityCount}"
+                };
+
+                crmEntity.Add(entity);
+            }
+
+            FluentActions.Invoking(() => systemUnderTest.StoreEntityData(crmEntity.ToArray(), inputEntityAttributes, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(maxEntityCount);
+            inputEntityRelationships.Count.Should().Be(maxEntityCount);
+
+            inputEntityAttributes[$"TestEntity{index}"].Count.Should().Be(maxAttributes);
+            inputEntityRelationships[$"TestEntity{index}"].Count.Should().Be(maxRelationships);
         }
 
         [TestMethod]
@@ -38,9 +173,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             {
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
-                    var inputWorkingstate = true;
-                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-
                     var dialogResult = System.Windows.Forms.DialogResult.Cancel;
 
                     FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
@@ -63,9 +195,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
-                    var inputWorkingstate = true;
-                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-
                     var dialogResult = System.Windows.Forms.DialogResult.OK;
 
                     FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
@@ -88,9 +217,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
-                    var inputWorkingstate = true;
-                    var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-
                     var dialogResult = System.Windows.Forms.DialogResult.OK;
 
                     FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
@@ -111,9 +237,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
             {
                 var serviceParameters = GenerateMigratorParameters();
-                var inputCheckedEntity = new HashSet<string>();
 
-                var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
                 var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
                 var inputCrmSchemaConfiguration = new DataMigration.Config.CrmSchemaConfiguration();
 
@@ -131,11 +255,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             NotificationServiceMock.Setup(x => x.DisplayFeedback("Please select at least one attribute for each selected entity!"))
                                    .Verifiable();
             var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
 
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
@@ -340,7 +462,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
@@ -356,7 +477,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
@@ -372,7 +493,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
@@ -386,10 +506,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
             var attributeSet = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
-            {
-                { entityLogicalName, attributeSet }
-            };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
 
@@ -407,10 +524,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
             var attributeSet = new HashSet<string>() { attributeLogicalName };
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
-            {
-                { entityLogicalName, attributeSet }
-            };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
 
@@ -428,10 +542,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
             var attributeSet = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>
-            {
-                { entityLogicalName, attributeSet }
-            };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
             var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
 
@@ -675,7 +786,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             string entityLogicalName = "account_contact";
             SetupMockObjects(entityLogicalName);
             var inputCachedMetadata = new List<EntityMetadata>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
             var serviceParameters = GenerateMigratorParameters();
 
@@ -691,7 +801,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             string entityLogicalName = "account_contact";
             SetupMockObjects(entityLogicalName);
             var inputCachedMetadata = new List<EntityMetadata>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var serviceParameters = GenerateMigratorParameters();
 
             var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
@@ -1096,8 +1205,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                     }
                 }
             };
-
-            Dictionary<string, HashSet<string>> inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
             var actual = systemUnderTest.ProcessAllAttributeMetadata(unmarkedattributes, attributeList.ToArray(), entityLogicalName, inputEntityAttributes);
 
@@ -1740,8 +1847,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void AreCrmEntityFieldsSelectedCheckedEntityCountIsZero()
         {
-            var inputCheckedEntity = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
             var serviceParameters = GenerateMigratorParameters();
 
@@ -1754,11 +1859,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void AreCrmEntityFieldsSelected()
         {
             var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
+            inputCheckedEntity.Add(entityLogicalName);
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
 
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
@@ -1777,8 +1881,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void CollectCrmEntityFieldsCheckedEntityCountIsZero()
         {
-            var inputCheckedEntity = new HashSet<string>();
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
             var serviceParameters = GenerateMigratorParameters();
 
@@ -1793,8 +1895,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void CollectCrmEntityFields()
         {
             var entityLogicalName = "contact";
-            var inputCheckedEntity = new HashSet<string> { entityLogicalName };
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            inputCheckedEntity.Add(entityLogicalName);
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
@@ -1821,7 +1922,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void StoreCrmEntityData()
         {
             var entityLogicalName = "contact";
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
@@ -1928,7 +2028,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
 
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
@@ -1954,8 +2053,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
 
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
 
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
@@ -1978,7 +2075,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void StoreAttributeMetadataWithNullInputEntityAttributes()
         {
             var entityLogicalName = "contact";
-            Dictionary<string, HashSet<string>> inputEntityAttributes = null;
+            inputEntityAttributes = null;
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
 
             string primaryAttribute = "contactId";
@@ -1999,7 +2096,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             var entityLogicalName = "contact";
 
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
 
             string primaryAttribute = "contactId";
@@ -2019,8 +2115,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         public void StoreAttributeMetadata()
         {
             var entityLogicalName = "contact";
-
-            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
