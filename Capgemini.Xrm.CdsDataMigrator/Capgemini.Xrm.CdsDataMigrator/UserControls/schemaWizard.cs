@@ -286,42 +286,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var columnNumber = e.Column;
             if (columnNumber != 3)
             {
-                SetListViewSorting(lvAttributes, e.Column);
+                schemaWizardDelegate.SetListViewSorting(lvAttributes, e.Column, organisationId.ToString(), Settings);
             }
         }
 
         private void ListViewEntitiesColumnClick(object sender, ColumnClickEventArgs e)
         {
-            SetListViewSorting(lvEntities, e.Column);
-        }
-
-        private void SetListViewSorting(ListView listview, int column)
-        {
-            var setting = Settings[organisationId.ToString()].Sortcolumns.FirstOrDefault(s => s.Key == listview.Name);
-            if (setting == null)
-            {
-                setting = new Item<string, int>(listview.Name, -1);
-                Settings[organisationId.ToString()].Sortcolumns.Add(setting);
-            }
-
-            if (setting.Value != column)
-            {
-                setting.Value = column;
-                listview.Sorting = SortOrder.Ascending;
-            }
-            else
-            {
-                if (listview.Sorting == SortOrder.Ascending)
-                {
-                    listview.Sorting = SortOrder.Descending;
-                }
-                else
-                {
-                    listview.Sorting = SortOrder.Ascending;
-                }
-            }
-
-            listview.ListViewItemSorter = new ListViewItemComparer(column, listview.Sorting);
+            schemaWizardDelegate.SetListViewSorting(lvEntities, e.Column, organisationId.ToString(), Settings);
         }
 
         private void CheckListAllEntitiesCheckedChanged(object sender, EventArgs e)
@@ -451,39 +422,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
             if (entityRelationships.ContainsKey(entityLogicalName))
             {
-                StoreRelationshipIfKeyExists(logicalName, e, entityLogicalName, entityRelationships);
+                schemaWizardDelegate.StoreRelationshipIfKeyExists(logicalName, e, entityLogicalName, entityRelationships);
             }
             else
             {
-                StoreRelationshipIfRequiresKey(logicalName, e, entityLogicalName, entityRelationships);
-            }
-        }
-
-        private static void StoreRelationshipIfRequiresKey(string logicalName, ItemCheckEventArgs e, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
-        {
-            var relationshipSet = new HashSet<string>();
-            if (e.CurrentValue.ToString() != "Checked")
-            {
-                relationshipSet.Add(logicalName);
-            }
-
-            inputEntityRelationships.Add(inputEntityLogicalName, relationshipSet);
-        }
-
-        private static void StoreRelationshipIfKeyExists(string logicalName, ItemCheckEventArgs e, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
-        {
-            var relationshipSet = inputEntityRelationships[inputEntityLogicalName];
-
-            if (e.CurrentValue.ToString() == "Checked")
-            {
-                if (relationshipSet.Contains(logicalName))
-                {
-                    relationshipSet.Remove(logicalName);
-                }
-            }
-            else
-            {
-                relationshipSet.Add(logicalName);
+                schemaWizardDelegate.StoreRelationshipIfRequiresKey(logicalName, e, entityLogicalName, entityRelationships);
             }
         }
 

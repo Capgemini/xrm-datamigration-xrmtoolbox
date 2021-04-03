@@ -8,7 +8,7 @@ using Microsoft.Xrm.Sdk;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {
     [TestClass]
-    public class SettingsTest
+    public class SettingsTests
     {
         [TestMethod]
         public void GetOrganisations()

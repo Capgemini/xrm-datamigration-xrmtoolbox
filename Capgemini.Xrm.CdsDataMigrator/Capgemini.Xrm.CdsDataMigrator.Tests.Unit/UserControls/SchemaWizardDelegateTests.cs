@@ -32,6 +32,155 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void SetListViewSortingWithEmptySettings()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 0;
+                var inputOrganisationId = Guid.NewGuid().ToString();
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId, settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Ascending);
+            }
+        }
+
+        [TestMethod]
+        public void SetListViewSortingWithSettingsContainingOrganisationIdAndListViewHasNoName()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 0;
+                var inputOrganisationId = Guid.NewGuid();
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                var item = new KeyValuePair<Guid, Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Organisations>(inputOrganisationId, new DataMigration.XrmToolBoxPlugin.Core.Organisations());
+                settings.Organisations.Add(item);
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId.ToString(), settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Ascending);
+            }
+        }
+
+        [TestMethod]
+        public void SetListViewSortingWithSettingsContainsOrganisationIdAndListItemValueIsNotEqualToInputColumn()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 0;
+                var inputOrganisationId = Guid.NewGuid();
+                listview.Name = inputOrganisationId.ToString();
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                var org = new DataMigration.XrmToolBoxPlugin.Core.Organisations();
+                var listItem = new DataMigration.XrmToolBoxPlugin.Core.Item<string, int>(inputOrganisationId.ToString(), 1);
+                org.Sortcolumns.Add(listItem);
+
+                var item = new KeyValuePair<Guid, Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Organisations>(inputOrganisationId, org);
+                settings.Organisations.Add(item);
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId.ToString(), settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Ascending);
+            }
+        }
+
+        [TestMethod]
+        public void SetListViewSortingWithSettingsContainsOrganisationIdAndListItemValueIsEqualToInputColumnAndSortOrderAscending()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 1;
+                var inputOrganisationId = Guid.NewGuid();
+                listview.Name = inputOrganisationId.ToString();
+                listview.Sorting = System.Windows.Forms.SortOrder.Ascending;
+
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                var org = new DataMigration.XrmToolBoxPlugin.Core.Organisations();
+                var listItem = new DataMigration.XrmToolBoxPlugin.Core.Item<string, int>(inputOrganisationId.ToString(), 1);
+                org.Sortcolumns.Add(listItem);
+
+                var item = new KeyValuePair<Guid, Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Organisations>(inputOrganisationId, org);
+                settings.Organisations.Add(item);
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId.ToString(), settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Descending);
+            }
+        }
+
+        [TestMethod]
+        public void SetListViewSortingWithSettingsContainsOrganisationIdAndListItemValueIsEqualToInputColumnAndSortOrderNone()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 1;
+                var inputOrganisationId = Guid.NewGuid();
+                listview.Name = inputOrganisationId.ToString();
+                listview.Sorting = System.Windows.Forms.SortOrder.None;
+
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                var org = new DataMigration.XrmToolBoxPlugin.Core.Organisations();
+                var listItem = new DataMigration.XrmToolBoxPlugin.Core.Item<string, int>(inputOrganisationId.ToString(), 1);
+                org.Sortcolumns.Add(listItem);
+
+                var item = new KeyValuePair<Guid, Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Organisations>(inputOrganisationId, org);
+                settings.Organisations.Add(item);
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId.ToString(), settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Ascending);
+            }
+        }
+
+        [TestMethod]
+        public void SetListViewSortingWithSettingsContainsOrganisationIdAndListItemValueIsEqualToInputColumnAndSortOrderDescending()
+        {
+            using (var listview = new System.Windows.Forms.ListView())
+            {
+                int column = 1;
+                var inputOrganisationId = Guid.NewGuid();
+                listview.Name = inputOrganisationId.ToString();
+                listview.Sorting = System.Windows.Forms.SortOrder.Descending;
+
+                var settings = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings();
+
+                var org = new DataMigration.XrmToolBoxPlugin.Core.Organisations();
+                var listItem = new DataMigration.XrmToolBoxPlugin.Core.Item<string, int>(inputOrganisationId.ToString(), 1);
+                org.Sortcolumns.Add(listItem);
+
+                var item = new KeyValuePair<Guid, Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Organisations>(inputOrganisationId, org);
+                settings.Organisations.Add(item);
+
+                FluentActions.Invoking(() => systemUnderTest.SetListViewSorting(listview, column, inputOrganisationId.ToString(), settings))
+                             .Should()
+                             .NotThrow();
+
+                listview.ListViewItemSorter.Should().NotBeNull();
+                listview.Sorting.Should().Be(System.Windows.Forms.SortOrder.Ascending);
+            }
+        }
+
+        [TestMethod]
         public void GenerateXMLFileEmptyFilePath()
         {
             using (var tbSchemaPath = new System.Windows.Forms.TextBox())
@@ -165,6 +314,103 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             inputEntityAttributes.Count.Should().Be(1);
             inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfRequiresKeyCurrentValueUnchecked()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfRequiresKey(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityRelationships[inputEntityLogicalName].Contains(relationshipLogicalName).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfRequiresKeyCurrentValueChecked()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfRequiresKey(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityRelationships[inputEntityLogicalName].Contains(relationshipLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfKeyExistsInputEntityRelationshipsDoesNotContainEntityLogicalName()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfKeyExists(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .Throw<KeyNotFoundException>();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfKeyExistsCurrentValueIsChecked()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var relationshipSet = new HashSet<string>();
+            inputEntityRelationships.Add(inputEntityLogicalName, relationshipSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfKeyExists(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityRelationships[inputEntityLogicalName].Contains(relationshipLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfKeyExistsCurrentValueIsCheckedAndRelationshipSetAlreadyContainsLogicalName()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var relationshipSet = new HashSet<string>() { relationshipLogicalName };
+            inputEntityRelationships.Add(inputEntityLogicalName, relationshipSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfKeyExists(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityRelationships[inputEntityLogicalName].Contains(relationshipLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreRelationshipIfKeyExistsCurrentValueIsUnchecked()
+        {
+            var relationshipLogicalName = "contact_account";
+            var inputEntityLogicalName = "contact";
+
+            var relationshipSet = new HashSet<string>();
+            inputEntityRelationships.Add(inputEntityLogicalName, relationshipSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreRelationshipIfKeyExists(relationshipLogicalName, itemCheckEventArgs, inputEntityLogicalName, inputEntityRelationships))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityRelationships[inputEntityLogicalName].Contains(relationshipLogicalName).Should().BeTrue();
         }
 
         [TestMethod]

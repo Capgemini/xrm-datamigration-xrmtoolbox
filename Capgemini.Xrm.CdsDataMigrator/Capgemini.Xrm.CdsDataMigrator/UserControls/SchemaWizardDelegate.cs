@@ -23,6 +23,63 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
     public class SchemaWizardDelegate
     {
+        public void StoreRelationshipIfRequiresKey(string logicalName, ItemCheckEventArgs e, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        {
+            var relationshipSet = new HashSet<string>();
+            if (e.CurrentValue.ToString() != "Checked")
+            {
+                relationshipSet.Add(logicalName);
+            }
+
+            inputEntityRelationships.Add(inputEntityLogicalName, relationshipSet);
+        }
+
+        public void StoreRelationshipIfKeyExists(string logicalName, ItemCheckEventArgs e, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
+        {
+            var relationshipSet = inputEntityRelationships[inputEntityLogicalName];
+
+            if (e.CurrentValue.ToString() == "Checked")
+            {
+                if (relationshipSet.Contains(logicalName))
+                {
+                    relationshipSet.Remove(logicalName);
+                }
+            }
+            else
+            {
+                relationshipSet.Add(logicalName);
+            }
+        }
+
+        public void SetListViewSorting(ListView listview, int column, string inputOrganisationId, Core.Settings settings)
+        {
+            var setting = settings[inputOrganisationId].Sortcolumns.FirstOrDefault(s => s.Key == listview.Name);
+            if (setting == null)
+            {
+                setting = new Item<string, int>(listview.Name, -1);
+                settings[inputOrganisationId].Sortcolumns.Add(setting);
+            }
+
+            if (setting.Value != column)
+            {
+                setting.Value = column;
+                listview.Sorting = SortOrder.Ascending;
+            }
+            else
+            {
+                if (listview.Sorting == SortOrder.Ascending)
+                {
+                    listview.Sorting = SortOrder.Descending;
+                }
+                else
+                {
+                    listview.Sorting = SortOrder.Ascending;
+                }
+            }
+
+            listview.ListViewItemSorter = new ListViewItemComparer(column, listview.Sorting);
+        }
+
         public void GenerateXMLFile(TextBox tbSchemaPath, CrmSchemaConfiguration schemaConfiguration)
         {
             if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))

@@ -210,7 +210,8 @@
     <Compile Include="Core\ListViewItemComparerTests.cs" />
     <Compile Include="Core\OrganisationsTests.cs" />
     <Compile Include="Core\RecordCounterProcessorTests.cs" />
-    <Compile Include="Core\SettingsTest.cs" />
+    <Compile Include="Core\SettingFileHandlerTest.cs" />
+    <Compile Include="Core\SettingsTests.cs" />
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
