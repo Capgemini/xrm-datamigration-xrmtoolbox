@@ -258,6 +258,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
 
+            inputCheckedEntity.Add(entityLogicalName);
+
             var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
             var inputAttributeMapping = new DataMigration.XrmToolBoxPlugin.Core.AttributeTypeMapping();
