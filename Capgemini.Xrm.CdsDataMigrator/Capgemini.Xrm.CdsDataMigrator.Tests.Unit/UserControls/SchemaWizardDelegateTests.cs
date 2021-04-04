@@ -1695,9 +1695,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             string inputEntityLogicalName = "contact";
             bool listViewItemIsSelected = true;
-            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
-
-            inputFilterQuery.Add(inputEntityLogicalName, inputEntityLogicalName);
+            var inputFilterQuery = new Dictionary<string, string>
+            {
+                { inputEntityLogicalName, inputEntityLogicalName }
+            };
 
             NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
                                .Verifiable();
