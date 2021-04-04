@@ -34,21 +34,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     var logicalName = entities.Name;
                     var attributeSet = new HashSet<string>();
                     var relationShipSet = new HashSet<string>();
-                    if (entities.CrmFields != null)
-                    {
-                        foreach (var attributes in entities.CrmFields)
-                        {
-                            attributeSet.Add(attributes.FieldName);
-                        }
-                    }
-
-                    if (entities.CrmRelationships != null)
-                    {
-                        foreach (var relationship in entities.CrmRelationships)
-                        {
-                            relationShipSet.Add(relationship.RelationshipName);
-                        }
-                    }
+                    ExtractAttributes(entities, attributeSet);
+                    ExtractRelationships(entities, relationShipSet);
 
                     inputEntityAttributes.Add(logicalName, attributeSet);
                     inputEntityRelationships.Add(logicalName, relationShipSet);
@@ -913,6 +900,28 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 }
 
                 inputMapping.Add(mappings.Key, list);
+            }
+        }
+
+        private static void ExtractRelationships(CrmEntity entities, HashSet<string> relationShipSet)
+        {
+            if (entities.CrmRelationships != null)
+            {
+                foreach (var relationship in entities.CrmRelationships)
+                {
+                    relationShipSet.Add(relationship.RelationshipName);
+                }
+            }
+        }
+
+        private static void ExtractAttributes(CrmEntity entities, HashSet<string> attributeSet)
+        {
+            if (entities.CrmFields != null)
+            {
+                foreach (var attributes in entities.CrmFields)
+                {
+                    attributeSet.Add(attributes.FieldName);
+                }
             }
         }
     }
