@@ -1,22 +1,21 @@
-﻿using System;
-using XrmToolBox.Extensibility;
-using Microsoft.Xrm.Sdk;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
-using System.Threading;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using McTools.Xrm.Connection;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
-using Capgemini.Xrm.CdsDataMigrator.Services;
+using Microsoft.Xrm.Sdk;
+using System;
+using System.Threading;
+using XrmToolBox.Extensibility;
 
 namespace MyXrmToolBoxPlugin3
 {
     public partial class MyPluginControl : PluginControlBase
     {
-        private readonly Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core.Settings settings;
+        private readonly Settings settings;
 
         public MyPluginControl()
         {
-            SettingFileHandler.GetConfigData(out settings);
+            SettingFileHandler.GetConfigData<Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaWizard>(out settings);
             InitializeComponent();
             DataImportWizard.OnConnectionRequested += ImportWizard1_onConnectionRequested;
             DataExportWizard.OnConnectionRequested += ImportWizard1_onConnectionRequested;

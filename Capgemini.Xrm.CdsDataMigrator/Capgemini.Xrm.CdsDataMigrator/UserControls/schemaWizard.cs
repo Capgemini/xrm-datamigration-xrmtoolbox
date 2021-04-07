@@ -1,11 +1,10 @@
-﻿using Capgemini.Xrm.CdsDataMigrator.Services;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Model;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Core;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Forms;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MyXrmToolBoxPlugin3;
@@ -62,7 +61,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public IExceptionService ExceptionService { get; set; }
 
-        public Core.Settings Settings { get; set; }
+        public Settings Settings { get; set; }
 
         public void OnConnectionUpdated(Guid ConnectedOrgId, string ConnectedOrgFriendlyName)
         {

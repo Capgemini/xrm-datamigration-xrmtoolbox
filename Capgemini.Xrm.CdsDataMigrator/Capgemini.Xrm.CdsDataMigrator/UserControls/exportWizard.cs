@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Views;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Presenters;
 using System.Threading;
 using Microsoft.Xrm.Tooling.Connector;
 using XrmToolBox.Extensibility;
 using MyXrmToolBoxPlugin3;
 using System.Linq;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Microsoft.Xrm.Sdk;
-using Capgemini.Xrm.CdsDataMigrator.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Views;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {

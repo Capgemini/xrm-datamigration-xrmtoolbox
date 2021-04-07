@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using System;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
@@ -65,7 +66,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.chkAllEntities = new System.Windows.Forms.CheckBox();
-            this.cbShowSystemAttributes = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox();
+            this.cbShowSystemAttributes = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.lvEntities = new System.Windows.Forms.ListView();
             this.clEntDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clEntLogicalName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -96,7 +97,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbSchemaPath = new System.Windows.Forms.TextBox();
             this.btSchemaFolderPath = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
-            this.wizardButtons1 = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.WizardButtons();
+            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
@@ -921,8 +922,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private System.Windows.Forms.ToolStripLabel toolStripLabelConnection;
         private AeroWizard.WizardPageContainer stepWizardControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private UserControls.WizardButtons wizardButtons1;
-        private UserControls.ToggleCheckBox cbShowSystemAttributes;
+        private Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons wizardButtons1;
+        private ToggleCheckBox cbShowSystemAttributes;
         private System.Windows.Forms.Label label2;
     }
 }

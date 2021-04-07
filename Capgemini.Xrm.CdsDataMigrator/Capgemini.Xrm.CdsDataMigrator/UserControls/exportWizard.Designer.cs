@@ -1,4 +1,6 @@
-﻿namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+
+namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     partial class ExportWizard
     {
@@ -46,9 +48,9 @@
             this.labelExportConnectionValidation = new System.Windows.Forms.Label();
             this.labelSchemaLocationFileValidation = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.checkBoxMinimize = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox();
+            this.checkBoxMinimize = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.checkBoxExportInactiveRecords = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox();
+            this.checkBoxExportInactiveRecords = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.labelConnectionString = new System.Windows.Forms.Label();
             this.buttonTargetConnectionString = new System.Windows.Forms.Button();
             this.labelTargetConnectionString = new System.Windows.Forms.Label();
@@ -64,7 +66,7 @@
             this.folderBrowserDialogExportLocation = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialogExportConfigFile = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.wizardButtons1 = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.WizardButtons();
+            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
             this.format.SuspendLayout();
@@ -595,9 +597,9 @@
         private System.Windows.Forms.Label labelTargetConnectionString;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label6;
-        private Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox checkBoxMinimize;
+        private ToggleCheckBox checkBoxMinimize;
         private System.Windows.Forms.Label label9;
-        private Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox checkBoxExportInactiveRecords;
+        private ToggleCheckBox checkBoxExportInactiveRecords;
         private AeroWizard.WizardPage wizardPage5;
         private System.Windows.Forms.Label label10;
         private WizardButtons wizardButtons1;

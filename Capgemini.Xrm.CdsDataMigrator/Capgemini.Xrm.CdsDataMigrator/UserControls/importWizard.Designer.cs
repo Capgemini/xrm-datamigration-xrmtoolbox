@@ -1,4 +1,6 @@
-﻿namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+
+namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     partial class ImportWizard
     {
@@ -49,8 +51,8 @@
             this.wizardPage3 = new AeroWizard.WizardPage();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.cbIgnoreStatuses = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox();
-            this.cbIgnoreSystemFields = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox();
+            this.cbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.cbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.nudSavePageSize = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.nudMaxThreads = new System.Windows.Forms.NumericUpDown();
@@ -62,7 +64,7 @@
             this.wizardPage4 = new AeroWizard.WizardPage();
             this.label10 = new System.Windows.Forms.Label();
             this.tbLogger = new System.Windows.Forms.TextBox();
-            this.wizardButtons1 = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.WizardButtons();
+            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -626,9 +628,9 @@
         private System.Windows.Forms.TextBox tbImportSchema;
         private System.Windows.Forms.Button btnImportSchema;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private Xrm.DataMigration.XrmToolBoxPlugin.UserControls.WizardButtons wizardButtons1;
-        private Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox cbIgnoreStatuses;
-        private Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ToggleCheckBox cbIgnoreSystemFields;
+        private Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons wizardButtons1;
+        private ToggleCheckBox cbIgnoreStatuses;
+        private ToggleCheckBox cbIgnoreSystemFields;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;

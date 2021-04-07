@@ -2,9 +2,6 @@
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Helpers;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Capgemini.Xrm.CdsDataMigrator.Services;
 using Microsoft.Xrm.Sdk;
 using MyXrmToolBoxPlugin3;
 using System;
@@ -13,6 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void WizardButtons1OnNavigateToNextPage(object sender, EventArgs e)
         {
             var wizardButtons = ((WizardButtons)sender);
-            WizardNavigation(/*wizardButtons, */labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
+            WizardNavigation(labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
         }
 
         private void tbSourceDataLocation_TextChanged(object sender, EventArgs e)
