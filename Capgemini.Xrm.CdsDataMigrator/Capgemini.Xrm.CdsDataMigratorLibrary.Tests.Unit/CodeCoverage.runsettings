@@ -8,18 +8,11 @@
           <CodeCoverage>
             <ModulePaths>
               <Include>
-                <!--<ModulePath>.*\.xrmtoolbox.dll</ModulePath>-->
-                <ModulePath>.*Capgemini.Xrm.CdsDataMigratorLibrary.dll</ModulePath>
+                <ModulePath>.*\.CdsDataMigratorLibrary.dll</ModulePath>
               </Include>
               <Exclude>
               </Exclude>
             </ModulePaths>
-            <!--<Functions>
-              <Include>-->
-            <!--<Function>^MyXrmToolBoxPlugin3\..*</Function>-->
-            <!--   <Function>^Capgemini\..*</Function>
-              </Include>
-            </Functions>-->
           </CodeCoverage>
         </Configuration>
       </DataCollector>
