@@ -83,16 +83,21 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void HandleFileDialogOpen(DialogResult dialogResult)
         {
-            var fd = folderBrowserDialog1.ShowDialog();
-
-            if (fd == DialogResult.OK)
+            if (dialogResult == DialogResult.OK)
             {
                 tbSourceDataLocation.Text = folderBrowserDialog1.SelectedPath;
                 importConfig.JsonFolderPath = folderBrowserDialog1.SelectedPath;
                 stepWizardControl1.Pages[1].AllowNext = true;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var dialogResult = folderBrowserDialog1.ShowDialog();
+
+            HandleFileDialogOpen(dialogResult);
         }
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)

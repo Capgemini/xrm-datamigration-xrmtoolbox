@@ -147,5 +147,41 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             factoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
         }
+
+        [TestMethod]
+        public void ExportDataAsJsonExportConfigPathIsNull()
+        {
+            var dataFormat = DataFormat.Json;
+            var exportSettings = new ExportSettings
+            {
+                // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
+                SchemaPath = "TestData/ContactSchemaWithOwner.xml",
+                DataFormat = dataFormat,
+                BatchSize = 5000,
+                ExportConfigPath = null,
+                SavePath = "TestData"
+            };
+
+            var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;
+            var storeWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>().Object;
+
+            var genericCrmDataMigrator = new GenericCrmDataMigrator(loggerMock.Object, storeReader, storeWriter);
+
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                                                dataFormat,
+                                                                It.IsAny<ILogger>(),
+                                                                It.IsAny<EntityRepository>(),
+                                                                It.IsAny<CrmExporterConfig>(),
+                                                                It.IsAny<CancellationToken>(),
+                                                                It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(genericCrmDataMigrator)
+                               .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.ExportData(exportSettings))
+                         .Should()
+                         .Throw<NullReferenceException>();
+
+            migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
                         .NotThrow();
 
             systemUnderTest.RecordCount.Should().Be(0);
+            systemUnderTest.EntityName.Should().BeNullOrEmpty();
         }
     }
 }

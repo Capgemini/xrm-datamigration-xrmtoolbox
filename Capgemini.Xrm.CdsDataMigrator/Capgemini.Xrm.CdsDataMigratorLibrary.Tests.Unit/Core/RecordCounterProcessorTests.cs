@@ -51,7 +51,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         [TestMethod]
         public void WriteDataToCSV()
         {
-            IEnumerable<string> items = new List<string>();
+            var items = new List<string>();
+
             var path = "TestData/apointmentsSchema.xml";
 
             FluentActions.Invoking(() => RecordCounterProcessor.WriteDataToCSV(items, path))

@@ -4,9 +4,6 @@ using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Repositories;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -34,6 +31,34 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 JsonFolderPath = "TestData",
                 FilePrefix = "ExtractedData"
             };
+        }
+
+        [TestMethod]
+        public void HandleFileDialogOpenDialogResultIsCancel()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                var dialogResult = System.Windows.Forms.DialogResult.Cancel;
+
+                FluentActions.Invoking(() =>
+                        systemUnderTest.HandleFileDialogOpen(dialogResult))
+                       .Should()
+                       .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void HandleFileDialogOpenDialogResultOk()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                var dialogResult = System.Windows.Forms.DialogResult.OK;
+
+                FluentActions.Invoking(() =>
+                        systemUnderTest.HandleFileDialogOpen(dialogResult))
+                       .Should()
+                       .NotThrow();
+            }
         }
 
         [TestMethod]
