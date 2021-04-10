@@ -25,11 +25,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             btnBack.Enabled = false;
         }
 
-        public void HandleSelectedPageChanged()
+        public void HandleSelectedPageChanged(bool isFinishPage)
         {
-            btnExecute.Visible = PageContainer.SelectedPage.IsFinishPage;
+            btnExecute.Visible = isFinishPage;
 
-            if (PageContainer.SelectedPage.IsFinishPage)
+            if (isFinishPage)
             {
                 btnExecute.BackColor = Color.Green;
             }
@@ -42,12 +42,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             btnBack.Enabled = PageContainer.SelectedPage != PageContainer.Pages[0];
         }
 
-        private void Container_SelectedPageChanged(object sender, EventArgs e)
-        {
-            HandleSelectedPageChanged();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        public void ExecutePreviousButtonClick(EventArgs e)
         {
             if (OnCustomPreviousNavigation != null)
             {
@@ -59,7 +54,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public void ExecuteNextButtonClick(EventArgs e)
         {
             if (OnCustomNextNavigation != null)
             {
@@ -71,11 +66,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        public void ExecuteAction(EventArgs e)
         {
             btnExecute.Enabled = false;
             OnExecute?.Invoke(this, e);
             btnExecute.Enabled = true;
+        }
+
+        private void Container_SelectedPageChanged(object sender, EventArgs e)
+        {
+            HandleSelectedPageChanged(PageContainer.SelectedPage.IsFinishPage);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ExecutePreviousButtonClick(e);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ExecuteNextButtonClick(e);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ExecuteAction(e);
         }
 
         private void WizardButtons_Load(object sender, EventArgs e)

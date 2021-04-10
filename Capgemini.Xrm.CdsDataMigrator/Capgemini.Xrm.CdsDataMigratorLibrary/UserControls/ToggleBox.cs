@@ -20,6 +20,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         protected override void OnPaint(PaintEventArgs pevent)
         {
+            ProcessPaintRequest(pevent);
+        }
+
+        public void ProcessPaintRequest(PaintEventArgs pevent)
+        {
             OnPaintBackground(pevent);
             pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             using (var path = new GraphicsPath())

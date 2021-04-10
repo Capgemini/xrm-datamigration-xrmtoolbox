@@ -23,6 +23,106 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         }
 
         [TestMethod]
+        public void DataConversion()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            var value = new Dictionary<Guid, Guid> { { Guid.NewGuid(), Guid.NewGuid() } };
+            inputMapper.Add("contact", value);
+
+            var inputMapping = new Dictionary<string, List<Item<EntityReference, EntityReference>>>();
+
+            FluentActions.Invoking(() => systemUnderTest.DataConversion(inputMapping, inputMapper))
+                             .Should()
+                             .NotThrow();
+
+            inputMapping.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void GenerateImportConfigFileWithoutImportConfigFilePath()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+            var value = new Dictionary<Guid, Guid> { { Guid.NewGuid(), Guid.NewGuid() } };
+            inputMapper.Add("contact", value);
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                                    .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                FluentActions.Invoking(() => systemUnderTest.GenerateImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void GenerateImportConfigFile()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+            var value = new Dictionary<Guid, Guid> { { Guid.NewGuid(), Guid.NewGuid() } };
+            inputMapper.Add("contact", value);
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                                    .Verifiable();
+
+            using (var importConfig = new System.Windows.Forms.TextBox())
+            {
+                importConfig.Text = $"TestData//{Guid.NewGuid()}.json";
+
+                FluentActions.Invoking(() => systemUnderTest.GenerateImportConfigFile(NotificationServiceMock.Object, importConfig, inputMapper))
+                                 .Should()
+                                 .NotThrow();
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void GenerateExportConfigFileWithoutExportConfigFilePath()
+        {
+            var inputFilterQuery = new Dictionary<string, string>();
+            var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
+
+            using (var exportConfig = new System.Windows.Forms.TextBox())
+            {
+                using (var schemaPath = new System.Windows.Forms.TextBox())
+                {
+                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping))
+                             .Should()
+                             .Throw<ArgumentException>()
+                             .WithMessage("Empty path name is not legal.");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GenerateExportConfig()
+        {
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+            var value = new Dictionary<Guid, Guid> { { Guid.NewGuid(), Guid.NewGuid() } };
+            inputMapper.Add("contact", value);
+
+            var inputFilterQuery = new Dictionary<string, string>();
+            var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
+
+            using (var exportConfig = new System.Windows.Forms.TextBox())
+            {
+                exportConfig.Text = $"TestData//{Guid.NewGuid()}.json";
+
+                using (var schemaPath = new System.Windows.Forms.TextBox())
+                {
+                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping))
+                             .Should()
+                             .NotThrow();
+                }
+            }
+        }
+
+        [TestMethod]
         public void LoadExportConfigFileWithEmptyExportConfigPath()
         {
             string exportConfigFilename = string.Empty;

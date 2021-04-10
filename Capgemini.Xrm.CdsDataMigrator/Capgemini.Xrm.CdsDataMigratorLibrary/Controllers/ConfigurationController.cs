@@ -95,7 +95,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
         {
             try
             {
-                CrmImportConfig migration = new CrmImportConfig()
+                var migration = new CrmImportConfig()
                 {
                     IgnoreStatuses = true,
                     IgnoreSystemFields = true,
@@ -134,7 +134,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 
         public void GenerateExportConfigFile(TextBox exportConfig, TextBox schemaPath, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping)
         {
-            CrmExporterConfig config = new CrmExporterConfig()
+            var config = new CrmExporterConfig()
             {
                 JsonFolderPath = "ExtractedData",
             };
