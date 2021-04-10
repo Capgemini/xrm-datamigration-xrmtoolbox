@@ -35,6 +35,84 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void InitFilter()
+        {
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                var entityitem = new System.Windows.Forms.ListViewItem();
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InitFilter(entityitem))
+                        .Should()
+                        .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InitFilterWithListViewtag()
+        {
+            var entityLogicalName = "account";
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+            var settings = new Capgemini.Xrm.CdsDataMigratorLibrary.Core.Settings();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                var entityitem = new System.Windows.Forms.ListViewItem
+                {
+                    Tag = entityMetadata
+                };
+                systemUnderTest.Settings = settings;
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InitFilter(entityitem))
+                        .Should()
+                        .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InitFilterWithListViewtagAndNoSettings()
+        {
+            var entityLogicalName = "account";
+            var entityMetadata = new EntityMetadata
+            {
+                LogicalName = entityLogicalName,
+                DisplayName = new Label
+                {
+                    UserLocalizedLabel = new LocalizedLabel { Label = "Test" }
+                }
+            };
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                var entityitem = new System.Windows.Forms.ListViewItem
+                {
+                    Tag = entityMetadata
+                };
+                systemUnderTest.Settings = null;
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InitFilter(entityitem))
+                        .Should()
+                        .Throw<NullReferenceException>()
+                        .WithMessage("Object reference not set to an instance of an object.");
+            }
+        }
+
+        [TestMethod]
         public void OnConnectionUpdated()
         {
             string entityLogicalName = "account_contact";

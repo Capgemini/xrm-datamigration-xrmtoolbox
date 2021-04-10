@@ -151,6 +151,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             Cursor = working ? Cursors.WaitCursor : Cursors.Default;
         }
 
+        public void InitFilter(ListViewItem entityitem)
+        {
+            string filter = null;
+
+            if (entityitem != null && entityitem.Tag != null)
+            {
+                var entity = (EntityMetadata)entityitem.Tag;
+                filter = Settings[organisationId.ToString()][entity.LogicalName].Filter;
+            }
+
+            tsbtFilters.ForeColor = string.IsNullOrEmpty(filter) ? Color.Black : Color.Blue;
+        }
+
         private void TabStripButtonRetrieveEntitiesClick(object sender, EventArgs e)
         {
             ClearMemory();
@@ -217,19 +230,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     }
                 }
             }
-        }
-
-        private void InitFilter(ListViewItem entityitem)
-        {
-            string filter = null;
-
-            if (entityitem != null && entityitem.Tag != null)
-            {
-                var entity = (EntityMetadata)entityitem.Tag;
-                filter = Settings[organisationId.ToString()][entity.LogicalName].Filter;
-            }
-
-            tsbtFilters.ForeColor = string.IsNullOrEmpty(filter) ? Color.Black : Color.Blue;
         }
 
         private void PopulateEntities(bool working)
