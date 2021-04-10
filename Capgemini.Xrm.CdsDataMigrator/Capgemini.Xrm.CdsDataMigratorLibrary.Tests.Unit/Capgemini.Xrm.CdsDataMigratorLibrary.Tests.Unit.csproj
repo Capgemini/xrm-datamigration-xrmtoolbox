@@ -230,6 +230,12 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
+    <Compile Include="Controllers\AttributeControllerTests.cs" />
+    <Compile Include="Controllers\ConfigurationControllerTests.cs" />
+    <Compile Include="Controllers\ControllerBaseTests.cs" />
+    <Compile Include="Controllers\EntityControllerTests.cs" />
+    <Compile Include="Controllers\RelationshipControllerTests.cs" />
+    <Compile Include="Controllers\SchemaControllerTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
@@ -263,7 +269,7 @@
     <Compile Include="Services\EntityRepositoryServiceTests.cs" />
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="UserControls\SchemaWizardDelegateTests.cs" />
+    <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\WizardButtonsTests.cs" />
   </ItemGroup>

@@ -230,16 +230,22 @@
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ValidationHelpers.cs" />
+    <Compile Include="Controllers\AttributeController.cs" />
+    <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Models\DataMigrationSettings.cs" />
     <Compile Include="Models\DeserializationSettings.cs" />
+    <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Models\ExportConfigSettings.cs" />
     <Compile Include="Models\ExportSettings.cs" />
     <Compile Include="Models\FilterEditorState.cs" />
     <Compile Include="Models\FilterSettings.cs" />
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Models\RecordCountModel.cs" />
+    <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Models\SaveAllSettings.cs" />
+    <Compile Include="Controllers\SchemaController.cs" />
     <Compile Include="Models\SerializationSettings.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
@@ -255,7 +261,7 @@
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="UserControls\SchemaWizardDelegate.cs" />
+    <Compile Include="Controllers\ListController.cs" />
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -288,6 +294,7 @@
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (
