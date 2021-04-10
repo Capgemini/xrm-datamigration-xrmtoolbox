@@ -250,6 +250,7 @@
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ValidationHelpersTests.cs" />
+    <Compile Include="MyPluginControlTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
     <Compile Include="Model\DeserializationSettingsTests.cs" />
@@ -270,6 +271,9 @@
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
+    <Compile Include="UserControls\ExportWizardTests.cs" />
+    <Compile Include="UserControls\ImportWizardTests.cs" />
+    <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\WizardButtonsTests.cs" />
   </ItemGroup>

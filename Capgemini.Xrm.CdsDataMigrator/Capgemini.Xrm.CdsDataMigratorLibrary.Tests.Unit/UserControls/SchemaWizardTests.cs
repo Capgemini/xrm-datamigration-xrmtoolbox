@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Core;
-using Capgemini.Xrm.DataMigration.XrmToolBox.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;

@@ -248,8 +248,19 @@
     <Compile Include="Controllers\SchemaController.cs" />
     <Compile Include="Models\SerializationSettings.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
+    <Compile Include="MyPluginControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MyPluginControl.designer.cs">
+      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
@@ -262,6 +273,24 @@
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="UserControls\ExportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ExportWizard.designer.cs">
+      <DependentUpon>ExportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ImportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ImportWizard.designer.cs">
+      <DependentUpon>ImportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\schemaWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\schemaWizard.designer.cs">
+      <DependentUpon>schemaWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -290,11 +319,47 @@
     <EmbeddedResource Include="Forms\MappingListLookup.resx">
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MyPluginControl.resx">
+      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ExportWizard.resx">
+      <DependentUpon>ExportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ImportWizard.resx">
+      <DependentUpon>ImportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SchemaWizard.resx">
+      <DependentUpon>schemaWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WizardButtons.resx">
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\tsbCloseThisTab.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tsbLoadAssemblies.Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\entities.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tsddbCompare.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\btImport.Image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveToCRMServerToolStripMenuItem.Image.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (
