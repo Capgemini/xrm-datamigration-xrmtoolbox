@@ -232,7 +232,6 @@
     </Compile>
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -242,17 +241,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILMergeOrder.txt" />
-    <Content Include="Resources\btImport.Image.png" />
-    <Content Include="Resources\entities.gif" />
-    <Content Include="Resources\export1.png" />
-    <Content Include="Resources\logo.png" />
-    <Content Include="Resources\logo80x80.png" />
-    <Content Include="Resources\logosmall.png" />
-    <Content Include="Resources\saveToCRMServerToolStripMenuItem.Image.png" />
-    <Content Include="Resources\tsbCloseThisTab.Image.png" />
-    <Content Include="Resources\tsbLoadAssemblies.Image1.png" />
-    <Content Include="Resources\tsbSaveForms.Image.png" />
-    <Content Include="Resources\tsddbCompare.Image.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Capgemini.Xrm.CdsDataMigratorLibrary\Capgemini.Xrm.CdsDataMigratorLibrary.csproj">
@@ -260,12 +248,7 @@
       <Name>Capgemini.Xrm.CdsDataMigratorLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UserControls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
