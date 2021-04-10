@@ -10,7 +10,6 @@ using Microsoft.Xrm.Sdk;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Views;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls

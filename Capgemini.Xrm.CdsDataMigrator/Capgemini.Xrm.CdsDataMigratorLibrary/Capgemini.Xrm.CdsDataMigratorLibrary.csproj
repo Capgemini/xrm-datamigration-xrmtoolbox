@@ -271,7 +271,7 @@
     <Compile Include="UserControls\WizardButtons.Designer.cs">
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\IExportView.cs" />
+    <Compile Include="Presenters\IExportView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\stylecop.json">

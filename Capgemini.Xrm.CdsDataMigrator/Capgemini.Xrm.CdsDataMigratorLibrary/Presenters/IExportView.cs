@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using XrmToolBox.Extensibility;
 
-namespace Capgemini.Xrm.CdsDataMigratorLibrary.Views
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public interface IExportView
     {
