@@ -480,7 +480,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             LoadAllFiles(NotificationService, tbSchemaPath, tbExportConfig, tbImportConfig, workingstate, entityAttributes, entityRelationships, filterQuery, lookupMaping, mapper, mapping);
         }
 
-        public void LoadAllFiles(INotificationService feedbackManager, System.Windows.Forms.TextBox schemaPath, System.Windows.Forms.TextBox exportConfig, System.Windows.Forms.TextBox importConfig, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
+        public void LoadAllFiles(INotificationService feedbackManager, TextBox schemaPath, TextBox exportConfig, TextBox importConfig, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
         {
             LoadSchemaFile(schemaPath.Text, inputWorkingstate, feedbackManager, inputEntityAttributes, inputEntityRelationships);
 
@@ -538,29 +538,66 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void SetMenuVisibility(WizardMode mode)
         {
             //Import
-            tsbtMappings.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            loadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            saveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            tbImportConfig.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            btImportConfigPath.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            //tsbtMappings.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            //loadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            //saveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            //tbImportConfig.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            //btImportConfigPath.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            SetImportMenu(mode, tsbtMappings, loadMappingsToolStripMenuItem, saveMappingsToolStripMenuItem, tbImportConfig, btImportConfigPath);
 
             //Export
-            lookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            tsbtFilters.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            loadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            saveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            tbExportConfig.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            btExportConfigPath.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //lookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //tsbtFilters.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //loadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //saveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //tbExportConfig.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            //btExportConfigPath.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            SetExportMenu(mode, lookupMappings, tsbtFilters, loadFiltersToolStripMenuItem, saveFiltersToolStripMenuItem, tbExportConfig, btExportConfigPath);
 
             //Schema
-            loadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            saveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            tbSchemaPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            btSchemaFolderPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            //loadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            //saveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            //tbSchemaPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            //btSchemaFolderPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            SetSchemaMenu(mode, loadSchemaToolStripMenuItem, saveSchemaToolStripMenuItem, tbSchemaPath, btSchemaFolderPath);
 
-            //All
-            loadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
-            saveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+            ////All
+            //loadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+            //saveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+            SetAllMenu(mode, loadAllToolStripMenuItem, saveAllToolStripMenuItem);
+        }
+
+        public void SetImportMenu(WizardMode mode, System.Windows.Forms.ToolStripButton mappingsToolStripButton, System.Windows.Forms.ToolStripMenuItem inputLoadMappingsToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveMappingsToolStripMenuItem, System.Windows.Forms.TextBox importConfigTextBox, System.Windows.Forms.Button importConfigPathButton)
+        {
+            mappingsToolStripButton.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            inputLoadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            inputSaveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            importConfigTextBox.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+            importConfigPathButton.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
+        }
+
+        public void SetExportMenu(WizardMode mode, System.Windows.Forms.ToolStripButton inputLookupMappings, System.Windows.Forms.ToolStripButton filtersToolStripButton, System.Windows.Forms.ToolStripMenuItem inputLoadFiltersToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveFiltersToolStripMenuItem, System.Windows.Forms.TextBox exportConfigTextBox, System.Windows.Forms.Button exportConfigPathButton)
+        {
+            inputLookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            filtersToolStripButton.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            inputLoadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            inputSaveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            exportConfigTextBox.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+            exportConfigPathButton.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
+        }
+
+        public void SetSchemaMenu(WizardMode mode, System.Windows.Forms.ToolStripMenuItem inputLoadSchemaToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveSchemaToolStripMenuItem, System.Windows.Forms.TextBox schemaPathTextBox, System.Windows.Forms.Button schemaFolderPathButton)
+        {
+            inputLoadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            inputSaveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            schemaPathTextBox.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+            schemaFolderPathButton.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
+        }
+
+        public void SetAllMenu(WizardMode mode, System.Windows.Forms.ToolStripMenuItem inputLoadAllToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveAllToolStripMenuItem)
+        {
+            inputLoadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
+            inputSaveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
         }
 
         private void ToolStripButtonConnectClick(object sender, EventArgs e)

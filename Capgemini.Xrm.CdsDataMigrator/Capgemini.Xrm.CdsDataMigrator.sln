@@ -8,13 +8,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{5E6BB39C-47C6-4920-9B0A-E8433BF144B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit", "Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit\Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.csproj", "{02FE1C61-34F2-4F47-9860-CE4B67BE915E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{94CFA298-B643-477B-A329-F184EBF68CF6} = {94CFA298-B643-477B-A329-F184EBF68CF6}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator", "Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.csproj", "{94CFA298-B643-477B-A329-F184EBF68CF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigratorLibrary", "Capgemini.Xrm.CdsDataMigratorLibrary\Capgemini.Xrm.CdsDataMigratorLibrary.csproj", "{A801DF1A-367D-42E8-8AFF-CB03179A774E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigrator.Tests.Unit", "Capgemini.Xrm.CdsDataMigrator.Tests.Unit\Capgemini.Xrm.CdsDataMigrator.Tests.Unit.csproj", "{76CE7F12-7CFA-4851-88DD-20F328F4D009}"
+	ProjectSection(ProjectDependencies) = postProject
+		{94CFA298-B643-477B-A329-F184EBF68CF6} = {94CFA298-B643-477B-A329-F184EBF68CF6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,12 +36,17 @@ Global
 		{A801DF1A-367D-42E8-8AFF-CB03179A774E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A801DF1A-367D-42E8-8AFF-CB03179A774E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A801DF1A-367D-42E8-8AFF-CB03179A774E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CE7F12-7CFA-4851-88DD-20F328F4D009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CE7F12-7CFA-4851-88DD-20F328F4D009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CE7F12-7CFA-4851-88DD-20F328F4D009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CE7F12-7CFA-4851-88DD-20F328F4D009}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{02FE1C61-34F2-4F47-9860-CE4B67BE915E} = {BECE6860-D066-4502-AB89-204DA979BED5}
+		{76CE7F12-7CFA-4851-88DD-20F328F4D009} = {BECE6860-D066-4502-AB89-204DA979BED5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {661BCCDD-E1AB-402B-8CD2-C1E9980E0D9A}
