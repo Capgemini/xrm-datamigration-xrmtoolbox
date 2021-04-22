@@ -223,7 +223,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
                             var controller = new ListController();
-                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship);
+                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes);
                             ManageWorkingState(false);
                         };
                         bwFill.RunWorkerAsync();
