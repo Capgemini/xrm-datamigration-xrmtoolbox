@@ -7,7 +7,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
-using MyXrmToolBoxPlugin3;
+using Capgemini.Xrm.CdsDataMigratorLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -580,7 +580,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             if (OnConnectionRequested != null)
             {
-                var args = new RequestConnectionEventArgs { ActionName = "SchemaConnection", Control = (MyPluginControl)Parent };
+                var args = new RequestConnectionEventArgs { ActionName = "SchemaConnection", Control = (CdsMigratorPluginControl)Parent };
                 OnConnectionRequested(this, args);
             }
         }

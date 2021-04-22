@@ -8,19 +8,19 @@ using System;
 using System.Threading;
 using XrmToolBox.Extensibility;
 
-namespace MyXrmToolBoxPlugin3
+namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
-    public partial class MyPluginControl : PluginControlBase
+    public partial class CdsMigratorPluginControl : PluginControlBase
     {
         private readonly Settings settings;
 
-        public MyPluginControl()
+        public CdsMigratorPluginControl()
         {
             SettingFileHandler.GetConfigData<SchemaWizard>(out settings);
             InitializeComponent();
-            DataImportWizard.OnConnectionRequested += ImportWizard1_onConnectionRequested;
-            DataExportWizard.OnConnectionRequested += ImportWizard1_onConnectionRequested;
-            SchemaGeneratorWizard.OnConnectionRequested += ImportWizard1_onConnectionRequested;
+            DataImportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
+            DataExportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
+            SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.Settings = settings;
             SchemaGeneratorWizard.BringToFront();
         }
@@ -61,7 +61,7 @@ namespace MyXrmToolBoxPlugin3
             }
         }
 
-        private void ImportWizard1_onConnectionRequested(object sender, RequestConnectionEventArgs e)
+        private void OnConnectionRequestedHandler(object sender, RequestConnectionEventArgs e)
         {
             RaiseRequestConnectionEvent(e);
         }

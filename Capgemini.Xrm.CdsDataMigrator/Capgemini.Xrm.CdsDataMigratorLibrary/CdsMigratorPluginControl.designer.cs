@@ -1,6 +1,6 @@
-﻿namespace MyXrmToolBoxPlugin3
+﻿namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
-    partial class MyPluginControl
+    partial class CdsMigratorPluginControl
     {
         /// <summary> 
         /// Required designer variable.

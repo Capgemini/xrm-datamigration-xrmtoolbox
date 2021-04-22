@@ -10,7 +10,7 @@
     <ProjectGuid>{94CFA298-B643-477B-A329-F184EBF68CF6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Capgemini.Xrm.DataMigration.XrmToolBox</RootNamespace>
+    <RootNamespace>Capgemini.Xrm.CdsDataMigrator</RootNamespace>
     <AssemblyName>Capgemini.Xrm.DataMigration.XrmToolBox</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

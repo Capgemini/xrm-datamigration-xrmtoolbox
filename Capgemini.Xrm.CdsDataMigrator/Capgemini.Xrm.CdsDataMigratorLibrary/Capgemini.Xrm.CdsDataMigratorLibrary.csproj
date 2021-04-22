@@ -248,11 +248,11 @@
     <Compile Include="Controllers\SchemaController.cs" />
     <Compile Include="Models\SerializationSettings.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
-    <Compile Include="MyPluginControl.cs">
+    <Compile Include="CdsMigratorPluginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MyPluginControl.designer.cs">
-      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    <Compile Include="CdsMigratorPluginControl.designer.cs">
+      <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -319,8 +319,8 @@
     <EmbeddedResource Include="Forms\MappingListLookup.resx">
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MyPluginControl.resx">
-      <DependentUpon>MyPluginControl.cs</DependentUpon>
+    <EmbeddedResource Include="CdsMigratorPluginControl.resx">
+      <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>

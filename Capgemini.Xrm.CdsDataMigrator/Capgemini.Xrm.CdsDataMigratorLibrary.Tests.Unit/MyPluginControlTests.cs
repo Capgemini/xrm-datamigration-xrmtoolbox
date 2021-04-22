@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary;
+using FluentAssertions;
 using McTools.Xrm.Connection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
-using MyXrmToolBoxPlugin3;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 {
@@ -14,7 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
         [TestMethod]
         public void MyPluginControl()
         {
-            FluentActions.Invoking(() => new MyPluginControl())
+            FluentActions.Invoking(() => new CdsMigratorPluginControl())
                          .Should()
                          .NotThrow();
         }
@@ -28,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             string actionName = "Custom";
             object parameter = null;
 
-            using (var systemUnderTest = new MyPluginControl())
+            using (var systemUnderTest = new CdsMigratorPluginControl())
             {
                 FluentActions.Invoking(() => systemUnderTest.UpdateConnection(organisationService, detail, actionName, parameter))
                              .Should()

@@ -3,7 +3,7 @@ using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
 using Microsoft.Xrm.Sdk;
-using MyXrmToolBoxPlugin3;
+using Capgemini.Xrm.CdsDataMigratorLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -102,7 +102,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private void buttonTargetConnectionString_Click(object sender, EventArgs e)
         {
-            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "TargetConnection", Control = (MyPluginControl)Parent });
+            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "TargetConnection", Control = (CdsMigratorPluginControl)Parent });
         }
 
         public void OnConnectionUpdated(string connectedOrgFriendlyName)

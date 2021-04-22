@@ -1,4 +1,4 @@
-﻿using MyXrmToolBoxPlugin3;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary;
 using System;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Reflection;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace Capgemini.Xrm.DataMigration.XrmToolBox
+namespace Capgemini.Xrm.CdsDataMigrator
 {
     // Do not forget to update version number and author (company attribute) in AssemblyInfo.cs class
     // To generate Base64 string for Images below, you can use https://www.base64-image.de/
@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox
     {
         public override IXrmToolBoxPluginControl GetControl()
         {
-            return new MyPluginControl();
+            return new CdsMigratorPluginControl();
         }
 
         /// <summary>
