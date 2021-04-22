@@ -8,7 +8,7 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 {
     [TestClass]
-    public class MyPluginControlTests
+    public class CdsMigratorPluginControlTests
     {
         [Ignore("To be fixed!")]
         [TestMethod]

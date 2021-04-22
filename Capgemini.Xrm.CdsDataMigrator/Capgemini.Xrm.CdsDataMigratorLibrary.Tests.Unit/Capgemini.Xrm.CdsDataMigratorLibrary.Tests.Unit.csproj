@@ -250,7 +250,7 @@
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ValidationHelpersTests.cs" />
-    <Compile Include="MyPluginControlTests.cs" />
+    <Compile Include="CdsMigratorPluginControlTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
     <Compile Include="Model\DeserializationSettingsTests.cs" />
