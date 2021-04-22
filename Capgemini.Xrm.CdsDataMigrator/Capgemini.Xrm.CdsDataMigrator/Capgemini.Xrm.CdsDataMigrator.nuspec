@@ -24,7 +24,7 @@
     <releaseNotes>
       1) Changed versioning strategy to semantic versioning
     </releaseNotes>
-    <copyright>Capgemini Copyright © 2020</copyright>
+    <copyright>Capgemini Copyright © 2021</copyright>
     <tags>XrmToolBox Plugins</tags>
     <dependencies>
       <group>
