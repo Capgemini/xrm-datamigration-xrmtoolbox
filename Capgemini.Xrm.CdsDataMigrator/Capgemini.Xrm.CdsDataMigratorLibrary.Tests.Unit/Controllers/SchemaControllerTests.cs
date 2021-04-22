@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -40,8 +41,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
                     var dialogResult = System.Windows.Forms.DialogResult.Cancel;
+                    var collectionParameters = new CollectionParameters(inputEntityAttributes, inputEntityRelationships, null, null, null, null);
 
-                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, collectionParameters, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
                                  .Should()
                                  .NotThrow();
 
@@ -62,8 +64,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
                     var dialogResult = System.Windows.Forms.DialogResult.OK;
+                    var collectionParameters = new CollectionParameters(inputEntityAttributes, inputEntityRelationships, null, null, null, null);
 
-                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, collectionParameters, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
                                  .Should()
                                  .NotThrow();
 
@@ -84,8 +87,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
                     var dialogResult = System.Windows.Forms.DialogResult.OK;
+                    var collectionParameters = new CollectionParameters(inputEntityAttributes, inputEntityRelationships, null, null, null, null);
 
-                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, inputEntityAttributes, inputEntityRelationships, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, collectionParameters, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
                                  .Should()
                                  .NotThrow();
 

@@ -71,7 +71,7 @@
             this.toolStripButtonSchemaConfig.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripButtonSchemaConfig.Size = new System.Drawing.Size(135, 25);
             this.toolStripButtonSchemaConfig.Text = "Schema Config";
-            this.toolStripButtonSchemaConfig.Click += new System.EventHandler(this.toolStripButtonSchemaConfig_Click);
+            this.toolStripButtonSchemaConfig.Click += new System.EventHandler(this.ToolStripButtonSchemaConfigClick);
             // 
             // toolStripSeparator1
             // 
@@ -85,7 +85,7 @@
             this.toolStripButtonDataImport.Name = "toolStripButtonDataImport";
             this.toolStripButtonDataImport.Size = new System.Drawing.Size(117, 25);
             this.toolStripButtonDataImport.Text = "Data Import";
-            this.toolStripButtonDataImport.Click += new System.EventHandler(this.toolStripButtonDataImport_Click);
+            this.toolStripButtonDataImport.Click += new System.EventHandler(this.ToolStripButtonDataImportClick);
             // 
             // toolStripSeparator2
             // 
@@ -99,7 +99,7 @@
             this.toolStripButtonDataExport.Name = "toolStripButtonDataExport";
             this.toolStripButtonDataExport.Size = new System.Drawing.Size(114, 25);
             this.toolStripButtonDataExport.Text = "Data Export";
-            this.toolStripButtonDataExport.Click += new System.EventHandler(this.toolStripButtonDataExport_Click);
+            this.toolStripButtonDataExport.Click += new System.EventHandler(this.ToolStripButtonDataExportClick);
             // 
             // toolStripPluginOptionMenu
             // 

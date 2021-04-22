@@ -21,7 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
     public class SchemaController : ControllerBase
     {
-        public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, DialogResult dialogResult, SaveFileDialog fileDialog,
+        public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, CollectionParameters collectionParameters, DialogResult dialogResult, SaveFileDialog fileDialog,
     Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
     )
         {
@@ -31,7 +31,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 
                 if (File.Exists(schemaPathTextBox.Text))
                 {
-                    loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, inputEntityAttributes, inputEntityRelationships);
+                    loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
                 }
             }
             else if (dialogResult == DialogResult.Cancel)

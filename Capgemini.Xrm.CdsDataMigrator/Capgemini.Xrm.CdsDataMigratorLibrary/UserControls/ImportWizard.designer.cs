@@ -157,7 +157,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.btnImportSchema.TabIndex = 3;
             this.btnImportSchema.Text = "...";
             this.btnImportSchema.UseVisualStyleBackColor = true;
-            this.btnImportSchema.Click += new System.EventHandler(this.button3_Click);
+            this.btnImportSchema.Click += new System.EventHandler(this.Button3Click);
             // 
             // label1
             // 
@@ -182,7 +182,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.radioButtonJsonFormat.TabStop = true;
             this.radioButtonJsonFormat.Text = "JSON";
             this.radioButtonJsonFormat.UseVisualStyleBackColor = true;
-            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.RadioButtonCheckedChanged);
             // 
             // radioButtonCSVFormat
             // 
@@ -196,7 +196,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.radioButtonCSVFormat.TabStop = true;
             this.radioButtonCSVFormat.Text = "CSV";
             this.radioButtonCSVFormat.UseVisualStyleBackColor = true;
-            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
             // 
             // wizardPage5
             // 
@@ -244,7 +244,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.btLoadImportConfigFile.TabIndex = 48;
             this.btLoadImportConfigFile.Text = "...";
             this.btLoadImportConfigFile.UseVisualStyleBackColor = true;
-            this.btLoadImportConfigFile.Click += new System.EventHandler(this.btLoadImportConfigFile_Click);
+            this.btLoadImportConfigFile.Click += new System.EventHandler(this.LoadImportConfigFileButtonClick);
             // 
             // tbImportConfigFile
             // 
@@ -254,7 +254,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.tbImportConfigFile.Name = "tbImportConfigFile";
             this.tbImportConfigFile.Size = new System.Drawing.Size(611, 32);
             this.tbImportConfigFile.TabIndex = 47;
-            this.tbImportConfigFile.TextChanged += new System.EventHandler(this.tbImportConfigFile_TextChanged);
+            this.tbImportConfigFile.TextChanged += new System.EventHandler(this.TabImportConfigFileTextChanged);
             // 
             // wizardPage2
             // 
@@ -291,7 +291,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.tbSourceDataLocation.Name = "tbSourceDataLocation";
             this.tbSourceDataLocation.Size = new System.Drawing.Size(544, 32);
             this.tbSourceDataLocation.TabIndex = 2;
-            this.tbSourceDataLocation.TextChanged += new System.EventHandler(this.tbSourceDataLocation_TextChanged);
+            this.tbSourceDataLocation.TextChanged += new System.EventHandler(this.TabSourceDataLocationTextChanged);
             // 
             // button1
             // 
@@ -302,7 +302,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.button1.TabIndex = 1;
             this.button1.Text = "...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.ButtonClick);
             // 
             // label2
             // 
@@ -463,7 +463,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.buttonTargetConnectionString.TabIndex = 40;
             this.buttonTargetConnectionString.Text = "...";
             this.buttonTargetConnectionString.UseVisualStyleBackColor = true;
-            this.buttonTargetConnectionString.Click += new System.EventHandler(this.buttonTargetConnectionString_Click);
+            this.buttonTargetConnectionString.Click += new System.EventHandler(this.ButtonTargetConnectionStringClick);
             // 
             // labelTargetConnectionString
             // 

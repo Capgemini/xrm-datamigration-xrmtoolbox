@@ -239,6 +239,7 @@
     <Compile Include="Models\ExportSettings.cs" />
     <Compile Include="Models\FilterEditorState.cs" />
     <Compile Include="Models\FilterSettings.cs" />
+    <Compile Include="Models\CollectionParameters.cs" />
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -285,11 +286,11 @@
     <Compile Include="UserControls\ImportWizard.designer.cs">
       <DependentUpon>ImportWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\schemaWizard.cs">
+    <Compile Include="UserControls\SchemaWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\schemaWizard.designer.cs">
-      <DependentUpon>schemaWizard.cs</DependentUpon>
+    <Compile Include="UserControls\SchemaWizard.designer.cs">
+      <DependentUpon>SchemaWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
@@ -333,7 +334,7 @@
       <DependentUpon>ImportWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SchemaWizard.resx">
-      <DependentUpon>schemaWizard.cs</DependentUpon>
+      <DependentUpon>SchemaWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\WizardButtons.resx">
       <DependentUpon>WizardButtons.cs</DependentUpon>

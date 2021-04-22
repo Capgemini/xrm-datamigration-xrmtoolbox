@@ -78,22 +78,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             HandleSelectedPageChanged(PageContainer.SelectedPage.IsFinishPage);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1Click(object sender, EventArgs e)
         {
             ExecutePreviousButtonClick(e);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2Click(object sender, EventArgs e)
         {
             ExecuteNextButtonClick(e);
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3Click(object sender, EventArgs e)
         {
             ExecuteAction(e);
         }
 
-        private void WizardButtons_Load(object sender, EventArgs e)
+        private void WizardButtonsLoadHandler(object sender, EventArgs e)
         {
             PageContainer.SelectedPageChanged += Container_SelectedPageChanged;
         }

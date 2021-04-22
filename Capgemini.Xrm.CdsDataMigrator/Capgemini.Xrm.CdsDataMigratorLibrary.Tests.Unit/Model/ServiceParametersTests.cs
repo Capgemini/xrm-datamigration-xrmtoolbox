@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+﻿using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

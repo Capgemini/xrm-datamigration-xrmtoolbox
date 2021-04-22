@@ -37,13 +37,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly Dictionary<string, Dictionary<string, List<string>>> lookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
         private readonly Dictionary<string, Dictionary<Guid, Guid>> mapper = new Dictionary<string, Dictionary<Guid, Guid>>();
 
+        private List<EntityMetadata> cachedMetadata = null;
         private bool workingstate;
-
         private Panel informationPanel;
         private Guid organisationId = Guid.Empty;
-
         private string entityLogicalName;
-        private List<EntityMetadata> cachedMetadata = null;
 
         public SchemaWizard()
         {
@@ -267,7 +265,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             RefreshEntities(cachedMetadata, workingstate);
         }
 
-        private void tsbtMappings_Click(object sender, EventArgs e)
+        private void TabStripButtonMappingsClick(object sender, EventArgs e)
         {
             var controller = new ListController();
             controller.HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
@@ -360,7 +358,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             {
                 var dialogResult = fileDialog.ShowDialog();
                 var controller = new SchemaController();
-                controller.SchemaFolderPathAction(NotificationService, tbSchemaPath, workingstate, entityAttributes, entityRelationships, dialogResult, fileDialog, LoadSchemaFile);
+                var collectionParameters = new CollectionParameters(entityAttributes, entityRelationships, null, null, null, null);
+
+                controller.SchemaFolderPathAction(NotificationService, tbSchemaPath, workingstate, collectionParameters  /*entityAttributes, entityRelationships*/, dialogResult, fileDialog, LoadSchemaFile);
             }
         }
 
@@ -419,7 +419,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-        private void btExportConfigPath_Click(object sender, EventArgs e)
+        private void ExportConfigPathButtonClick(object sender, EventArgs e)
         {
             using (SaveFileDialog fileDialog = new SaveFileDialog
             {
@@ -477,16 +477,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void LoadAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            LoadAllFiles(NotificationService, tbSchemaPath, tbExportConfig, tbImportConfig, workingstate, entityAttributes, entityRelationships, filterQuery, lookupMaping, mapper, mapping);
+            var collectionParameters = new CollectionParameters(entityAttributes, entityRelationships,
+              filterQuery, lookupMaping, mapper, mapping);
+
+            LoadAllFiles(NotificationService, tbSchemaPath, tbExportConfig, tbImportConfig, workingstate, collectionParameters);
         }
 
-        public void LoadAllFiles(INotificationService feedbackManager, TextBox schemaPath, TextBox exportConfig, TextBox importConfig, bool inputWorkingstate, Dictionary<string, HashSet<string>> inputEntityAttributes, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping)
+        public void LoadAllFiles(INotificationService feedbackManager, TextBox schemaPath, TextBox exportConfig, TextBox importConfig, bool inputWorkingstate, CollectionParameters collectionParameters)
         {
-            LoadSchemaFile(schemaPath.Text, inputWorkingstate, feedbackManager, inputEntityAttributes, inputEntityRelationships);
+            LoadSchemaFile(schemaPath.Text, inputWorkingstate, feedbackManager, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
 
             var controller = new ConfigurationController();
-            controller.LoadExportConfigFile(feedbackManager, exportConfig, inputFilterQuery, inputLookupMaping);
-            controller.LoadImportConfigFile(feedbackManager, importConfig, inputMapper, inputMapping);
+            controller.LoadExportConfigFile(feedbackManager, exportConfig, collectionParameters.FilterQuery, collectionParameters.LookupMaping);
+            controller.LoadImportConfigFile(feedbackManager, importConfig, collectionParameters.Mapper, collectionParameters.Mapping);
         }
 
         private void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
@@ -515,22 +518,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             Settings[organisationId.ToString()].Mappings.Clear();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Schema);
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton2CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Export);
         }
 
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton3CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Import);
         }
 
-        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        private void RadioButton4CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.All);
         }
@@ -552,7 +555,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             importConfigPathButton.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
         }
 
-        public void SetExportMenu(WizardMode mode, System.Windows.Forms.ToolStripButton inputLookupMappings, System.Windows.Forms.ToolStripButton filtersToolStripButton, System.Windows.Forms.ToolStripMenuItem inputLoadFiltersToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveFiltersToolStripMenuItem, System.Windows.Forms.TextBox exportConfigTextBox, System.Windows.Forms.Button exportConfigPathButton)
+        public void SetExportMenu(WizardMode mode, ToolStripButton inputLookupMappings, ToolStripButton filtersToolStripButton, ToolStripMenuItem inputLoadFiltersToolStripMenuItem, ToolStripMenuItem inputSaveFiltersToolStripMenuItem, TextBox exportConfigTextBox, Button exportConfigPathButton)
         {
             inputLookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             filtersToolStripButton.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
@@ -562,7 +565,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             exportConfigPathButton.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
         }
 
-        public void SetSchemaMenu(WizardMode mode, System.Windows.Forms.ToolStripMenuItem inputLoadSchemaToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveSchemaToolStripMenuItem, System.Windows.Forms.TextBox schemaPathTextBox, System.Windows.Forms.Button schemaFolderPathButton)
+        public void SetSchemaMenu(WizardMode mode, ToolStripMenuItem inputLoadSchemaToolStripMenuItem, ToolStripMenuItem inputSaveSchemaToolStripMenuItem, TextBox schemaPathTextBox, Button schemaFolderPathButton)
         {
             inputLoadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
             inputSaveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
@@ -570,7 +573,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             schemaFolderPathButton.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
         }
 
-        public void SetAllMenu(WizardMode mode, System.Windows.Forms.ToolStripMenuItem inputLoadAllToolStripMenuItem, System.Windows.Forms.ToolStripMenuItem inputSaveAllToolStripMenuItem)
+        public void SetAllMenu(WizardMode mode, ToolStripMenuItem inputLoadAllToolStripMenuItem, ToolStripMenuItem inputSaveAllToolStripMenuItem)
         {
             inputLoadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
             inputSaveAllToolStripMenuItem.Enabled = mode == WizardMode.All;

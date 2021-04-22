@@ -1,9 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary;
-using System;
 using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 

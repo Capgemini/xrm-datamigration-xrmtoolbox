@@ -66,17 +66,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             RaiseRequestConnectionEvent(e);
         }
 
-        private void toolStripButtonSchemaConfig_Click(object sender, EventArgs e)
+        private void ToolStripButtonSchemaConfigClick(object sender, EventArgs e)
         {
             SchemaGeneratorWizard.BringToFront();
         }
 
-        private void toolStripButtonDataImport_Click(object sender, EventArgs e)
+        private void ToolStripButtonDataImportClick(object sender, EventArgs e)
         {
             DataImportWizard.BringToFront();
         }
 
-        private void toolStripButtonDataExport_Click(object sender, EventArgs e)
+        private void ToolStripButtonDataExportClick(object sender, EventArgs e)
         {
             DataExportWizard.BringToFront();
         }

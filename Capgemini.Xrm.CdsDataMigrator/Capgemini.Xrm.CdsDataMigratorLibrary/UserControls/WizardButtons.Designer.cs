@@ -42,7 +42,7 @@
             this.btnBack.TabIndex = 0;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.button1_Click);
+            this.btnBack.Click += new System.EventHandler(this.Button1Click);
             // 
             // btnNext
             // 
@@ -53,7 +53,7 @@
             this.btnNext.TabIndex = 1;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.button2_Click);
+            this.btnNext.Click += new System.EventHandler(this.Button2Click);
             // 
             // btnExecute
             // 
@@ -67,7 +67,7 @@
             this.btnExecute.Text = "Execute";
             this.btnExecute.UseVisualStyleBackColor = false;
             this.btnExecute.Visible = false;
-            this.btnExecute.Click += new System.EventHandler(this.button3_Click);
+            this.btnExecute.Click += new System.EventHandler(this.Button3Click);
             // 
             // WizardButtons
             // 
@@ -78,7 +78,7 @@
             this.Controls.Add(this.btnBack);
             this.Name = "WizardButtons";
             this.Size = new System.Drawing.Size(253, 42);
-            this.Load += new System.EventHandler(this.WizardButtons_Load);
+            this.Load += new System.EventHandler(this.WizardButtonsLoadHandler);
             this.ResumeLayout(false);
 
         }

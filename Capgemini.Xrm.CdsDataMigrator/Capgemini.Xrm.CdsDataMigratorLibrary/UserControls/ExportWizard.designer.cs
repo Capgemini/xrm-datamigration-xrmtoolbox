@@ -175,7 +175,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.buttonExportConfigLocation.TabIndex = 11;
             this.buttonExportConfigLocation.Text = "...";
             this.buttonExportConfigLocation.UseVisualStyleBackColor = true;
-            this.buttonExportConfigLocation.Click += new System.EventHandler(this.buttonExportConfigLocation_Click);
+            this.buttonExportConfigLocation.Click += new System.EventHandler(this.ButtonExportConfigLocationClick);
             // 
             // textBoxExportConfigLocation
             // 
@@ -232,7 +232,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.buttonExportLocation.TabIndex = 8;
             this.buttonExportLocation.Text = "...";
             this.buttonExportLocation.UseVisualStyleBackColor = true;
-            this.buttonExportLocation.Click += new System.EventHandler(this.buttonExportLocation_Click);
+            this.buttonExportLocation.Click += new System.EventHandler(this.ButtonExportLocationClick);
             // 
             // textBoxExportLocation
             // 
@@ -369,7 +369,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.buttonTargetConnectionString.TabIndex = 43;
             this.buttonTargetConnectionString.Text = "...";
             this.buttonTargetConnectionString.UseVisualStyleBackColor = true;
-            this.buttonTargetConnectionString.Click += new System.EventHandler(this.buttonTargetConnectionString_Click);
+            this.buttonTargetConnectionString.Click += new System.EventHandler(this.ButtonTargetConnectionStringClick);
             // 
             // labelTargetConnectionString
             // 
@@ -404,7 +404,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.buttonSchemaLocation.TabIndex = 16;
             this.buttonSchemaLocation.Text = "...";
             this.buttonSchemaLocation.UseVisualStyleBackColor = true;
-            this.buttonSchemaLocation.Click += new System.EventHandler(this.buttonSchemaLocation_Click);
+            this.buttonSchemaLocation.Click += new System.EventHandler(this.ButtonSchemaLocationClick);
             // 
             // textBoxSchemaLocation
             // 

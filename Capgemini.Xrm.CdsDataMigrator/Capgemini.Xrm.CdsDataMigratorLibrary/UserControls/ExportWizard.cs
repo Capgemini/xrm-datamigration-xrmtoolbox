@@ -116,22 +116,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             set => numericUpDownBatchSize.Value = value;
         }
 
-        private void buttonExportLocation_Click(object sender, EventArgs e)
+        private void ButtonExportLocationClick(object sender, EventArgs e)
         {
             SelectExportLocationHandler(sender, e);
         }
 
-        private void buttonExportConfigLocation_Click(object sender, EventArgs e)
+        private void ButtonExportConfigLocationClick(object sender, EventArgs e)
         {
             SelectExportConfigFileHandler(sender, e);
         }
 
-        private void buttonSchemaLocation_Click(object sender, EventArgs e)
+        private void ButtonSchemaLocationClick(object sender, EventArgs e)
         {
             SelectSchemaFileHandler(sender, e);
         }
 
-        private void buttonExportData_Click(object sender, EventArgs e)
+        private void ButtonExportDataClick(object sender, EventArgs e)
         {
             ExportDataHandler(sender, e);
         }
@@ -142,7 +142,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             ExportDataHandler(sender, e);
         }
 
-        private void buttonTargetConnectionString_Click(object sender, EventArgs e)
+        private void ButtonTargetConnectionStringClick(object sender, EventArgs e)
         {
             OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (CdsMigratorPluginControl)Parent });
         }
