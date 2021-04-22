@@ -537,33 +537,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void SetMenuVisibility(WizardMode mode)
         {
-            //Import
-            //tsbtMappings.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            //loadMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            //saveMappingsToolStripMenuItem.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            //tbImportConfig.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
-            //btImportConfigPath.Enabled = mode == WizardMode.All || mode == WizardMode.Import;
             SetImportMenu(mode, tsbtMappings, loadMappingsToolStripMenuItem, saveMappingsToolStripMenuItem, tbImportConfig, btImportConfigPath);
-
-            //Export
-            //lookupMappings.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            //tsbtFilters.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            //loadFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            //saveFiltersToolStripMenuItem.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            //tbExportConfig.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
-            //btExportConfigPath.Enabled = mode == WizardMode.Export || mode == WizardMode.All;
             SetExportMenu(mode, lookupMappings, tsbtFilters, loadFiltersToolStripMenuItem, saveFiltersToolStripMenuItem, tbExportConfig, btExportConfigPath);
-
-            //Schema
-            //loadSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            //saveSchemaToolStripMenuItem.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            //tbSchemaPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
-            //btSchemaFolderPath.Enabled = mode == WizardMode.Schema || mode == WizardMode.All;
             SetSchemaMenu(mode, loadSchemaToolStripMenuItem, saveSchemaToolStripMenuItem, tbSchemaPath, btSchemaFolderPath);
-
-            ////All
-            //loadAllToolStripMenuItem.Enabled = mode == WizardMode.All;
-            //saveAllToolStripMenuItem.Enabled = mode == WizardMode.All;
             SetAllMenu(mode, loadAllToolStripMenuItem, saveAllToolStripMenuItem);
         }
 
