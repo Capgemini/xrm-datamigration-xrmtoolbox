@@ -91,12 +91,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             {
                 using (var schemaPath = new System.Windows.Forms.TextBox())
                 {
-                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping))
+                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping, NotificationServiceMock.Object))
                              .Should()
-                             .Throw<ArgumentException>()
-                             .WithMessage("Empty path name is not legal.");
+                             .NotThrow();
                 }
             }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
@@ -115,7 +116,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 
                 using (var schemaPath = new System.Windows.Forms.TextBox())
                 {
-                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping))
+                    FluentActions.Invoking(() => systemUnderTest.GenerateExportConfigFile(exportConfig, schemaPath, inputFilterQuery, inputLookupMaping, NotificationServiceMock.Object))
                              .Should()
                              .NotThrow();
                 }

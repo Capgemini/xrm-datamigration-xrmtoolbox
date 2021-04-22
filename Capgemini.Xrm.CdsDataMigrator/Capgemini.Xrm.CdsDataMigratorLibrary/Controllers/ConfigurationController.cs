@@ -128,43 +128,49 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
             catch (Exception ex)
             {
-                notificationService.DisplayFeedback($"Error Saving Import Config file, Error:{ex.Message}");
+                notificationService.DisplayFeedback($"Error Saving Import Config file. Error: {ex.Message}");
             }
         }
 
-        public void GenerateExportConfigFile(TextBox exportConfig, TextBox schemaPath, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping)
+        public void GenerateExportConfigFile(TextBox exportConfig, TextBox schemaPath, Dictionary<string, string> inputFilterQuery, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, INotificationService notificationService)
         {
-            var config = new CrmExporterConfig()
-            {
-                JsonFolderPath = "ExtractedData",
-            };
+            try {
+                var config = new CrmExporterConfig()
+                {
+                    JsonFolderPath = "ExtractedData",
+                };
 
-            if (File.Exists(exportConfig.Text))
+                if (File.Exists(exportConfig.Text))
+                {
+                    config = CrmExporterConfig.GetConfiguration(exportConfig.Text);
+                }
+
+                config.CrmMigrationToolSchemaFilters.Clear();
+                config.CrmMigrationToolSchemaFilters.AddRange(inputFilterQuery);
+
+                if (!string.IsNullOrWhiteSpace(schemaPath.Text))
+                {
+                    config.CrmMigrationToolSchemaPaths.Clear();
+                    config.CrmMigrationToolSchemaPaths.Add(schemaPath.Text);
+                }
+
+                if (inputLookupMaping.Count > 0)
+                {
+                    config.LookupMapping.Clear();
+                    config.LookupMapping.AddRange(inputLookupMaping);
+                }
+
+                if (File.Exists(exportConfig.Text))
+                {
+                    File.Delete(exportConfig.Text);
+                }
+
+                config.SaveConfiguration(exportConfig.Text);
+            } 
+            catch (Exception ex)
             {
-                config = CrmExporterConfig.GetConfiguration(exportConfig.Text);
+                notificationService.DisplayFeedback($"Error Saving Export Config file. Error: {ex.Message}");
             }
-
-            config.CrmMigrationToolSchemaFilters.Clear();
-            config.CrmMigrationToolSchemaFilters.AddRange(inputFilterQuery);
-
-            if (!string.IsNullOrWhiteSpace(schemaPath.Text))
-            {
-                config.CrmMigrationToolSchemaPaths.Clear();
-                config.CrmMigrationToolSchemaPaths.Add(schemaPath.Text);
-            }
-
-            if (inputLookupMaping.Count > 0)
-            {
-                config.LookupMapping.Clear();
-                config.LookupMapping.AddRange(inputLookupMaping);
-            }
-
-            if (File.Exists(exportConfig.Text))
-            {
-                File.Delete(exportConfig.Text);
-            }
-
-            config.SaveConfiguration(exportConfig.Text);
         }
     }
 }

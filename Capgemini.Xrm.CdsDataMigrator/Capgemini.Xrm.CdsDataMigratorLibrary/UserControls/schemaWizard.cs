@@ -455,7 +455,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private void ToolBarSaveFiltersClick(object sender, EventArgs e)
         {
             var controller = new ConfigurationController();
-            controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping);
+            controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
         }
 
         private void ToolBarLoadMappingsFileClick(object sender, EventArgs e)
@@ -493,7 +493,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var controller = new ConfigurationController();
             controller.GenerateImportConfigFile(NotificationService, tbImportConfig, mapper);
-            controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping);
+            controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
 
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
             var entityController = new EntityController();
