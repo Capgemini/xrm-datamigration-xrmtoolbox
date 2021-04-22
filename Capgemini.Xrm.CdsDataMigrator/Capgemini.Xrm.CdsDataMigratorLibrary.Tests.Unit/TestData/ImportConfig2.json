@@ -1,0 +1,18 @@
+{
+  "IgnoreStatuses": true,
+  "IgnoreSystemFields": true,
+  "MigrationConfig": {
+    "ApplyAliasMapping": true,
+    "Mappings": {}
+  },
+  "SaveBatchSize": 200,
+  "JsonFolderPath": "D:\\PackageTester\\Sample1\\ExtractedData",
+  "DeactivateAllProcesses": false,
+  "FilePrefix": "ExportedData",
+  "PassOneReferences": [
+    "businessunit",
+    "uom",
+    "uomschedule",
+    "queue"
+  ]
+}
