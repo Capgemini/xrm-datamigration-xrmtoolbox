@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BECE6860-D066-4502-AB89-204DA979BED5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{5E6BB39C-47C6-4920-9B0A-E8433BF144B2}"
+	ProjectSection(SolutionItems) = preProject
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit", "Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit\Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.csproj", "{02FE1C61-34F2-4F47-9860-CE4B67BE915E}"
 EndProject
