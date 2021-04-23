@@ -1,0 +1,14 @@
+name: $(GitVersion.NuGetVersionV2)
+trigger: none
+pr:
+  - master
+pool:
+  vmImage: 'windows-latest'
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'any cpu'
+  buildConfiguration: 'Release'
+stages:
+  - stage: Build
+    jobs:
+    - template: templates/commonbuildtasks.yml
