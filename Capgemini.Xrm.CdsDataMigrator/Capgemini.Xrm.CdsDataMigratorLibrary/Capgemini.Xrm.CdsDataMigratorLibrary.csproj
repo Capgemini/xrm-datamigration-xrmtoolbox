@@ -361,6 +361,10 @@
   <ItemGroup>
     <None Include="Resources\saveToCRMServerToolStripMenuItem.Image.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\SecurityCodeScan.VS2019.5.1.0\analyzers\dotnet\SecurityCodeScan.VS2019.dll" />
+    <Analyzer Include="..\..\packages\SecurityCodeScan.VS2019.5.1.0\analyzers\dotnet\YamlDotNet.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF $(ConfigurationName) == Debug (

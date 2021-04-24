@@ -27,6 +27,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         [TestMethod]
         public void WizardValidationExportConfig()
         {
+            //ixucih
             using (var systemUnderTest = new ExportWizard())
             {
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
