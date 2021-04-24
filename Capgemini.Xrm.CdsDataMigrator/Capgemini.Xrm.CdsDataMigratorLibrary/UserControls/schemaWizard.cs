@@ -36,8 +36,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         private readonly Dictionary<string, string> filterQuery = new Dictionary<string, string>();
         private readonly Dictionary<string, Dictionary<string, List<string>>> lookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
         private readonly Dictionary<string, Dictionary<Guid, Guid>> mapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+        private readonly List<EntityMetadata> cachedMetadata = new List<EntityMetadata>();
 
-        private List<EntityMetadata> cachedMetadata = null;
         private bool workingstate;
         private Panel informationPanel;
         private Guid organisationId = Guid.Empty;
@@ -127,7 +127,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         public void RefreshEntities(List<EntityMetadata> inputCachedMetadata, bool inputWorkingstate, bool isNewConnection = false)
         {
-            if (inputCachedMetadata == null || isNewConnection)
+            if (inputCachedMetadata.Count == 0 || isNewConnection)
             {
                 ClearMemory();
                 PopulateEntities(inputWorkingstate);

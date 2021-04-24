@@ -32,7 +32,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 
             if (sourceList != null)
             {
-                inputCachedMetadata = sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList();
+                inputCachedMetadata.Clear();
+                inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
             }
 
             var sourceEntitiesList = new List<ListViewItem>();
