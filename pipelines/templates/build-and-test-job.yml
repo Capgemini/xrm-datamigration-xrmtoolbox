@@ -22,7 +22,7 @@ jobs:
         inputs:
           useConfigFile: true
           configFilePath: '$(Build.SourcesDirectory)\GitVersion.yml'
-          updateAssemblyInfo: false
+          updateAssemblyInfo: true
 
       - pwsh: Write-Host '##vso[task.setvariable variable=SemVer;isOutput=true]$(GitVersion.SemVer)'
         name: OutputSemVerTask
