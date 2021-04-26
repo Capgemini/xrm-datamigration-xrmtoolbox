@@ -20,7 +20,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
     {
         private CrmImportConfig importConfig;
         private readonly Capgemini.DataMigration.Core.ILogger logger;
-        private readonly IEntityRepositoryService entityRepositoryService;
+        private IEntityRepositoryService entityRepositoryService;
 
         public ImportWizard()
         {
@@ -37,7 +37,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             wizardButtons1.OnExecute += Button2Click;
             logger = new LoggerService(tbLogger, SynchronizationContext.Current);
-            entityRepositoryService = new EntityRepositoryService(OrganizationService);
+
             wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
         }
 
@@ -109,6 +109,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             labelTargetConnectionString.Text = connectedOrgFriendlyName;
             stepWizardControl1.Pages[3].AllowNext = true;
+            entityRepositoryService = new EntityRepositoryService(OrganizationService);
         }
 
         public void WizardNavigation(System.Windows.Forms.Label folderPathValidationLabel, TextBox sourceDataLocationTextBox, AeroWizard.WizardPage selectedPage, AeroWizard.WizardPageContainer pageContainer)
