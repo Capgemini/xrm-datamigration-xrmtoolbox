@@ -1,14 +1,11 @@
-name: $(GitVersion.NuGetVersionV2)
+name: $(GITVERSION_FullSemVer)
 trigger: none
 pr:
   - master
 pool:
   vmImage: 'windows-latest'
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'any cpu'
-  buildConfiguration: 'Release'
 stages:
-  - stage: Build
+  - stage: BuildAndTest
+    displayName: Build and Test
     jobs:
-    - template: templates/commonbuildtasks.yml
+    - template: templates/build-and-test-job.yml
