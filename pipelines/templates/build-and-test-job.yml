@@ -28,11 +28,16 @@ jobs:
         name: OutputSemVerTask
         displayName: Output SemVer
 
-      - task: DotNetCoreCLI@2
-        displayName: Restore NuGet packages
+      - task: NuGetToolInstaller@0
+        displayName: 'Use NuGet 4.4.1'
         inputs:
-          command: restore
-          projects: "**/*.csproj"
+          versionSpec: 4.4.1
+
+      - task: NuGetCommand@2
+        displayName: 'NuGet restore'
+        inputs:
+          restoreSolution: '$(solution)'
+          restoreDirectory: ../packages
 
       - task: SonarCloudPrepare@1
         displayName: Prepare SonarCloud
