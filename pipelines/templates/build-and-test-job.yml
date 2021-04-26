@@ -64,7 +64,10 @@ jobs:
           configuration: "$(buildConfiguration)"
           runSettingsFile: '$(Build.SourcesDirectory)\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit\CodeCoverage.runsettings'
           searchFolder: Capgemini.Xrm.CdsDataMigrator
-          testAssemblyVer2: '**\*Tests*.dll'
+          testAssemblyVer2: |
+            **\*Tests*.dll
+            !**\*Integration*.dll
+            !**\obj\**
 
       - task: SonarCloudAnalyze@1
         displayName: Analyse with SonarCloud
