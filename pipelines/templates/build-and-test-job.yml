@@ -77,7 +77,7 @@ jobs:
         inputs:
           pollingTimeoutSec: '300'
 
-      - task: WhiteSource Bolt@20
+      - task: WhiteSource Bolt@21
         displayName: Detect security and licence issues
         inputs:
           cwd: '$(Build.SourcesDirectory)'
