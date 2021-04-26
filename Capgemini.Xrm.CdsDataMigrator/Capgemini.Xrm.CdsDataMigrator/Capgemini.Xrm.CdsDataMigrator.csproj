@@ -248,7 +248,10 @@
       <Name>Capgemini.Xrm.CdsDataMigratorLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\SecurityCodeScan.VS2019.5.1.0\analyzers\dotnet\SecurityCodeScan.VS2019.dll" />
+    <Analyzer Include="..\..\packages\SecurityCodeScan.VS2019.5.1.0\analyzers\dotnet\YamlDotNet.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Debug (
