@@ -1,0 +1,91 @@
+jobs:
+  - job: BuildAndTestJob
+    variables:
+      - name: GitVersion.SemVer
+        value: ""
+      - name: solution
+        value: "**/*.sln"
+      - name: buildPlatform
+        value: "Any CPU"
+      - name: buildConfiguration
+        value: "Release"
+    displayName: Build and Test
+
+    steps:
+      - task: gitversion/setup@0
+        displayName: Install GitVersion
+        inputs:
+          versionSpec: "5.x"
+
+      - task: gitversion/execute@0
+        displayName: Execute GitVersion
+        inputs:
+          useConfigFile: true
+          configFilePath: '$(Build.SourcesDirectory)\GitVersion.yml'
+          updateAssemblyInfo: false
+
+      - pwsh: Write-Host "##vso[task.setvariable variable=SemVer;isOutput=true]$(GitVersion.SemVer)"
+        name: OutputSemVerTask
+        displayName: Output SemVer
+
+      - task: DotNetCoreCLI@2
+        displayName: Restore NuGet packages
+        inputs:
+          command: restore
+          projects: "**/*.csproj"
+
+      - task: SonarCloudPrepare@1
+        displayName: Prepare SonarCloud
+        inputs:
+          SonarCloud: "SonarCloud"
+          organization: "capgemini-1"
+          scannerMode: "MSBuild"
+          projectKey: "xrm-datamigration-xrmtoolbox"
+          projectName: "xrm-datamigration-xrmtoolbox"
+          projectVersion: "$(GitVersion.SemVer)"
+
+      - task: VSBuild@1
+        displayName: "Build solution"
+        inputs:
+          solution: "$(solution)"
+          platform: "$(buildPlatform)"
+          configuration: "$(buildConfiguration)"
+
+      - task: VSTest@2
+        displayName: Run tests
+        inputs:
+          codeCoverageEnabled: true
+          platform: "$(buildPlatform)"
+          configuration: "$(buildConfiguration)"
+          runSettingsFile: '$(Build.SourcesDirectory)\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit\CodeCoverage.runsettings'
+          searchFolder: Capgemini.Xrm.CdsDataMigrator
+          testAssemblyVer2: '**\*Tests*.dll'
+
+      - task: SonarCloudAnalyze@1
+        displayName: Analyse with SonarCloud
+
+      - task: SonarCloudPublish@1
+        displayName: Publish SonarCloud results
+        inputs:
+          pollingTimeoutSec: "300"
+
+      - task: WhiteSource Bolt@20
+        displayName: Detect security and licence issues
+        inputs:
+          cwd: "$(Build.SourcesDirectory)"
+
+      - task: DotNetCoreCLI@2
+        displayName: Pack NuGet package
+        inputs:
+          command: pack
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator\Capgemini.Xrm.CdsDataMigrator.nuspec
+          modifyOutputPath: true
+          versioningScheme: byEnvVar
+          versionEnvVar: GitVersion.NuGetVersionV2
+          includesymbols: false
+          buildProperties: Configuration=$(buildConfiguration)
+          packDirectory: $(Build.ArtifactStagingDirectory)/out
+
+      - publish: $(Build.ArtifactStagingDirectory)/out
+        displayName: Publish NuGet artifact
+        artifact: Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
