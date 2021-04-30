@@ -49,37 +49,46 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
         {
-            if (maxThreads > 1)
+            try
             {
-                currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
-                var repos = new List<IEntityRepository>();
-                int threadCount = maxThreads;
 
-                while (threadCount > 0)
+                if (maxThreads > 1)
                 {
-                    threadCount--;
-                    repos.Add(entityRepositoryService.InstantiateEntityRepository(true));
-                }
+                    currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
+                    var repos = new List<IEntityRepository>();
+                    int threadCount = maxThreads;
 
-                var fileExporter = new CrmFileDataImporter(currentLogger, repos, currentImportConfig, tokenSource.Token);
-                fileExporter.MigrateData();
-            }
-            else
-            {
-                currentLogger.LogInfo("Starting Single Threaded processing, you must set up max threads to more than 1");
-                var entityRepo = entityRepositoryService.InstantiateEntityRepository(false);
+                    while (threadCount > 0)
+                    {
+                        threadCount--;
+                        repos.Add(entityRepositoryService.InstantiateEntityRepository(true));
+                    }
 
-                if (jsonFormat)
-                {
-                    var fileExporter = new CrmFileDataImporter(currentLogger, entityRepo, currentImportConfig, tokenSource.Token);
+                    var fileExporter = new CrmFileDataImporter(currentLogger, repos, currentImportConfig, tokenSource.Token);
                     fileExporter.MigrateData();
                 }
                 else
                 {
-                    var schema = CrmSchemaConfiguration.ReadFromFile(importSchemaFilePath);
-                    var fileExporter = new CrmFileDataImporterCsv(currentLogger, entityRepo, currentImportConfig, schema, tokenSource.Token);
-                    fileExporter.MigrateData();
+                    currentLogger.LogInfo("Starting Single Threaded processing, you must set up max threads to more than 1");
+                    var entityRepo = entityRepositoryService.InstantiateEntityRepository(false);
+
+                    if (jsonFormat)
+                    {
+                        var fileExporter = new CrmFileDataImporter(currentLogger, entityRepo, currentImportConfig, tokenSource.Token);
+                        fileExporter.MigrateData();
+                    }
+                    else
+                    {
+                        var schema = CrmSchemaConfiguration.ReadFromFile(importSchemaFilePath);
+                        var fileExporter = new CrmFileDataImporterCsv(currentLogger, entityRepo, currentImportConfig, schema, tokenSource.Token);
+                        fileExporter.MigrateData();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                currentLogger.LogError($"Critical import error, processing stopped: {ex.Message}");
+                throw;
             }
         }
 
