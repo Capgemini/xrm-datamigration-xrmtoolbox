@@ -51,7 +51,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             try
             {
-
                 if (maxThreads > 1)
                 {
                     currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");

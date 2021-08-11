@@ -85,7 +85,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Core
                     break;
 
                 default:
-                    notificationService.DisplayFeedback($"Missing mapping for {input}");
+                    notificationService.DisplayFeedback($"Unable to map attribute - {input}.");
                     break;
             }
 
