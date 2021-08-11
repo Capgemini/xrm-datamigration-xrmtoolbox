@@ -218,14 +218,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         {
             var input = "Unknown";
 
-            notificationServiceMock.Setup(x => x.DisplayFeedback($"Missing mapping for {input}"))
+            notificationServiceMock.Setup(x => x.DisplayFeedback($"Unable to map attribute - {input}."))
                                 .Verifiable();
 
             systemUnderTest.AttributeMetadataType = input;
 
             systemUnderTest.GetMapping(notificationServiceMock.Object);
 
-            notificationServiceMock.Verify(x => x.DisplayFeedback($"Missing mapping for {input}"), Times.Once);
+            notificationServiceMock.Verify(x => x.DisplayFeedback($"Unable to map attribute - {input}."), Times.Once);
             systemUnderTest.AttributeMetadataTypeResult.Should().Be(input);
         }
     }
