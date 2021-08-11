@@ -81,6 +81,7 @@ jobs:
         displayName: Detect security and licence issues
         inputs:
           cwd: '$(Build.SourcesDirectory)'
+        enabled: false
 
       - task: PublishSymbols@2
         displayName: Publish symbols
