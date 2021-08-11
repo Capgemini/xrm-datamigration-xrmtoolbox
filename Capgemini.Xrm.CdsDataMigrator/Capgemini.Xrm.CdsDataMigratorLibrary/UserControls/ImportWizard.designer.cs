@@ -529,14 +529,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // wizardButtons1
             // 
             this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(404, 0);
             this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.wizardButtons1.Name = "wizardButtons1";
             this.wizardButtons1.PageContainer = this.stepWizardControl1;
             this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(396, 159);
             this.wizardButtons1.TabIndex = 0;
+            this.wizardButtons1.Location = new System.Drawing.Point(0, 0);
+            this.wizardButtons1.Size = new System.Drawing.Size(400, 50);
+
             // 
             // openFileDialog1
             // 
@@ -552,13 +553,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.stepWizardControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.wizardButtons1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.wizardButtons1);
+            this.splitContainer1.Panel2.Controls.Add(this.stepWizardControl1);
             this.splitContainer1.Size = new System.Drawing.Size(800, 552);
-            this.splitContainer1.SplitterDistance = 391;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 1;
             // 
