@@ -13,13 +13,15 @@ using XrmToolBox.Extensibility;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class ImportWizard : UserControl
     {
         private CrmImportConfig importConfig;
-        private readonly Capgemini.DataMigration.Core.ILogger logger;
+        private readonly LoggerService logger;
         private IEntityRepositoryService entityRepositoryService;
 
         public ImportWizard()
@@ -39,6 +41,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             logger = new LoggerService(tbLogger, SynchronizationContext.Current);
 
             wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
+
+            comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -213,6 +217,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             cbIgnoreStatuses.Checked = importConfig.IgnoreStatuses;
             tbSourceDataLocation.Text = importConfig.JsonFolderPath;
             nudSavePageSize.Value = importConfig.SaveBatchSize;
+        }
+
+        private void comboBoxLogLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
     }
 }

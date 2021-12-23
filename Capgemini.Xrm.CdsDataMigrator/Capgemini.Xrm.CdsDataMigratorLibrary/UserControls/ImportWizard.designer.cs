@@ -32,6 +32,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             this.stepWizardControl1 = new AeroWizard.WizardPageContainer();
             this.dataFormat = new AeroWizard.WizardPage();
+            this.labelLogLevel = new System.Windows.Forms.Label();
+            this.comboBoxLogLevel = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tbImportSchema = new System.Windows.Forms.TextBox();
             this.btnImportSchema = new System.Windows.Forms.Button();
@@ -90,9 +92,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
+            this.stepWizardControl1.Controls.Add(this.dataFormat);
             this.stepWizardControl1.Controls.Add(this.wizardPage3);
             this.stepWizardControl1.Controls.Add(this.wizardPage2);
-            this.stepWizardControl1.Controls.Add(this.dataFormat);
             this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Controls.Add(this.wizardPage4);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -106,13 +108,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.Pages.Add(this.wizardPage3);
             this.stepWizardControl1.Pages.Add(this.wizardPage4);
             this.stepWizardControl1.ShowProgressInTaskbarIcon = true;
-            this.stepWizardControl1.Size = new System.Drawing.Size(800, 391);
+            this.stepWizardControl1.Size = new System.Drawing.Size(800, 500);
             this.stepWizardControl1.TabIndex = 0;
             // 
             // dataFormat
             // 
             this.dataFormat.AllowCancel = false;
             this.dataFormat.AllowNext = false;
+            this.dataFormat.Controls.Add(this.labelLogLevel);
+            this.dataFormat.Controls.Add(this.comboBoxLogLevel);
             this.dataFormat.Controls.Add(this.groupBox1);
             this.dataFormat.Controls.Add(this.label1);
             this.dataFormat.Controls.Add(this.radioButtonJsonFormat);
@@ -120,9 +124,29 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.dataFormat.Name = "dataFormat";
             this.dataFormat.NextPage = this.wizardPage5;
             this.dataFormat.ShowCancel = false;
-            this.dataFormat.Size = new System.Drawing.Size(800, 391);
+            this.dataFormat.Size = new System.Drawing.Size(800, 500);
             this.dataFormat.TabIndex = 2;
             this.dataFormat.Text = "Select Data Format";
+            // 
+            // labelLogLevel
+            // 
+            this.labelLogLevel.AutoSize = true;
+            this.labelLogLevel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLogLevel.Location = new System.Drawing.Point(30, 236);
+            this.labelLogLevel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLogLevel.Name = "labelLogLevel";
+            this.labelLogLevel.Size = new System.Drawing.Size(121, 32);
+            this.labelLogLevel.TabIndex = 11;
+            this.labelLogLevel.Text = "Log Level:";
+            // 
+            // comboBoxLogLevel
+            // 
+            this.comboBoxLogLevel.FormattingEnabled = true;
+            this.comboBoxLogLevel.Location = new System.Drawing.Point(158, 246);
+            this.comboBoxLogLevel.Name = "comboBoxLogLevel";
+            this.comboBoxLogLevel.Size = new System.Drawing.Size(184, 24);
+            this.comboBoxLogLevel.TabIndex = 10;
+            this.comboBoxLogLevel.SelectedIndexChanged += new System.EventHandler(this.comboBoxLogLevel_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -529,15 +553,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // wizardButtons1
             // 
             this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtons1.Location = new System.Drawing.Point(400, 0);
             this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.wizardButtons1.Name = "wizardButtons1";
             this.wizardButtons1.PageContainer = this.stepWizardControl1;
             this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.TabIndex = 0;
-            this.wizardButtons1.Location = new System.Drawing.Point(0, 0);
             this.wizardButtons1.Size = new System.Drawing.Size(400, 50);
-
+            this.wizardButtons1.TabIndex = 0;
             // 
             // openFileDialog1
             // 
@@ -637,5 +660,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private System.Windows.Forms.TextBox tbLogger;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label labelFolderPathValidation;
+        private System.Windows.Forms.Label labelLogLevel;
+        private System.Windows.Forms.ComboBox comboBoxLogLevel;
     }
 }

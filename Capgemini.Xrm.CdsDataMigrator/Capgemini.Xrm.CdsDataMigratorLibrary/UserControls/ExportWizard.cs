@@ -11,6 +11,8 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -40,6 +42,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             FormatCsvSelected = false;
             FormatJsonSelected = true;
             numericUpDownBatchSize.Value = 5000;
+
+            comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
 
         private void WizardButtons1_OnCustomPreviousNavigation(object sender, EventArgs e)
@@ -181,6 +185,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
 
             return true;
+        }
+
+        private void comboBoxLogLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
     }
 }
