@@ -242,6 +242,7 @@
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
+    <Compile Include="Extensions\FormControlExtensionsTests.cs" />
     <Compile Include="Forms\FilterEditorTests.cs" />
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
