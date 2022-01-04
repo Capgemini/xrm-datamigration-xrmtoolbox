@@ -36,8 +36,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
-            wizardButtons1.OnCustomNextNavigation += WizardButtons1_OnNavigateToNextPage;
-            wizardButtons1.OnCustomPreviousNavigation += WizardButtons1_OnCustomPreviousNavigation;
+            wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
+            wizardButtons1.OnCustomPreviousNavigation += WizardButtonsOnCustomPreviousNavigation;
 
             FormatCsvSelected = false;
             FormatJsonSelected = true;
@@ -46,7 +46,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
 
-        private void WizardButtons1_OnCustomPreviousNavigation(object sender, EventArgs e)
+        public void WizardButtonsOnCustomPreviousNavigation(object sender, EventArgs e)
         {
             var wizardButtons = (WizardButtons)sender;
 
@@ -54,9 +54,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             wizardButtons.PageContainer.PreviousPage();
         }
 
-        private void WizardButtons1_OnNavigateToNextPage(object sender, EventArgs e)
+        public void WizardButtonsOnNavigateToNextPage(object sender, EventArgs e)
         {
-            var wizardButtons = ((WizardButtons)sender);
+            var wizardButtons = (WizardButtons)sender;
 
             if (WizardValidation(wizardButtons.PageContainer.SelectedPage.Name))
             {
@@ -187,7 +187,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             return true;
         }
 
-        private void comboBoxLogLevel_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
         {
             logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }

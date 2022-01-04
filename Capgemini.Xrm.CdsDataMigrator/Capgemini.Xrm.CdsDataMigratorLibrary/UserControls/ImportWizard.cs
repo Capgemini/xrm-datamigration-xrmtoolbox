@@ -40,7 +40,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             wizardButtons1.OnExecute += Button2Click;
             logger = new LoggerService(tbLogger, SynchronizationContext.Current);
 
-            wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
+            wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
 
             comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
@@ -198,9 +198,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void WizardButtons1OnNavigateToNextPage(object sender, EventArgs e)
+        public void WizardButtonsOnNavigateToNextPage(object sender, EventArgs e)
         {
-            var wizardButtons = ((WizardButtons)sender);
+            var wizardButtons = (WizardButtons)sender;
             WizardNavigation(labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
         }
 
@@ -219,7 +219,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             nudSavePageSize.Value = importConfig.SaveBatchSize;
         }
 
-        private void comboBoxLogLevel_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
         {
             logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }

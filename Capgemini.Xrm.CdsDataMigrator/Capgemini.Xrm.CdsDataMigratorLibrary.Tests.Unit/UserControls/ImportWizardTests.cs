@@ -2,6 +2,7 @@
 using System.Threading;
 using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
@@ -279,6 +280,24 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                         folderPathValidationLabel.Visible.Should().BeTrue();
                     }
                 }
+            }
+        }
+
+        [TestMethod]
+        public void WizardButtonsOnNavigateToNextPage()
+        {
+            var sender = new WizardButtons();
+            var pageContainer = new AeroWizard.WizardPageContainer();
+
+            pageContainer.Pages.Add(new AeroWizard.WizardPage());
+            pageContainer.Pages.Add(new AeroWizard.WizardPage() { Name = "wizardPage2" });
+            sender.PageContainer = pageContainer;
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.WizardButtonsOnNavigateToNextPage(sender, new EventArgs()))
+                            .Should()
+                            .NotThrow();
             }
         }
     }
