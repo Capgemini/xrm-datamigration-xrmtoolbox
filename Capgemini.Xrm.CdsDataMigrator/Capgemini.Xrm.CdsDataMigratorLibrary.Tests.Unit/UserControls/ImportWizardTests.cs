@@ -333,5 +333,27 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                             .NotThrow();
             }
         }
+
+        [TestMethod]
+        public void RadioButton1CheckedChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.RadioButton1CheckedChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void RadioButtonCheckedChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.RadioButtonCheckedChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
     }
 }

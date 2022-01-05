@@ -141,14 +141,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void RadioButtonCheckedChanged(object sender, EventArgs e)
+        public void RadioButtonCheckedChanged(object sender, EventArgs e)
         {
             radioButtonCSVFormat.Checked = !radioButtonJsonFormat.Checked;
             groupBox1.Visible = false;
             stepWizardControl1.Pages[0].AllowNext = true;
         }
 
-        private void RadioButton1CheckedChanged(object sender, EventArgs e)
+        public void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             stepWizardControl1.Pages[0].AllowNext = radioButtonCSVFormat.Checked && tbImportSchema.Text != string.Empty;
             radioButtonJsonFormat.Checked = !radioButtonCSVFormat.Checked;
