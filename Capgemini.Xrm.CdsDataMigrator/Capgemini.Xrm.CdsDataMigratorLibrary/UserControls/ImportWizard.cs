@@ -155,7 +155,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             groupBox1.Visible = true;
         }
 
-        private void Button2Click(object sender, EventArgs e)
+        public void Button2Click(object sender, EventArgs e)
         {
             importConfig.JsonFolderPath = tbSourceDataLocation.Text;
             importConfig.IgnoreStatuses = cbIgnoreStatuses.Checked;

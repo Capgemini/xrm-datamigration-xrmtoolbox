@@ -322,5 +322,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                             .NotThrow();
             }
         }
+
+        [TestMethod]
+        public void Button2Click()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.Button2Click(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
     }
 }
