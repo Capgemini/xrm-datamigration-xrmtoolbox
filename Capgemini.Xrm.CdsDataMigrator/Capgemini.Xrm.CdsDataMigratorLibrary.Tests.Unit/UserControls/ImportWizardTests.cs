@@ -300,5 +300,27 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                             .NotThrow();
             }
         }
+
+        [TestMethod]
+        public void TabImportConfigFileTextChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.TabImportConfigFileTextChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void TbImportSchemeTextChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.TbImportSchemeTextChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
     }
 }

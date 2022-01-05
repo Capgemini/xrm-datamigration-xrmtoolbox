@@ -190,7 +190,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void TbImportSchemeTextChanged(object sender, EventArgs e)
+        public void TbImportSchemeTextChanged(object sender, EventArgs e)
         {
             if (radioButtonCSVFormat.Checked)
             {
@@ -209,7 +209,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
         }
 
-        private void TabImportConfigFileTextChanged(object sender, EventArgs e)
+        public void TabImportConfigFileTextChanged(object sender, EventArgs e)
         {
             importConfig = CrmImportConfig.GetConfiguration(openFileDialog1.FileName);
 
