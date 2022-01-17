@@ -367,5 +367,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                             .NotThrow();
             }
         }
+
+        [TestMethod]
+        public void InvokeComboBoxLogLevelSelectedIndexChanged()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeComboBoxLogLevelSelectedIndexChanged(new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
     }
 }

@@ -9,5 +9,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks
         {
             WizardButtonsOnCancel(null, eventArgs);
         }
+
+        public void InvokeComboBoxLogLevelSelectedIndexChanged(EventArgs eventArgs)
+        {
+            ComboBoxLogLevelSelectedIndexChanged(null, eventArgs);
+        }
     }
 }

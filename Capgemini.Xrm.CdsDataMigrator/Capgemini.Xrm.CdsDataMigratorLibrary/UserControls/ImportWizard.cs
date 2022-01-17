@@ -226,7 +226,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             nudSavePageSize.Value = importConfig.SaveBatchSize;
         }
 
-        private void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
+        protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
         {
             logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
