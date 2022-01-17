@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -122,6 +123,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
             using (var systemUnderTest = new ExportWizard())
             {
                 FluentActions.Invoking(() => systemUnderTest.WizardButtonsOnNavigateToNextPage(sender, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeWizardButtonsOnCancel()
+        {
+            var sender = new WizardButtons();
+            var pageContainer = new AeroWizard.WizardPageContainer();
+
+            pageContainer.Pages.Add(new AeroWizard.WizardPage());
+            pageContainer.Pages.Add(new AeroWizard.WizardPage() { Name = "exportConfig" });
+            sender.PageContainer = pageContainer;
+
+            using (var systemUnderTest = new MockupForExportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeWizardButtonsOnCancel(new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void ComboBoxLogLevelSelectedIndexChanged()
+        {
+            var sender = new WizardButtons();
+            var pageContainer = new AeroWizard.WizardPageContainer();
+
+            pageContainer.Pages.Add(new AeroWizard.WizardPage());
+            pageContainer.Pages.Add(new AeroWizard.WizardPage() { Name = "exportConfig" });
+            sender.PageContainer = pageContainer;
+
+            using (var systemUnderTest = new MockupForExportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.ComboBoxLogLevelSelectedIndexChanged(new EventArgs()))
                             .Should()
                             .NotThrow();
             }

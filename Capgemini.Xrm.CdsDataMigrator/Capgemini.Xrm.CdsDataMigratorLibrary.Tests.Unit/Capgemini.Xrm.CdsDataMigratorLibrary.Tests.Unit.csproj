@@ -248,6 +248,15 @@
     <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ValidationHelpersTests.cs" />
     <Compile Include="CdsMigratorPluginControlTests.cs" />
+    <Compile Include="Mocks\MockupForExportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mocks\MockupForImportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mocks\MockupForSchemaWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />

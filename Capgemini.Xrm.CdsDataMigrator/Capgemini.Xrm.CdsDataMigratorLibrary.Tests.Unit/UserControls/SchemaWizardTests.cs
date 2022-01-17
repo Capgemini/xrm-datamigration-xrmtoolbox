@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -272,6 +273,66 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 systemUnderTest.NotificationService = NotificationServiceMock.Object;
 
                 FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(false))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeRadioButton1CheckedChanged()
+        {
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InvokeRadioButton1CheckedChanged(new EventArgs()))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeRadioButton2CheckedChanged()
+        {
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InvokeRadioButton2CheckedChanged(new EventArgs()))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeRadioButton3CheckedChanged()
+        {
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.InvokeRadioButton3CheckedChanged(new EventArgs()))
+                                 .Should()
+                                 .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void RadioButton4CheckedChanged()
+        {
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetadataService = MetadataServiceMock.Object;
+                systemUnderTest.NotificationService = NotificationServiceMock.Object;
+
+                FluentActions.Invoking(() => systemUnderTest.RadioButton4CheckedChanged(new EventArgs()))
                                  .Should()
                                  .NotThrow();
             }

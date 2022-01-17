@@ -2,6 +2,7 @@
 using System.Threading;
 using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
@@ -351,6 +352,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
             using (var systemUnderTest = new ImportWizard())
             {
                 FluentActions.Invoking(() => systemUnderTest.RadioButtonCheckedChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeWizardButtonsOnCancel()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeWizardButtonsOnCancel(new EventArgs()))
                             .Should()
                             .NotThrow();
             }

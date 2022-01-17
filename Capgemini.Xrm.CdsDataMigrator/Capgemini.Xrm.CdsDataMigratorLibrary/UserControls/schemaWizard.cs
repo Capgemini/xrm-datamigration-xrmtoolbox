@@ -518,22 +518,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             Settings[organisationId.ToString()].Mappings.Clear();
         }
 
-        private void RadioButton1CheckedChanged(object sender, EventArgs e)
+        protected void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Schema);
         }
 
-        private void RadioButton2CheckedChanged(object sender, EventArgs e)
+        protected void RadioButton2CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Export);
         }
 
-        private void RadioButton3CheckedChanged(object sender, EventArgs e)
+        protected void RadioButton3CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.Import);
         }
 
-        private void RadioButton4CheckedChanged(object sender, EventArgs e)
+        protected void RadioButton4CheckedChanged(object sender, EventArgs e)
         {
             SetMenuVisibility(WizardMode.All);
         }

@@ -34,10 +34,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             presenter = new ExportPresenter(this, logger, dataMigrationService);
 
             logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
-            wizardButtons1.OnExecute += WizardButtons1_OnExecute;
+            wizardButtons1.OnExecute += WizardButtonsOnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtonsOnCustomPreviousNavigation;
-            wizardButtons1.OnCancel += WizardButtons1_OnCancel;
+            wizardButtons1.OnCancel += WizardButtonsOnCancel;
 
             FormatCsvSelected = false;
             FormatJsonSelected = true;
@@ -122,37 +122,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             set => numericUpDownBatchSize.Value = value;
         }
 
-        private void ButtonExportLocationClick(object sender, EventArgs e)
-        {
-            SelectExportLocationHandler(sender, e);
-        }
-
-        private void ButtonExportConfigLocationClick(object sender, EventArgs e)
-        {
-            SelectExportConfigFileHandler(sender, e);
-        }
-
-        private void ButtonSchemaLocationClick(object sender, EventArgs e)
-        {
-            SelectSchemaFileHandler(sender, e);
-        }
-
-        private void WizardButtons1_OnExecute(object sender, EventArgs e)
-        {
-            textBoxLogs.Clear();
-            ExportDataHandler(sender, e);
-        }
-
-        private void WizardButtons1_OnCancel(object sender, EventArgs e)
-        {
-            CancelHandler(sender, e);
-        }
-
-        private void ButtonTargetConnectionStringClick(object sender, EventArgs e)
-        {
-            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (CdsMigratorPluginControl)Parent });
-        }
-
         public void OnConnectionUpdated(string connectedOrgFriendlyName)
         {
             labelTargetConnectionString.Text = connectedOrgFriendlyName;
@@ -168,6 +137,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             openFileDialogExportConfigFile.ShowDialog();
             return openFileDialogExportConfigFile.FileName;
+        }
+
+        private void ButtonExportLocationClick(object sender, EventArgs e)
+        {
+            SelectExportLocationHandler(sender, e);
+        }
+
+        private void ButtonExportConfigLocationClick(object sender, EventArgs e)
+        {
+            SelectExportConfigFileHandler(sender, e);
+        }
+
+        protected void ButtonSchemaLocationClick(object sender, EventArgs e)
+        {
+            SelectSchemaFileHandler(sender, e);
+        }
+
+        protected void WizardButtonsOnExecute(object sender, EventArgs e)
+        {
+            textBoxLogs.Clear();
+            ExportDataHandler(sender, e);
+        }
+
+        protected void WizardButtonsOnCancel(object sender, EventArgs e)
+        {
+            CancelHandler(sender, e);
+        }
+
+        protected void ButtonTargetConnectionStringClick(object sender, EventArgs e)
+        {
+            OnConnectionRequested?.Invoke(this, new RequestConnectionEventArgs { ActionName = "SourceConnection", Control = (CdsMigratorPluginControl)Parent });
+        }
+
+        protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
+        {
+            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
 
         private bool LoadSettingsFromConfig()
@@ -187,11 +192,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
 
             return true;
-        }
-
-        private void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
-        {
-            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
     }
 }

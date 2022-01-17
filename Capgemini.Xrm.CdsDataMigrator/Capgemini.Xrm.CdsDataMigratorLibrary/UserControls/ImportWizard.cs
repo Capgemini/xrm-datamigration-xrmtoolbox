@@ -172,7 +172,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             });
         }
 
-        private void WizardButtonsOnCancel(object sender, EventArgs e)
+        protected void WizardButtonsOnCancel(object sender, EventArgs e)
         {
             tokenSource?.Cancel();
         }
