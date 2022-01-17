@@ -17,8 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {

@@ -23,6 +23,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private CrmImportConfig importConfig;
         private readonly LoggerService logger;
         private IEntityRepositoryService entityRepositoryService;
+        private CancellationTokenSource tokenSource;
 
         public ImportWizard()
         {
@@ -38,6 +39,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             };
 
             wizardButtons1.OnExecute += Button2Click;
+            wizardButtons1.OnCancel += WizardButtonsOnCancel;
             logger = new LoggerService(tbLogger, SynchronizationContext.Current);
 
             wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
@@ -162,12 +164,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             importConfig.IgnoreSystemFields = cbIgnoreSystemFields.Checked;
             importConfig.SaveBatchSize = Convert.ToInt32(nudSavePageSize.Value);
 
-            var tokenSource = new CancellationTokenSource();
+            tokenSource = new CancellationTokenSource();
             tbLogger.Clear();
             Task.Run(() =>
             {
                 PerformImportAction(tbImportSchema.Text, Convert.ToInt32(nudMaxThreads.Value), radioButtonJsonFormat.Checked, logger, entityRepositoryService, importConfig, tokenSource);
             });
+        }
+
+        private void WizardButtonsOnCancel(object sender, EventArgs e)
+        {
+            tokenSource?.Cancel();
         }
 
         private void LoadImportConfigFileButtonClick(object sender, EventArgs e)

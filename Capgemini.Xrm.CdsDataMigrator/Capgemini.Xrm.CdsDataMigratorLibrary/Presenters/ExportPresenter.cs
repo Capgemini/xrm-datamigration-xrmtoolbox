@@ -22,6 +22,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.exportView.SelectExportConfigFileHandler += SelectExportConfig;
             this.exportView.SelectSchemaFileHandler += SelectSchemaFile;
             this.exportView.ExportDataHandler += ExportData;
+            this.exportView.CancelHandler += CancelAction;
         }
 
         private void SelectExportLocation(object sender, EventArgs e)
@@ -82,6 +83,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             settings.BatchSize = (int)exportView.BatchSize;
 
             return settings;
+        }
+
+        public void CancelAction(object sender, EventArgs e)
+        {
+            try
+            {
+                dataMigrationService.CancelDataExport();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
         }
     }
 }

@@ -31,13 +31,22 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private void InitializeComponent()
         {
             this.stepWizardControl1 = new AeroWizard.WizardPageContainer();
-            this.dataFormat = new AeroWizard.WizardPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tbImportSchema = new System.Windows.Forms.TextBox();
-            this.btnImportSchema = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.radioButtonJsonFormat = new System.Windows.Forms.RadioButton();
-            this.radioButtonCSVFormat = new System.Windows.Forms.RadioButton();
+            this.wizardPage4 = new AeroWizard.WizardPage();
+            this.labelLogLevel = new System.Windows.Forms.Label();
+            this.comboBoxLogLevel = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tbLogger = new System.Windows.Forms.TextBox();
+            this.wizardPage3 = new AeroWizard.WizardPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.nudSavePageSize = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudMaxThreads = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ConnectionString = new System.Windows.Forms.Label();
+            this.buttonTargetConnectionString = new System.Windows.Forms.Button();
+            this.labelTargetConnectionString = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.wizardPage5 = new AeroWizard.WizardPage();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -48,38 +57,29 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.tbSourceDataLocation = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.wizardPage3 = new AeroWizard.WizardPage();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
-            this.cbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
-            this.nudSavePageSize = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.nudMaxThreads = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.ConnectionString = new System.Windows.Forms.Label();
-            this.buttonTargetConnectionString = new System.Windows.Forms.Button();
-            this.labelTargetConnectionString = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.wizardPage4 = new AeroWizard.WizardPage();
-            this.label10 = new System.Windows.Forms.Label();
-            this.tbLogger = new System.Windows.Forms.TextBox();
-            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.dataFormat = new AeroWizard.WizardPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbImportSchema = new System.Windows.Forms.TextBox();
+            this.btnImportSchema = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radioButtonJsonFormat = new System.Windows.Forms.RadioButton();
+            this.radioButtonCSVFormat = new System.Windows.Forms.RadioButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.labelLogLevel = new System.Windows.Forms.Label();
-            this.comboBoxLogLevel = new System.Windows.Forms.ComboBox();
+            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.cbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.cbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
-            this.dataFormat.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.wizardPage5.SuspendLayout();
-            this.wizardPage2.SuspendLayout();
+            this.wizardPage4.SuspendLayout();
             this.wizardPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).BeginInit();
-            this.wizardPage4.SuspendLayout();
+            this.wizardPage5.SuspendLayout();
+            this.wizardPage2.SuspendLayout();
+            this.dataFormat.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -92,11 +92,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
-            this.stepWizardControl1.Controls.Add(this.wizardPage4);
-            this.stepWizardControl1.Controls.Add(this.wizardPage3);
-            this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Controls.Add(this.dataFormat);
+            this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Controls.Add(this.wizardPage2);
+            this.stepWizardControl1.Controls.Add(this.wizardPage3);
+            this.stepWizardControl1.Controls.Add(this.wizardPage4);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -111,94 +111,215 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.Size = new System.Drawing.Size(800, 500);
             this.stepWizardControl1.TabIndex = 0;
             // 
-            // dataFormat
+            // wizardPage4
             // 
-            this.dataFormat.AllowCancel = false;
-            this.dataFormat.AllowNext = false;
-            this.dataFormat.Controls.Add(this.groupBox1);
-            this.dataFormat.Controls.Add(this.label1);
-            this.dataFormat.Controls.Add(this.radioButtonJsonFormat);
-            this.dataFormat.Controls.Add(this.radioButtonCSVFormat);
-            this.dataFormat.Name = "dataFormat";
-            this.dataFormat.NextPage = this.wizardPage5;
-            this.dataFormat.ShowCancel = false;
-            this.dataFormat.Size = new System.Drawing.Size(800, 500);
-            this.dataFormat.TabIndex = 2;
-            this.dataFormat.Text = "Select Data Format";
+            this.wizardPage4.AllowCancel = false;
+            this.wizardPage4.AllowNext = false;
+            this.wizardPage4.Controls.Add(this.labelLogLevel);
+            this.wizardPage4.Controls.Add(this.comboBoxLogLevel);
+            this.wizardPage4.Controls.Add(this.label10);
+            this.wizardPage4.Controls.Add(this.tbLogger);
+            this.wizardPage4.IsFinishPage = true;
+            this.wizardPage4.Name = "wizardPage4";
+            this.wizardPage4.ShowCancel = false;
+            this.wizardPage4.Size = new System.Drawing.Size(800, 500);
+            this.wizardPage4.TabIndex = 5;
+            this.wizardPage4.Text = "Perform Import";
             // 
-            // groupBox1
+            // labelLogLevel
             // 
-            this.groupBox1.Controls.Add(this.tbImportSchema);
-            this.groupBox1.Controls.Add(this.btnImportSchema);
-            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.groupBox1.Location = new System.Drawing.Point(35, 141);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.groupBox1.Size = new System.Drawing.Size(691, 84);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Schema file (CSV only)";
-            this.groupBox1.Visible = false;
+            this.labelLogLevel.AutoSize = true;
+            this.labelLogLevel.Font = new System.Drawing.Font("Segoe UI", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLogLevel.Location = new System.Drawing.Point(18, 10);
+            this.labelLogLevel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLogLevel.Name = "labelLogLevel";
+            this.labelLogLevel.Size = new System.Drawing.Size(105, 30);
+            this.labelLogLevel.TabIndex = 16;
+            this.labelLogLevel.Text = "Log Level:";
             // 
-            // tbImportSchema
+            // comboBoxLogLevel
             // 
-            this.tbImportSchema.Location = new System.Drawing.Point(7, 31);
-            this.tbImportSchema.Margin = new System.Windows.Forms.Padding(2);
-            this.tbImportSchema.Name = "tbImportSchema";
-            this.tbImportSchema.Size = new System.Drawing.Size(589, 32);
-            this.tbImportSchema.TabIndex = 4;
-            this.tbImportSchema.TextChanged += new System.EventHandler(this.TbImportSchemeTextChanged);
+            this.comboBoxLogLevel.FormattingEnabled = true;
+            this.comboBoxLogLevel.Location = new System.Drawing.Point(141, 16);
+            this.comboBoxLogLevel.Name = "comboBoxLogLevel";
+            this.comboBoxLogLevel.Size = new System.Drawing.Size(184, 24);
+            this.comboBoxLogLevel.TabIndex = 15;
             // 
-            // btnImportSchema
+            // label10
             // 
-            this.btnImportSchema.Location = new System.Drawing.Point(603, 31);
-            this.btnImportSchema.Margin = new System.Windows.Forms.Padding(2);
-            this.btnImportSchema.Name = "btnImportSchema";
-            this.btnImportSchema.Size = new System.Drawing.Size(46, 33);
-            this.btnImportSchema.TabIndex = 3;
-            this.btnImportSchema.Text = "...";
-            this.btnImportSchema.UseVisualStyleBackColor = true;
-            this.btnImportSchema.Click += new System.EventHandler(this.Button3Click);
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(18, 46);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(51, 25);
+            this.label10.TabIndex = 13;
+            this.label10.Text = "Logs";
             // 
-            // label1
+            // tbLogger
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(30, 26);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(594, 32);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Which format would you like to import the data from?";
+            this.tbLogger.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbLogger.BackColor = System.Drawing.SystemColors.Control;
+            this.tbLogger.Location = new System.Drawing.Point(23, 73);
+            this.tbLogger.Margin = new System.Windows.Forms.Padding(2);
+            this.tbLogger.Multiline = true;
+            this.tbLogger.Name = "tbLogger";
+            this.tbLogger.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbLogger.Size = new System.Drawing.Size(751, 415);
+            this.tbLogger.TabIndex = 14;
             // 
-            // radioButtonJsonFormat
+            // wizardPage3
             // 
-            this.radioButtonJsonFormat.AutoSize = true;
-            this.radioButtonJsonFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonJsonFormat.Location = new System.Drawing.Point(35, 78);
-            this.radioButtonJsonFormat.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonJsonFormat.Name = "radioButtonJsonFormat";
-            this.radioButtonJsonFormat.Size = new System.Drawing.Size(78, 29);
-            this.radioButtonJsonFormat.TabIndex = 1;
-            this.radioButtonJsonFormat.TabStop = true;
-            this.radioButtonJsonFormat.Text = "JSON";
-            this.radioButtonJsonFormat.UseVisualStyleBackColor = true;
-            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.RadioButtonCheckedChanged);
+            this.wizardPage3.AllowCancel = false;
+            this.wizardPage3.AllowNext = false;
+            this.wizardPage3.Controls.Add(this.label9);
+            this.wizardPage3.Controls.Add(this.label8);
+            this.wizardPage3.Controls.Add(this.cbIgnoreStatuses);
+            this.wizardPage3.Controls.Add(this.cbIgnoreSystemFields);
+            this.wizardPage3.Controls.Add(this.nudSavePageSize);
+            this.wizardPage3.Controls.Add(this.label11);
+            this.wizardPage3.Controls.Add(this.nudMaxThreads);
+            this.wizardPage3.Controls.Add(this.label5);
+            this.wizardPage3.Controls.Add(this.ConnectionString);
+            this.wizardPage3.Controls.Add(this.buttonTargetConnectionString);
+            this.wizardPage3.Controls.Add(this.labelTargetConnectionString);
+            this.wizardPage3.Controls.Add(this.label3);
+            this.wizardPage3.Name = "wizardPage3";
+            this.wizardPage3.NextPage = this.wizardPage4;
+            this.wizardPage3.ShowCancel = false;
+            this.wizardPage3.Size = new System.Drawing.Size(800, 500);
+            this.wizardPage3.TabIndex = 4;
+            this.wizardPage3.Text = "Import Settings";
             // 
-            // radioButtonCSVFormat
+            // label9
             // 
-            this.radioButtonCSVFormat.AutoSize = true;
-            this.radioButtonCSVFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonCSVFormat.Location = new System.Drawing.Point(35, 109);
-            this.radioButtonCSVFormat.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonCSVFormat.Name = "radioButtonCSVFormat";
-            this.radioButtonCSVFormat.Size = new System.Drawing.Size(67, 29);
-            this.radioButtonCSVFormat.TabIndex = 0;
-            this.radioButtonCSVFormat.TabStop = true;
-            this.radioButtonCSVFormat.Text = "CSV";
-            this.radioButtonCSVFormat.UseVisualStyleBackColor = true;
-            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(31, 258);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(185, 25);
+            this.label9.TabIndex = 57;
+            this.label9.Text = "Ignore Record Status";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(31, 219);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(183, 25);
+            this.label8.TabIndex = 56;
+            this.label8.Text = "Ignore System Fields";
+            // 
+            // nudSavePageSize
+            // 
+            this.nudSavePageSize.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudSavePageSize.Location = new System.Drawing.Point(268, 129);
+            this.nudSavePageSize.Margin = new System.Windows.Forms.Padding(2);
+            this.nudSavePageSize.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.nudSavePageSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSavePageSize.Name = "nudSavePageSize";
+            this.nudSavePageSize.Size = new System.Drawing.Size(75, 32);
+            this.nudSavePageSize.TabIndex = 53;
+            this.nudSavePageSize.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(31, 174);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(120, 25);
+            this.label11.TabIndex = 49;
+            this.label11.Text = "Max Threads";
+            // 
+            // nudMaxThreads
+            // 
+            this.nudMaxThreads.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudMaxThreads.Location = new System.Drawing.Point(268, 174);
+            this.nudMaxThreads.Margin = new System.Windows.Forms.Padding(2);
+            this.nudMaxThreads.Name = "nudMaxThreads";
+            this.nudMaxThreads.Size = new System.Drawing.Size(75, 32);
+            this.nudMaxThreads.TabIndex = 52;
+            this.nudMaxThreads.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(31, 129);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(136, 25);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "Save Page Size";
+            // 
+            // ConnectionString
+            // 
+            this.ConnectionString.AutoSize = true;
+            this.ConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConnectionString.Location = new System.Drawing.Point(31, 88);
+            this.ConnectionString.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.ConnectionString.Name = "ConnectionString";
+            this.ConnectionString.Size = new System.Drawing.Size(220, 25);
+            this.ConnectionString.TabIndex = 39;
+            this.ConnectionString.Text = "Target Connection String";
+            // 
+            // buttonTargetConnectionString
+            // 
+            this.buttonTargetConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonTargetConnectionString.Location = new System.Drawing.Point(658, 88);
+            this.buttonTargetConnectionString.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonTargetConnectionString.Name = "buttonTargetConnectionString";
+            this.buttonTargetConnectionString.Size = new System.Drawing.Size(46, 33);
+            this.buttonTargetConnectionString.TabIndex = 40;
+            this.buttonTargetConnectionString.Text = "...";
+            this.buttonTargetConnectionString.UseVisualStyleBackColor = true;
+            this.buttonTargetConnectionString.Click += new System.EventHandler(this.ButtonTargetConnectionStringClick);
+            // 
+            // labelTargetConnectionString
+            // 
+            this.labelTargetConnectionString.AutoSize = true;
+            this.labelTargetConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTargetConnectionString.ForeColor = System.Drawing.Color.Green;
+            this.labelTargetConnectionString.Location = new System.Drawing.Point(263, 92);
+            this.labelTargetConnectionString.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelTargetConnectionString.MinimumSize = new System.Drawing.Size(97, 0);
+            this.labelTargetConnectionString.Name = "labelTargetConnectionString";
+            this.labelTargetConnectionString.Size = new System.Drawing.Size(97, 25);
+            this.labelTargetConnectionString.TabIndex = 41;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(30, 26);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(357, 32);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Please set the setting for import";
             // 
             // wizardPage5
             // 
@@ -317,230 +438,94 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.label2.TabIndex = 0;
             this.label2.Text = "What directory contains the source data?";
             // 
-            // wizardPage3
+            // dataFormat
             // 
-            this.wizardPage3.AllowCancel = false;
-            this.wizardPage3.AllowNext = false;
-            this.wizardPage3.Controls.Add(this.label9);
-            this.wizardPage3.Controls.Add(this.label8);
-            this.wizardPage3.Controls.Add(this.cbIgnoreStatuses);
-            this.wizardPage3.Controls.Add(this.cbIgnoreSystemFields);
-            this.wizardPage3.Controls.Add(this.nudSavePageSize);
-            this.wizardPage3.Controls.Add(this.label11);
-            this.wizardPage3.Controls.Add(this.nudMaxThreads);
-            this.wizardPage3.Controls.Add(this.label5);
-            this.wizardPage3.Controls.Add(this.ConnectionString);
-            this.wizardPage3.Controls.Add(this.buttonTargetConnectionString);
-            this.wizardPage3.Controls.Add(this.labelTargetConnectionString);
-            this.wizardPage3.Controls.Add(this.label3);
-            this.wizardPage3.Name = "wizardPage3";
-            this.wizardPage3.NextPage = this.wizardPage4;
-            this.wizardPage3.ShowCancel = false;
-            this.wizardPage3.Size = new System.Drawing.Size(800, 500);
-            this.wizardPage3.TabIndex = 4;
-            this.wizardPage3.Text = "Import Settings";
+            this.dataFormat.AllowCancel = false;
+            this.dataFormat.AllowNext = false;
+            this.dataFormat.Controls.Add(this.groupBox1);
+            this.dataFormat.Controls.Add(this.label1);
+            this.dataFormat.Controls.Add(this.radioButtonJsonFormat);
+            this.dataFormat.Controls.Add(this.radioButtonCSVFormat);
+            this.dataFormat.Name = "dataFormat";
+            this.dataFormat.NextPage = this.wizardPage5;
+            this.dataFormat.ShowCancel = false;
+            this.dataFormat.Size = new System.Drawing.Size(800, 500);
+            this.dataFormat.TabIndex = 2;
+            this.dataFormat.Text = "Select Data Format";
             // 
-            // label9
+            // groupBox1
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(31, 258);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(185, 25);
-            this.label9.TabIndex = 57;
-            this.label9.Text = "Ignore Record Status";
+            this.groupBox1.Controls.Add(this.tbImportSchema);
+            this.groupBox1.Controls.Add(this.btnImportSchema);
+            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.groupBox1.Location = new System.Drawing.Point(35, 141);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.groupBox1.Size = new System.Drawing.Size(691, 84);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Schema file (CSV only)";
+            this.groupBox1.Visible = false;
             // 
-            // label8
+            // tbImportSchema
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(31, 219);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(183, 25);
-            this.label8.TabIndex = 56;
-            this.label8.Text = "Ignore System Fields";
+            this.tbImportSchema.Location = new System.Drawing.Point(7, 31);
+            this.tbImportSchema.Margin = new System.Windows.Forms.Padding(2);
+            this.tbImportSchema.Name = "tbImportSchema";
+            this.tbImportSchema.Size = new System.Drawing.Size(589, 32);
+            this.tbImportSchema.TabIndex = 4;
+            this.tbImportSchema.TextChanged += new System.EventHandler(this.TbImportSchemeTextChanged);
             // 
-            // cbIgnoreStatuses
+            // btnImportSchema
             // 
-            this.cbIgnoreStatuses.Location = new System.Drawing.Point(268, 258);
-            this.cbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreStatuses.Name = "cbIgnoreStatuses";
-            this.cbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreStatuses.Size = new System.Drawing.Size(75, 31);
-            this.cbIgnoreStatuses.TabIndex = 55;
-            this.cbIgnoreStatuses.Text = "toggleCheckBox2";
-            this.cbIgnoreStatuses.UseVisualStyleBackColor = true;
+            this.btnImportSchema.Location = new System.Drawing.Point(603, 31);
+            this.btnImportSchema.Margin = new System.Windows.Forms.Padding(2);
+            this.btnImportSchema.Name = "btnImportSchema";
+            this.btnImportSchema.Size = new System.Drawing.Size(46, 33);
+            this.btnImportSchema.TabIndex = 3;
+            this.btnImportSchema.Text = "...";
+            this.btnImportSchema.UseVisualStyleBackColor = true;
+            this.btnImportSchema.Click += new System.EventHandler(this.Button3Click);
             // 
-            // cbIgnoreSystemFields
+            // label1
             // 
-            this.cbIgnoreSystemFields.Location = new System.Drawing.Point(268, 219);
-            this.cbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreSystemFields.Name = "cbIgnoreSystemFields";
-            this.cbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreSystemFields.Size = new System.Drawing.Size(75, 31);
-            this.cbIgnoreSystemFields.TabIndex = 54;
-            this.cbIgnoreSystemFields.Text = "toggleCheckBox1";
-            this.cbIgnoreSystemFields.UseVisualStyleBackColor = true;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(30, 26);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(594, 32);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Which format would you like to import the data from?";
             // 
-            // nudSavePageSize
+            // radioButtonJsonFormat
             // 
-            this.nudSavePageSize.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudSavePageSize.Location = new System.Drawing.Point(268, 129);
-            this.nudSavePageSize.Margin = new System.Windows.Forms.Padding(2);
-            this.nudSavePageSize.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.nudSavePageSize.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSavePageSize.Name = "nudSavePageSize";
-            this.nudSavePageSize.Size = new System.Drawing.Size(75, 32);
-            this.nudSavePageSize.TabIndex = 53;
-            this.nudSavePageSize.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
+            this.radioButtonJsonFormat.AutoSize = true;
+            this.radioButtonJsonFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonJsonFormat.Location = new System.Drawing.Point(35, 78);
+            this.radioButtonJsonFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButtonJsonFormat.Name = "radioButtonJsonFormat";
+            this.radioButtonJsonFormat.Size = new System.Drawing.Size(78, 29);
+            this.radioButtonJsonFormat.TabIndex = 1;
+            this.radioButtonJsonFormat.TabStop = true;
+            this.radioButtonJsonFormat.Text = "JSON";
+            this.radioButtonJsonFormat.UseVisualStyleBackColor = true;
+            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.RadioButtonCheckedChanged);
             // 
-            // label11
+            // radioButtonCSVFormat
             // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(31, 174);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(120, 25);
-            this.label11.TabIndex = 49;
-            this.label11.Text = "Max Threads";
-            // 
-            // nudMaxThreads
-            // 
-            this.nudMaxThreads.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudMaxThreads.Location = new System.Drawing.Point(268, 174);
-            this.nudMaxThreads.Margin = new System.Windows.Forms.Padding(2);
-            this.nudMaxThreads.Name = "nudMaxThreads";
-            this.nudMaxThreads.Size = new System.Drawing.Size(75, 32);
-            this.nudMaxThreads.TabIndex = 52;
-            this.nudMaxThreads.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(31, 129);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(136, 25);
-            this.label5.TabIndex = 47;
-            this.label5.Text = "Save Page Size";
-            // 
-            // ConnectionString
-            // 
-            this.ConnectionString.AutoSize = true;
-            this.ConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConnectionString.Location = new System.Drawing.Point(31, 88);
-            this.ConnectionString.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.ConnectionString.Name = "ConnectionString";
-            this.ConnectionString.Size = new System.Drawing.Size(220, 25);
-            this.ConnectionString.TabIndex = 39;
-            this.ConnectionString.Text = "Target Connection String";
-            // 
-            // buttonTargetConnectionString
-            // 
-            this.buttonTargetConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTargetConnectionString.Location = new System.Drawing.Point(658, 88);
-            this.buttonTargetConnectionString.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonTargetConnectionString.Name = "buttonTargetConnectionString";
-            this.buttonTargetConnectionString.Size = new System.Drawing.Size(46, 33);
-            this.buttonTargetConnectionString.TabIndex = 40;
-            this.buttonTargetConnectionString.Text = "...";
-            this.buttonTargetConnectionString.UseVisualStyleBackColor = true;
-            this.buttonTargetConnectionString.Click += new System.EventHandler(this.ButtonTargetConnectionStringClick);
-            // 
-            // labelTargetConnectionString
-            // 
-            this.labelTargetConnectionString.AutoSize = true;
-            this.labelTargetConnectionString.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTargetConnectionString.ForeColor = System.Drawing.Color.Green;
-            this.labelTargetConnectionString.Location = new System.Drawing.Point(263, 92);
-            this.labelTargetConnectionString.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelTargetConnectionString.MinimumSize = new System.Drawing.Size(97, 0);
-            this.labelTargetConnectionString.Name = "labelTargetConnectionString";
-            this.labelTargetConnectionString.Size = new System.Drawing.Size(97, 25);
-            this.labelTargetConnectionString.TabIndex = 41;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(30, 26);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(357, 32);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Please set the setting for import";
-            // 
-            // wizardPage4
-            // 
-            this.wizardPage4.AllowCancel = false;
-            this.wizardPage4.AllowNext = false;
-            this.wizardPage4.Controls.Add(this.labelLogLevel);
-            this.wizardPage4.Controls.Add(this.comboBoxLogLevel);
-            this.wizardPage4.Controls.Add(this.label10);
-            this.wizardPage4.Controls.Add(this.tbLogger);
-            this.wizardPage4.IsFinishPage = true;
-            this.wizardPage4.Name = "wizardPage4";
-            this.wizardPage4.ShowCancel = false;
-            this.wizardPage4.Size = new System.Drawing.Size(800, 500);
-            this.wizardPage4.TabIndex = 5;
-            this.wizardPage4.Text = "Perform Import";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(18, 46);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(51, 25);
-            this.label10.TabIndex = 13;
-            this.label10.Text = "Logs";
-            // 
-            // tbLogger
-            // 
-            this.tbLogger.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbLogger.BackColor = System.Drawing.SystemColors.Control;
-            this.tbLogger.Location = new System.Drawing.Point(23, 73);
-            this.tbLogger.Margin = new System.Windows.Forms.Padding(2);
-            this.tbLogger.Multiline = true;
-            this.tbLogger.Name = "tbLogger";
-            this.tbLogger.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbLogger.Size = new System.Drawing.Size(751, 415);
-            this.tbLogger.TabIndex = 14;
-            // 
-            // wizardButtons1
-            // 
-            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(400, 0);
-            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.PageContainer = this.stepWizardControl1;
-            this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wizardButtons1.ShowExecuteButton = true;
-            this.wizardButtons1.Size = new System.Drawing.Size(400, 50);
-            this.wizardButtons1.TabIndex = 0;
+            this.radioButtonCSVFormat.AutoSize = true;
+            this.radioButtonCSVFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonCSVFormat.Location = new System.Drawing.Point(35, 109);
+            this.radioButtonCSVFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButtonCSVFormat.Name = "radioButtonCSVFormat";
+            this.radioButtonCSVFormat.Size = new System.Drawing.Size(67, 29);
+            this.radioButtonCSVFormat.TabIndex = 0;
+            this.radioButtonCSVFormat.TabStop = true;
+            this.radioButtonCSVFormat.Text = "CSV";
+            this.radioButtonCSVFormat.UseVisualStyleBackColor = true;
+            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
             // 
             // openFileDialog1
             // 
@@ -565,24 +550,39 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 1;
             // 
-            // labelLogLevel
+            // wizardButtons1
             // 
-            this.labelLogLevel.AutoSize = true;
-            this.labelLogLevel.Font = new System.Drawing.Font("Segoe UI", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLogLevel.Location = new System.Drawing.Point(18, 10);
-            this.labelLogLevel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelLogLevel.Name = "labelLogLevel";
-            this.labelLogLevel.Size = new System.Drawing.Size(105, 30);
-            this.labelLogLevel.TabIndex = 16;
-            this.labelLogLevel.Text = "Log Level:";
+            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtons1.Location = new System.Drawing.Point(400, 0);
+            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.wizardButtons1.Name = "wizardButtons1";
+            this.wizardButtons1.PageContainer = this.stepWizardControl1;
+            this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.wizardButtons1.ShowExecuteButton = false;
+            this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
+            this.wizardButtons1.TabIndex = 0;
             // 
-            // comboBoxLogLevel
+            // cbIgnoreStatuses
             // 
-            this.comboBoxLogLevel.FormattingEnabled = true;
-            this.comboBoxLogLevel.Location = new System.Drawing.Point(141, 16);
-            this.comboBoxLogLevel.Name = "comboBoxLogLevel";
-            this.comboBoxLogLevel.Size = new System.Drawing.Size(184, 24);
-            this.comboBoxLogLevel.TabIndex = 15;
+            this.cbIgnoreStatuses.Location = new System.Drawing.Point(268, 258);
+            this.cbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreStatuses.Name = "cbIgnoreStatuses";
+            this.cbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreStatuses.Size = new System.Drawing.Size(75, 31);
+            this.cbIgnoreStatuses.TabIndex = 55;
+            this.cbIgnoreStatuses.Text = "toggleCheckBox2";
+            this.cbIgnoreStatuses.UseVisualStyleBackColor = true;
+            // 
+            // cbIgnoreSystemFields
+            // 
+            this.cbIgnoreSystemFields.Location = new System.Drawing.Point(268, 219);
+            this.cbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreSystemFields.Name = "cbIgnoreSystemFields";
+            this.cbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreSystemFields.Size = new System.Drawing.Size(75, 31);
+            this.cbIgnoreSystemFields.TabIndex = 54;
+            this.cbIgnoreSystemFields.Text = "toggleCheckBox1";
+            this.cbIgnoreSystemFields.UseVisualStyleBackColor = true;
             // 
             // ImportWizard
             // 
@@ -597,20 +597,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.Size = new System.Drawing.Size(800, 552);
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).EndInit();
             this.stepWizardControl1.ResumeLayout(false);
-            this.dataFormat.ResumeLayout(false);
-            this.dataFormat.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.wizardPage5.ResumeLayout(false);
-            this.wizardPage5.PerformLayout();
-            this.wizardPage2.ResumeLayout(false);
-            this.wizardPage2.PerformLayout();
+            this.wizardPage4.ResumeLayout(false);
+            this.wizardPage4.PerformLayout();
             this.wizardPage3.ResumeLayout(false);
             this.wizardPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).EndInit();
-            this.wizardPage4.ResumeLayout(false);
-            this.wizardPage4.PerformLayout();
+            this.wizardPage5.ResumeLayout(false);
+            this.wizardPage5.PerformLayout();
+            this.wizardPage2.ResumeLayout(false);
+            this.wizardPage2.PerformLayout();
+            this.dataFormat.ResumeLayout(false);
+            this.dataFormat.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

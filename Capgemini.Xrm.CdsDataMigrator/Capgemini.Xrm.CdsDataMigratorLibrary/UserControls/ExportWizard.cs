@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Threading;
-using Microsoft.Xrm.Tooling.Connector;
 using XrmToolBox.Extensibility;
 using Capgemini.Xrm.CdsDataMigratorLibrary;
 using System.Linq;
@@ -38,6 +37,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             wizardButtons1.OnExecute += WizardButtons1_OnExecute;
             wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
             wizardButtons1.OnCustomPreviousNavigation += WizardButtonsOnCustomPreviousNavigation;
+            wizardButtons1.OnCancel += WizardButtons1_OnCancel;
 
             FormatCsvSelected = false;
             FormatJsonSelected = true;
@@ -98,6 +98,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public event EventHandler ExportDataHandler;
 
+        public event EventHandler CancelHandler;
+
         public bool FormatJsonSelected { get => radioButtonFormatJson.Checked; set => radioButtonFormatJson.Checked = value; }
 
         public bool FormatCsvSelected { get => radioButtonFormatCsv.Checked; set => radioButtonFormatCsv.Checked = value; }
@@ -135,15 +137,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             SelectSchemaFileHandler(sender, e);
         }
 
-        private void ButtonExportDataClick(object sender, EventArgs e)
-        {
-            ExportDataHandler(sender, e);
-        }
+        //private void ButtonExportDataClick(object sender, EventArgs e)
+        //{
+        //    ExportDataHandler(sender, e);
+        //}
 
         private void WizardButtons1_OnExecute(object sender, EventArgs e)
         {
             textBoxLogs.Clear();
             ExportDataHandler(sender, e);
+        }
+
+        private void WizardButtons1_OnCancel(object sender, EventArgs e)
+        {
+            CancelHandler(sender, e);
         }
 
         private void ButtonTargetConnectionStringClick(object sender, EventArgs e)

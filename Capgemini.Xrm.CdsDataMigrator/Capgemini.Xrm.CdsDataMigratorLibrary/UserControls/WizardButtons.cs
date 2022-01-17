@@ -8,6 +8,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class WizardButtons : UserControl
     {
+        public event EventHandler<EventArgs> OnExecute;
+
+        public event EventHandler<EventArgs> OnCustomNextNavigation;
+
+        public event EventHandler<EventArgs> OnCustomPreviousNavigation;
+
+        public event EventHandler<EventArgs> OnCancel;
+
         public AeroWizard.WizardPageContainer PageContainer { get; set; }
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Bindable(true)]
@@ -23,11 +31,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
             btnExecute.Visible = ShowExecuteButton;
             btnBack.Enabled = false;
+            buttonCancel.Enabled = false;
         }
 
         public void HandleSelectedPageChanged(bool isFinishPage)
         {
             btnExecute.Visible = isFinishPage;
+            buttonCancel.Visible = isFinishPage;
 
             if (isFinishPage)
             {
@@ -69,7 +79,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public void ExecuteAction(EventArgs e)
         {
             btnExecute.Enabled = false;
+            buttonCancel.Enabled = true;
             OnExecute?.Invoke(this, e);
+            btnExecute.Enabled = true;
+        }
+
+        public void CancelAction(EventArgs e)
+        {
+            buttonCancel.Enabled = false;
+            OnCancel?.Invoke(this, e);
             btnExecute.Enabled = true;
         }
 
@@ -98,10 +116,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             PageContainer.SelectedPageChanged += Container_SelectedPageChanged;
         }
 
-        public event EventHandler<EventArgs> OnExecute;
-
-        public event EventHandler<EventArgs> OnCustomNextNavigation;
-
-        public event EventHandler<EventArgs> OnCustomPreviousNavigation;
+        private void buttonCancelClick(object sender, EventArgs e)
+        {
+            CancelAction(e);
+        }
     }
 }
