@@ -7,6 +7,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
@@ -114,6 +115,31 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             exportView.VerifyAll();
             logger.Verify(a => a.LogError(It.IsAny<string>()), Times.Never);
+            dataMigrationService.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CancelAction()
+        {
+            dataMigrationService.Setup(a => a.CancelDataExport());
+
+            FluentActions.Invoking(() => systemUnderTest.CancelAction(null, new EventArgs()))
+                .Should()
+                .NotThrow();
+
+            dataMigrationService.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CancelActionThrowsException()
+        {
+            dataMigrationService.Setup(a => a.CancelDataExport()).Throws<Exception>();
+
+            FluentActions.Invoking(() => systemUnderTest.CancelAction(null, new EventArgs()))
+                .Should()
+                .NotThrow();
+
+            logger.Verify(a => a.LogError(It.IsAny<string>()), Times.Once);
             dataMigrationService.VerifyAll();
         }
     }
