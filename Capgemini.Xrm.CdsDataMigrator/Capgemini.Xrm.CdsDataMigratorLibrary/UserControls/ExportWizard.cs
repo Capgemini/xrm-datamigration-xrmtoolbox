@@ -137,11 +137,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             SelectSchemaFileHandler(sender, e);
         }
 
-        //private void ButtonExportDataClick(object sender, EventArgs e)
-        //{
-        //    ExportDataHandler(sender, e);
-        //}
-
         private void WizardButtons1_OnExecute(object sender, EventArgs e)
         {
             textBoxLogs.Clear();
