@@ -183,5 +183,58 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
         }
+
+        [TestMethod]
+        public void CancelDataExportShouldNotThrowExceptionEvenIfCancellationTokenSourceIsNull()
+        {
+            //CancellationTokenSource tokenSource
+            FluentActions.Invoking(() => systemUnderTest.CancelDataExport())
+                         .Should()
+                         .NotThrow();
+        }
+
+        [TestMethod]
+        public void CancelDataExport()
+        {
+            var dataFormat = DataFormat.Json;
+            var exportSettings = new ExportSettings
+            {
+                // this is not really unit test but it is the quckest way to get this tested as CrmSchemaConfiguration.ReadFromFile actually looks for the file!
+                SchemaPath = "TestData/ContactSchemaWithOwner.xml",
+                DataFormat = dataFormat,
+                BatchSize = 5000,
+                ExportConfigPath = "TestData",
+                SavePath = "TestData"
+            };
+
+            var storeReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>().Object;
+            var storeWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>().Object;
+
+            var genericCrmDataMigrator = new GenericCrmDataMigrator(loggerMock.Object, storeReader, storeWriter);
+
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                                                dataFormat,
+                                                                It.IsAny<ILogger>(),
+                                                                It.IsAny<EntityRepository>(),
+                                                                It.IsAny<CrmExporterConfig>(),
+                                                                It.IsAny<CancellationToken>(),
+                                                                It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(genericCrmDataMigrator)
+                               .Verifiable();
+
+            try
+            {
+                systemUnderTest.ExportData(exportSettings);
+            }
+            catch (Exception)
+            {
+                // lets handle any exception here as we really want to test if the cancellation method can be invoked!
+                // we expect the CancellationTokenSource to be initialized within the exportdata method prior ro actually doing any real work;
+            }
+
+            FluentActions.Invoking(() => systemUnderTest.CancelDataExport())
+                         .Should()
+                         .NotThrow();
+        }
     }
 }
