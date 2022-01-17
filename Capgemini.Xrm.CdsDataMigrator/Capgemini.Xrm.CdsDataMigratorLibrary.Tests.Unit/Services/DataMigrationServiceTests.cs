@@ -187,7 +187,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         [TestMethod]
         public void CancelDataExportShouldNotThrowExceptionEvenIfCancellationTokenSourceIsNull()
         {
-            //CancellationTokenSource tokenSource
             FluentActions.Invoking(() => systemUnderTest.CancelDataExport())
                          .Should()
                          .NotThrow();
