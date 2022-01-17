@@ -96,17 +96,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             HandleSelectedPageChanged(PageContainer.SelectedPage.IsFinishPage);
         }
 
-        private void Button1Click(object sender, EventArgs e)
+        protected void PreviousButtonClick(object sender, EventArgs e)
         {
             ExecutePreviousButtonClick(e);
         }
 
-        private void Button2Click(object sender, EventArgs e)
+        protected void NextButtonClick(object sender, EventArgs e)
         {
             ExecuteNextButtonClick(e);
         }
 
-        private void Button3Click(object sender, EventArgs e)
+        protected void ButtonExecuteClick(object sender, EventArgs e)
         {
             ExecuteAction(e);
         }
@@ -116,7 +116,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             PageContainer.SelectedPageChanged += Container_SelectedPageChanged;
         }
 
-        private void buttonCancelClick(object sender, EventArgs e)
+        protected void buttonCancelClick(object sender, EventArgs e)
         {
             CancelAction(e);
         }

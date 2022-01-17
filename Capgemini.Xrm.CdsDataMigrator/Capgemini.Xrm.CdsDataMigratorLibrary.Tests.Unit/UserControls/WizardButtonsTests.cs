@@ -3,6 +3,7 @@ using AeroWizard;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
@@ -204,6 +205,84 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 systemUnderTest.OnCancel += (x, y) => { customEventExecuted = true; };
 
                 FluentActions.Invoking(() => systemUnderTest.CancelAction(eventArgs))
+                             .Should()
+                             .NotThrow();
+
+                customEventExecuted.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeButtonCancelClick()
+        {
+            using (var systemUnderTest = new MockupForWizardButtons())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeButtonCancelClick(new EventArgs()))
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeExecuteAction()
+        {
+            var customEventExecuted = false;
+
+            using (var systemUnderTest = new MockupForWizardButtons())
+            {
+                systemUnderTest.OnExecute += (x, y) => { customEventExecuted = true; };
+
+                FluentActions.Invoking(() => systemUnderTest.InvokeButtonExecuteClick(new EventArgs()))
+                             .Should()
+                             .NotThrow();
+
+                customEventExecuted.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeNextButtonClick()
+        {
+            var customEventExecuted = false;
+
+            using (var systemUnderTest = new MockupForWizardButtons())
+            {
+                systemUnderTest.PageContainer = new WizardPageContainer();
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+
+                var eventArgs = new EventArgs();
+
+                systemUnderTest.OnCustomNextNavigation += (x, y) => { customEventExecuted = true; };
+
+                systemUnderTest.HandleSelectedPageChanged(false);
+
+                FluentActions.Invoking(() => systemUnderTest.InvokeNextButtonClick(eventArgs))
+                             .Should()
+                             .NotThrow();
+
+                customEventExecuted.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void InvokePreviousButtonClick()
+        {
+            var customEventExecuted = false;
+
+            using (var systemUnderTest = new MockupForWizardButtons())
+            {
+                systemUnderTest.PageContainer = new WizardPageContainer();
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+                systemUnderTest.PageContainer.Pages.Add(new WizardPage());
+
+                var eventArgs = new EventArgs();
+
+                systemUnderTest.OnCustomPreviousNavigation += (x, y) => { customEventExecuted = true; };
+
+                systemUnderTest.HandleSelectedPageChanged(false);
+
+                FluentActions.Invoking(() => systemUnderTest.InvokePreviousButtonClick(eventArgs))
                              .Should()
                              .NotThrow();
 

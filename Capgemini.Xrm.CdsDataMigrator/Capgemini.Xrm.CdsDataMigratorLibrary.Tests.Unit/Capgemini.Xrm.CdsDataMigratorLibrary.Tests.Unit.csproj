@@ -271,6 +271,9 @@
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
+    <Compile Include="Mocks\MockupForWizardButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\WizardButtonsTests.cs" />

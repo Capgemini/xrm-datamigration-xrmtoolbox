@@ -44,7 +44,7 @@
             this.btnBack.TabIndex = 0;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.Button1Click);
+            this.btnBack.Click += new System.EventHandler(this.PreviousButtonClick);
             // 
             // btnNext
             // 
@@ -56,7 +56,7 @@
             this.btnNext.TabIndex = 1;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
-            this.btnNext.Click += new System.EventHandler(this.Button2Click);
+            this.btnNext.Click += new System.EventHandler(this.NextButtonClick);
             // 
             // btnExecute
             // 
@@ -71,7 +71,7 @@
             this.btnExecute.Text = "Execute";
             this.btnExecute.UseVisualStyleBackColor = false;
             this.btnExecute.Visible = false;
-            this.btnExecute.Click += new System.EventHandler(this.Button3Click);
+            this.btnExecute.Click += new System.EventHandler(this.ButtonExecuteClick);
             // 
             // buttonCancel
             // 
