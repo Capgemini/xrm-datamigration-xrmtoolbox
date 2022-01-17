@@ -178,5 +178,37 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 customEventExecuted.Should().BeTrue();
             }
         }
+
+        [TestMethod]
+        public void CancelActionNullExecuteActionDoesNotThrowException()
+        {
+            using (var systemUnderTest = new WizardButtons())
+            {
+                var eventArgs = new EventArgs();
+                systemUnderTest.OnCancel += null;
+
+                FluentActions.Invoking(() => systemUnderTest.CancelAction(eventArgs))
+                             .Should()
+                             .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void CancelAction()
+        {
+            var customEventExecuted = false;
+
+            using (var systemUnderTest = new WizardButtons())
+            {
+                var eventArgs = new EventArgs();
+                systemUnderTest.OnCancel += (x, y) => { customEventExecuted = true; };
+
+                FluentActions.Invoking(() => systemUnderTest.CancelAction(eventArgs))
+                             .Should()
+                             .NotThrow();
+
+                customEventExecuted.Should().BeTrue();
+            }
+        }
     }
 }
