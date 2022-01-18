@@ -74,6 +74,20 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void OnConnectionUpdated()
+        {
+            string connectedOrgFriendlyName = "test connection";
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() =>
+                        systemUnderTest.OnConnectionUpdated(connectedOrgFriendlyName))
+                       .Should()
+                       .NotThrow();
+            }
+        }
+
+        [TestMethod]
         public void PerformImportActionHandleException()
         {
             var entityRepository = new Mock<IEntityRepository>();
