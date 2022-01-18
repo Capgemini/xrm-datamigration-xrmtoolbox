@@ -36,6 +36,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void ImportWizardInstantiated()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                systemUnderTest.TargetConnectionString.Should().BeNull();
+                systemUnderTest.OrganizationService.Should().BeNull();
+            }
+        }
+
+        [TestMethod]
         public void HandleFileDialogOpenDialogResultIsCancel()
         {
             using (var systemUnderTest = new ImportWizard())
@@ -61,6 +71,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                        .Should()
                        .NotThrow();
             }
+        }
+
+        [TestMethod]
+        public void PerformImportActionHandleException()
+        {
+            var entityRepository = new Mock<IEntityRepository>();
+            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+                                    .Returns(entityRepository.Object)
+                                    .Verifiable();
+
+            logger.Setup(x => x.LogInfo(It.IsAny<string>())).Throws<Exception>();
+            logger.Setup(x => x.LogError(It.IsAny<string>()));
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                using (var tokenSource = new CancellationTokenSource())
+                {
+                    string importSchemaFilePath = "TestData\\ImportConfig.json";
+                    int maxThreads = 1;
+                    bool jsonFormat = true;
+
+                    FluentActions.Invoking(() =>
+                            systemUnderTest.PerformImportAction(
+                                                                importSchemaFilePath,
+                                                                maxThreads,
+                                                                jsonFormat,
+                                                                logger.Object,
+                                                                entityRepositoryService.Object,
+                                                                importConfig,
+                                                                tokenSource))
+                           .Should()
+                           .Throw<Exception>();
+                }
+            }
+
+            logger.VerifyAll();
         }
 
         [TestMethod]

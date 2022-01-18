@@ -178,19 +178,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         private bool LoadSettingsFromConfig()
         {
-            //try
-            //{
-            var config = CrmExporterConfig.GetConfiguration(ExportConfigFileLocation);
-            ExportSchemaFileLocation = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
-            SaveExportLocation = config.JsonFolderPath;
-            BatchSize = config.BatchSize;
-            ExportInactiveRecordsChecked = !config.OnlyActiveRecords;
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Export Config Error: {ex}");
-            //    return false;
-            //}
+            try
+            {
+                var config = CrmExporterConfig.GetConfiguration(ExportConfigFileLocation);
+                ExportSchemaFileLocation = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
+                SaveExportLocation = config.JsonFolderPath;
+                BatchSize = config.BatchSize;
+                ExportInactiveRecordsChecked = !config.OnlyActiveRecords;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export Config Error: {ex}");
+                return false;
+            }
 
             return true;
         }
