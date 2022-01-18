@@ -211,11 +211,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             WizardNavigation(labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
         }
 
-        private void TabSourceDataLocationTextChanged(object sender, EventArgs e)
-        {
-            ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
-        }
-
         public void TabImportConfigFileTextChanged(object sender, EventArgs e)
         {
             importConfig = CrmImportConfig.GetConfiguration(openFileDialog1.FileName);
@@ -224,6 +219,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             cbIgnoreStatuses.Checked = importConfig.IgnoreStatuses;
             tbSourceDataLocation.Text = importConfig.JsonFolderPath;
             nudSavePageSize.Value = importConfig.SaveBatchSize;
+        }
+
+        protected void TabSourceDataLocationTextChanged(object sender, EventArgs e)
+        {
+            ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
         }
 
         protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)

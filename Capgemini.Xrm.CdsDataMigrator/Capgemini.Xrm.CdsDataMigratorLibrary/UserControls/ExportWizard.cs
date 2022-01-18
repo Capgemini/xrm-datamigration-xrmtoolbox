@@ -28,9 +28,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             InitializeComponent();
 
             logger = new LoggerService(textBoxLogs, SynchronizationContext.Current);
-
             migratorFactory = new CrmGenericMigratorFactory();
-            logger = new LoggerService(textBoxLogs, SynchronizationContext.Current);
             dataMigrationService = new DataMigrationService(logger, migratorFactory);
             presenter = new ExportPresenter(this, logger, dataMigrationService);
 
@@ -180,6 +178,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         {
             try
             {
+                logger.Verbose("About to load settings from config");
+
                 var config = CrmExporterConfig.GetConfiguration(ExportConfigFileLocation);
                 ExportSchemaFileLocation = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
                 SaveExportLocation = config.JsonFolderPath;

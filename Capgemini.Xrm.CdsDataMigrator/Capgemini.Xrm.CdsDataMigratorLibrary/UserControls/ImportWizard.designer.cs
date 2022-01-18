@@ -92,11 +92,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
+            this.stepWizardControl1.Controls.Add(this.wizardPage4);
             this.stepWizardControl1.Controls.Add(this.dataFormat);
             this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Controls.Add(this.wizardPage2);
             this.stepWizardControl1.Controls.Add(this.wizardPage3);
-            this.stepWizardControl1.Controls.Add(this.wizardPage4);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -144,6 +144,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.comboBoxLogLevel.Name = "comboBoxLogLevel";
             this.comboBoxLogLevel.Size = new System.Drawing.Size(184, 24);
             this.comboBoxLogLevel.TabIndex = 15;
+            this.comboBoxLogLevel.SelectedIndexChanged += new System.EventHandler(this.ComboBoxLogLevelSelectedIndexChanged);
             // 
             // label10
             // 
@@ -558,7 +559,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.wizardButtons1.Name = "wizardButtons1";
             this.wizardButtons1.PageContainer = this.stepWizardControl1;
             this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wizardButtons1.ShowExecuteButton = false;
+            this.wizardButtons1.ShowExecuteButton = true;
             this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
             this.wizardButtons1.TabIndex = 0;
             // 

@@ -14,5 +14,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks
         {
             ComboBoxLogLevelSelectedIndexChanged(null, eventArgs);
         }
+
+        public void InvokeTabSourceDataLocationTextChanged(EventArgs eventArgs)
+        {
+            TabSourceDataLocationTextChanged(null, eventArgs);
+        }
     }
 }

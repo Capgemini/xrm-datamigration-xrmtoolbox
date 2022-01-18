@@ -438,5 +438,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                             .NotThrow();
             }
         }
+
+        [TestMethod]
+        public void InvokeTabSourceDataLocationTextChanged()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeTabSourceDataLocationTextChanged(new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
     }
 }
