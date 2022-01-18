@@ -25,6 +25,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 systemUnderTest.SaveExportLocation.Should().BeNullOrEmpty();
                 systemUnderTest.BatchSize.Should().Be(5000);
                 systemUnderTest.ExportInactiveRecordsChecked.Should().BeFalse();
+                systemUnderTest.MinimizeJsonChecked.Should().BeFalse();
+                systemUnderTest.OrganizationService.Should().BeNull();
             }
         }
 

@@ -25,19 +25,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.exportView.CancelHandler += CancelAction;
         }
 
-        //public void ExportDataAction()
-        //{
-        //    try
-        //    {
-        //        var settings = GetExportSettingsObject();
-        //        dataMigrationService.ExportData(settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.LogError(ex.Message);
-        //    }
-        //}
-
         public ExportSettings GetExportSettingsObject()
         {
             ExportSettings settings = new ExportSettings();
@@ -76,7 +63,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public void ExportData(object sender, EventArgs e)
         {
-            //ExportDataAction();
             try
             {
                 var settings = GetExportSettingsObject();
