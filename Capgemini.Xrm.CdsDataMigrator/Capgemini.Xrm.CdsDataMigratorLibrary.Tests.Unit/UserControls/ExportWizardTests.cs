@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
@@ -129,6 +130,26 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void OnConnectionUpdated()
+        {
+            var sender = new WizardButtons();
+            var pageContainer = new AeroWizard.WizardPageContainer();
+
+            pageContainer.Pages.Add(new AeroWizard.WizardPage());
+            pageContainer.Pages.Add(new AeroWizard.WizardPage() { Name = "exportConfig" });
+            sender.PageContainer = pageContainer;
+
+            string connectedOrgFriendlyName = "test value";
+
+            using (var systemUnderTest = new ExportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.OnConnectionUpdated(connectedOrgFriendlyName))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
         public void InvokeWizardButtonsOnCancel()
         {
             var sender = new WizardButtons();
@@ -147,7 +168,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
-        public void ComboBoxLogLevelSelectedIndexChanged()
+        public void InvokeComboBoxLogLevelSelectedIndexChanged()
         {
             var sender = new WizardButtons();
             var pageContainer = new AeroWizard.WizardPageContainer();
@@ -158,7 +179,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 
             using (var systemUnderTest = new MockupForExportWizard())
             {
-                FluentActions.Invoking(() => systemUnderTest.ComboBoxLogLevelSelectedIndexChanged(new EventArgs()))
+                FluentActions.Invoking(() => systemUnderTest.InvokeComboBoxLogLevelSelectedIndexChanged(new EventArgs()))
                             .Should()
                             .NotThrow();
             }

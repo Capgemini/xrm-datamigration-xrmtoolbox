@@ -20,6 +20,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private readonly LoggerService logger;
         private readonly ExportPresenter presenter;
         private readonly IDataMigrationService dataMigrationService;
+
         private readonly ICrmGenericMigratorFactory migratorFactory;
 
         public ExportWizard()
