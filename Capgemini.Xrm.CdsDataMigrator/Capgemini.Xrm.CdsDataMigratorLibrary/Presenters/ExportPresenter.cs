@@ -25,18 +25,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.exportView.CancelHandler += CancelAction;
         }
 
-        public void ExportDataAction()
-        {
-            try
-            {
-                var settings = GetExportSettingsObject();
-                dataMigrationService.ExportData(settings);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message);
-            }
-        }
+        //public void ExportDataAction()
+        //{
+        //    try
+        //    {
+        //        var settings = GetExportSettingsObject();
+        //        dataMigrationService.ExportData(settings);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError(ex.Message);
+        //    }
+        //}
 
         public ExportSettings GetExportSettingsObject()
         {
@@ -74,6 +74,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
+        public void ExportData(object sender, EventArgs e)
+        {
+            //ExportDataAction();
+            try
+            {
+                var settings = GetExportSettingsObject();
+                dataMigrationService.ExportData(settings);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
+        }
+
         private void SelectExportLocation(object sender, EventArgs e)
         {
             string exportLocation = exportView.ShowFolderBrowserDialog();
@@ -90,11 +104,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             string schemaFileName = exportView.ShowFileDialog();
             exportView.ExportSchemaFileLocation = schemaFileName;
-        }
-
-        private void ExportData(object sender, EventArgs e)
-        {
-            ExportDataAction();
         }
     }
 }

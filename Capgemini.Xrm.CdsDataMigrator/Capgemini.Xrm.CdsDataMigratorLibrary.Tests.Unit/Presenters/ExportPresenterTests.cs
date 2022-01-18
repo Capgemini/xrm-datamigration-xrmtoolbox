@@ -93,7 +93,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                                 .Throws<OrganizationalServiceException>();
             logger.Setup(a => a.LogError(It.IsAny<string>()));
 
-            FluentActions.Invoking(() => systemUnderTest.ExportDataAction())
+            FluentActions.Invoking(() => systemUnderTest./*ExportDataAction*/ExportData(null, new EventArgs()))
                 .Should()
                 .NotThrow();
 
@@ -109,7 +109,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             dataMigrationService.Setup(a => a.ExportData(It.IsAny<ExportSettings>()));
             logger.Setup(a => a.LogError(It.IsAny<string>()));
 
-            FluentActions.Invoking(() => systemUnderTest.ExportDataAction())
+            FluentActions.Invoking(() => systemUnderTest./*ExportDataAction*/ExportData(null, new EventArgs()))
                 .Should()
                 .NotThrow();
 
