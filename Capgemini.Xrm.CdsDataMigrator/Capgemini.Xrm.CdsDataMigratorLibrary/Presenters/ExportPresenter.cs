@@ -3,6 +3,7 @@ using System;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -74,18 +75,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void SelectExportLocation(object sender, EventArgs e)
         {
             string exportLocation = exportView.ShowFolderBrowserDialog();
             exportView.SaveExportLocation = exportLocation;
         }
 
+        [ExcludeFromCodeCoverage]
         private void SelectExportConfig(object sender, EventArgs e)
         {
             string exportConfigFileName = exportView.ShowFileDialog();
             exportView.ExportConfigFileLocation = exportConfigFileName;
         }
 
+        [ExcludeFromCodeCoverage]
         private void SelectSchemaFile(object sender, EventArgs e)
         {
             string schemaFileName = exportView.ShowFileDialog();
