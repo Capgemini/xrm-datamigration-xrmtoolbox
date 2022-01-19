@@ -12,6 +12,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -126,12 +127,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             labelTargetConnectionString.Text = connectedOrgFriendlyName;
         }
 
+        [ExcludeFromCodeCoverage]
         public string ShowFolderBrowserDialog()
         {
             folderBrowserDialogExportLocation.ShowDialog();
             return folderBrowserDialogExportLocation.SelectedPath;
         }
 
+        [ExcludeFromCodeCoverage]
         public string ShowFileDialog()
         {
             openFileDialogExportConfigFile.ShowDialog();

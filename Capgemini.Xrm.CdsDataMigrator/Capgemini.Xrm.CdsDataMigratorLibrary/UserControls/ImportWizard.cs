@@ -15,6 +15,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -107,6 +108,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void ButtonClick(object sender, EventArgs e)
         {
             var dialogResult = folderBrowserDialog1.ShowDialog();
@@ -177,6 +179,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             tokenSource?.Cancel();
         }
 
+        [ExcludeFromCodeCoverage]
         private void LoadImportConfigFileButtonClick(object sender, EventArgs e)
         {
             var fd = openFileDialog1.ShowDialog();
@@ -187,6 +190,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void Button3Click(object sender, EventArgs e)
         {
             var fd = openFileDialog1.ShowDialog();
