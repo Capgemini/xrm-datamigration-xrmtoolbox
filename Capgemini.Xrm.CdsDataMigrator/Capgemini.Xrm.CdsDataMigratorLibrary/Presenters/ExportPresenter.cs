@@ -3,6 +3,7 @@ using System;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -22,42 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.exportView.SelectExportConfigFileHandler += SelectExportConfig;
             this.exportView.SelectSchemaFileHandler += SelectSchemaFile;
             this.exportView.ExportDataHandler += ExportData;
-        }
-
-        private void SelectExportLocation(object sender, EventArgs e)
-        {
-            string exportLocation = exportView.ShowFolderBrowserDialog();
-            exportView.SaveExportLocation = exportLocation;
-        }
-
-        private void SelectExportConfig(object sender, EventArgs e)
-        {
-            string exportConfigFileName = exportView.ShowFileDialog();
-            exportView.ExportConfigFileLocation = exportConfigFileName;
-        }
-
-        private void SelectSchemaFile(object sender, EventArgs e)
-        {
-            string schemaFileName = exportView.ShowFileDialog();
-            exportView.ExportSchemaFileLocation = schemaFileName;
-        }
-
-        private void ExportData(object sender, EventArgs e)
-        {
-            ExportDataAction();
-        }
-
-        public void ExportDataAction()
-        {
-            try
-            {
-                var settings = GetExportSettingsObject();
-                dataMigrationService.ExportData(settings);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message);
-            }
+            this.exportView.CancelHandler += CancelAction;
         }
 
         public ExportSettings GetExportSettingsObject()
@@ -82,6 +48,52 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             settings.BatchSize = (int)exportView.BatchSize;
 
             return settings;
+        }
+
+        public void CancelAction(object sender, EventArgs e)
+        {
+            try
+            {
+                dataMigrationService.CancelDataExport();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
+        }
+
+        public void ExportData(object sender, EventArgs e)
+        {
+            try
+            {
+                var settings = GetExportSettingsObject();
+                dataMigrationService.ExportData(settings);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void SelectExportLocation(object sender, EventArgs e)
+        {
+            string exportLocation = exportView.ShowFolderBrowserDialog();
+            exportView.SaveExportLocation = exportLocation;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void SelectExportConfig(object sender, EventArgs e)
+        {
+            string exportConfigFileName = exportView.ShowFileDialog();
+            exportView.ExportConfigFileLocation = exportConfigFileName;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void SelectSchemaFile(object sender, EventArgs e)
+        {
+            string schemaFileName = exportView.ShowFileDialog();
+            exportView.ExportSchemaFileLocation = schemaFileName;
         }
     }
 }

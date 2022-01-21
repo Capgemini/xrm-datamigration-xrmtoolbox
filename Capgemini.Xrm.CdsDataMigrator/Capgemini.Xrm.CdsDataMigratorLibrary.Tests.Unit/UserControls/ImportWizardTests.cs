@@ -2,6 +2,8 @@
 using System.Threading;
 using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
@@ -34,6 +36,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void ImportWizardInstantiated()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                systemUnderTest.TargetConnectionString.Should().BeNull();
+                systemUnderTest.OrganizationService.Should().BeNull();
+            }
+        }
+
+        [TestMethod]
         public void HandleFileDialogOpenDialogResultIsCancel()
         {
             using (var systemUnderTest = new ImportWizard())
@@ -59,6 +71,56 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                        .Should()
                        .NotThrow();
             }
+        }
+
+        [TestMethod]
+        public void OnConnectionUpdated()
+        {
+            string connectedOrgFriendlyName = "test connection";
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() =>
+                        systemUnderTest.OnConnectionUpdated(connectedOrgFriendlyName))
+                       .Should()
+                       .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void PerformImportActionHandleException()
+        {
+            var entityRepository = new Mock<IEntityRepository>();
+            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+                                    .Returns(entityRepository.Object)
+                                    .Verifiable();
+
+            logger.Setup(x => x.LogInfo(It.IsAny<string>())).Throws<Exception>();
+            logger.Setup(x => x.LogError(It.IsAny<string>()));
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                using (var tokenSource = new CancellationTokenSource())
+                {
+                    string importSchemaFilePath = "TestData\\ImportConfig.json";
+                    int maxThreads = 1;
+                    bool jsonFormat = true;
+
+                    FluentActions.Invoking(() =>
+                            systemUnderTest.PerformImportAction(
+                                                                importSchemaFilePath,
+                                                                maxThreads,
+                                                                jsonFormat,
+                                                                logger.Object,
+                                                                entityRepositoryService.Object,
+                                                                importConfig,
+                                                                tokenSource))
+                           .Should()
+                           .Throw<Exception>();
+                }
+            }
+
+            logger.VerifyAll();
         }
 
         [TestMethod]
@@ -279,6 +341,112 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                         folderPathValidationLabel.Visible.Should().BeTrue();
                     }
                 }
+            }
+        }
+
+        [TestMethod]
+        public void WizardButtonsOnNavigateToNextPage()
+        {
+            var sender = new WizardButtons();
+            var pageContainer = new AeroWizard.WizardPageContainer();
+
+            pageContainer.Pages.Add(new AeroWizard.WizardPage());
+            pageContainer.Pages.Add(new AeroWizard.WizardPage() { Name = "wizardPage2" });
+            sender.PageContainer = pageContainer;
+
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.WizardButtonsOnNavigateToNextPage(sender, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void TabImportConfigFileTextChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.TabImportConfigFileTextChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void TbImportSchemeTextChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.TbImportSchemeTextChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void Button2Click()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.Button2Click(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void RadioButton1CheckedChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.RadioButton1CheckedChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void RadioButtonCheckedChanged()
+        {
+            using (var systemUnderTest = new ImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.RadioButtonCheckedChanged(null, new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeWizardButtonsOnCancel()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeWizardButtonsOnCancel(new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeComboBoxLogLevelSelectedIndexChanged()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeComboBoxLogLevelSelectedIndexChanged(new EventArgs()))
+                            .Should()
+                            .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void InvokeTabSourceDataLocationTextChanged()
+        {
+            using (var systemUnderTest = new MockupForImportWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.InvokeTabSourceDataLocationTextChanged(new EventArgs()))
+                            .Should()
+                            .NotThrow();
             }
         }
     }

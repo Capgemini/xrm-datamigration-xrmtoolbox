@@ -242,11 +242,21 @@
     <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
+    <Compile Include="Extensions\FormControlExtensionsTests.cs" />
     <Compile Include="Forms\FilterEditorTests.cs" />
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ValidationHelpersTests.cs" />
     <Compile Include="CdsMigratorPluginControlTests.cs" />
+    <Compile Include="Mocks\MockupForExportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mocks\MockupForImportWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mocks\MockupForSchemaWizard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
@@ -270,6 +280,9 @@
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
+    <Compile Include="Mocks\MockupForWizardButtons.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\WizardButtonsTests.cs" />

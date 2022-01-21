@@ -13,14 +13,18 @@ using XrmToolBox.Extensibility;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class ImportWizard : UserControl
     {
         private CrmImportConfig importConfig;
-        private readonly Capgemini.DataMigration.Core.ILogger logger;
+        private readonly LoggerService logger;
         private IEntityRepositoryService entityRepositoryService;
+        private CancellationTokenSource tokenSource;
 
         public ImportWizard()
         {
@@ -36,9 +40,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             };
 
             wizardButtons1.OnExecute += Button2Click;
+            wizardButtons1.OnCancel += WizardButtonsOnCancel;
             logger = new LoggerService(tbLogger, SynchronizationContext.Current);
 
-            wizardButtons1.OnCustomNextNavigation += WizardButtons1OnNavigateToNextPage;
+            wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
+
+            comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
@@ -101,6 +108,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void ButtonClick(object sender, EventArgs e)
         {
             var dialogResult = folderBrowserDialog1.ShowDialog();
@@ -137,28 +145,28 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void RadioButtonCheckedChanged(object sender, EventArgs e)
+        public void RadioButtonCheckedChanged(object sender, EventArgs e)
         {
             radioButtonCSVFormat.Checked = !radioButtonJsonFormat.Checked;
             groupBox1.Visible = false;
             stepWizardControl1.Pages[0].AllowNext = true;
         }
 
-        private void RadioButton1CheckedChanged(object sender, EventArgs e)
+        public void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             stepWizardControl1.Pages[0].AllowNext = radioButtonCSVFormat.Checked && tbImportSchema.Text != string.Empty;
             radioButtonJsonFormat.Checked = !radioButtonCSVFormat.Checked;
             groupBox1.Visible = true;
         }
 
-        private void Button2Click(object sender, EventArgs e)
+        public void Button2Click(object sender, EventArgs e)
         {
             importConfig.JsonFolderPath = tbSourceDataLocation.Text;
             importConfig.IgnoreStatuses = cbIgnoreStatuses.Checked;
             importConfig.IgnoreSystemFields = cbIgnoreSystemFields.Checked;
             importConfig.SaveBatchSize = Convert.ToInt32(nudSavePageSize.Value);
 
-            var tokenSource = new CancellationTokenSource();
+            tokenSource = new CancellationTokenSource();
             tbLogger.Clear();
             Task.Run(() =>
             {
@@ -166,6 +174,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             });
         }
 
+        protected void WizardButtonsOnCancel(object sender, EventArgs e)
+        {
+            tokenSource?.Cancel();
+        }
+
+        [ExcludeFromCodeCoverage]
         private void LoadImportConfigFileButtonClick(object sender, EventArgs e)
         {
             var fd = openFileDialog1.ShowDialog();
@@ -176,6 +190,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void Button3Click(object sender, EventArgs e)
         {
             var fd = openFileDialog1.ShowDialog();
@@ -186,7 +201,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void TbImportSchemeTextChanged(object sender, EventArgs e)
+        public void TbImportSchemeTextChanged(object sender, EventArgs e)
         {
             if (radioButtonCSVFormat.Checked)
             {
@@ -194,18 +209,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             }
         }
 
-        private void WizardButtons1OnNavigateToNextPage(object sender, EventArgs e)
+        public void WizardButtonsOnNavigateToNextPage(object sender, EventArgs e)
         {
-            var wizardButtons = ((WizardButtons)sender);
+            var wizardButtons = (WizardButtons)sender;
             WizardNavigation(labelFolderPathValidation, tbSourceDataLocation, wizardButtons.PageContainer.SelectedPage, wizardButtons.PageContainer);
         }
 
-        private void TabSourceDataLocationTextChanged(object sender, EventArgs e)
-        {
-            ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
-        }
-
-        private void TabImportConfigFileTextChanged(object sender, EventArgs e)
+        public void TabImportConfigFileTextChanged(object sender, EventArgs e)
         {
             importConfig = CrmImportConfig.GetConfiguration(openFileDialog1.FileName);
 
@@ -213,6 +223,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             cbIgnoreStatuses.Checked = importConfig.IgnoreStatuses;
             tbSourceDataLocation.Text = importConfig.JsonFolderPath;
             nudSavePageSize.Value = importConfig.SaveBatchSize;
+        }
+
+        protected void TabSourceDataLocationTextChanged(object sender, EventArgs e)
+        {
+            ValidationHelpers.IsTextControlNotEmpty(labelFolderPathValidation, tbSourceDataLocation);
+        }
+
+        protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
+        {
+            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
         }
     }
 }

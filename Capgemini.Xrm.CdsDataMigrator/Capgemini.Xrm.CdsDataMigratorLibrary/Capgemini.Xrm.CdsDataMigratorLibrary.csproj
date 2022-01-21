@@ -211,6 +211,7 @@
     <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\FormControlExtensions.cs" />
     <Compile Include="Forms\FilterEditor.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
@@ -14,6 +13,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler SelectSchemaFileHandler;
 
         event EventHandler ExportDataHandler;
+
+        event EventHandler CancelHandler;
 
         event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 

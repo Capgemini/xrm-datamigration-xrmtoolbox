@@ -14,6 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
         private readonly ILogger logger;
         private readonly ICrmGenericMigratorFactory migratorFactory;
         private CrmExporterConfig exportConfig;
+        private CancellationTokenSource tokenSource;
 
         public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
         {
@@ -28,7 +29,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
                 throw new ArgumentNullException(nameof(exportSettings));
             }
 
-            var tokenSource = new CancellationTokenSource();
+            tokenSource = new CancellationTokenSource();
 
             var repo = new EntityRepository(exportSettings.EnvironmentConnection, new ServiceRetryExecutor());
 
@@ -60,6 +61,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
             var exporter = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
             exporter.MigrateData();
+        }
+
+        public void CancelDataExport()
+        {
+            tokenSource?.Cancel();
         }
 
         private void InjectAdditionalValuesIntoTheExportConfig(CrmExporterConfig config, ExportSettings exportSettings)

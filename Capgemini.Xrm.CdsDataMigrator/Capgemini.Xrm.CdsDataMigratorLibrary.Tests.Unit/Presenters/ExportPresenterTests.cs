@@ -7,6 +7,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
@@ -92,7 +93,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                                 .Throws<OrganizationalServiceException>();
             logger.Setup(a => a.LogError(It.IsAny<string>()));
 
-            FluentActions.Invoking(() => systemUnderTest.ExportDataAction())
+            FluentActions.Invoking(() => systemUnderTest.ExportData(null, new EventArgs()))
                 .Should()
                 .NotThrow();
 
@@ -108,12 +109,37 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             dataMigrationService.Setup(a => a.ExportData(It.IsAny<ExportSettings>()));
             logger.Setup(a => a.LogError(It.IsAny<string>()));
 
-            FluentActions.Invoking(() => systemUnderTest.ExportDataAction())
+            FluentActions.Invoking(() => systemUnderTest.ExportData(null, new EventArgs()))
                 .Should()
                 .NotThrow();
 
             exportView.VerifyAll();
             logger.Verify(a => a.LogError(It.IsAny<string>()), Times.Never);
+            dataMigrationService.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CancelAction()
+        {
+            dataMigrationService.Setup(a => a.CancelDataExport());
+
+            FluentActions.Invoking(() => systemUnderTest.CancelAction(null, new EventArgs()))
+                .Should()
+                .NotThrow();
+
+            dataMigrationService.VerifyAll();
+        }
+
+        [TestMethod]
+        public void CancelActionThrowsException()
+        {
+            dataMigrationService.Setup(a => a.CancelDataExport()).Throws<Exception>();
+
+            FluentActions.Invoking(() => systemUnderTest.CancelAction(null, new EventArgs()))
+                .Should()
+                .NotThrow();
+
+            logger.Verify(a => a.LogError(It.IsAny<string>()), Times.Once);
             dataMigrationService.VerifyAll();
         }
     }

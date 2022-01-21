@@ -5,5 +5,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
     public interface IDataMigrationService
     {
         void ExportData(ExportSettings exportSettings);
+
+        void CancelDataExport();
     }
 }
