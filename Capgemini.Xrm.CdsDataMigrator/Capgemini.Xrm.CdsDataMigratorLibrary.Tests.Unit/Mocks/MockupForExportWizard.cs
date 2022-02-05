@@ -11,7 +11,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks
 
         public void InvokeWizardButtonsOnCancel(EventArgs eventArgs)
         {
-            WizardButtonsOnCancel(null, eventArgs);
+            ExportDataCancellationAction(null, eventArgs);
         }
 
         public void InvokeComboBoxLogLevelSelectedIndexChanged(EventArgs eventArgs)

@@ -1,7 +1,9 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
+using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -25,10 +27,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SchemaGeneratorWizard.BringToFront();
         }
 
-        protected CancellationTokenSource TokenSource { get; set; } = null;
-
-        protected LoggerService Logger { get; set; } = null;
-
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
@@ -46,10 +44,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 {
                     DataExportWizard.OrganizationService = detail.ServiceClient;
                     DataExportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
+
+                    var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ExportWizard)));
+
+                    DataExportWizard.LoggerService = new LoggerService(DataExportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
+                    DataExportWizard.MigratorFactory = new CrmGenericMigratorFactory();
+                    DataExportWizard.DataMigrationService = new DataMigrationService(DataExportWizard.LoggerService, DataExportWizard.MigratorFactory);
+                    DataExportWizard.Presenter = new ExportPresenter(DataExportWizard, DataExportWizard.LoggerService, DataExportWizard.DataMigrationService);
                 }
 
                 if (actionName == "TargetConnection" || actionName == "")
                 {
+                    var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ImportWizard)));
+                    DataImportWizard.LoggerService = new LoggerService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
                     DataImportWizard.OrganizationService = detail.ServiceClient;
                     DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
                 }

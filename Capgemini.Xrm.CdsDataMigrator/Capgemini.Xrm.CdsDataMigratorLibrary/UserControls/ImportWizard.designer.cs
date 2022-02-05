@@ -52,7 +52,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.wizardButtonsImportData = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
             this.wizardPage4.SuspendLayout();
@@ -347,7 +347,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.button1.TabIndex = 1;
             this.button1.Text = "...";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ButtonClick);
+            this.button1.Click += new System.EventHandler(this.ImportFolderSelectionButtonClick);
             // 
             // label2
             // 
@@ -547,7 +547,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.wizardButtons1);
+            this.splitContainer1.Panel1.Controls.Add(this.wizardButtonsImportData);
             // 
             // splitContainer1.Panel2
             // 
@@ -558,15 +558,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // wizardButtons1
             // 
-            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(300, 0);
-            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.PageContainer = this.stepWizardControl1;
-            this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
-            this.wizardButtons1.TabIndex = 0;
+            this.wizardButtonsImportData.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtonsImportData.Location = new System.Drawing.Point(300, 0);
+            this.wizardButtonsImportData.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.wizardButtonsImportData.Name = "wizardButtons1";
+            this.wizardButtonsImportData.PageContainer = this.stepWizardControl1;
+            this.wizardButtonsImportData.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.wizardButtonsImportData.ShowExecuteButton = false;
+            this.wizardButtonsImportData.Size = new System.Drawing.Size(500, 50);
+            this.wizardButtonsImportData.TabIndex = 0;
             // 
             // ImportWizard
             // 
@@ -648,7 +648,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private System.Windows.Forms.TextBox tbImportSchema;
         private System.Windows.Forms.Button btnImportSchema;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons wizardButtons1;
+        private Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons wizardButtonsImportData;
         private ToggleCheckBox cbIgnoreStatuses;
         private ToggleCheckBox cbIgnoreSystemFields;
         private System.Windows.Forms.Label label8;
