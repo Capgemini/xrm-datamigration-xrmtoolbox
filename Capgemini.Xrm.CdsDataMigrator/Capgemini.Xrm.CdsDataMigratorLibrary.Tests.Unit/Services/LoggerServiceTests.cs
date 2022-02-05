@@ -6,6 +6,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
@@ -16,6 +17,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         private const string DateFormat = "dd-MMM-yyyy";
 
         private LoggerService systemUnderTest;
+        private Mock<ILogManagerContainer> logManagerContainerMock;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            logManagerContainerMock = new Mock<ILogManagerContainer>();
+        }
 
         [TestMethod]
         public void MessageLogger()
@@ -24,9 +32,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             {
                 SynchronizationContext syncContext = SynchronizationContext.Current;
 
-                FluentActions.Invoking(() => systemUnderTest = new LoggerService(textBox, syncContext))
+                FluentActions.Invoking(() => systemUnderTest = new LoggerService(textBox, syncContext, logManagerContainerMock.Object))
                             .Should()
                             .NotThrow();
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -36,9 +46,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Verbose
                 };
@@ -49,6 +61,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -58,9 +72,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Error
                 };
@@ -71,6 +87,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -81,9 +99,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current);
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object);
 
                 FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
                             .Should()
@@ -92,6 +112,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
                 textBox.Text.Should().Contain(exception.Message);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -100,7 +122,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Warning
                 };
@@ -110,6 +132,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                             .NotThrow();
 
                 textBox.Text.Should().Be(string.Empty);
+
+                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info), Times.Never);
             }
         }
 
@@ -118,10 +142,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Info:{Message}";
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info));
 
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Info
                 };
@@ -132,6 +157,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -140,7 +167,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Warning
                 };
@@ -150,6 +177,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                             .NotThrow();
 
                 textBox.Text.Should().Be(string.Empty);
+
+                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose), Times.Never);
             }
         }
 
@@ -159,9 +188,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Verbose:{Message}";
 
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose));
+
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Verbose
                 };
@@ -172,6 +203,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
 
@@ -180,7 +213,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Error
                 };
@@ -190,6 +223,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                             .NotThrow();
 
                 textBox.Text.Should().Be(string.Empty);
+
+                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning), Times.Never);
             }
         }
 
@@ -199,9 +234,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Warning:{Message}";
 
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning));
+
             using (var textBox = new TextBox())
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
+                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
                 {
                     LogLevel = LogLevel.Warning
                 };
@@ -212,6 +249,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
+
+                logManagerContainerMock.VerifyAll();
             }
         }
     }
