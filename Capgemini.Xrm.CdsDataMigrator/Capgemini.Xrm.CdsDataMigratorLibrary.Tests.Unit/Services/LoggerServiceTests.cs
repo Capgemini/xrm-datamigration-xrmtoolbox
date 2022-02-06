@@ -10,7 +10,20 @@ using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
-    [Ignore("To be fixed!")]
+    public sealed class TestSynchronizationContext : SynchronizationContext
+    {
+        public override void Post(SendOrPostCallback callback, object state)
+        {
+            callback(state);
+        }
+
+        public override void Send(SendOrPostCallback callback, object state)
+        {
+            callback(state);
+        }
+    }
+
+    //[Ignore("To be fixed!")]
     [TestClass]
     public class LoggerServiceTests
     {
@@ -26,6 +39,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         [TestInitialize]
         public void Setup()
         {
+            SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
+
             //logManagerContainerMock = new Mock<ILogManagerContainer>();
 
             //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
@@ -43,7 +58,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         //{
         //    //logTextBox?.Dispose();
         //}
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void MessageLogger()
         {
