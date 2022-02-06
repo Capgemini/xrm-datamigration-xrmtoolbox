@@ -18,26 +18,34 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
         private LoggerService systemUnderTest;
         private Mock<ILogManagerContainer> logManagerContainerMock;
+        private TextBox logTextBox;
 
         [TestInitialize]
         public void Setup()
         {
             logManagerContainerMock = new Mock<ILogManagerContainer>();
+
+            if (logTextBox == null)
+            {
+                logTextBox = new TextBox();
+            }
+
+            logTextBox.Text = "";
         }
 
         [TestMethod]
         public void MessageLogger()
         {
-            using (var textBox = new TextBox())
-            {
-                SynchronizationContext syncContext = SynchronizationContext.Current;
+            //using (var textBox = new TextBox())
+            // {
+            // SynchronizationContext syncContext = SynchronizationContext.Current;
 
-                FluentActions.Invoking(() => systemUnderTest = new LoggerService(textBox, syncContext, logManagerContainerMock.Object))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object))
+                        .Should()
+                        .NotThrow();
 
-                logManagerContainerMock.VerifyAll();
-            }
+            //logManagerContainerMock.VerifyAll();
+            //}
         }
 
         [TestMethod]
@@ -48,20 +56,20 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             // logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
 
-            using (var textBox = new TextBox())
+            //using (var textBox = new TextBox())
+            // {
+            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Verbose
-                };
+                LogLevel = LogLevel.Verbose
+            };
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogError(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+            // }
 
             //logManagerContainerMock.VerifyAll();
             logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
