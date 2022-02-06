@@ -46,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
-            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+            // logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
 
             using (var textBox = new TextBox())
             {
@@ -61,9 +61,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
                 textBox.Text.Should().Contain(expectedMessage);
                 textBox.Text.Should().Contain(expectedTimeStamp);
-
-                logManagerContainerMock.VerifyAll();
             }
+
+            //logManagerContainerMock.VerifyAll();
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
         }
 
         [Ignore("To be fixed!")]
