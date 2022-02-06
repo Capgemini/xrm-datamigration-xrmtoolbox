@@ -9,10 +9,12 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Threading;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
-    public partial class CdsMigratorPluginControl : PluginControlBase
+    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
 
@@ -26,6 +28,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SchemaGeneratorWizard.Settings = settings;
             SchemaGeneratorWizard.BringToFront();
         }
+
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
@@ -51,6 +55,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     DataExportWizard.MigratorFactory = new CrmGenericMigratorFactory();
                     DataExportWizard.DataMigrationService = new DataMigrationService(DataExportWizard.LoggerService, DataExportWizard.MigratorFactory);
                     DataExportWizard.Presenter = new ExportPresenter(DataExportWizard, DataExportWizard.LoggerService, DataExportWizard.DataMigrationService);
+                    DataExportWizard.OnActionStarted += OnActionStarted;
+                    DataExportWizard.OnActionProgressed += OnActionProgressed;
+                    DataExportWizard.OnActionCompleted += OnActionCompleted;
                 }
 
                 if (actionName == "TargetConnection" || actionName == "")
@@ -59,6 +66,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     DataImportWizard.LoggerService = new LoggerService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
                     DataImportWizard.OrganizationService = detail.ServiceClient;
                     DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
+                    DataImportWizard.OnActionStarted += OnActionStarted;
+                    DataImportWizard.OnActionProgressed += OnActionProgressed;
+                    DataImportWizard.OnActionCompleted += OnActionCompleted;
                 }
             }
 
@@ -68,6 +78,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             }
         }
 
+        private void OnActionCompleted(object sender, EventArgs e)
+        {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(100, $"Completed!"));
+        }
+
+        private void OnActionProgressed(object sender, EventArgs e)
+        {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(50, $"Progressing..."));
+        }
+
+        private void OnActionStarted(object sender, EventArgs e)
+        {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, $"Starting..."));
+        }
+
         private void OnConnectionRequestedHandler(object sender, RequestConnectionEventArgs e)
         {
             RaiseRequestConnectionEvent(e);
@@ -75,16 +100,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
 
         private void ToolStripButtonSchemaConfigClick(object sender, EventArgs e)
         {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
             SchemaGeneratorWizard.BringToFront();
         }
 
         private void ToolStripButtonDataImportClick(object sender, EventArgs e)
         {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
             DataImportWizard.BringToFront();
         }
 
         private void ToolStripButtonDataExportClick(object sender, EventArgs e)
         {
+            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
             DataExportWizard.BringToFront();
         }
     }

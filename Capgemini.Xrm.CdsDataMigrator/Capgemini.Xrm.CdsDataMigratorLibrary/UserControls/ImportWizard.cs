@@ -16,6 +16,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using System.Diagnostics.CodeAnalysis;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -48,6 +49,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 
+        public event EventHandler<EventArgs> OnActionStarted;
+
+        public event EventHandler<EventArgs> OnActionProgressed;
+
+        public event EventHandler<EventArgs> OnActionCompleted;
+
         public TextBox LogDisplay
         {
             get
@@ -60,12 +67,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public IOrganizationService OrganizationService { get; set; }
 
+        public IStatusBarMessenger StatusBarMessenger { get; set; }
+
         public ILogManager LoggerService { get; set; }
 
         public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
         {
             try
             {
+                OnActionProgressed?.Invoke(this, new EventArgs { });
                 if (maxThreads > 1)
                 {
                     currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
@@ -169,6 +179,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public async void DataImportAction(object sender, EventArgs e)
         {
+            OnActionStarted?.Invoke(this, new EventArgs { });
             importConfig.JsonFolderPath = tbSourceDataLocation.Text;
             importConfig.IgnoreStatuses = cbIgnoreStatuses.Checked;
             importConfig.IgnoreSystemFields = cbIgnoreSystemFields.Checked;
@@ -181,6 +192,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                  PerformImportAction(tbImportSchema.Text, Convert.ToInt32(nudMaxThreads.Value), radioButtonJsonFormat.Checked, LoggerService, entityRepositoryService, importConfig, tokenSource);
              });
 
+            OnActionCompleted?.Invoke(this, new EventArgs { });
             wizardButtonsImportData.PerformExecutionCompletedActions();
         }
 

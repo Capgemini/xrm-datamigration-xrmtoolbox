@@ -45,6 +45,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         public event EventHandler CancelHandler;
 
+        public event EventHandler<EventArgs> OnActionStarted;
+
+        public event EventHandler<EventArgs> OnActionProgressed;
+
+        public event EventHandler<EventArgs> OnActionCompleted;
+
         public TextBox LogDisplay
         {
             get
@@ -161,8 +167,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         protected void ExportDataAction(object sender, EventArgs e)
         {
+            OnActionStarted?.Invoke(this, new EventArgs { });
             textBoxLogs.Clear();
+            OnActionProgressed?.Invoke(this, new EventArgs { });
             ExportDataHandler(sender, e);
+            OnActionCompleted?.Invoke(this, new EventArgs { });
             wizardButtonsExportData.PerformExecutionCompletedActions();
         }
 
