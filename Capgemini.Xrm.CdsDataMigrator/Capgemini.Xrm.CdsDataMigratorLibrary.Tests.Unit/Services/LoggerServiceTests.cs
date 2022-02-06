@@ -12,14 +12,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     public sealed class TestSynchronizationContext : SynchronizationContext
     {
-        public override void Post(SendOrPostCallback callback, object state)
+        public override void Post(SendOrPostCallback d, object state)
         {
-            callback(state);
+            d(state);
         }
 
-        public override void Send(SendOrPostCallback callback, object state)
+        public override void Send(SendOrPostCallback d, object state)
         {
-            callback(state);
+            d(state);
         }
     }
 
@@ -130,30 +130,30 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             //}
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorWithExceptionParameter()
         {
             var exception = new Exception("Sample exception");
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            //var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
-            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+            // logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+            //using (var textBox = new TextBox())
+            //{
+            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-                textBox.Text.Should().Contain(exception.Message);
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain(exception.Message);
 
-                logManagerContainerMock.VerifyAll();
-            }
+            logManagerContainerMock.VerifyAll();
+            //  }
         }
 
         [Ignore("To be fixed!")]
