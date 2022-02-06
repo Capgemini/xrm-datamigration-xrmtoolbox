@@ -257,6 +257,7 @@
     <Compile Include="Mocks\MockupForSchemaWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Mocks\TestSynchronizationContext.cs" />
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
