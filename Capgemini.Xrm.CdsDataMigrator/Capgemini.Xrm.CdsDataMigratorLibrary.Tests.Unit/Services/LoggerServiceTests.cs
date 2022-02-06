@@ -41,6 +41,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
 
+            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+
             //logManagerContainerMock = new Mock<ILogManagerContainer>();
 
             //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
@@ -84,10 +86,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             //using (var textBox = new TextBox())
             // {
-            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-            {
-                LogLevel = LogLevel.Verbose
-            };
+            //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Verbose;
+            //};
 
             FluentActions.Invoking(() =>
             systemUnderTest.LogError(Message))
@@ -113,10 +115,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             //using (var textBox = new TextBox())
             //{
-            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-            {
-                LogLevel = LogLevel.Error
-            };
+            //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Error;
+            // };
 
             FluentActions.Invoking(() => systemUnderTest.LogError(Message))
                         .Should()
@@ -142,7 +144,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             //using (var textBox = new TextBox())
             //{
-            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+            //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
 
             FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
                         .Should()
@@ -156,147 +158,146 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             //  }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void InfoLessThanInfoLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            //using (var textBox = new TextBox())
+            // {
+            //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Warning;
+            //    };
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
+            logTextBox.Text.Should().Be(string.Empty);
 
-                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info), Times.Never);
-            }
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info), Times.Never);
+            // }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void InfoLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            //var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Info:{Message}";
             logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info));
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Info
-                };
+            //using (var textBox = new TextBox())
+            // {
+            //systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Info;
+            // };
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
 
-                logManagerContainerMock.VerifyAll();
-            }
+            logManagerContainerMock.VerifyAll();
+            //  }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void VerboseLessThanVerboseLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            //using (var textBox = new TextBox())
+            // {
+            //systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Warning;
+            //  };
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
+            logTextBox.Text.Should().Be(string.Empty);
 
-                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose), Times.Never);
-            }
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose), Times.Never);
+            // }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void VerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            // var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Verbose:{Message}";
 
             logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose));
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Verbose
-                };
+            //using (var textBox = new TextBox())
+            //  {
+            //systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Verbose;
+            //  };
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
 
-                logManagerContainerMock.VerifyAll();
-            }
+            logManagerContainerMock.VerifyAll();
+            //  }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void WarningErrorLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Error
-                };
+            // using (var textBox = new TextBox())
+            //    {
+            //systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Error;
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
+            logTextBox.Text.Should().Be(string.Empty);
 
-                logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning), Times.Never);
-            }
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning), Times.Never);
+            //  }
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void WarningWarningLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            //var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Warning:{Message}";
 
             logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning));
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            //using (var textBox = new TextBox())
+            // {
+            //systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
+            //{
+            systemUnderTest.LogLevel = LogLevel.Warning;
+            //     };
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
 
-                logManagerContainerMock.VerifyAll();
-            }
+            logManagerContainerMock.VerifyAll();
+            // }
         }
     }
 }
