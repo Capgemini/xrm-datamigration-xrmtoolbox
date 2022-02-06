@@ -6,13 +6,13 @@ using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
+    [Ignore("To be fixed!")]
     [TestClass]
     public class LogManagerContainerTests
     {
         private LogManagerContainer systemUnderTest;
         private readonly string message = "Sample message";
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void CanInstantiate()
         {
@@ -21,7 +21,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                         .NotThrow();
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void WriteLineVerbose()
         {
