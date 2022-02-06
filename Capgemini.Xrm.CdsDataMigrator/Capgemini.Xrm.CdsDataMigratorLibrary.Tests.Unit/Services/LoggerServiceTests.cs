@@ -16,22 +16,32 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";
 
+        private readonly string expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+        private readonly Mock<ILogManagerContainer> logManagerContainerMock = new Mock<ILogManagerContainer>();
+        private readonly TextBox logTextBox = new TextBox();
+
         private LoggerService systemUnderTest;
-        private Mock<ILogManagerContainer> logManagerContainerMock;
-        private TextBox logTextBox;
 
         [TestInitialize]
         public void Setup()
         {
-            logManagerContainerMock = new Mock<ILogManagerContainer>();
+            //logManagerContainerMock = new Mock<ILogManagerContainer>();
 
-            if (logTextBox == null)
-            {
-                logTextBox = new TextBox();
-            }
+            //systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+
+            //if (logTextBox == null)
+            //{
+            //    logTextBox = new TextBox();
+            //}
 
             logTextBox.Text = "";
         }
+
+        //[TestCleanup]
+        //public void Cleanup()
+        //{
+        //    //logTextBox?.Dispose();
+        //}
 
         [TestMethod]
         public void MessageLogger()
@@ -51,8 +61,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         [TestMethod]
         public void ErrorWhenVerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
-            var expectedMessage = $"- Error:{Message}";
+            //var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            //var expectedMessage = $"- Error:{Message}";
 
             // logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
 
@@ -67,7 +77,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                         .Should()
                         .NotThrow();
 
-            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain($"- Error:{Message}");
             logTextBox.Text.Should().Contain(expectedTimeStamp);
             // }
 
@@ -75,31 +85,32 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
         }
 
-        [Ignore("To be fixed!")]
+        //[Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
-            var expectedMessage = $"- Error:{Message}";
+            //var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+            //var expectedMessage = $"- Error:{Message}";
 
-            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+            //logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
 
-            using (var textBox = new TextBox())
+            //using (var textBox = new TextBox())
+            //{
+            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object)
             {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current, logManagerContainerMock.Object)
-                {
-                    LogLevel = LogLevel.Error
-                };
+                LogLevel = LogLevel.Error
+            };
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogError(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain($"- Error:{Message}");
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
 
-                logManagerContainerMock.VerifyAll();
-            }
+            // logManagerContainerMock.VerifyAll();
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
+            //}
         }
 
         [Ignore("To be fixed!")]

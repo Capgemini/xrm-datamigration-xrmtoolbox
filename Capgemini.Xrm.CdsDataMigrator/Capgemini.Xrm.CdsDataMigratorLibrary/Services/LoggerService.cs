@@ -56,15 +56,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         private void WriteLine(string message, LogLevel logLevel)
         {
-            var logMessage = $"{DateTime.Now:dd-MMM-yyyy HH:mm:ss} - {message}{Environment.NewLine}";
-
             syncContext.Send(
                 p =>
             {
+                var logMessage = $"{DateTime.Now:dd-MMM-yyyy HH:mm:ss} - {message}{Environment.NewLine}";
                 messageTextBox.AppendText(logMessage);
+                logManagerContainer.WriteLine(logMessage, logLevel);
             }, null);
-
-            logManagerContainer.WriteLine(logMessage, logLevel);
         }
     }
 }
