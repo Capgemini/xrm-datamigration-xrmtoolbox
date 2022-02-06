@@ -10,7 +10,6 @@ using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
-    [Ignore("To be fixed!")]
     [TestClass]
     public class LoggerServiceTests
     {
@@ -41,6 +40,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorWhenVerboseLogLevel()
         {
@@ -67,6 +67,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorLogLevel()
         {
@@ -93,6 +94,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorWithExceptionParameter()
         {
@@ -118,6 +120,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void InfoLessThanInfoLogLevel()
         {
@@ -138,6 +141,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void InfoLogLevel()
         {
@@ -163,6 +167,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void VerboseLessThanVerboseLogLevel()
         {
@@ -183,6 +188,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void VerboseLogLevel()
         {
@@ -209,6 +215,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void WarningErrorLogLevel()
         {
@@ -229,6 +236,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
+        [Ignore("To be fixed!")]
         [TestMethod]
         public void WarningWarningLogLevel()
         {
