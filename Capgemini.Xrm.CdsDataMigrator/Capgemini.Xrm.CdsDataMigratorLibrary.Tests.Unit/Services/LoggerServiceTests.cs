@@ -40,7 +40,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             }
         }
 
-        [Ignore("To be fixed!")]
         [TestMethod]
         public void ErrorWhenVerboseLogLevel()
         {
