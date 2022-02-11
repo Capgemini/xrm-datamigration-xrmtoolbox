@@ -136,8 +136,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
-            this.stepWizardControl1.Controls.Add(this.wizardPage1);
             this.stepWizardControl1.Controls.Add(this.wizardPage3);
+            this.stepWizardControl1.Controls.Add(this.wizardPage1);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(4);
@@ -245,7 +245,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.wizardPage3.Name = "wizardPage3";
             this.wizardPage3.ShowCancel = false;
             this.wizardPage3.ShowNext = false;
-            this.wizardPage3.Size = new System.Drawing.Size(1600, 742);
+            this.wizardPage3.Size = new System.Drawing.Size(1600, 745);
             this.wizardPage3.TabIndex = 4;
             this.wizardPage3.Text = "Schema Creation";
             // 
@@ -328,7 +328,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btImportConfigPath.Enabled = false;
             this.btImportConfigPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btImportConfigPath.Location = new System.Drawing.Point(912, 52);
+            this.btImportConfigPath.Location = new System.Drawing.Point(1115, 52);
             this.btImportConfigPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btImportConfigPath.Name = "btImportConfigPath";
             this.btImportConfigPath.Size = new System.Drawing.Size(35, 32);
@@ -341,7 +341,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btExportConfigPath.Enabled = false;
             this.btExportConfigPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btExportConfigPath.Location = new System.Drawing.Point(912, 84);
+            this.btExportConfigPath.Location = new System.Drawing.Point(1115, 84);
             this.btExportConfigPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btExportConfigPath.Name = "btExportConfigPath";
             this.btExportConfigPath.Size = new System.Drawing.Size(35, 32);
@@ -357,7 +357,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbImportConfig.Location = new System.Drawing.Point(640, 55);
             this.tbImportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbImportConfig.Name = "tbImportConfig";
-            this.tbImportConfig.Size = new System.Drawing.Size(263, 26);
+            this.tbImportConfig.Size = new System.Drawing.Size(473, 26);
             this.tbImportConfig.TabIndex = 33;
             // 
             // label9
@@ -454,7 +454,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbExportConfig.Location = new System.Drawing.Point(640, 86);
             this.tbExportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbExportConfig.Name = "tbExportConfig";
-            this.tbExportConfig.Size = new System.Drawing.Size(263, 26);
+            this.tbExportConfig.Size = new System.Drawing.Size(473, 26);
             this.tbExportConfig.TabIndex = 34;
             // 
             // gbEntities
@@ -471,7 +471,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities.Margin = new System.Windows.Forms.Padding(4);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Padding = new System.Windows.Forms.Padding(4);
-            this.gbEntities.Size = new System.Drawing.Size(457, 677);
+            this.gbEntities.Size = new System.Drawing.Size(457, 680);
             this.gbEntities.TabIndex = 95;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Available entities";
@@ -530,7 +530,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.lvEntities.Margin = new System.Windows.Forms.Padding(4);
             this.lvEntities.MultiSelect = false;
             this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(440, 601);
+            this.lvEntities.Size = new System.Drawing.Size(440, 604);
             this.lvEntities.TabIndex = 64;
             this.lvEntities.UseCompatibleStateImageBehavior = false;
             this.lvEntities.View = System.Windows.Forms.View.Details;
@@ -764,14 +764,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbSchemaPath.Location = new System.Drawing.Point(640, 118);
             this.tbSchemaPath.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbSchemaPath.Name = "tbSchemaPath";
-            this.tbSchemaPath.Size = new System.Drawing.Size(263, 26);
+            this.tbSchemaPath.Size = new System.Drawing.Size(473, 26);
             this.tbSchemaPath.TabIndex = 30;
             // 
             // btSchemaFolderPath
             // 
             this.btSchemaFolderPath.Enabled = false;
             this.btSchemaFolderPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSchemaFolderPath.Location = new System.Drawing.Point(912, 116);
+            this.btSchemaFolderPath.Location = new System.Drawing.Point(1115, 116);
             this.btSchemaFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btSchemaFolderPath.Name = "btSchemaFolderPath";
             this.btSchemaFolderPath.Size = new System.Drawing.Size(35, 32);
