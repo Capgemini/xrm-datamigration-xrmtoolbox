@@ -36,17 +36,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.comboBoxLogLevel = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tbLogger = new System.Windows.Forms.TextBox();
-            this.wizardPage3 = new AeroWizard.WizardPage();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nudSavePageSize = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.nudMaxThreads = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.ConnectionString = new System.Windows.Forms.Label();
-            this.buttonTargetConnectionString = new System.Windows.Forms.Button();
-            this.labelTargetConnectionString = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.dataFormat = new AeroWizard.WizardPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbImportSchema = new System.Windows.Forms.TextBox();
+            this.btnImportSchema = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radioButtonJsonFormat = new System.Windows.Forms.RadioButton();
+            this.radioButtonCSVFormat = new System.Windows.Forms.RadioButton();
             this.wizardPage5 = new AeroWizard.WizardPage();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -57,29 +53,33 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.tbSourceDataLocation = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.dataFormat = new AeroWizard.WizardPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tbImportSchema = new System.Windows.Forms.TextBox();
-            this.btnImportSchema = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.radioButtonJsonFormat = new System.Windows.Forms.RadioButton();
-            this.radioButtonCSVFormat = new System.Windows.Forms.RadioButton();
+            this.wizardPage3 = new AeroWizard.WizardPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.cbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.nudSavePageSize = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudMaxThreads = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ConnectionString = new System.Windows.Forms.Label();
+            this.buttonTargetConnectionString = new System.Windows.Forms.Button();
+            this.labelTargetConnectionString = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
-            this.cbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
-            this.cbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
             this.wizardPage4.SuspendLayout();
+            this.dataFormat.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.wizardPage5.SuspendLayout();
+            this.wizardPage2.SuspendLayout();
             this.wizardPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).BeginInit();
-            this.wizardPage5.SuspendLayout();
-            this.wizardPage2.SuspendLayout();
-            this.dataFormat.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -92,11 +92,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
-            this.stepWizardControl1.Controls.Add(this.wizardPage4);
-            this.stepWizardControl1.Controls.Add(this.dataFormat);
             this.stepWizardControl1.Controls.Add(this.wizardPage5);
-            this.stepWizardControl1.Controls.Add(this.wizardPage2);
+            this.stepWizardControl1.Controls.Add(this.wizardPage4);
             this.stepWizardControl1.Controls.Add(this.wizardPage3);
+            this.stepWizardControl1.Controls.Add(this.wizardPage2);
+            this.stepWizardControl1.Controls.Add(this.dataFormat);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -171,6 +171,212 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.tbLogger.Size = new System.Drawing.Size(751, 415);
             this.tbLogger.TabIndex = 14;
             // 
+            // dataFormat
+            // 
+            this.dataFormat.AllowCancel = false;
+            this.dataFormat.AllowNext = false;
+            this.dataFormat.Controls.Add(this.groupBox1);
+            this.dataFormat.Controls.Add(this.label1);
+            this.dataFormat.Controls.Add(this.radioButtonJsonFormat);
+            this.dataFormat.Controls.Add(this.radioButtonCSVFormat);
+            this.dataFormat.Name = "dataFormat";
+            this.dataFormat.NextPage = this.wizardPage5;
+            this.dataFormat.ShowCancel = false;
+            this.dataFormat.Size = new System.Drawing.Size(800, 500);
+            this.dataFormat.TabIndex = 2;
+            this.dataFormat.Text = "Select Data Format";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbImportSchema);
+            this.groupBox1.Controls.Add(this.btnImportSchema);
+            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.groupBox1.Location = new System.Drawing.Point(35, 141);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.groupBox1.Size = new System.Drawing.Size(762, 84);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Schema file (CSV only)";
+            this.groupBox1.Visible = false;
+            // 
+            // tbImportSchema
+            // 
+            this.tbImportSchema.Location = new System.Drawing.Point(7, 31);
+            this.tbImportSchema.Margin = new System.Windows.Forms.Padding(2);
+            this.tbImportSchema.Name = "tbImportSchema";
+            this.tbImportSchema.Size = new System.Drawing.Size(695, 32);
+            this.tbImportSchema.TabIndex = 4;
+            this.tbImportSchema.TextChanged += new System.EventHandler(this.TbImportSchemeTextChanged);
+            // 
+            // btnImportSchema
+            // 
+            this.btnImportSchema.Location = new System.Drawing.Point(706, 31);
+            this.btnImportSchema.Margin = new System.Windows.Forms.Padding(2);
+            this.btnImportSchema.Name = "btnImportSchema";
+            this.btnImportSchema.Size = new System.Drawing.Size(46, 33);
+            this.btnImportSchema.TabIndex = 3;
+            this.btnImportSchema.Text = "...";
+            this.btnImportSchema.UseVisualStyleBackColor = true;
+            this.btnImportSchema.Click += new System.EventHandler(this.Button3Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(30, 26);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(594, 32);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Which format would you like to import the data from?";
+            // 
+            // radioButtonJsonFormat
+            // 
+            this.radioButtonJsonFormat.AutoSize = true;
+            this.radioButtonJsonFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonJsonFormat.Location = new System.Drawing.Point(35, 78);
+            this.radioButtonJsonFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButtonJsonFormat.Name = "radioButtonJsonFormat";
+            this.radioButtonJsonFormat.Size = new System.Drawing.Size(78, 29);
+            this.radioButtonJsonFormat.TabIndex = 1;
+            this.radioButtonJsonFormat.TabStop = true;
+            this.radioButtonJsonFormat.Text = "JSON";
+            this.radioButtonJsonFormat.UseVisualStyleBackColor = true;
+            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.RadioButtonCheckedChanged);
+            // 
+            // radioButtonCSVFormat
+            // 
+            this.radioButtonCSVFormat.AutoSize = true;
+            this.radioButtonCSVFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonCSVFormat.Location = new System.Drawing.Point(35, 109);
+            this.radioButtonCSVFormat.Margin = new System.Windows.Forms.Padding(2);
+            this.radioButtonCSVFormat.Name = "radioButtonCSVFormat";
+            this.radioButtonCSVFormat.Size = new System.Drawing.Size(67, 29);
+            this.radioButtonCSVFormat.TabIndex = 0;
+            this.radioButtonCSVFormat.TabStop = true;
+            this.radioButtonCSVFormat.Text = "CSV";
+            this.radioButtonCSVFormat.UseVisualStyleBackColor = true;
+            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+            // 
+            // wizardPage5
+            // 
+            this.wizardPage5.AllowCancel = false;
+            this.wizardPage5.Controls.Add(this.label7);
+            this.wizardPage5.Controls.Add(this.label4);
+            this.wizardPage5.Controls.Add(this.btLoadImportConfigFile);
+            this.wizardPage5.Controls.Add(this.tbImportConfigFile);
+            this.wizardPage5.Name = "wizardPage5";
+            this.wizardPage5.NextPage = this.wizardPage2;
+            this.wizardPage5.ShowCancel = false;
+            this.wizardPage5.Size = new System.Drawing.Size(800, 500);
+            this.wizardPage5.TabIndex = 6;
+            this.wizardPage5.Text = "Import Config";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(30, 26);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(683, 32);
+            this.label7.TabIndex = 49;
+            this.label7.Text = "Do you have an existing Import Config file? Please supply if so";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(31, 72);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(253, 25);
+            this.label4.TabIndex = 46;
+            this.label4.Text = "Import Config File (Optional)";
+            // 
+            // btLoadImportConfigFile
+            // 
+            this.btLoadImportConfigFile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btLoadImportConfigFile.Location = new System.Drawing.Point(748, 105);
+            this.btLoadImportConfigFile.Margin = new System.Windows.Forms.Padding(1);
+            this.btLoadImportConfigFile.Name = "btLoadImportConfigFile";
+            this.btLoadImportConfigFile.Size = new System.Drawing.Size(46, 33);
+            this.btLoadImportConfigFile.TabIndex = 48;
+            this.btLoadImportConfigFile.Text = "...";
+            this.btLoadImportConfigFile.UseVisualStyleBackColor = true;
+            this.btLoadImportConfigFile.Click += new System.EventHandler(this.LoadImportConfigFileButtonClick);
+            // 
+            // tbImportConfigFile
+            // 
+            this.tbImportConfigFile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbImportConfigFile.Location = new System.Drawing.Point(31, 105);
+            this.tbImportConfigFile.Margin = new System.Windows.Forms.Padding(2);
+            this.tbImportConfigFile.Name = "tbImportConfigFile";
+            this.tbImportConfigFile.Size = new System.Drawing.Size(714, 32);
+            this.tbImportConfigFile.TabIndex = 47;
+            this.tbImportConfigFile.TextChanged += new System.EventHandler(this.TabImportConfigFileTextChanged);
+            // 
+            // wizardPage2
+            // 
+            this.wizardPage2.AllowCancel = false;
+            this.wizardPage2.AllowNext = false;
+            this.wizardPage2.Controls.Add(this.labelFolderPathValidation);
+            this.wizardPage2.Controls.Add(this.tbSourceDataLocation);
+            this.wizardPage2.Controls.Add(this.button1);
+            this.wizardPage2.Controls.Add(this.label2);
+            this.wizardPage2.Name = "wizardPage2";
+            this.wizardPage2.NextPage = this.wizardPage3;
+            this.wizardPage2.ShowCancel = false;
+            this.wizardPage2.Size = new System.Drawing.Size(800, 500);
+            this.wizardPage2.TabIndex = 3;
+            this.wizardPage2.Text = "Select Source Directory";
+            // 
+            // labelFolderPathValidation
+            // 
+            this.labelFolderPathValidation.AutoSize = true;
+            this.labelFolderPathValidation.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelFolderPathValidation.ForeColor = System.Drawing.Color.Red;
+            this.labelFolderPathValidation.Location = new System.Drawing.Point(39, 67);
+            this.labelFolderPathValidation.Name = "labelFolderPathValidation";
+            this.labelFolderPathValidation.Size = new System.Drawing.Size(170, 15);
+            this.labelFolderPathValidation.TabIndex = 10;
+            this.labelFolderPathValidation.Text = "Please Provide the folder path";
+            this.labelFolderPathValidation.Visible = false;
+            // 
+            // tbSourceDataLocation
+            // 
+            this.tbSourceDataLocation.Font = new System.Drawing.Font("Segoe UI", 11.25F);
+            this.tbSourceDataLocation.Location = new System.Drawing.Point(35, 93);
+            this.tbSourceDataLocation.Margin = new System.Windows.Forms.Padding(2);
+            this.tbSourceDataLocation.Name = "tbSourceDataLocation";
+            this.tbSourceDataLocation.Size = new System.Drawing.Size(706, 32);
+            this.tbSourceDataLocation.TabIndex = 2;
+            this.tbSourceDataLocation.TextChanged += new System.EventHandler(this.TabSourceDataLocationTextChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(745, 93);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(46, 33);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.ButtonClick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(30, 26);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(451, 32);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "What directory contains the source data?";
+            // 
             // wizardPage3
             // 
             this.wizardPage3.AllowCancel = false;
@@ -215,6 +421,28 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.label8.Size = new System.Drawing.Size(183, 25);
             this.label8.TabIndex = 56;
             this.label8.Text = "Ignore System Fields";
+            // 
+            // cbIgnoreStatuses
+            // 
+            this.cbIgnoreStatuses.Location = new System.Drawing.Point(268, 258);
+            this.cbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreStatuses.Name = "cbIgnoreStatuses";
+            this.cbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreStatuses.Size = new System.Drawing.Size(75, 31);
+            this.cbIgnoreStatuses.TabIndex = 55;
+            this.cbIgnoreStatuses.Text = "toggleCheckBox2";
+            this.cbIgnoreStatuses.UseVisualStyleBackColor = true;
+            // 
+            // cbIgnoreSystemFields
+            // 
+            this.cbIgnoreSystemFields.Location = new System.Drawing.Point(268, 219);
+            this.cbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreSystemFields.Name = "cbIgnoreSystemFields";
+            this.cbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(2);
+            this.cbIgnoreSystemFields.Size = new System.Drawing.Size(75, 31);
+            this.cbIgnoreSystemFields.TabIndex = 54;
+            this.cbIgnoreSystemFields.Text = "toggleCheckBox1";
+            this.cbIgnoreSystemFields.UseVisualStyleBackColor = true;
             // 
             // nudSavePageSize
             // 
@@ -322,212 +550,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.label3.TabIndex = 0;
             this.label3.Text = "Please set the setting for import";
             // 
-            // wizardPage5
-            // 
-            this.wizardPage5.AllowCancel = false;
-            this.wizardPage5.Controls.Add(this.label7);
-            this.wizardPage5.Controls.Add(this.label4);
-            this.wizardPage5.Controls.Add(this.btLoadImportConfigFile);
-            this.wizardPage5.Controls.Add(this.tbImportConfigFile);
-            this.wizardPage5.Name = "wizardPage5";
-            this.wizardPage5.NextPage = this.wizardPage2;
-            this.wizardPage5.ShowCancel = false;
-            this.wizardPage5.Size = new System.Drawing.Size(800, 500);
-            this.wizardPage5.TabIndex = 6;
-            this.wizardPage5.Text = "Import Config";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(30, 26);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(683, 32);
-            this.label7.TabIndex = 49;
-            this.label7.Text = "Do you have an existing Import Config file? Please supply if so";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(31, 72);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(253, 25);
-            this.label4.TabIndex = 46;
-            this.label4.Text = "Import Config File (Optional)";
-            // 
-            // btLoadImportConfigFile
-            // 
-            this.btLoadImportConfigFile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btLoadImportConfigFile.Location = new System.Drawing.Point(649, 105);
-            this.btLoadImportConfigFile.Margin = new System.Windows.Forms.Padding(1);
-            this.btLoadImportConfigFile.Name = "btLoadImportConfigFile";
-            this.btLoadImportConfigFile.Size = new System.Drawing.Size(46, 33);
-            this.btLoadImportConfigFile.TabIndex = 48;
-            this.btLoadImportConfigFile.Text = "...";
-            this.btLoadImportConfigFile.UseVisualStyleBackColor = true;
-            this.btLoadImportConfigFile.Click += new System.EventHandler(this.LoadImportConfigFileButtonClick);
-            // 
-            // tbImportConfigFile
-            // 
-            this.tbImportConfigFile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbImportConfigFile.Location = new System.Drawing.Point(31, 105);
-            this.tbImportConfigFile.Margin = new System.Windows.Forms.Padding(2);
-            this.tbImportConfigFile.Name = "tbImportConfigFile";
-            this.tbImportConfigFile.Size = new System.Drawing.Size(611, 32);
-            this.tbImportConfigFile.TabIndex = 47;
-            this.tbImportConfigFile.TextChanged += new System.EventHandler(this.TabImportConfigFileTextChanged);
-            // 
-            // wizardPage2
-            // 
-            this.wizardPage2.AllowCancel = false;
-            this.wizardPage2.AllowNext = false;
-            this.wizardPage2.Controls.Add(this.labelFolderPathValidation);
-            this.wizardPage2.Controls.Add(this.tbSourceDataLocation);
-            this.wizardPage2.Controls.Add(this.button1);
-            this.wizardPage2.Controls.Add(this.label2);
-            this.wizardPage2.Name = "wizardPage2";
-            this.wizardPage2.NextPage = this.wizardPage3;
-            this.wizardPage2.ShowCancel = false;
-            this.wizardPage2.Size = new System.Drawing.Size(800, 391);
-            this.wizardPage2.TabIndex = 3;
-            this.wizardPage2.Text = "Select Source Directory";
-            // 
-            // labelFolderPathValidation
-            // 
-            this.labelFolderPathValidation.AutoSize = true;
-            this.labelFolderPathValidation.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFolderPathValidation.ForeColor = System.Drawing.Color.Red;
-            this.labelFolderPathValidation.Location = new System.Drawing.Point(39, 67);
-            this.labelFolderPathValidation.Name = "labelFolderPathValidation";
-            this.labelFolderPathValidation.Size = new System.Drawing.Size(170, 15);
-            this.labelFolderPathValidation.TabIndex = 10;
-            this.labelFolderPathValidation.Text = "Please Provide the folder path";
-            this.labelFolderPathValidation.Visible = false;
-            // 
-            // tbSourceDataLocation
-            // 
-            this.tbSourceDataLocation.Font = new System.Drawing.Font("Segoe UI", 11.25F);
-            this.tbSourceDataLocation.Location = new System.Drawing.Point(35, 93);
-            this.tbSourceDataLocation.Margin = new System.Windows.Forms.Padding(2);
-            this.tbSourceDataLocation.Name = "tbSourceDataLocation";
-            this.tbSourceDataLocation.Size = new System.Drawing.Size(544, 32);
-            this.tbSourceDataLocation.TabIndex = 2;
-            this.tbSourceDataLocation.TextChanged += new System.EventHandler(this.TabSourceDataLocationTextChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(587, 93);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(46, 33);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ButtonClick);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(30, 26);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(451, 32);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "What directory contains the source data?";
-            // 
-            // dataFormat
-            // 
-            this.dataFormat.AllowCancel = false;
-            this.dataFormat.AllowNext = false;
-            this.dataFormat.Controls.Add(this.groupBox1);
-            this.dataFormat.Controls.Add(this.label1);
-            this.dataFormat.Controls.Add(this.radioButtonJsonFormat);
-            this.dataFormat.Controls.Add(this.radioButtonCSVFormat);
-            this.dataFormat.Name = "dataFormat";
-            this.dataFormat.NextPage = this.wizardPage5;
-            this.dataFormat.ShowCancel = false;
-            this.dataFormat.Size = new System.Drawing.Size(800, 500);
-            this.dataFormat.TabIndex = 2;
-            this.dataFormat.Text = "Select Data Format";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.tbImportSchema);
-            this.groupBox1.Controls.Add(this.btnImportSchema);
-            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.groupBox1.Location = new System.Drawing.Point(35, 141);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.groupBox1.Size = new System.Drawing.Size(691, 84);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Schema file (CSV only)";
-            this.groupBox1.Visible = false;
-            // 
-            // tbImportSchema
-            // 
-            this.tbImportSchema.Location = new System.Drawing.Point(7, 31);
-            this.tbImportSchema.Margin = new System.Windows.Forms.Padding(2);
-            this.tbImportSchema.Name = "tbImportSchema";
-            this.tbImportSchema.Size = new System.Drawing.Size(589, 32);
-            this.tbImportSchema.TabIndex = 4;
-            this.tbImportSchema.TextChanged += new System.EventHandler(this.TbImportSchemeTextChanged);
-            // 
-            // btnImportSchema
-            // 
-            this.btnImportSchema.Location = new System.Drawing.Point(603, 31);
-            this.btnImportSchema.Margin = new System.Windows.Forms.Padding(2);
-            this.btnImportSchema.Name = "btnImportSchema";
-            this.btnImportSchema.Size = new System.Drawing.Size(46, 33);
-            this.btnImportSchema.TabIndex = 3;
-            this.btnImportSchema.Text = "...";
-            this.btnImportSchema.UseVisualStyleBackColor = true;
-            this.btnImportSchema.Click += new System.EventHandler(this.Button3Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(30, 26);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(594, 32);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Which format would you like to import the data from?";
-            // 
-            // radioButtonJsonFormat
-            // 
-            this.radioButtonJsonFormat.AutoSize = true;
-            this.radioButtonJsonFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonJsonFormat.Location = new System.Drawing.Point(35, 78);
-            this.radioButtonJsonFormat.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonJsonFormat.Name = "radioButtonJsonFormat";
-            this.radioButtonJsonFormat.Size = new System.Drawing.Size(78, 29);
-            this.radioButtonJsonFormat.TabIndex = 1;
-            this.radioButtonJsonFormat.TabStop = true;
-            this.radioButtonJsonFormat.Text = "JSON";
-            this.radioButtonJsonFormat.UseVisualStyleBackColor = true;
-            this.radioButtonJsonFormat.CheckedChanged += new System.EventHandler(this.RadioButtonCheckedChanged);
-            // 
-            // radioButtonCSVFormat
-            // 
-            this.radioButtonCSVFormat.AutoSize = true;
-            this.radioButtonCSVFormat.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonCSVFormat.Location = new System.Drawing.Point(35, 109);
-            this.radioButtonCSVFormat.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButtonCSVFormat.Name = "radioButtonCSVFormat";
-            this.radioButtonCSVFormat.Size = new System.Drawing.Size(67, 29);
-            this.radioButtonCSVFormat.TabIndex = 0;
-            this.radioButtonCSVFormat.TabStop = true;
-            this.radioButtonCSVFormat.Text = "CSV";
-            this.radioButtonCSVFormat.UseVisualStyleBackColor = true;
-            this.radioButtonCSVFormat.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -554,36 +576,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // wizardButtons1
             // 
             this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(400, 0);
+            this.wizardButtons1.Location = new System.Drawing.Point(300, 0);
             this.wizardButtons1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.wizardButtons1.Name = "wizardButtons1";
             this.wizardButtons1.PageContainer = this.stepWizardControl1;
             this.wizardButtons1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wizardButtons1.ShowExecuteButton = true;
+            this.wizardButtons1.ShowExecuteButton = false;
             this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
             this.wizardButtons1.TabIndex = 0;
-            // 
-            // cbIgnoreStatuses
-            // 
-            this.cbIgnoreStatuses.Location = new System.Drawing.Point(268, 258);
-            this.cbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreStatuses.Name = "cbIgnoreStatuses";
-            this.cbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreStatuses.Size = new System.Drawing.Size(75, 31);
-            this.cbIgnoreStatuses.TabIndex = 55;
-            this.cbIgnoreStatuses.Text = "toggleCheckBox2";
-            this.cbIgnoreStatuses.UseVisualStyleBackColor = true;
-            // 
-            // cbIgnoreSystemFields
-            // 
-            this.cbIgnoreSystemFields.Location = new System.Drawing.Point(268, 219);
-            this.cbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreSystemFields.Name = "cbIgnoreSystemFields";
-            this.cbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(2);
-            this.cbIgnoreSystemFields.Size = new System.Drawing.Size(75, 31);
-            this.cbIgnoreSystemFields.TabIndex = 54;
-            this.cbIgnoreSystemFields.Text = "toggleCheckBox1";
-            this.cbIgnoreSystemFields.UseVisualStyleBackColor = true;
             // 
             // ImportWizard
             // 
@@ -600,18 +600,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.ResumeLayout(false);
             this.wizardPage4.ResumeLayout(false);
             this.wizardPage4.PerformLayout();
-            this.wizardPage3.ResumeLayout(false);
-            this.wizardPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).EndInit();
-            this.wizardPage5.ResumeLayout(false);
-            this.wizardPage5.PerformLayout();
-            this.wizardPage2.ResumeLayout(false);
-            this.wizardPage2.PerformLayout();
             this.dataFormat.ResumeLayout(false);
             this.dataFormat.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.wizardPage5.ResumeLayout(false);
+            this.wizardPage5.PerformLayout();
+            this.wizardPage2.ResumeLayout(false);
+            this.wizardPage2.PerformLayout();
+            this.wizardPage3.ResumeLayout(false);
+            this.wizardPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
