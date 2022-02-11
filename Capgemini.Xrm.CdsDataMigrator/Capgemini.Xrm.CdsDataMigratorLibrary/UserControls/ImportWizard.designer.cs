@@ -36,6 +36,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.comboBoxLogLevel = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tbLogger = new System.Windows.Forms.TextBox();
+            this.wizardPage2 = new AeroWizard.WizardPage();
+            this.labelFolderPathValidation = new System.Windows.Forms.Label();
+            this.tbSourceDataLocation = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.wizardPage3 = new AeroWizard.WizardPage();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -595,10 +600,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.wizardPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSavePageSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxThreads)).EndInit();
-            this.wizardPage5.ResumeLayout(false);
-            this.wizardPage5.PerformLayout();
-            this.wizardPage2.ResumeLayout(false);
-            this.wizardPage2.PerformLayout();
             this.dataFormat.ResumeLayout(false);
             this.dataFormat.PerformLayout();
             this.groupBox1.ResumeLayout(false);

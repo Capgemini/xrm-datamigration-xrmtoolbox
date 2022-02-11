@@ -286,7 +286,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // buttonExportLocation
             // 
-            this.buttonExportLocation.Location = new System.Drawing.Point(751, 93);
+            this.buttonExportLocation.Location = new System.Drawing.Point(564, 93);
             this.buttonExportLocation.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExportLocation.Name = "buttonExportLocation";
             this.buttonExportLocation.Size = new System.Drawing.Size(46, 33);

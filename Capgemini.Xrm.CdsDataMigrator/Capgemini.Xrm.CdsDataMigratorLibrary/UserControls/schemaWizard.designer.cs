@@ -279,7 +279,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbImportConfig.Location = new System.Drawing.Point(640, 55);
             this.tbImportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbImportConfig.Name = "tbImportConfig";
-            this.tbImportConfig.Size = new System.Drawing.Size(263, 26);
+            this.tbImportConfig.Size = new System.Drawing.Size(520, 26);
             this.tbImportConfig.TabIndex = 33;
             // 
             // label9
@@ -693,7 +693,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btSchemaFolderPath.Enabled = false;
             this.btSchemaFolderPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSchemaFolderPath.Location = new System.Drawing.Point(912, 116);
+            this.btSchemaFolderPath.Location = new System.Drawing.Point(1169, 116);
             this.btSchemaFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btSchemaFolderPath.Name = "btSchemaFolderPath";
             this.btSchemaFolderPath.Size = new System.Drawing.Size(35, 32);
