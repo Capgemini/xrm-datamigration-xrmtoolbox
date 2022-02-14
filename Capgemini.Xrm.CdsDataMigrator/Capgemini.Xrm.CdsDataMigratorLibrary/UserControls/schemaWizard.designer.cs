@@ -37,6 +37,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.fdSchemaFile = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.stepWizardControl1 = new AeroWizard.WizardPageContainer();
+            this.wizardPage1 = new AeroWizard.WizardPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.wizardPage3 = new AeroWizard.WizardPage();
             this.gbRelationship = new System.Windows.Forms.GroupBox();
             this.chkAllRelationships = new System.Windows.Forms.CheckBox();
@@ -91,22 +97,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbSchemaPath = new System.Windows.Forms.TextBox();
             this.btSchemaFolderPath = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
-            this.wizardPage1 = new AeroWizard.WizardPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
+            this.wizardPage1.SuspendLayout();
             this.wizardPage3.SuspendLayout();
             this.gbRelationship.SuspendLayout();
             this.gbAttributes.SuspendLayout();
             this.gbEntities.SuspendLayout();
             this.toolStrip2.SuspendLayout();
-            this.wizardPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -119,7 +119,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.StatusLabel.Location = new System.Drawing.Point(36, 305);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 16);
+            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
             this.StatusLabel.TabIndex = 16;
             // 
             // fdSchemaFile
@@ -148,6 +148,84 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.stepWizardControl1.Size = new System.Drawing.Size(1600, 745);
             this.stepWizardControl1.TabIndex = 41;
             // 
+            // wizardPage1
+            // 
+            this.wizardPage1.Controls.Add(this.label1);
+            this.wizardPage1.Controls.Add(this.radioButton4);
+            this.wizardPage1.Controls.Add(this.radioButton3);
+            this.wizardPage1.Controls.Add(this.radioButton2);
+            this.wizardPage1.Controls.Add(this.radioButton1);
+            this.wizardPage1.Name = "wizardPage1";
+            this.wizardPage1.ShowCancel = false;
+            this.wizardPage1.Size = new System.Drawing.Size(1600, 745);
+            this.wizardPage1.TabIndex = 2;
+            this.wizardPage1.Text = "Schema Mode";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(33, 28);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(309, 32);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "What would you like to do?";
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Checked = true;
+            this.radioButton4.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton4.Location = new System.Drawing.Point(40, 167);
+            this.radioButton4.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(165, 29);
+            this.radioButton4.TabIndex = 3;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "All of the above";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.RadioButton4CheckedChanged);
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton3.Location = new System.Drawing.Point(40, 136);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(342, 29);
+            this.radioButton3.TabIndex = 2;
+            this.radioButton3.Text = "Generate / Modify Import Config File";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.RadioButton3CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton2.Location = new System.Drawing.Point(40, 106);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(340, 29);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "Generate / Modify Export Config File";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.RadioButton2CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1.Location = new System.Drawing.Point(40, 76);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(316, 29);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.Text = "Generate / Modify Export Schema";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+            // 
             // wizardPage3
             // 
             this.wizardPage3.AllowNext = false;
@@ -173,7 +251,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbRelationship
             // 
-            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbRelationship.Controls.Add(this.chkAllRelationships);
             this.gbRelationship.Controls.Add(this.lvRelationship);
@@ -205,8 +283,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvRelationship
             // 
-            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvRelationship.CheckBoxes = true;
             this.lvRelationship.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -279,7 +357,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbImportConfig.Location = new System.Drawing.Point(640, 55);
             this.tbImportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbImportConfig.Name = "tbImportConfig";
-            this.tbImportConfig.Size = new System.Drawing.Size(520, 26);
+            this.tbImportConfig.Size = new System.Drawing.Size(473, 26);
             this.tbImportConfig.TabIndex = 33;
             // 
             // label9
@@ -296,7 +374,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbAttributes
             // 
-            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbAttributes.Controls.Add(this.chkAllAttributes);
             this.gbAttributes.Controls.Add(this.lvAttributes);
@@ -328,8 +406,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvAttributes
             // 
-            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvAttributes.CheckBoxes = true;
             this.lvAttributes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -381,7 +459,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbEntities
             // 
-            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.gbEntities.Controls.Add(this.label2);
             this.gbEntities.Controls.Add(this.chkAllEntities);
@@ -439,8 +517,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvEntities
             // 
-            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvEntities.CheckBoxes = true;
             this.lvEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -693,7 +771,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btSchemaFolderPath.Enabled = false;
             this.btSchemaFolderPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSchemaFolderPath.Location = new System.Drawing.Point(1169, 116);
+            this.btSchemaFolderPath.Location = new System.Drawing.Point(1115, 116);
             this.btSchemaFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btSchemaFolderPath.Name = "btSchemaFolderPath";
             this.btSchemaFolderPath.Size = new System.Drawing.Size(35, 32);
@@ -714,83 +792,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.label8.Text = "Schema File Path";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // wizardPage1
+            // wizardButtons1
             // 
-            this.wizardPage1.Controls.Add(this.label1);
-            this.wizardPage1.Controls.Add(this.radioButton4);
-            this.wizardPage1.Controls.Add(this.radioButton3);
-            this.wizardPage1.Controls.Add(this.radioButton2);
-            this.wizardPage1.Controls.Add(this.radioButton1);
-            this.wizardPage1.Name = "wizardPage1";
-            this.wizardPage1.ShowCancel = false;
-            this.wizardPage1.Size = new System.Drawing.Size(1600, 745);
-            this.wizardPage1.TabIndex = 2;
-            this.wizardPage1.Text = "Schema Mode";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(33, 28);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(308, 32);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "What would you like to do?";
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Checked = true;
-            this.radioButton4.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton4.Location = new System.Drawing.Point(40, 167);
-            this.radioButton4.Margin = new System.Windows.Forms.Padding(4);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(165, 29);
-            this.radioButton4.TabIndex = 3;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "All of the above";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.RadioButton4CheckedChanged);
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton3.Location = new System.Drawing.Point(40, 136);
-            this.radioButton3.Margin = new System.Windows.Forms.Padding(4);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(342, 29);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.Text = "Generate / Modify Import Config File";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.RadioButton3CheckedChanged);
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(40, 106);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(340, 29);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "Generate / Modify Export Config File";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.RadioButton2CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(40, 76);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(316, 29);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.Text = "Generate / Modify Export Schema";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtons1.Location = new System.Drawing.Point(1400, 0);
+            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.wizardButtons1.Name = "wizardButtons1";
+            this.wizardButtons1.PageContainer = this.stepWizardControl1;
+            this.wizardButtons1.ShowExecuteButton = false;
+            this.wizardButtons1.Size = new System.Drawing.Size(200, 50);
+            this.wizardButtons1.TabIndex = 2;
             // 
             // splitContainer1
             // 
@@ -811,17 +822,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 42;
             // 
-            // wizardButtons1
-            // 
-            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(1400, 0);
-            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.PageContainer = this.stepWizardControl1;
-            this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(200, 50);
-            this.wizardButtons1.TabIndex = 2;
-            // 
             // SchemaWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -833,6 +833,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.Size = new System.Drawing.Size(1600, 800);
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).EndInit();
             this.stepWizardControl1.ResumeLayout(false);
+            this.wizardPage1.ResumeLayout(false);
+            this.wizardPage1.PerformLayout();
             this.wizardPage3.ResumeLayout(false);
             this.wizardPage3.PerformLayout();
             this.gbRelationship.ResumeLayout(false);
@@ -843,8 +845,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
-            this.wizardPage1.ResumeLayout(false);
-            this.wizardPage1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

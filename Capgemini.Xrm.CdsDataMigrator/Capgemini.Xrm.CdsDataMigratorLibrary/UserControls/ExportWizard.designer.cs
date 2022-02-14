@@ -154,8 +154,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // textBoxLogs
             // 
-            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLogs.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxLogs.Location = new System.Drawing.Point(22, 74);
@@ -286,7 +286,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // buttonExportLocation
             // 
-            this.buttonExportLocation.Location = new System.Drawing.Point(564, 93);
+            this.buttonExportLocation.Location = new System.Drawing.Point(751, 93);
             this.buttonExportLocation.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExportLocation.Name = "buttonExportLocation";
             this.buttonExportLocation.Size = new System.Drawing.Size(46, 33);
