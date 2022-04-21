@@ -1,8 +1,10 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using System.Diagnostics.CodeAnalysis;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 {
+    [ExcludeFromCodeCoverage]
     public class LogManagerContainer : ILogManagerContainer
     {
         private readonly LogManager xrmToolBoxLogManager;
