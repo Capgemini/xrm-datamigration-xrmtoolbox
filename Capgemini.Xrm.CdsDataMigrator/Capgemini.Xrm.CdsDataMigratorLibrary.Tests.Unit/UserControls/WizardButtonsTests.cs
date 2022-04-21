@@ -181,6 +181,21 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void PerformExecutionCompletedActions()
+        {
+
+            using (var systemUnderTest = new WizardButtons())
+            {
+                systemUnderTest.OnExecute += null;
+
+                FluentActions.Invoking(() => systemUnderTest.PerformExecutionCompletedActions())
+                             .Should()
+                             .NotThrow();
+
+            }
+        }
+
+        [TestMethod]
         public void CancelActionNullExecuteActionDoesNotThrowException()
         {
             using (var systemUnderTest = new WizardButtons())
