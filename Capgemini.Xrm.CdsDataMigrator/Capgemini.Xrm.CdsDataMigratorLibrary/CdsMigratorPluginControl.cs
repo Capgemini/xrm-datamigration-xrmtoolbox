@@ -7,6 +7,7 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
@@ -14,6 +15,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
+    [ExcludeFromCodeCoverage]
     public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
