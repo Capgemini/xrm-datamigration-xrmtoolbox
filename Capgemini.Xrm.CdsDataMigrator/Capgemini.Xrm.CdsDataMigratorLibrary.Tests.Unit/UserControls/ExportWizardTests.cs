@@ -21,6 +21,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         }
 
         [TestMethod]
+        public void ExportDataActionDoesNotThrowException()
+        {
+            using (var systemUnderTest = new MockupForExportWizard())
+            {
+                systemUnderTest.ExportDataHandler += (x, y) => { };
+                FluentActions.Invoking(() =>
+                    systemUnderTest.InvokeExportDataAction())
+                    .Should()
+                    .NotThrow();
+            }
+        }
+
+        [TestMethod]
         public void WizardValidationExportConfigIsNull()
         {
             using (var systemUnderTest = new ExportWizard())

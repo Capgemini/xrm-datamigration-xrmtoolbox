@@ -23,5 +23,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks
         {
             ButtonSchemaLocationClick(null, eventArgs);
         }
+
+        public void InvokeExportDataAction()
+        {
+            ExportDataAction(this, new EventArgs());
+        }
     }
 }
