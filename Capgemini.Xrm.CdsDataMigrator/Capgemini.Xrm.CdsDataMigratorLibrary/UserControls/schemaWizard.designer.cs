@@ -251,7 +251,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbRelationship
             // 
-            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbRelationship.Controls.Add(this.chkAllRelationships);
             this.gbRelationship.Controls.Add(this.lvRelationship);
@@ -283,8 +283,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvRelationship
             // 
-            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvRelationship.CheckBoxes = true;
             this.lvRelationship.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -374,7 +374,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbAttributes
             // 
-            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbAttributes.Controls.Add(this.chkAllAttributes);
             this.gbAttributes.Controls.Add(this.lvAttributes);
@@ -406,8 +406,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvAttributes
             // 
-            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvAttributes.CheckBoxes = true;
             this.lvAttributes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -459,7 +459,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbEntities
             // 
-            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.gbEntities.Controls.Add(this.label2);
             this.gbEntities.Controls.Add(this.chkAllEntities);
@@ -517,8 +517,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvEntities
             // 
-            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvEntities.CheckBoxes = true;
             this.lvEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {

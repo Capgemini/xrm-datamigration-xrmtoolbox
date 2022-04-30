@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Threading;
 using XrmToolBox.Extensibility;
 using Capgemini.Xrm.CdsDataMigratorLibrary;
 using System.Linq;
@@ -18,32 +17,76 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class ExportWizard : UserControl, IExportView
     {
-        private readonly LoggerService logger;
-        private readonly ExportPresenter presenter;
-        private readonly IDataMigrationService dataMigrationService;
-
-        private readonly ICrmGenericMigratorFactory migratorFactory;
-
         public ExportWizard()
         {
             InitializeComponent();
 
-            logger = new LoggerService(textBoxLogs, SynchronizationContext.Current);
-            migratorFactory = new CrmGenericMigratorFactory();
-            dataMigrationService = new DataMigrationService(logger, migratorFactory);
-            presenter = new ExportPresenter(this, logger, dataMigrationService);
-
-            logger.LogVerbose($"ExportPresenter {presenter} successfully instatiated!");
-            wizardButtons1.OnExecute += WizardButtonsOnExecute;
-            wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
-            wizardButtons1.OnCustomPreviousNavigation += WizardButtonsOnCustomPreviousNavigation;
-            wizardButtons1.OnCancel += WizardButtonsOnCancel;
+            wizardButtonsExportData.OnExecute += ExportDataAction;
+            wizardButtonsExportData.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
+            wizardButtonsExportData.OnCustomPreviousNavigation += WizardButtonsOnCustomPreviousNavigation;
+            wizardButtonsExportData.OnCancel += ExportDataCancellationAction;
 
             FormatCsvSelected = false;
             FormatJsonSelected = true;
             numericUpDownBatchSize.Value = 5000;
 
             comboBoxLogLevel.PopulateComboBoxLogLevel();
+        }
+
+        public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
+
+        public event EventHandler SelectExportLocationHandler;
+
+        public event EventHandler SelectExportConfigFileHandler;
+
+        public event EventHandler SelectSchemaFileHandler;
+
+        public event EventHandler ExportDataHandler;
+
+        public event EventHandler CancelHandler;
+
+        public event EventHandler<EventArgs> OnActionStarted;
+
+        public event EventHandler<EventArgs> OnActionProgressed;
+
+        public event EventHandler<EventArgs> OnActionCompleted;
+
+        public TextBox LogDisplay
+        {
+            get
+            {
+                return textBoxLogs;
+            }
+        }
+
+        public bool FormatJsonSelected { get => radioButtonFormatJson.Checked; set => radioButtonFormatJson.Checked = value; }
+
+        public bool FormatCsvSelected { get => radioButtonFormatCsv.Checked; set => radioButtonFormatCsv.Checked = value; }
+
+        public IOrganizationService OrganizationService { get; set; }
+
+        public ILogManager LoggerService { get; set; }
+
+        public ExportPresenter Presenter { get; set; }
+
+        public IDataMigrationService DataMigrationService { get; set; }
+
+        public ICrmGenericMigratorFactory MigratorFactory { get; set; }
+
+        public string SaveExportLocation { get => textBoxExportLocation.Text; set => textBoxExportLocation.Text = value; }
+
+        public string ExportConfigFileLocation { get => textBoxExportConfigLocation.Text; set => textBoxExportConfigLocation.Text = value; }
+
+        public string ExportSchemaFileLocation { get => textBoxSchemaLocation.Text; set => textBoxSchemaLocation.Text = value; }
+
+        public bool ExportInactiveRecordsChecked { get => checkBoxExportInactiveRecords.Checked; set => checkBoxExportInactiveRecords.Checked = value; }
+
+        public bool MinimizeJsonChecked { get => checkBoxMinimize.Checked; set => checkBoxMinimize.Checked = value; }
+
+        public decimal BatchSize
+        {
+            get => numericUpDownBatchSize.Value;
+            set => numericUpDownBatchSize.Value = value;
         }
 
         public void WizardButtonsOnCustomPreviousNavigation(object sender, EventArgs e)
@@ -88,40 +131,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             return valResults;
         }
 
-        public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
-
-        public event EventHandler SelectExportLocationHandler;
-
-        public event EventHandler SelectExportConfigFileHandler;
-
-        public event EventHandler SelectSchemaFileHandler;
-
-        public event EventHandler ExportDataHandler;
-
-        public event EventHandler CancelHandler;
-
-        public bool FormatJsonSelected { get => radioButtonFormatJson.Checked; set => radioButtonFormatJson.Checked = value; }
-
-        public bool FormatCsvSelected { get => radioButtonFormatCsv.Checked; set => radioButtonFormatCsv.Checked = value; }
-
-        public IOrganizationService OrganizationService { get; set; }
-
-        public string SaveExportLocation { get => textBoxExportLocation.Text; set => textBoxExportLocation.Text = value; }
-
-        public string ExportConfigFileLocation { get => textBoxExportConfigLocation.Text; set => textBoxExportConfigLocation.Text = value; }
-
-        public string ExportSchemaFileLocation { get => textBoxSchemaLocation.Text; set => textBoxSchemaLocation.Text = value; }
-
-        public bool ExportInactiveRecordsChecked { get => checkBoxExportInactiveRecords.Checked; set => checkBoxExportInactiveRecords.Checked = value; }
-
-        public bool MinimizeJsonChecked { get => checkBoxMinimize.Checked; set => checkBoxMinimize.Checked = value; }
-
-        public decimal BatchSize
-        {
-            get => numericUpDownBatchSize.Value;
-            set => numericUpDownBatchSize.Value = value;
-        }
-
         public void OnConnectionUpdated(string connectedOrgFriendlyName)
         {
             labelTargetConnectionString.Text = connectedOrgFriendlyName;
@@ -156,13 +165,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             SelectSchemaFileHandler(sender, e);
         }
 
-        protected void WizardButtonsOnExecute(object sender, EventArgs e)
+        protected void ExportDataAction(object sender, EventArgs e)
         {
+            OnActionStarted?.Invoke(this, new EventArgs { });
             textBoxLogs.Clear();
+            OnActionProgressed?.Invoke(this, new EventArgs { });
             ExportDataHandler(sender, e);
+            OnActionCompleted?.Invoke(this, new EventArgs { });
+            wizardButtonsExportData.PerformExecutionCompletedActions();
         }
 
-        protected void WizardButtonsOnCancel(object sender, EventArgs e)
+        protected void ExportDataCancellationAction(object sender, EventArgs e)
         {
             CancelHandler(sender, e);
         }
@@ -174,14 +187,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
         {
-            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
+            if (LoggerService != null)
+            {
+                LoggerService.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
+            }
         }
 
         private bool LoadSettingsFromConfig()
         {
             try
             {
-                logger.Verbose("About to load settings from config");
+                LoggerService.LogVerbose("About to load settings from config");
 
                 var config = CrmExporterConfig.GetConfiguration(ExportConfigFileLocation);
                 ExportSchemaFileLocation = config.CrmMigrationToolSchemaPaths.FirstOrDefault();

@@ -81,7 +81,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             btnExecute.Enabled = false;
             buttonCancel.Enabled = true;
             OnExecute?.Invoke(this, e);
+        }
+
+        public void PerformExecutionCompletedActions()
+        {
             btnExecute.Enabled = true;
+            buttonCancel.Enabled = false;
         }
 
         public void CancelAction(EventArgs e)

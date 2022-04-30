@@ -269,9 +269,12 @@
     <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
     <Compile Include="Services\IDataMigrationService.cs" />
     <Compile Include="Services\IEntityRepositoryService.cs" />
+    <Compile Include="Services\ILogManager.cs" />
+    <Compile Include="Services\ILogManagerContainer.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\LogManagerContainer.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Controllers\ListController.cs" />

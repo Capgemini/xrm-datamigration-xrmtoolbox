@@ -68,7 +68,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.folderBrowserDialogExportLocation = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialogExportConfigFile = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.wizardButtonsExportData = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
             this.wizardPage5.SuspendLayout();
@@ -154,8 +154,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // textBoxLogs
             // 
-            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLogs.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxLogs.Location = new System.Drawing.Point(22, 74);
@@ -532,7 +532,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.wizardButtons1);
+            this.splitContainer1.Panel1.Controls.Add(this.wizardButtonsExportData);
             // 
             // splitContainer1.Panel2
             // 
@@ -543,14 +543,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // wizardButtons1
             // 
-            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(300, 0);
-            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
-            this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.PageContainer = this.stepWizardControl1;
-            this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
-            this.wizardButtons1.TabIndex = 1;
+            this.wizardButtonsExportData.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtonsExportData.Location = new System.Drawing.Point(300, 0);
+            this.wizardButtonsExportData.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
+            this.wizardButtonsExportData.Name = "wizardButtons1";
+            this.wizardButtonsExportData.PageContainer = this.stepWizardControl1;
+            this.wizardButtonsExportData.ShowExecuteButton = false;
+            this.wizardButtonsExportData.Size = new System.Drawing.Size(500, 50);
+            this.wizardButtonsExportData.TabIndex = 1;
             // 
             // ExportWizard
             // 
@@ -618,7 +618,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private ToggleCheckBox checkBoxExportInactiveRecords;
         private AeroWizard.WizardPage wizardPage5;
         private System.Windows.Forms.Label label10;
-        private WizardButtons wizardButtons1;
+        private WizardButtons wizardButtonsExportData;
         private System.Windows.Forms.Label labelFolderPathValidation;
         private System.Windows.Forms.Label labelSchemaLocationFileValidation;
         private System.Windows.Forms.TextBox textBoxLogs;

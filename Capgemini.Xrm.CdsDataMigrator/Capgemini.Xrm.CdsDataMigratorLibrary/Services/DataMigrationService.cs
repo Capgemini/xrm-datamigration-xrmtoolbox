@@ -60,6 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             var schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
 
             var exporter = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
+
             exporter.MigrateData();
         }
 

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
@@ -24,6 +19,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
         protected Mock<INotificationService> NotificationServiceMock { get; set; }
 
         protected Mock<IExceptionService> ExceptionServicerMock { get; set; }
+
+        protected Mock<ILogManagerContainer> LogManagerContainerMock { get; set; }
+
+        protected Mock<ILogManager> LogConfigMock { get; set; }
+
+        protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
+
+        protected Mock<IEntityRepositoryService> EntityRepositoryService { get; set; }
 
         protected static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
@@ -118,6 +121,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             MetadataServiceMock = new Mock<IMetadataService>();
             NotificationServiceMock = new Mock<INotificationService>();
             ExceptionServicerMock = new Mock<IExceptionService>();
+            LogManagerContainerMock = new Mock<ILogManagerContainer>();
+            LogConfigMock = new Mock<ILogManager>();
+            DataMigrationServiceMock = new Mock<IDataMigrationService>();
+            EntityRepositoryService = new Mock<IEntityRepositoryService>();
         }
     }
 }
