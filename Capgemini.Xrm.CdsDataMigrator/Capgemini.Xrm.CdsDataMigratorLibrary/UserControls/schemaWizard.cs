@@ -97,7 +97,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
                             var controller = new ListController();
-                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship);
+                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship, cbShowSystemAttributes.Checked);
                             ManageWorkingState(false);
                         };
                         bwFill.RunWorkerAsync();
@@ -221,7 +221,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         bwFill.RunWorkerCompleted += (sender, e) =>
                         {
                             var controller = new ListController();
-                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes);
+                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
                             ManageWorkingState(false);
                         };
                         bwFill.RunWorkerAsync();
@@ -412,10 +412,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         controller.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
                     }
                 }
-                else if (result == DialogResult.Cancel)
-                {
-                    tbImportConfig.Text = null;
-                }
+                //else if (result == DialogResult.Cancel)
+                //{
+                //    tbImportConfig.Text = null;
+                //}
             }
         }
 
@@ -439,10 +439,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         controller.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
                     }
                 }
-                else if (result == DialogResult.Cancel)
-                {
-                    tbExportConfig.Text = null;
-                }
+                //else if (result == DialogResult.Cancel)
+                //{
+                //    tbExportConfig.Text = null;
+                //}
             }
         }
 
@@ -586,6 +586,11 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 var args = new RequestConnectionEventArgs { ActionName = "SchemaConnection", Control = (CdsMigratorPluginControl)Parent };
                 OnConnectionRequested(this, args);
             }
+        }
+
+        private void cbShowSystemAttributes_CheckedChanged(object sender, EventArgs e)
+        {
+            RefreshEntities(cachedMetadata, workingstate, true);
         }
     }
 }

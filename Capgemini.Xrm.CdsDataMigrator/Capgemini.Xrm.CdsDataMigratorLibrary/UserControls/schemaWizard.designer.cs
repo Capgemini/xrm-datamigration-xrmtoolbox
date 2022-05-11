@@ -119,7 +119,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.StatusLabel.Location = new System.Drawing.Point(36, 305);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.StatusLabel.Size = new System.Drawing.Size(0, 16);
             this.StatusLabel.TabIndex = 16;
             // 
             // fdSchemaFile
@@ -136,8 +136,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.stepWizardControl1.BackButtonText = "";
             this.stepWizardControl1.CancelButton = null;
             this.stepWizardControl1.CancelButtonText = "";
-            this.stepWizardControl1.Controls.Add(this.wizardPage1);
             this.stepWizardControl1.Controls.Add(this.wizardPage3);
+            this.stepWizardControl1.Controls.Add(this.wizardPage1);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(4);
@@ -168,7 +168,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.label1.Location = new System.Drawing.Point(33, 28);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(309, 32);
+            this.label1.Size = new System.Drawing.Size(308, 32);
             this.label1.TabIndex = 4;
             this.label1.Text = "What would you like to do?";
             // 
@@ -245,7 +245,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.wizardPage3.Name = "wizardPage3";
             this.wizardPage3.ShowCancel = false;
             this.wizardPage3.ShowNext = false;
-            this.wizardPage3.Size = new System.Drawing.Size(1600, 742);
+            this.wizardPage3.Size = new System.Drawing.Size(1600, 745);
             this.wizardPage3.TabIndex = 4;
             this.wizardPage3.Text = "Schema Creation";
             // 
@@ -471,7 +471,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.gbEntities.Margin = new System.Windows.Forms.Padding(4);
             this.gbEntities.Name = "gbEntities";
             this.gbEntities.Padding = new System.Windows.Forms.Padding(4);
-            this.gbEntities.Size = new System.Drawing.Size(457, 677);
+            this.gbEntities.Size = new System.Drawing.Size(457, 680);
             this.gbEntities.TabIndex = 95;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Available entities";
@@ -530,7 +530,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.lvEntities.Margin = new System.Windows.Forms.Padding(4);
             this.lvEntities.MultiSelect = false;
             this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(440, 601);
+            this.lvEntities.Size = new System.Drawing.Size(440, 604);
             this.lvEntities.TabIndex = 64;
             this.lvEntities.UseCompatibleStateImageBehavior = false;
             this.lvEntities.View = System.Windows.Forms.View.Details;

@@ -23,7 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
     {
         public List<ListViewItem> RetrieveSourceEntitiesList(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
         {
-            var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
+            var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService); 
 
             if (!showSystemAttributes)
             {

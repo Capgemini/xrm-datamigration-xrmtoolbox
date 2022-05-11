@@ -367,7 +367,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, false))
              .Should()
              .NotThrow();
             }
@@ -388,7 +388,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, false))
                              .Should()
                              .NotThrow();
             }
