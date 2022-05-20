@@ -413,10 +413,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         controller.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
                     }
                 }
-                //else if (result == DialogResult.Cancel)
-                //{
-                //    tbImportConfig.Text = null;
-                //}
             }
         }
 
@@ -440,10 +436,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                         controller.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
                     }
                 }
-                //else if (result == DialogResult.Cancel)
-                //{
-                //    tbExportConfig.Text = null;
-                //}
             }
         }
 

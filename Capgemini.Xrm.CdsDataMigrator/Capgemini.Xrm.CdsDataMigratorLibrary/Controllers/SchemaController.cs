@@ -34,10 +34,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
                     loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
                 }
             }
-            //else if (dialogResult == DialogResult.Cancel)
-            //{
-            //    schemaPathTextBox.Text = null;
-            //}
         }
 
         public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, TextBox schemaPathTextBox)
