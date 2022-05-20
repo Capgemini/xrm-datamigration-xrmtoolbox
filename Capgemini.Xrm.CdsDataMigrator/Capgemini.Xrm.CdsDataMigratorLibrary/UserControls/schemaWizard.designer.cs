@@ -119,7 +119,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.StatusLabel.Location = new System.Drawing.Point(36, 305);
             this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(0, 16);
+            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
             this.StatusLabel.TabIndex = 16;
             // 
             // fdSchemaFile
@@ -168,7 +168,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.label1.Location = new System.Drawing.Point(33, 28);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(308, 32);
+            this.label1.Size = new System.Drawing.Size(309, 32);
             this.label1.TabIndex = 4;
             this.label1.Text = "What would you like to do?";
             // 
