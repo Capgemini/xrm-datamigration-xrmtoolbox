@@ -588,10 +588,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 OnConnectionRequested(this, args);
             }
         }
-
-        private void cbShowSystemAttributes_CheckedChanged(object sender, EventArgs e)
-        {
-            RefreshEntities(cachedMetadata, workingstate, true);
-        }
     }
 }

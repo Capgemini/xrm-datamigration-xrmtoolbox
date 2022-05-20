@@ -514,6 +514,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.cbShowSystemAttributes.TabIndex = 104;
             this.cbShowSystemAttributes.Text = "toggleCheckBox1";
             this.cbShowSystemAttributes.UseVisualStyleBackColor = true;
+            this.cbShowSystemAttributes.CheckedChanged += new System.EventHandler(this.ListViewEntitiesSelectedIndexChanged);
             // 
             // lvEntities
             // 

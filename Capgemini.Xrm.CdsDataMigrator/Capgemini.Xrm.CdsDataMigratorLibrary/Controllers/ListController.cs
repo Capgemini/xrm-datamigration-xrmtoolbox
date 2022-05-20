@@ -66,7 +66,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
         }
 
         public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner, ListView listView, bool showSystemAttributes)
-        {   
+        {
             if (e.Error != null)
             {
                 notificationService.DisplayErrorFeedback(owner, $"An error occured: {e.Error.Message}");
