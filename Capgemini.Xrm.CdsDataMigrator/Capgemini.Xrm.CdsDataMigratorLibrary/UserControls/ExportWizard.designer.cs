@@ -311,7 +311,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.label2.Location = new System.Drawing.Point(32, 29);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(515, 32);
+            this.label2.Size = new System.Drawing.Size(516, 32);
             this.label2.TabIndex = 6;
             this.label2.Text = "Where do you want to save the exported data?";
             // 
