@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
@@ -13,17 +14,14 @@ using Moq;
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
     [TestClass]
-    public class ImportWizardTests
+    public class ImportWizardTests : TestBase
     {
-        private Mock<ILogger> logger;
-        private Mock<IEntityRepositoryService> entityRepositoryService;
         private CrmImportConfig importConfig;
 
         [TestInitialize]
         public void TestSetup()
         {
-            logger = new Mock<ILogger>();
-            entityRepositoryService = new Mock<IEntityRepositoryService>();
+            SetupServiceMocks();
 
             importConfig = new CrmImportConfig()
             {
@@ -91,12 +89,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         public void PerformImportActionHandleException()
         {
             var entityRepository = new Mock<IEntityRepository>();
-            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+
+            EntityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
-            logger.Setup(x => x.LogInfo(It.IsAny<string>())).Throws<Exception>();
-            logger.Setup(x => x.LogError(It.IsAny<string>()));
+            LogConfigMock.Setup(x => x.LogInfo(It.IsAny<string>())).Throws<Exception>();
+            LogConfigMock.Setup(x => x.LogError(It.IsAny<string>()));
 
             using (var systemUnderTest = new ImportWizard())
             {
@@ -111,8 +110,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                                                 importSchemaFilePath,
                                                                 maxThreads,
                                                                 jsonFormat,
-                                                                logger.Object,
-                                                                entityRepositoryService.Object,
+                                                                LogConfigMock.Object,
+                                                                EntityRepositoryService.Object,
                                                                 importConfig,
                                                                 tokenSource))
                            .Should()
@@ -120,14 +119,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 }
             }
 
-            logger.VerifyAll();
+            LogConfigMock.VerifyAll();
         }
 
         [TestMethod]
         public void PerformImportActionJsonFormat()
         {
             var entityRepository = new Mock<IEntityRepository>();
-            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+
+            EntityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
@@ -144,8 +144,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                                                 importSchemaFilePath,
                                                                 maxThreads,
                                                                 jsonFormat,
-                                                                logger.Object,
-                                                                entityRepositoryService.Object,
+                                                                LogConfigMock.Object,
+                                                                EntityRepositoryService.Object,
                                                                 importConfig,
                                                                 tokenSource))
                            .Should()
@@ -153,14 +153,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 }
             }
 
-            entityRepositoryService.VerifyAll();
+            EntityRepositoryService.VerifyAll();
         }
 
         [TestMethod]
         public void PerformImportActionJsonFormatMoreThanOneThread()
         {
             var entityRepository = new Mock<IEntityRepository>();
-            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(true))
+
+            EntityRepositoryService.Setup(x => x.InstantiateEntityRepository(true))
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
@@ -177,8 +178,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                                                 importSchemaFilePath,
                                                                 maxThreads,
                                                                 jsonFormat,
-                                                                logger.Object,
-                                                                entityRepositoryService.Object,
+                                                                LogConfigMock.Object,
+                                                                EntityRepositoryService.Object,
                                                                 importConfig,
                                                                 tokenSource))
                            .Should()
@@ -186,14 +187,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 }
             }
 
-            entityRepositoryService.VerifyAll();
+            EntityRepositoryService.VerifyAll();
         }
 
         [TestMethod]
         public void PerformImportActionCsvFormat()
         {
             var entityRepository = new Mock<IEntityRepository>();
-            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+
+            EntityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
@@ -210,8 +212,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                                                 importSchemaFilePath,
                                                                 maxThreads,
                                                                 jsonFormat,
-                                                                logger.Object,
-                                                                entityRepositoryService.Object,
+                                                                LogConfigMock.Object,
+                                                                EntityRepositoryService.Object,
                                                                 importConfig,
                                                                 tokenSource))
                            .Should()
@@ -219,14 +221,15 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 }
             }
 
-            entityRepositoryService.VerifyAll();
+            EntityRepositoryService.VerifyAll();
         }
 
         [TestMethod]
         public void PerformImportActionCsvFormatMoreThanOneThread()
         {
             var entityRepository = new Mock<IEntityRepository>();
-            entityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
+
+            EntityRepositoryService.Setup(x => x.InstantiateEntityRepository(false))
                                     .Returns(entityRepository.Object)
                                     .Verifiable();
 
@@ -243,8 +246,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                                                                     importSchemaFilePath,
                                                                     maxThreads,
                                                                     jsonFormat,
-                                                                    logger.Object,
-                                                                    entityRepositoryService.Object,
+                                                                    LogConfigMock.Object,
+                                                                    EntityRepositoryService.Object,
                                                                     importConfig,
                                                                     tokenSource))
                            .Should()
@@ -252,7 +255,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
                 }
             }
 
-            entityRepositoryService.VerifyAll();
+            EntityRepositoryService.VerifyAll();
         }
 
         [TestMethod]
@@ -389,7 +392,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         {
             using (var systemUnderTest = new ImportWizard())
             {
-                FluentActions.Invoking(() => systemUnderTest.Button2Click(null, new EventArgs()))
+                FluentActions.Invoking(() => systemUnderTest.DataImportAction(null, new EventArgs()))
                             .Should()
                             .NotThrow();
             }

@@ -251,7 +251,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbRelationship
             // 
-            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbRelationship.Controls.Add(this.chkAllRelationships);
             this.gbRelationship.Controls.Add(this.lvRelationship);
@@ -283,8 +283,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvRelationship
             // 
-            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvRelationship.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvRelationship.CheckBoxes = true;
             this.lvRelationship.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -328,7 +328,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btImportConfigPath.Enabled = false;
             this.btImportConfigPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btImportConfigPath.Location = new System.Drawing.Point(912, 52);
+            this.btImportConfigPath.Location = new System.Drawing.Point(1115, 52);
             this.btImportConfigPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btImportConfigPath.Name = "btImportConfigPath";
             this.btImportConfigPath.Size = new System.Drawing.Size(35, 32);
@@ -341,7 +341,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             this.btExportConfigPath.Enabled = false;
             this.btExportConfigPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btExportConfigPath.Location = new System.Drawing.Point(912, 84);
+            this.btExportConfigPath.Location = new System.Drawing.Point(1115, 84);
             this.btExportConfigPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btExportConfigPath.Name = "btExportConfigPath";
             this.btExportConfigPath.Size = new System.Drawing.Size(35, 32);
@@ -357,7 +357,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbImportConfig.Location = new System.Drawing.Point(640, 55);
             this.tbImportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbImportConfig.Name = "tbImportConfig";
-            this.tbImportConfig.Size = new System.Drawing.Size(263, 26);
+            this.tbImportConfig.Size = new System.Drawing.Size(473, 26);
             this.tbImportConfig.TabIndex = 33;
             // 
             // label9
@@ -374,7 +374,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // gbAttributes
             // 
-            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbAttributes.Controls.Add(this.chkAllAttributes);
             this.gbAttributes.Controls.Add(this.lvAttributes);
@@ -406,8 +406,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvAttributes
             // 
-            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvAttributes.CheckBoxes = true;
             this.lvAttributes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -454,12 +454,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbExportConfig.Location = new System.Drawing.Point(640, 86);
             this.tbExportConfig.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbExportConfig.Name = "tbExportConfig";
-            this.tbExportConfig.Size = new System.Drawing.Size(263, 26);
+            this.tbExportConfig.Size = new System.Drawing.Size(473, 26);
             this.tbExportConfig.TabIndex = 34;
             // 
             // gbEntities
             // 
-            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbEntities.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.gbEntities.Controls.Add(this.label2);
             this.gbEntities.Controls.Add(this.chkAllEntities);
@@ -517,8 +517,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // 
             // lvEntities
             // 
-            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.lvEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvEntities.CheckBoxes = true;
             this.lvEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -764,14 +764,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             this.tbSchemaPath.Location = new System.Drawing.Point(640, 118);
             this.tbSchemaPath.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.tbSchemaPath.Name = "tbSchemaPath";
-            this.tbSchemaPath.Size = new System.Drawing.Size(263, 26);
+            this.tbSchemaPath.Size = new System.Drawing.Size(473, 26);
             this.tbSchemaPath.TabIndex = 30;
             // 
             // btSchemaFolderPath
             // 
             this.btSchemaFolderPath.Enabled = false;
             this.btSchemaFolderPath.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btSchemaFolderPath.Location = new System.Drawing.Point(912, 116);
+            this.btSchemaFolderPath.Location = new System.Drawing.Point(1115, 116);
             this.btSchemaFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.btSchemaFolderPath.Name = "btSchemaFolderPath";
             this.btSchemaFolderPath.Size = new System.Drawing.Size(35, 32);

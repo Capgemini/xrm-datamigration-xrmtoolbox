@@ -46,6 +46,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         public SchemaWizard()
         {
             InitializeComponent();
+            SetMenuVisibility(WizardMode.All);
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;

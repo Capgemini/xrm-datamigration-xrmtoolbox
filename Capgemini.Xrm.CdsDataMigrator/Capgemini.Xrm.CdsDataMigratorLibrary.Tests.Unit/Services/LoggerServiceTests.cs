@@ -4,8 +4,10 @@ using System.Threading;
 using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
@@ -15,204 +17,179 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";
 
+        private readonly string expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
+        private readonly Mock<ILogManagerContainer> logManagerContainerMock = new Mock<ILogManagerContainer>();
+        private readonly TextBox logTextBox = new TextBox();
+
         private LoggerService systemUnderTest;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
+
+            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+
+            logTextBox.Text = "";
+        }
 
         [TestMethod]
         public void MessageLogger()
         {
-            using (var textBox = new TextBox())
-            {
-                SynchronizationContext syncContext = SynchronizationContext.Current;
-
-                FluentActions.Invoking(() => systemUnderTest = new LoggerService(textBox, syncContext))
-                            .Should()
-                            .NotThrow();
-            }
+            FluentActions.Invoking(() => systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object))
+                        .Should()
+                        .NotThrow();
         }
 
         [TestMethod]
         public void ErrorWhenVerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Verbose
-                };
+            systemUnderTest.LogLevel = LogLevel.Verbose;
+            //};
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() =>
+            systemUnderTest.LogError(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
         }
 
         [TestMethod]
         public void ErrorLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Error
-                };
+            systemUnderTest.LogLevel = LogLevel.Error;
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogError(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Error));
         }
 
         [TestMethod]
         public void ErrorWithExceptionParameter()
         {
             var exception = new Exception("Sample exception");
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Error:{Message}";
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current);
+            FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
+                        .Should()
+                        .NotThrow();
 
-                FluentActions.Invoking(() => systemUnderTest.LogError(Message, exception))
-                            .Should()
-                            .NotThrow();
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+            logTextBox.Text.Should().Contain(exception.Message);
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-                textBox.Text.Should().Contain(exception.Message);
-            }
+            logManagerContainerMock.VerifyAll();
         }
 
         [TestMethod]
         public void InfoLessThanInfoLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            systemUnderTest.LogLevel = LogLevel.Warning;
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
-            }
+            logTextBox.Text.Should().Be(string.Empty);
+
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info), Times.Never);
         }
 
         [TestMethod]
         public void InfoLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Info:{Message}";
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Info));
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Info
-                };
+            systemUnderTest.LogLevel = LogLevel.Info;
 
-                FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogInfo(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+
+            logManagerContainerMock.VerifyAll();
         }
 
         [TestMethod]
         public void VerboseLessThanVerboseLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            systemUnderTest.LogLevel = LogLevel.Warning;
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
-            }
+            logTextBox.Text.Should().Be(string.Empty);
+
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose), Times.Never);
         }
 
         [TestMethod]
         public void VerboseLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Verbose:{Message}";
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Verbose
-                };
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Verbose));
 
-                FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
-                            .Should()
-                            .NotThrow();
+            systemUnderTest.LogLevel = LogLevel.Verbose;
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            FluentActions.Invoking(() => systemUnderTest.LogVerbose(Message))
+                        .Should()
+                        .NotThrow();
+
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+
+            logManagerContainerMock.VerifyAll();
         }
 
         [TestMethod]
         public void WarningErrorLogLevel()
         {
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Error
-                };
+            systemUnderTest.LogLevel = LogLevel.Error;
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
-                            .Should()
-                            .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                        .Should()
+                        .NotThrow();
 
-                textBox.Text.Should().Be(string.Empty);
-            }
+            logTextBox.Text.Should().Be(string.Empty);
+
+            logManagerContainerMock.Verify(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning), Times.Never);
         }
 
         [TestMethod]
         public void WarningWarningLogLevel()
         {
-            var expectedTimeStamp = $"{DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture)} ";
             var expectedMessage = $"- Warning:{Message}";
 
-            using (var textBox = new TextBox())
-            {
-                systemUnderTest = new LoggerService(textBox, SynchronizationContext.Current)
-                {
-                    LogLevel = LogLevel.Warning
-                };
+            logManagerContainerMock.Setup(x => x.WriteLine(It.IsAny<string>(), LogLevel.Warning));
 
-                FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
-                            .Should()
-                            .NotThrow();
+            systemUnderTest.LogLevel = LogLevel.Warning;
 
-                textBox.Text.Should().Contain(expectedMessage);
-                textBox.Text.Should().Contain(expectedTimeStamp);
-            }
+            FluentActions.Invoking(() => systemUnderTest.LogWarning(Message))
+                        .Should()
+                        .NotThrow();
+
+            logTextBox.Text.Should().Contain(expectedMessage);
+            logTextBox.Text.Should().Contain(expectedTimeStamp);
+
+            logManagerContainerMock.VerifyAll();
         }
     }
 }

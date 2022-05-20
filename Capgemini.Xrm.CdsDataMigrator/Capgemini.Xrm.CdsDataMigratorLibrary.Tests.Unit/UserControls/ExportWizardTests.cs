@@ -1,16 +1,38 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 {
     [TestClass]
-    public class ExportWizardTests
+    public class ExportWizardTests : TestBase
     {
+        [TestInitialize]
+        public void Setup()
+        {
+            SetupServiceMocks();
+        }
+
+        [TestMethod]
+        public void ExportDataActionDoesNotThrowException()
+        {
+            using (var systemUnderTest = new MockupForExportWizard())
+            {
+                systemUnderTest.ExportDataHandler += (x, y) => { };
+                FluentActions.Invoking(() =>
+                    systemUnderTest.InvokeExportDataAction())
+                    .Should()
+                    .NotThrow();
+            }
+        }
+
         [TestMethod]
         public void WizardValidationExportConfigIsNull()
         {
@@ -35,6 +57,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
         {
             using (var systemUnderTest = new ExportWizard())
             {
+                systemUnderTest.LoggerService = LogConfigMock.Object;
+
                 systemUnderTest.ExportConfigFileLocation = "TestData\\ExportConfig.json";
 
                 var actual = systemUnderTest.WizardValidation("exportConfig");
@@ -163,6 +187,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
 
             using (var systemUnderTest = new MockupForExportWizard())
             {
+                systemUnderTest.Presenter = new ExportPresenter(systemUnderTest, LogConfigMock.Object, DataMigrationServiceMock.Object);
+
                 FluentActions.Invoking(() => systemUnderTest.InvokeWizardButtonsOnCancel(new EventArgs()))
                             .Should()
                             .NotThrow();

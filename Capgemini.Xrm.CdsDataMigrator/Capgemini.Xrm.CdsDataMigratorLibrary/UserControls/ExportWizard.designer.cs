@@ -68,7 +68,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.folderBrowserDialogExportLocation = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialogExportConfigFile = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.wizardButtons1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
+            this.wizardButtonsExportData = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.WizardButtons();
             ((System.ComponentModel.ISupportInitialize)(this.stepWizardControl1)).BeginInit();
             this.stepWizardControl1.SuspendLayout();
             this.wizardPage5.SuspendLayout();
@@ -93,7 +93,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Controls.Add(this.executeExport);
             this.stepWizardControl1.Controls.Add(this.exportConfig);
+            this.stepWizardControl1.Controls.Add(this.format);
             this.stepWizardControl1.Controls.Add(this.exportLocation);
+            this.stepWizardControl1.Controls.Add(this.wizardPage5);
             this.stepWizardControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stepWizardControl1.Location = new System.Drawing.Point(0, 0);
             this.stepWizardControl1.Margin = new System.Windows.Forms.Padding(4);
@@ -154,8 +156,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // textBoxLogs
             // 
-            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLogs.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxLogs.Location = new System.Drawing.Point(22, 74);
@@ -224,13 +226,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.exportConfig.Name = "exportConfig";
             this.exportConfig.NextPage = this.exportLocation;
             this.exportConfig.ShowCancel = false;
-            this.exportConfig.Size = new System.Drawing.Size(800, 397);
+            this.exportConfig.Size = new System.Drawing.Size(800, 501);
             this.exportConfig.TabIndex = 4;
             this.exportConfig.Text = "Export Config";
             // 
             // buttonExportConfigLocation
             // 
-            this.buttonExportConfigLocation.Location = new System.Drawing.Point(574, 84);
+            this.buttonExportConfigLocation.Location = new System.Drawing.Point(748, 84);
             this.buttonExportConfigLocation.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExportConfigLocation.Name = "buttonExportConfigLocation";
             this.buttonExportConfigLocation.Size = new System.Drawing.Size(46, 33);
@@ -245,7 +247,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.textBoxExportConfigLocation.Location = new System.Drawing.Point(29, 84);
             this.textBoxExportConfigLocation.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxExportConfigLocation.Name = "textBoxExportConfigLocation";
-            this.textBoxExportConfigLocation.Size = new System.Drawing.Size(539, 32);
+            this.textBoxExportConfigLocation.Size = new System.Drawing.Size(717, 32);
             this.textBoxExportConfigLocation.TabIndex = 10;
             // 
             // label3
@@ -268,7 +270,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.exportLocation.Name = "exportLocation";
             this.exportLocation.NextPage = this.executeExport;
             this.exportLocation.ShowCancel = false;
-            this.exportLocation.Size = new System.Drawing.Size(800, 397);
+            this.exportLocation.Size = new System.Drawing.Size(800, 501);
             this.exportLocation.TabIndex = 3;
             this.exportLocation.Text = "Select Export Location";
             // 
@@ -286,7 +288,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // buttonExportLocation
             // 
-            this.buttonExportLocation.Location = new System.Drawing.Point(564, 93);
+            this.buttonExportLocation.Location = new System.Drawing.Point(751, 93);
             this.buttonExportLocation.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExportLocation.Name = "buttonExportLocation";
             this.buttonExportLocation.Size = new System.Drawing.Size(46, 33);
@@ -301,7 +303,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.textBoxExportLocation.Location = new System.Drawing.Point(38, 93);
             this.textBoxExportLocation.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxExportLocation.Name = "textBoxExportLocation";
-            this.textBoxExportLocation.Size = new System.Drawing.Size(520, 32);
+            this.textBoxExportLocation.Size = new System.Drawing.Size(705, 32);
             this.textBoxExportLocation.TabIndex = 7;
             // 
             // label2
@@ -454,7 +456,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // buttonSchemaLocation
             // 
             this.buttonSchemaLocation.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSchemaLocation.Location = new System.Drawing.Point(626, 179);
+            this.buttonSchemaLocation.Location = new System.Drawing.Point(751, 179);
             this.buttonSchemaLocation.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSchemaLocation.Name = "buttonSchemaLocation";
             this.buttonSchemaLocation.Size = new System.Drawing.Size(46, 33);
@@ -469,7 +471,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             this.textBoxSchemaLocation.Location = new System.Drawing.Point(39, 179);
             this.textBoxSchemaLocation.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSchemaLocation.Name = "textBoxSchemaLocation";
-            this.textBoxSchemaLocation.Size = new System.Drawing.Size(581, 32);
+            this.textBoxSchemaLocation.Size = new System.Drawing.Size(704, 32);
             this.textBoxSchemaLocation.TabIndex = 15;
             // 
             // numericUpDownBatchSize
@@ -532,7 +534,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.wizardButtons1);
+            this.splitContainer1.Panel1.Controls.Add(this.wizardButtonsExportData);
             // 
             // splitContainer1.Panel2
             // 
@@ -543,14 +545,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             // 
             // wizardButtons1
             // 
-            this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(300, 0);
-            this.wizardButtons1.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
-            this.wizardButtons1.Name = "wizardButtons1";
-            this.wizardButtons1.PageContainer = this.stepWizardControl1;
-            this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
-            this.wizardButtons1.TabIndex = 1;
+            this.wizardButtonsExportData.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wizardButtonsExportData.Location = new System.Drawing.Point(300, 0);
+            this.wizardButtonsExportData.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
+            this.wizardButtonsExportData.Name = "wizardButtons1";
+            this.wizardButtonsExportData.PageContainer = this.stepWizardControl1;
+            this.wizardButtonsExportData.ShowExecuteButton = false;
+            this.wizardButtonsExportData.Size = new System.Drawing.Size(500, 50);
+            this.wizardButtonsExportData.TabIndex = 1;
             // 
             // ExportWizard
             // 
@@ -618,7 +620,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         private ToggleCheckBox checkBoxExportInactiveRecords;
         private AeroWizard.WizardPage wizardPage5;
         private System.Windows.Forms.Label label10;
-        private WizardButtons wizardButtons1;
+        private WizardButtons wizardButtonsExportData;
         private System.Windows.Forms.Label labelFolderPathValidation;
         private System.Windows.Forms.Label labelSchemaLocationFileValidation;
         private System.Windows.Forms.TextBox textBoxLogs;

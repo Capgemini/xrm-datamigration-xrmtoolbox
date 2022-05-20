@@ -16,14 +16,15 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using System.Diagnostics.CodeAnalysis;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
     public partial class ImportWizard : UserControl
     {
         private CrmImportConfig importConfig;
-        private readonly LoggerService logger;
         private IEntityRepositoryService entityRepositoryService;
+
         private CancellationTokenSource tokenSource;
 
         public ImportWizard()
@@ -39,25 +40,42 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
                 FilePrefix = "ExtractedData"
             };
 
-            wizardButtons1.OnExecute += Button2Click;
-            wizardButtons1.OnCancel += WizardButtonsOnCancel;
-            logger = new LoggerService(tbLogger, SynchronizationContext.Current);
-
-            wizardButtons1.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
+            wizardButtonsImportData.OnExecute += DataImportAction;
+            wizardButtonsImportData.OnCancel += DataImportCancellationAction;
+            wizardButtonsImportData.OnCustomNextNavigation += WizardButtonsOnNavigateToNextPage;
 
             comboBoxLogLevel.PopulateComboBoxLogLevel();
         }
 
         public event EventHandler<RequestConnectionEventArgs> OnConnectionRequested;
 
+        public event EventHandler<EventArgs> OnActionStarted;
+
+        public event EventHandler<EventArgs> OnActionProgressed;
+
+        public event EventHandler<EventArgs> OnActionCompleted;
+
+        public TextBox LogDisplay
+        {
+            get
+            {
+                return tbLogger;
+            }
+        }
+
         public string TargetConnectionString { get; set; }
 
         public IOrganizationService OrganizationService { get; set; }
+
+        public IStatusBarMessenger StatusBarMessenger { get; set; }
+
+        public ILogManager LoggerService { get; set; }
 
         public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
         {
             try
             {
+                OnActionProgressed?.Invoke(this, new EventArgs { });
                 if (maxThreads > 1)
                 {
                     currentLogger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
@@ -109,7 +127,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         }
 
         [ExcludeFromCodeCoverage]
-        private void ButtonClick(object sender, EventArgs e)
+        private void ImportFolderSelectionButtonClick(object sender, EventArgs e)
         {
             var dialogResult = folderBrowserDialog1.ShowDialog();
 
@@ -159,8 +177,9 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
             groupBox1.Visible = true;
         }
 
-        public void Button2Click(object sender, EventArgs e)
+        public async void DataImportAction(object sender, EventArgs e)
         {
+            OnActionStarted?.Invoke(this, new EventArgs { });
             importConfig.JsonFolderPath = tbSourceDataLocation.Text;
             importConfig.IgnoreStatuses = cbIgnoreStatuses.Checked;
             importConfig.IgnoreSystemFields = cbIgnoreSystemFields.Checked;
@@ -168,13 +187,16 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
             tokenSource = new CancellationTokenSource();
             tbLogger.Clear();
-            Task.Run(() =>
-            {
-                PerformImportAction(tbImportSchema.Text, Convert.ToInt32(nudMaxThreads.Value), radioButtonJsonFormat.Checked, logger, entityRepositoryService, importConfig, tokenSource);
-            });
+            await Task.Run(() =>
+             {
+                 PerformImportAction(tbImportSchema.Text, Convert.ToInt32(nudMaxThreads.Value), radioButtonJsonFormat.Checked, LoggerService, entityRepositoryService, importConfig, tokenSource);
+             });
+
+            OnActionCompleted?.Invoke(this, new EventArgs { });
+            wizardButtonsImportData.PerformExecutionCompletedActions();
         }
 
-        protected void WizardButtonsOnCancel(object sender, EventArgs e)
+        protected void DataImportCancellationAction(object sender, EventArgs e)
         {
             tokenSource?.Cancel();
         }
@@ -232,7 +254,10 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 
         protected void ComboBoxLogLevelSelectedIndexChanged(object sender, EventArgs e)
         {
-            logger.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
+            if (LoggerService != null)
+            {
+                LoggerService.LogLevel = (LogLevel)comboBoxLogLevel.SelectedItem;
+            }
         }
     }
 }
