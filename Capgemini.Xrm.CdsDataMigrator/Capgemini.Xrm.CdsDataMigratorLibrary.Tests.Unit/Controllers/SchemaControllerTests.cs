@@ -36,9 +36,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         [TestMethod]
         public void SchemaFolderPathActionWithDialogResultCancel()
         {
-
             using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
-            {   
+            {
                 using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
                 {
                     var dialogResult = System.Windows.Forms.DialogResult.Cancel;
