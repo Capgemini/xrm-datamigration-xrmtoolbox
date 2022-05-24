@@ -406,12 +406,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             bool showSystemAttributes = true;
             var result = new List<System.Windows.Forms.ListViewItem>();
             System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
-            var attribute = new AttributeMetadata
-            {
-                LogicalName = "contactattnoentity1"
-            };
-            var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            isLogicalEntityField.SetValue(attribute, (bool?)true);
+            var attribute = new AttributeMetadata { };
+            var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(attribute, (bool?)true);
             item.Tag = attribute;
             result.Add(item);
 
@@ -432,27 +429,57 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributesIsFalse()
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributesWithNoCustomAttributes()
+        {
+            Exception exception = null;
+            bool cancelled = false;
+            bool showSystemAttributes = true;
+            var result = new List<System.Windows.Forms.ListViewItem>();
+            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
+            var attribute = new AttributeMetadata { };
+            var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(attribute, (bool?)false);
+            item.Tag = attribute;
+            result.Add(item);
+
+            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
+
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
+                             .Should()
+                             .NotThrow();
+
+                listView.Items.Count.Should().Be(0);
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndAllAttributesWithTwoItems()
         {
             Exception exception = null;
             bool cancelled = false;
             bool showSystemAttributes = false;
             var result = new List<System.Windows.Forms.ListViewItem>();
-            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
-            System.Windows.Forms.ListViewItem item2 = new System.Windows.Forms.ListViewItem { };
-            var attribute = new AttributeMetadata();
-            var attribute2 = new AttributeMetadata();
+            System.Windows.Forms.ListViewItem nonCustomItem = new System.Windows.Forms.ListViewItem { };
+            System.Windows.Forms.ListViewItem customTtem = new System.Windows.Forms.ListViewItem { };
+            var nonCustomAttribute = new AttributeMetadata();
+            var customAttribute = new AttributeMetadata();
 
-            var fieldReference = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            fieldReference.SetValue(attribute, (bool?)false); ;
+            var isCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(customAttribute, (bool?)false);
 
-            var fieldReference2 = attribute2.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            fieldReference2.SetValue(attribute2, (bool?)true);
-            
-            item.Tag = attribute;
-            item2.Tag = attribute2;
-            result.Add(item);
-            result.Add(item2);
+            var secondIsCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            secondIsCustomAttributeField.SetValue(customAttribute, (bool?)true);
+
+            nonCustomItem.Tag = nonCustomAttribute;
+            customTtem.Tag = customAttribute;
+            result.Add(nonCustomItem);
+            result.Add(customTtem);
 
             var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
 
