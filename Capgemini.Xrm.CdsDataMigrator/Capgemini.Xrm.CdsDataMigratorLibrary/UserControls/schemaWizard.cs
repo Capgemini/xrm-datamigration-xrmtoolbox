@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
@@ -69,18 +70,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             RefreshEntities(cachedMetadata, workingstate, true);
         }
 
-        public void HandleListViewEntitiesSelectedIndexChanged(Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems, ServiceParameters serviceParameters)
+        public async void HandleListViewEntitiesSelectedIndexChanged(Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems, ServiceParameters serviceParameters)
         {
             ListViewItem listViewSelectedItem = selectedItems.Count > 0 ? selectedItems[0] : null;
 
             PopulateAttributes(inputEntityLogicalName, listViewSelectedItem, serviceParameters);
 
-            PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, listViewSelectedItem, serviceParameters);
+            await PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, listViewSelectedItem, serviceParameters);
             var controller = new EntityController();
             controller.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
         }
-
-        public void PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)
+        public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)//, RunWorkerCompletedEventHandler completeCallBack)
         {
             if (!workingstate)
             {
@@ -88,21 +88,26 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 InitFilter(listViewSelectedItem);
                 if (listViewSelectedItem != null)
                 {
-                    using (var bwFill = new BackgroundWorker())
+                    Exception error = null;
+                    List<ListViewItem> result = null;
+
+                    await Task.Run(() =>
                     {
-                        bwFill.DoWork += (sender, e) =>
+                        var controller = new RelationshipController();
+
+                        try
                         {
-                            var controller = new RelationshipController();
-                            e.Result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
-                        };
-                        bwFill.RunWorkerCompleted += (sender, e) =>
+                            result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
+                        }
+                        catch (Exception ex)
                         {
-                            var controller = new ListController();
-                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship, cbShowSystemAttributes.Checked);
-                            ManageWorkingState(false);
-                        };
-                        bwFill.RunWorkerAsync();
-                    }
+                            error = ex;
+                        }
+                    });
+                    var listController = new ListController();
+                    var e = new RunWorkerCompletedEventArgs(result, error, false);
+                    listController.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship, cbShowSystemAttributes.Checked);
+                    ManageWorkingState(false);
                 }
             }
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
@@ -196,10 +198,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                     systemUnderTest.MetadataService = MetadataServiceMock.Object;
 
                     var serviceParameters = GenerateMigratorParameters();
-                    FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, inputEntityRelationships, selectedItems, serviceParameters))
+                    FluentActions.Awaiting(() => systemUnderTest.PopulateRelationship(entityLogicalName, inputEntityRelationships, selectedItems, serviceParameters))
                     .Should()
                     .NotThrow();
                 }
+
             }
         }
 
