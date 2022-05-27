@@ -70,17 +70,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             RefreshEntities(cachedMetadata, workingstate, true);
         }
 
-        public async void HandleListViewEntitiesSelectedIndexChanged(Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems, ServiceParameters serviceParameters)
+        public async Task HandleListViewEntitiesSelectedIndexChanged(Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName, HashSet<string> inputSelectedEntity, ListView.SelectedListViewItemCollection selectedItems, ServiceParameters serviceParameters)
         {
             ListViewItem listViewSelectedItem = selectedItems.Count > 0 ? selectedItems[0] : null;
 
-            PopulateAttributes(inputEntityLogicalName, listViewSelectedItem, serviceParameters);
+            await PopulateAttributes(inputEntityLogicalName, listViewSelectedItem, serviceParameters);
 
             await PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, listViewSelectedItem, serviceParameters);
             var controller = new EntityController();
             controller.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
         }
-        public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)//, RunWorkerCompletedEventHandler completeCallBack)
+        public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)
         {
             if (!workingstate)
             {
@@ -194,17 +194,17 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             tbExportConfig.Clear();
         }
 
-        private void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
+        private async void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
             var migratorParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
 
             var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
             var controller = new EntityController();
             entityLogicalName = controller.GetEntityLogicalName(entityitem);
-            HandleListViewEntitiesSelectedIndexChanged(entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems, migratorParameters);
+            await HandleListViewEntitiesSelectedIndexChanged(entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems, migratorParameters);
         }
 
-        private void PopulateAttributes(string entityLogicalName, ListViewItem listViewSelectedItem, ServiceParameters serviceParameters)
+        private async Task PopulateAttributes(string entityLogicalName, ListViewItem listViewSelectedItem, ServiceParameters serviceParameters)
         {
             if (!workingstate)
             {
@@ -214,24 +214,27 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 InitFilter(listViewSelectedItem);
                 if (listViewSelectedItem != null)
                 {
-                    using (var bwFill = new BackgroundWorker())
+                    Exception error = null;
+                    List<ListViewItem> result = null;
+
+                    await Task.Run(() =>
                     {
-                        bwFill.DoWork += (sender, e) =>
+                        var attributeController = new AttributeController();
+                        try
                         {
                             var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            var controller = new AttributeController();
-                            var attributes = controller.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
-
-                            e.Result = controller.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
-                        };
-                        bwFill.RunWorkerCompleted += (sender, e) =>
+                            var attributes = attributeController.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
+                            result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
+                        }
+                        catch (Exception ex)
                         {
-                            var controller = new ListController();
-                            controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
-                            ManageWorkingState(false);
-                        };
-                        bwFill.RunWorkerAsync();
-                    }
+                            error = ex;
+                        }
+                    });
+                    var controller = new ListController();
+                    var e = new RunWorkerCompletedEventArgs(result, error, false);
+                    controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
+                    ManageWorkingState(false);
                 }
             }
         }
