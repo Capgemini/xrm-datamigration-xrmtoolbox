@@ -138,25 +138,72 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         {
             string inputEntityLogicalName = "account";
             HashSet<string> inputSelectedEntity = new HashSet<string>();
-
             using (var listView = new System.Windows.Forms.ListView())
             {
                 var selectedItems = new System.Windows.Forms.ListView.SelectedListViewItemCollection(listView);
-
                 using (var systemUnderTest = new SchemaWizard())
                 {
                     systemUnderTest.OrganizationService = ServiceMock.Object;
                     systemUnderTest.MetadataService = MetadataServiceMock.Object;
-
                     var serviceParameters = GenerateMigratorParameters();
-
                     FluentActions.Invoking(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity, selectedItems, serviceParameters))
                             .Should()
                             .NotThrow();
                 }
             }
         }
-        
+
+        [TestMethod]
+        public void PopulateAttributes()
+        {
+            HashSet<string> inputSelectedEntity = new HashSet<string>();
+            var entityLogicalName = "contact";
+            var intersectEntityName = "account_contact";
+
+            var settings = new Capgemini.Xrm.CdsDataMigratorLibrary.Core.Settings();
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = intersectEntityName,
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid",
+                IsCustomizable = new BooleanManagedProperty() { Value = true }
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { intersectEntityName };
+
+            inputEntityRelationships.Add(entityLogicalName, entityRelationshipSet);
+
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
+            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                              .Returns(entityMetadata)
+                              .Verifiable();
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                var item = new System.Windows.Forms.ListViewItem { };
+                listView.Items.Add(item);
+                var selectedItem = listView.Items[0];
+
+                using (var systemUnderTest = new SchemaWizard())
+                {
+                    systemUnderTest.Settings = settings;
+                    systemUnderTest.OrganizationService = ServiceMock.Object;
+                    systemUnderTest.MetadataService = MetadataServiceMock.Object;
+
+                    var serviceParameters = GenerateMigratorParameters();
+                    FluentActions.Awaiting(() => systemUnderTest.PopulateAttributes(entityLogicalName, selectedItem, serviceParameters))
+                    .Should()
+                    .NotThrow();
+                }
+
+            }
+        }
+
         [TestMethod]
         public void PopulateRelationship()
         {

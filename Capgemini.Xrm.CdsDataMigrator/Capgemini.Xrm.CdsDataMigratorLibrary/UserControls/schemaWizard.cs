@@ -204,7 +204,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             await HandleListViewEntitiesSelectedIndexChanged(entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems, migratorParameters);
         }
 
-        private async Task PopulateAttributes(string entityLogicalName, ListViewItem listViewSelectedItem, ServiceParameters serviceParameters)
+        public async Task PopulateAttributes(string entityLogicalName, ListViewItem listViewSelectedItem, ServiceParameters serviceParameters)
         {
             if (!workingstate)
             {
