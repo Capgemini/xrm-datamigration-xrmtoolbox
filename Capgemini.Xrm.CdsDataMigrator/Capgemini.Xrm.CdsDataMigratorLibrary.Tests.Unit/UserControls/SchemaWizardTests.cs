@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
@@ -156,7 +154,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
         [TestMethod]
         public void PopulateAttributes()
         {
-            HashSet<string> inputSelectedEntity = new HashSet<string>();
             var entityLogicalName = "contact";
             var intersectEntityName = "account_contact";
 
@@ -174,7 +171,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
 
             var entityRelationshipSet = new HashSet<string>() { intersectEntityName };
 
-            inputEntityRelationships.Add(entityLogicalName, entityRelationshipSet);
 
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
@@ -200,14 +196,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                     .Should()
                     .NotThrow();
                 }
-
             }
         }
 
         [TestMethod]
         public void PopulateAttributesWithException()
         {
-            HashSet<string> inputSelectedEntity = new HashSet<string>();
             var entityLogicalName = "contact";
             var intersectEntityName = "account_contact";
 
@@ -222,8 +216,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             };
 
             var entityRelationshipSet = new HashSet<string>() { intersectEntityName };
-
-            inputEntityRelationships.Add(entityLogicalName, entityRelationshipSet);
 
             var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
@@ -247,7 +239,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                     FluentActions.Awaiting(() => systemUnderTest.PopulateAttributes(entityLogicalName, selectedItem, serviceParameters))
                     .Should().Throw<NullReferenceException>();
                 }
-
             }
         }
 
