@@ -429,7 +429,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         }
 
         [TestMethod]
-        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributesWithNoCustomAttributes()
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributesWithZeroSystemAttributes()
         {
             Exception exception = null;
             bool cancelled = false;
