@@ -359,6 +359,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         {
             Exception exception = new Exception();
             bool cancelled = false;
+            bool showSystemAttributes = false;
             var result = new List<System.Windows.Forms.ListViewItem>();
 
             var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
@@ -367,7 +368,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
              .Should()
              .NotThrow();
             }
@@ -380,6 +381,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         {
             Exception exception = null;
             bool cancelled = false;
+            bool showSystemAttributes = false;
             var result = new List<System.Windows.Forms.ListViewItem>();
 
             var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
@@ -388,9 +390,108 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView))
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
                              .Should()
                              .NotThrow();
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributes()
+        {
+            Exception exception = null;
+            bool cancelled = false;
+            bool showSystemAttributes = true;
+            var result = new List<System.Windows.Forms.ListViewItem>();
+            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
+            var attribute = new AttributeMetadata { };
+            var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(attribute, (bool?)true);
+            item.Tag = attribute;
+            result.Add(item);
+
+            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
+
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
+                             .Should()
+                             .NotThrow();
+
+                listView.Items.Count.Should().Be(1);
+            }
+                
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndOnlySystemAttributesWithZeroSystemAttributes()
+        {
+            Exception exception = null;
+            bool cancelled = false;
+            bool showSystemAttributes = true;
+            var result = new List<System.Windows.Forms.ListViewItem>();
+            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
+            var attribute = new AttributeMetadata { };
+            var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(attribute, (bool?)false);
+            item.Tag = attribute;
+            result.Add(item);
+
+            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
+
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
+                             .Should()
+                             .NotThrow();
+
+                listView.Items.Count.Should().Be(0);
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnPopulateRelationshipCompletedActionWithoutExceptionAndAllAttributesWithTwoItems()
+        {
+            Exception exception = null;
+            bool cancelled = false;
+            bool showSystemAttributes = false;
+            var result = new List<System.Windows.Forms.ListViewItem>();
+            System.Windows.Forms.ListViewItem nonCustomItem = new System.Windows.Forms.ListViewItem { };
+            System.Windows.Forms.ListViewItem customTtem = new System.Windows.Forms.ListViewItem { };
+            var nonCustomAttribute = new AttributeMetadata();
+            var customAttribute = new AttributeMetadata();
+
+            var isCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            isCustomAttributeField.SetValue(customAttribute, (bool?)false);
+
+            var secondIsCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
+            secondIsCustomAttributeField.SetValue(customAttribute, (bool?)true);
+
+            nonCustomItem.Tag = nonCustomAttribute;
+            customTtem.Tag = customAttribute;
+            result.Add(nonCustomItem);
+            result.Add(customTtem);
+
+            var eventArgs = new System.ComponentModel.RunWorkerCompletedEventArgs(result, exception, cancelled);
+
+            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
+                                .Verifiable();
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                FluentActions.Invoking(() => systemUnderTest.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, listView, showSystemAttributes))
+                             .Should()
+                             .NotThrow();
+
+                listView.Items.Count.Should().Be(2);
             }
 
             NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);

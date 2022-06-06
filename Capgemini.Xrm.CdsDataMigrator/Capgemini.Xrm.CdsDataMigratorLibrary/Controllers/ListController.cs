@@ -65,7 +65,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner, ListView listView)
+        public void OnPopulateCompletedAction(RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner, ListView listView, bool showSystemAttributes)
         {
             if (e.Error != null)
             {
@@ -74,6 +74,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             else
             {
                 var items = e.Result as List<ListViewItem>;
+                if (showSystemAttributes)
+                {
+                    items = items.Where(x => ((AttributeMetadata)x.Tag)?.IsCustomAttribute == true).ToList();
+                }
                 if (items != null)
                 {
                     listView.Items.AddRange(items.ToArray());

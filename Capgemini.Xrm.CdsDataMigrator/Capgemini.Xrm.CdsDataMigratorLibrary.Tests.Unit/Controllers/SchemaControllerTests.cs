@@ -53,6 +53,30 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         }
 
         [TestMethod]
+        public void SchemaFolderPathActionWithDialogResultCancelWhenFileAlreadyChosen()
+        {
+            var filename = "TestData\\usersettingsschema.xml";
+
+            using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                fileDialog.FileName = filename;
+
+                using (var schemaPathTextBox = new System.Windows.Forms.TextBox())
+                {
+                    schemaPathTextBox.Text = filename;
+                    var dialogResult = System.Windows.Forms.DialogResult.Cancel;
+                    var collectionParameters = new CollectionParameters(inputEntityAttributes, inputEntityRelationships, null, null, null, null);
+
+                    FluentActions.Invoking(() => systemUnderTest.SchemaFolderPathAction(NotificationServiceMock.Object, schemaPathTextBox, inputWorkingstate, collectionParameters, dialogResult, fileDialog, (x1, x2, x3, x4, x5) => { }))
+                                 .Should()
+                                 .NotThrow();
+
+                    schemaPathTextBox.Text.Should().Be(filename);
+                }
+            }
+        }
+
+        [TestMethod]
         public void SchemaFolderPathActionWithDialogResultOk()
         {
             var filename = "TestData\\usersettingsschema.xml";
