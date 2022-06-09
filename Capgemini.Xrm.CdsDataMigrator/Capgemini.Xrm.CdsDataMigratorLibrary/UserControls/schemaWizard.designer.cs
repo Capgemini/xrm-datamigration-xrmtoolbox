@@ -796,12 +796,12 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             // wizardButtons1
             // 
             this.wizardButtons1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.wizardButtons1.Location = new System.Drawing.Point(300, 0);
+            this.wizardButtons1.Location = new System.Drawing.Point(1400, 0);
             this.wizardButtons1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.wizardButtons1.Name = "wizardButtons1";
             this.wizardButtons1.PageContainer = this.stepWizardControl1;
             this.wizardButtons1.ShowExecuteButton = false;
-            this.wizardButtons1.Size = new System.Drawing.Size(500, 50);
+            this.wizardButtons1.Size = new System.Drawing.Size(200, 50);
             this.wizardButtons1.TabIndex = 2;
             // 
             // splitContainer1
