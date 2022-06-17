@@ -253,7 +253,9 @@
     <Compile Include="CdsMigratorPluginControl.designer.cs">
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
+    <Compile Include="Presenters\IExportPageView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -275,6 +277,12 @@
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="UserControls\ExportPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ExportPage.Designer.cs">
+      <DependentUpon>ExportPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ExportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -327,6 +335,9 @@
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ExportPage.resx">
+      <DependentUpon>ExportPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportWizard.resx">
       <DependentUpon>ExportWizard.cs</DependentUpon>

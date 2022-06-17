@@ -255,6 +255,7 @@
     </Compile>
     <Compile Include="Mocks\TestSynchronizationContext.cs" />
     <Compile Include="Model\CollectionParametersTests.cs" />
+    <Compile Include="Presenters\ExportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LoggerServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />

@@ -117,5 +117,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
             DataExportWizard.BringToFront();
         }
+
+        private void tsbShowExportPage_Click(object sender, EventArgs e)
+        {
+            exportPage1.BringToFront();
+        }
     }
 }
