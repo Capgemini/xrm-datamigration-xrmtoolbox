@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Linq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
@@ -89,6 +90,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportView.SetupGet(x => x.PageSize).Returns(1000);
             exportView.SetupGet(x => x.BatchSize).Returns(2000);
             exportView.SetupGet(x => x.TopCount).Returns(3000);
+            exportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             exportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -102,6 +104,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
             exportConfig.TopCount.Should().Be(3000);
+            exportConfig.CrmMigrationToolSchemaPaths.Count.Should().Be(1);
+            exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
         }
 
         [TestMethod]
@@ -161,6 +165,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportView.VerifySet(x => x.PageSize = exportConfig.PageSize, "Page size does not match config");
             exportView.VerifySet(x => x.BatchSize = exportConfig.BatchSize, "Batch size does not match config");
             exportView.VerifySet(x => x.TopCount = exportConfig.TopCount, "Top count does not match config");
+            exportView.VerifySet(x => x.CrmMigrationToolSchemaPath = exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault(), "Schema Path does not match config");
         }
 
         private void VerifyViewPropertiesNotSet()
@@ -169,6 +174,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportView.VerifySet(x => x.PageSize = It.IsAny<int>(), Times.Once, "Page size was set unexpectedly");
             exportView.VerifySet(x => x.BatchSize = It.IsAny<int>(), Times.Once, "Batch size was set unexpectedly");
             exportView.VerifySet(x => x.TopCount = It.IsAny<int>(), Times.Once, "Top count was set unexpectedly");
+            exportView.VerifySet(x => x.CrmMigrationToolSchemaPath = It.IsAny<string>(), Times.Once, "Schema path was set unexpectedly");
         }
     }
 }
