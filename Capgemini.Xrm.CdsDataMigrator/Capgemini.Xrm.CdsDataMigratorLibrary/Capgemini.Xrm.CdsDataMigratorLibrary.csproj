@@ -277,6 +277,12 @@
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="UserControls\DataverseEnvironmentSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\DataverseEnvironmentSelector.Designer.cs">
+      <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ExportPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -348,6 +354,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\DataverseEnvironmentSelector.resx">
+      <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportPage.resx">
       <DependentUpon>ExportPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -397,11 +406,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF $(ConfigurationName) == Debug (
+    <PostBuildEvent>
+      IF $(ConfigurationName) == Debug (
       IF NOT EXIST Plugins mkdir Plugins
       xcopy "$(TargetDir)$(TargetFileName)" "$(TargetDir)Plugins\" /Y
       xcopy "$(TargetDir)$(TargetName).pdb" "$(TargetDir)Plugins\" /Y
-      )</PostBuildEvent>
+      )
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.  

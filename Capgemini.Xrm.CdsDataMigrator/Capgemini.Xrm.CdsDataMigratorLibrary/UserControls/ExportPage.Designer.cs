@@ -37,6 +37,8 @@
             this.nbxPageSize = new System.Windows.Forms.NumericUpDown();
             this.nbxTopCount = new System.Windows.Forms.NumericUpDown();
             this.fisSchemaFile = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FileInputSelector();
+            this.label7 = new System.Windows.Forms.Label();
+            this.dataverseEnvironmentSelector1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector();
             this.gbxWriteSettings = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
@@ -91,6 +93,8 @@
             this.tableLayoutPanel1.Controls.Add(this.nbxPageSize, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.nbxTopCount, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.fisSchemaFile, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.dataverseEnvironmentSelector1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -107,7 +111,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(3, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 31);
             this.label1.TabIndex = 0;
@@ -117,7 +121,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 31);
+            this.label2.Location = new System.Drawing.Point(3, 60);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(131, 26);
             this.label2.TabIndex = 1;
@@ -127,7 +131,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 57);
+            this.label3.Location = new System.Drawing.Point(3, 86);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 26);
             this.label3.TabIndex = 2;
@@ -135,7 +139,7 @@
             // 
             // nbxPageSize
             // 
-            this.nbxPageSize.Location = new System.Drawing.Point(140, 34);
+            this.nbxPageSize.Location = new System.Drawing.Point(140, 63);
             this.nbxPageSize.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -147,7 +151,7 @@
             0,
             0});
             this.nbxPageSize.Name = "nbxPageSize";
-            this.nbxPageSize.Size = new System.Drawing.Size(120, 20);
+            this.nbxPageSize.Size = new System.Drawing.Size(96, 20);
             this.nbxPageSize.TabIndex = 3;
             this.nbxPageSize.Value = new decimal(new int[] {
             1,
@@ -157,26 +161,44 @@
             // 
             // nbxTopCount
             // 
-            this.nbxTopCount.Location = new System.Drawing.Point(140, 60);
+            this.nbxTopCount.Location = new System.Drawing.Point(140, 89);
             this.nbxTopCount.Maximum = new decimal(new int[] {
             10000000,
             0,
             0,
             0});
             this.nbxTopCount.Name = "nbxTopCount";
-            this.nbxTopCount.Size = new System.Drawing.Size(120, 20);
+            this.nbxTopCount.Size = new System.Drawing.Size(96, 20);
             this.nbxTopCount.TabIndex = 4;
             // 
             // fisSchemaFile
             // 
             this.fisSchemaFile.AutoSize = true;
             this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fisSchemaFile.Location = new System.Drawing.Point(140, 3);
+            this.fisSchemaFile.Location = new System.Drawing.Point(140, 32);
             this.fisSchemaFile.MinimumSize = new System.Drawing.Size(100, 25);
             this.fisSchemaFile.Name = "fisSchemaFile";
             this.fisSchemaFile.Size = new System.Drawing.Size(690, 25);
             this.fisSchemaFile.TabIndex = 5;
             this.fisSchemaFile.Value = "";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Location = new System.Drawing.Point(3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(131, 29);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Environment";
+            // 
+            // dataverseEnvironmentSelector1
+            // 
+            this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(140, 2);
+            this.dataverseEnvironmentSelector1.Name = "dataverseEnvironmentSelector1";
+            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(690, 23);
+            this.dataverseEnvironmentSelector1.TabIndex = 8;
             // 
             // gbxWriteSettings
             // 
@@ -410,5 +432,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private FileInputSelector fisSchemaFile;
         private FolderInputSelector fisOutputDirectory;
+        private System.Windows.Forms.Label label7;
+        private DataverseEnvironmentSelector dataverseEnvironmentSelector1;
     }
 }
