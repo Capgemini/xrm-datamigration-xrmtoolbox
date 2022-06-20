@@ -10,7 +10,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     {
         //List<string> ExcludedFields { get; set; }
         //string FetchXMLFolderPath { get; set; }
-        //List<string> CrmMigrationToolSchemaPaths { get; set; }
+        string CrmMigrationToolSchemaPath { get; set; }
         // Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
         int PageSize { get; set; }
         int BatchSize { get; set; }

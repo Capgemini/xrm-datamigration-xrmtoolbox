@@ -41,8 +41,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         string IExportPageView.JsonFolderPath
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => fisOutputDirectory.Value;
+            set => fisOutputDirectory.Value = value;
         }
 
         bool IExportPageView.OneEntityPerBatch
@@ -61,6 +61,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
+        }
+
+        string IExportPageView.CrmMigrationToolSchemaPath
+        {
+            get => fisSchemaFile.Value;
+            set => fisSchemaFile.Value = value;
         }
 
         #endregion

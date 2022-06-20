@@ -289,6 +289,18 @@
     <Compile Include="UserControls\ExportWizard.designer.cs">
       <DependentUpon>ExportWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\FolderInputSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FolderInputSelector.Designer.cs">
+      <DependentUpon>FolderInputSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FileInputSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FileInputSelector.Designer.cs">
+      <DependentUpon>FileInputSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ImportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -341,6 +353,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportWizard.resx">
       <DependentUpon>ExportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\FolderInputSelector.resx">
+      <DependentUpon>FolderInputSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\FileInputSelector.resx">
+      <DependentUpon>FileInputSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>

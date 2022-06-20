@@ -39,11 +39,11 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDataExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripPluginOptionMenu = new System.Windows.Forms.ToolStrip();
+            this.tsbShowExportPage = new System.Windows.Forms.ToolStripButton();
             this.SchemaGeneratorWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaWizard();
             this.DataImportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ImportWizard();
             this.DataExportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ExportWizard();
             this.exportPage1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ExportPage();
-            this.tsbShowExportPage = new System.Windows.Forms.ToolStripButton();
             this.toolStripPluginOptionMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,6 +121,15 @@
             this.toolStripPluginOptionMenu.TabIndex = 4;
             this.toolStripPluginOptionMenu.Text = "toolStrip1";
             // 
+            // tsbShowExportPage
+            // 
+            this.tsbShowExportPage.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.export;
+            this.tsbShowExportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbShowExportPage.Name = "tsbShowExportPage";
+            this.tsbShowExportPage.Size = new System.Drawing.Size(157, 25);
+            this.tsbShowExportPage.Text = "Data Export (new)";
+            this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
+            // 
             // SchemaGeneratorWizard
             // 
             this.SchemaGeneratorWizard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -142,10 +151,12 @@
             this.DataImportWizard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.DataImportWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataImportWizard.Location = new System.Drawing.Point(0, 0);
+            this.DataImportWizard.LoggerService = null;
             this.DataImportWizard.MinimumSize = new System.Drawing.Size(600, 448);
             this.DataImportWizard.Name = "DataImportWizard";
             this.DataImportWizard.OrganizationService = null;
             this.DataImportWizard.Size = new System.Drawing.Size(1372, 600);
+            this.DataImportWizard.StatusBarMessenger = null;
             this.DataImportWizard.TabIndex = 47;
             this.DataImportWizard.TargetConnectionString = null;
             // 
@@ -158,6 +169,7 @@
             0,
             0,
             0});
+            this.DataExportWizard.DataMigrationService = null;
             this.DataExportWizard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DataExportWizard.ExportConfigFileLocation = "";
             this.DataExportWizard.ExportInactiveRecordsChecked = false;
@@ -165,11 +177,14 @@
             this.DataExportWizard.FormatCsvSelected = false;
             this.DataExportWizard.FormatJsonSelected = true;
             this.DataExportWizard.Location = new System.Drawing.Point(0, 0);
+            this.DataExportWizard.LoggerService = null;
             this.DataExportWizard.Margin = new System.Windows.Forms.Padding(0);
+            this.DataExportWizard.MigratorFactory = null;
             this.DataExportWizard.MinimizeJsonChecked = false;
             this.DataExportWizard.MinimumSize = new System.Drawing.Size(600, 448);
             this.DataExportWizard.Name = "DataExportWizard";
             this.DataExportWizard.OrganizationService = null;
+            this.DataExportWizard.Presenter = null;
             this.DataExportWizard.SaveExportLocation = "";
             this.DataExportWizard.Size = new System.Drawing.Size(1372, 600);
             this.DataExportWizard.TabIndex = 49;
@@ -181,15 +196,6 @@
             this.exportPage1.Name = "exportPage1";
             this.exportPage1.Size = new System.Drawing.Size(1372, 600);
             this.exportPage1.TabIndex = 50;
-            // 
-            // tsbShowExportPage
-            // 
-            this.tsbShowExportPage.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.export;
-            this.tsbShowExportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbShowExportPage.Name = "tsbShowExportPage";
-            this.tsbShowExportPage.Size = new System.Drawing.Size(157, 25);
-            this.tsbShowExportPage.Text = "Data Export (new)";
-            this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
             // 
             // CdsMigratorPluginControl
             // 

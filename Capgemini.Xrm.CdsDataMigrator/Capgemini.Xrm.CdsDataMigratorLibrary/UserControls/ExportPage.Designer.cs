@@ -36,7 +36,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.nbxPageSize = new System.Windows.Forms.NumericUpDown();
             this.nbxTopCount = new System.Windows.Forms.NumericUpDown();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.fisSchemaFile = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FileInputSelector();
             this.gbxWriteSettings = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
@@ -44,11 +44,9 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.nbxBatchSize = new System.Windows.Forms.NumericUpDown();
+            this.fisOutputDirectory = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FolderInputSelector();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbLoad = new System.Windows.Forms.ToolStripButton();
             this.tsbSave = new System.Windows.Forms.ToolStripButton();
@@ -63,7 +61,6 @@
             this.gbxWriteSettings.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxBatchSize)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +73,7 @@
             this.gbxFetchSettings.Location = new System.Drawing.Point(0, 27);
             this.gbxFetchSettings.Name = "gbxFetchSettings";
             this.gbxFetchSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.gbxFetchSettings.Size = new System.Drawing.Size(863, 201);
+            this.gbxFetchSettings.Size = new System.Drawing.Size(853, 201);
             this.gbxFetchSettings.TabIndex = 0;
             this.gbxFetchSettings.TabStop = false;
             this.gbxFetchSettings.Text = "Fetch settings (from Dataverse)";
@@ -88,21 +85,22 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.45274F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.54726F));
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.nbxPageSize, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.nbxTopCount, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.nbxPageSize, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.nbxTopCount, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.fisSchemaFile, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(843, 168);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(833, 168);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -111,7 +109,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(132, 26);
+            this.label1.Size = new System.Drawing.Size(131, 31);
             this.label1.TabIndex = 0;
             this.label1.Text = "Schema File";
             // 
@@ -119,9 +117,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 26);
+            this.label2.Location = new System.Drawing.Point(3, 31);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(132, 26);
+            this.label2.Size = new System.Drawing.Size(131, 26);
             this.label2.TabIndex = 1;
             this.label2.Text = "Page Size";
             // 
@@ -129,15 +127,15 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 52);
+            this.label3.Location = new System.Drawing.Point(3, 57);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(132, 26);
+            this.label3.Size = new System.Drawing.Size(131, 26);
             this.label3.TabIndex = 2;
             this.label3.Text = "Top Count";
             // 
             // nbxPageSize
             // 
-            this.nbxPageSize.Location = new System.Drawing.Point(141, 29);
+            this.nbxPageSize.Location = new System.Drawing.Point(140, 34);
             this.nbxPageSize.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -149,7 +147,7 @@
             0,
             0});
             this.nbxPageSize.Name = "nbxPageSize";
-            this.nbxPageSize.Size = new System.Drawing.Size(235, 20);
+            this.nbxPageSize.Size = new System.Drawing.Size(120, 20);
             this.nbxPageSize.TabIndex = 3;
             this.nbxPageSize.Value = new decimal(new int[] {
             1,
@@ -159,22 +157,26 @@
             // 
             // nbxTopCount
             // 
-            this.nbxTopCount.Location = new System.Drawing.Point(141, 55);
+            this.nbxTopCount.Location = new System.Drawing.Point(140, 60);
             this.nbxTopCount.Maximum = new decimal(new int[] {
             10000000,
             0,
             0,
             0});
             this.nbxTopCount.Name = "nbxTopCount";
-            this.nbxTopCount.Size = new System.Drawing.Size(235, 20);
+            this.nbxTopCount.Size = new System.Drawing.Size(120, 20);
             this.nbxTopCount.TabIndex = 4;
             // 
-            // textBox1
+            // fisSchemaFile
             // 
-            this.textBox1.Location = new System.Drawing.Point(141, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(349, 20);
-            this.textBox1.TabIndex = 5;
+            this.fisSchemaFile.AutoSize = true;
+            this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fisSchemaFile.Location = new System.Drawing.Point(140, 3);
+            this.fisSchemaFile.MinimumSize = new System.Drawing.Size(100, 25);
+            this.fisSchemaFile.Name = "fisSchemaFile";
+            this.fisSchemaFile.Size = new System.Drawing.Size(690, 25);
+            this.fisSchemaFile.TabIndex = 5;
+            this.fisSchemaFile.Value = "";
             // 
             // gbxWriteSettings
             // 
@@ -183,7 +185,7 @@
             this.gbxWriteSettings.Location = new System.Drawing.Point(0, 228);
             this.gbxWriteSettings.Name = "gbxWriteSettings";
             this.gbxWriteSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.gbxWriteSettings.Size = new System.Drawing.Size(863, 210);
+            this.gbxWriteSettings.Size = new System.Drawing.Size(853, 210);
             this.gbxWriteSettings.TabIndex = 1;
             this.gbxWriteSettings.TabStop = false;
             this.gbxWriteSettings.Text = "Write settings (to files)";
@@ -196,9 +198,9 @@
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label5, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel1, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.panel1, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.label6, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.nbxBatchSize, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.fisOutputDirectory, 1, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -209,7 +211,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(843, 177);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(833, 177);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // label4
@@ -218,7 +220,7 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Location = new System.Drawing.Point(3, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(130, 29);
+            this.label4.Size = new System.Drawing.Size(129, 29);
             this.label4.TabIndex = 0;
             this.label4.Text = "File Type";
             // 
@@ -228,7 +230,7 @@
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Location = new System.Drawing.Point(3, 29);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(130, 25);
+            this.label5.Size = new System.Drawing.Size(129, 31);
             this.label5.TabIndex = 1;
             this.label5.Text = "Output Directory";
             // 
@@ -238,9 +240,9 @@
             this.flowLayoutPanel1.Controls.Add(this.radioButton1);
             this.flowLayoutPanel1.Controls.Add(this.radioButton2);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(139, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(138, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(701, 23);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(692, 23);
             this.flowLayoutPanel1.TabIndex = 3;
             // 
             // radioButton1
@@ -265,49 +267,20 @@
             this.radioButton2.Text = "radioButton2";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.textBox2);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(139, 32);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(701, 19);
-            this.panel1.TabIndex = 4;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(0, 0);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(654, 20);
-            this.textBox2.TabIndex = 2;
-            // 
-            // button1
-            // 
-            this.button1.AutoSize = true;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.Location = new System.Drawing.Point(654, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(47, 19);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Select";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 54);
+            this.label6.Location = new System.Drawing.Point(3, 60);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(130, 26);
+            this.label6.Size = new System.Drawing.Size(129, 26);
             this.label6.TabIndex = 5;
             this.label6.Text = "Batch Size";
             // 
             // nbxBatchSize
             // 
             this.nbxBatchSize.Dock = System.Windows.Forms.DockStyle.Left;
-            this.nbxBatchSize.Location = new System.Drawing.Point(139, 57);
+            this.nbxBatchSize.Location = new System.Drawing.Point(138, 63);
             this.nbxBatchSize.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -327,6 +300,17 @@
             0,
             0});
             // 
+            // fisOutputDirectory
+            // 
+            this.fisOutputDirectory.AutoSize = true;
+            this.fisOutputDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fisOutputDirectory.Location = new System.Drawing.Point(138, 32);
+            this.fisOutputDirectory.MinimumSize = new System.Drawing.Size(100, 25);
+            this.fisOutputDirectory.Name = "fisOutputDirectory";
+            this.fisOutputDirectory.Size = new System.Drawing.Size(692, 25);
+            this.fisOutputDirectory.TabIndex = 7;
+            this.fisOutputDirectory.Value = "";
+            // 
             // toolStrip1
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -336,7 +320,7 @@
             this.tsbRun});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(863, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(853, 27);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -379,7 +363,7 @@
             this.Controls.Add(this.gbxWriteSettings);
             this.Controls.Add(this.toolStrip1);
             this.Name = "ExportPage";
-            this.Size = new System.Drawing.Size(863, 438);
+            this.Size = new System.Drawing.Size(853, 438);
             this.gbxFetchSettings.ResumeLayout(false);
             this.gbxFetchSettings.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -391,8 +375,6 @@
             this.tableLayoutPanel2.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxBatchSize)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -411,16 +393,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown nbxPageSize;
         private System.Windows.Forms.NumericUpDown nbxTopCount;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbLoad;
         private System.Windows.Forms.ToolStripButton tsbSave;
@@ -430,5 +408,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown nbxBatchSize;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private FileInputSelector fisSchemaFile;
+        private FolderInputSelector fisOutputDirectory;
     }
 }
