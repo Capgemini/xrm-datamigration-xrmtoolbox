@@ -24,7 +24,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             OnConnectionUpdated(null, new ConnectionUpdatedEventArgs(xrmToolBoxControl.Service, xrmToolBoxControl.ConnectionDetail));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSelect_Click(object sender, EventArgs e)
         {
             xrmToolBoxControl.ConnectionUpdated += OnConnectionUpdated;
             xrmToolBoxControl.RaiseRequestConnectionEvent(new RequestConnectionEventArgs
@@ -37,7 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         private void OnConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
         {
             Service = e?.Service;
-            label1.Text = e?.ConnectionDetail?.OrganizationFriendlyName ?? "No environment selected.";
+            lblConnectionName.Text = e?.ConnectionDetail?.OrganizationFriendlyName ?? "No environment selected.";
             xrmToolBoxControl.ConnectionUpdated -= OnConnectionUpdated;
         }
 

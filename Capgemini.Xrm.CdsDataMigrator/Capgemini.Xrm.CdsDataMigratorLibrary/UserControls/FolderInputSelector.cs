@@ -12,14 +12,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         public string Value
         {
-            get => textBox1.Text;
-            set { textBox1.Text = value; folderBrowserDialog1.SelectedPath = value; }
+            get => tbxInput.Text;
+            set { tbxInput.Text = value; folderBrowserDialog.SelectedPath = value; }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSelect_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog1.ShowDialog();
-            textBox1.Text = folderBrowserDialog1.SelectedPath;
+            folderBrowserDialog.ShowDialog();
+            tbxInput.Text = folderBrowserDialog.SelectedPath;
         }
     }
 }

@@ -12,18 +12,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         public string Value { 
-            get => textBox1.Text;
-            set { textBox1.Text = value; openFileDialog1.FileName = value; }
+            get => tbxInput.Text;
+            set { tbxInput.Text = value; openFileDialog.FileName = value; }
         }
 
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        private void openFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-            textBox1.Text = openFileDialog1.FileName;
+            tbxInput.Text = openFileDialog.FileName;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSelect_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
+            openFileDialog.ShowDialog();
         }
     }
 }
