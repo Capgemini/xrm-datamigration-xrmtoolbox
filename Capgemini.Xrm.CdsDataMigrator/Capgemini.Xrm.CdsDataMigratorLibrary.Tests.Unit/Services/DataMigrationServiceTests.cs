@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Capgemini.DataMigration.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
@@ -182,6 +183,80 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                          .Throw<NullReferenceException>();
 
             migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(dataFormat, It.IsAny<ILogger>(), It.IsAny<EntityRepository>(), It.IsAny<CrmExporterConfig>(), It.IsAny<CancellationToken>(), It.IsAny<CrmSchemaConfiguration>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void ExportDataAsJsonV2()
+        {
+            var exportConfig = new CrmExporterConfig();
+            exportConfig.CrmMigrationToolSchemaPaths.Add("TestData/ContactSchemaWithOwner.xml");
+            var mockOrganisationService = new Mock<IOrganizationService>();
+            var mockStoreReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>();
+            var mockStoreWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>();
+            var mockGenericCrmDataMigrator = new Mock<GenericCrmDataMigrator>(loggerMock.Object, mockStoreReader.Object, mockStoreWriter.Object);
+
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                    DataFormat.Json,
+                                    loggerMock.Object,
+                                    It.IsAny<EntityRepository>(),
+                                    exportConfig,
+                                    It.IsAny<CancellationToken>(),
+                                    It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(mockGenericCrmDataMigrator.Object)
+                               .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.ExportData(mockOrganisationService.Object, DataFormat.Json, exportConfig))
+                         .Should()
+                         .NotThrow();
+
+            migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(
+                DataFormat.Json,
+                loggerMock.Object,
+                It.IsAny<EntityRepository>(),
+                exportConfig,
+                It.IsAny<CancellationToken>(),
+                It.IsAny<CrmSchemaConfiguration>()),
+                Times.Once);
+
+            // TODO make this testable
+            // mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
+        }
+
+        [TestMethod]
+        public void ExportDataAsCsvV2()
+        {
+            var exportConfig = new CrmExporterConfig();
+            exportConfig.CrmMigrationToolSchemaPaths.Add("TestData/ContactSchemaWithOwner.xml");
+            var mockOrganisationService = new Mock<IOrganizationService>();
+            var mockStoreReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>();
+            var mockStoreWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>();
+            var mockGenericCrmDataMigrator = new Mock<GenericCrmDataMigrator>(loggerMock.Object, mockStoreReader.Object, mockStoreWriter.Object);
+
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                    DataFormat.Csv,
+                                    loggerMock.Object,
+                                    It.IsAny<EntityRepository>(),
+                                    exportConfig,
+                                    It.IsAny<CancellationToken>(),
+                                    It.IsAny<CrmSchemaConfiguration>()))
+                               .Returns(mockGenericCrmDataMigrator.Object)
+                               .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.ExportData(mockOrganisationService.Object, DataFormat.Csv, exportConfig))
+                         .Should()
+                         .NotThrow();
+
+            migratorFactoryMock.Verify(x => x.GetCrmDataMigrator(
+                DataFormat.Csv,
+                loggerMock.Object,
+                It.IsAny<EntityRepository>(),
+                exportConfig,
+                It.IsAny<CancellationToken>(),
+                It.IsAny<CrmSchemaConfiguration>()),
+                Times.Once);
+
+            // TODO: Make testable
+            // mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
         }
 
         [TestMethod]
