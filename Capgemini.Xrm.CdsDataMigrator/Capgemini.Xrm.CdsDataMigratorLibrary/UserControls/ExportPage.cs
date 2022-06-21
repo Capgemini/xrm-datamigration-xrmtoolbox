@@ -134,9 +134,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             var parent = Parent;
 
-            while (!(parent is PluginControlBase))
+            while (!(parent is PluginControlBase || parent is null))
             {
-                parent = parent.Parent;
+                parent = parent?.Parent;
             }
 
             return parent as PluginControlBase;
