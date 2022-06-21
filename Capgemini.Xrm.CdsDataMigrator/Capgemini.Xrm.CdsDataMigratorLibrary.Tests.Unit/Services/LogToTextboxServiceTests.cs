@@ -12,7 +12,7 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
-    public class LoggerServiceTests
+    public class LogToTextboxServiceTests
     {
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";

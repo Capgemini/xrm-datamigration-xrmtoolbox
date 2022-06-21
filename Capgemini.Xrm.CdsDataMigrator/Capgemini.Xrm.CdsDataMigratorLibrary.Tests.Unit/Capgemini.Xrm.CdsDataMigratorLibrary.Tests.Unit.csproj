@@ -257,7 +257,7 @@
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
-    <Compile Include="Services\LoggerServiceTests.cs" />
+    <Compile Include="Services\LogToTextboxServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
     <Compile Include="Model\DeserializationSettingsTests.cs" />
     <Compile Include="Model\ExportConfigSettingsTests.cs" />
@@ -274,6 +274,7 @@
     <Compile Include="Services\CrmGenericMigratorFactoryTests.cs" />
     <Compile Include="Services\DataMigrationServiceTests.cs" />
     <Compile Include="Services\EntityRepositoryServiceTests.cs" />
+    <Compile Include="Services\LogToFileServiceTests.cs" />
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Controllers\ListControllerTests.cs" />
