@@ -1,6 +1,10 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -11,7 +15,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public ExportPage()
         {
             InitializeComponent();
-            presenter = new ExportPagePresenter(this);
+
+            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+
+            presenter = new ExportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
         }
 
         #region input mapping
@@ -69,6 +77,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => fisSchemaFile.Value = value;
         }
 
+        DataFormat IExportPageView.DataFormat
+        {
+            get => rbnDataFormatJson.Checked ? DataFormat.Json : rbnDataFormatCsv.Checked ? DataFormat.Csv : DataFormat.Unknown;
+            set
+            {
+                rbnDataFormatJson.Checked = value == DataFormat.Json;
+                rbnDataFormatCsv.Checked = value == DataFormat.Csv;
+            }
+        }
+
+        IOrganizationService IExportPageView.Service
+        {
+            get => dataverseEnvironmentSelector1.Service;
+        }
+
         #endregion
 
         #region action mappings
@@ -106,5 +129,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         #endregion
+
+        private PluginControlBase FindPluginControlBase()
+        {
+            var parent = Parent;
+
+            while (!(parent is PluginControlBase))
+            {
+                parent = parent.Parent;
+            }
+
+            return parent as PluginControlBase;
+        }
     }
 }

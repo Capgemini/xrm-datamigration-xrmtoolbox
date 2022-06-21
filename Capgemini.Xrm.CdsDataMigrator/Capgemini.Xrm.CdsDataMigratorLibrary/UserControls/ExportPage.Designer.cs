@@ -44,8 +44,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.rbnDataFormatJson = new System.Windows.Forms.RadioButton();
+            this.rbnDataFormatCsv = new System.Windows.Forms.RadioButton();
             this.label6 = new System.Windows.Forms.Label();
             this.nbxBatchSize = new System.Windows.Forms.NumericUpDown();
             this.fisOutputDirectory = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FolderInputSelector();
@@ -259,8 +259,8 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.radioButton1);
-            this.flowLayoutPanel1.Controls.Add(this.radioButton2);
+            this.flowLayoutPanel1.Controls.Add(this.rbnDataFormatJson);
+            this.flowLayoutPanel1.Controls.Add(this.rbnDataFormatCsv);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(138, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -269,25 +269,25 @@
             // 
             // radioButton1
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.rbnDataFormatJson.AutoSize = true;
+            this.rbnDataFormatJson.Location = new System.Drawing.Point(3, 3);
+            this.rbnDataFormatJson.Name = "radioButton1";
+            this.rbnDataFormatJson.Size = new System.Drawing.Size(85, 17);
+            this.rbnDataFormatJson.TabIndex = 0;
+            this.rbnDataFormatJson.TabStop = true;
+            this.rbnDataFormatJson.Text = "radioButton1";
+            this.rbnDataFormatJson.UseVisualStyleBackColor = true;
             // 
             // radioButton2
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(94, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(85, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.rbnDataFormatCsv.AutoSize = true;
+            this.rbnDataFormatCsv.Location = new System.Drawing.Point(94, 3);
+            this.rbnDataFormatCsv.Name = "radioButton2";
+            this.rbnDataFormatCsv.Size = new System.Drawing.Size(85, 17);
+            this.rbnDataFormatCsv.TabIndex = 1;
+            this.rbnDataFormatCsv.TabStop = true;
+            this.rbnDataFormatCsv.Text = "radioButton2";
+            this.rbnDataFormatCsv.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -419,8 +419,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton rbnDataFormatJson;
+        private System.Windows.Forms.RadioButton rbnDataFormatCsv;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbLoad;
         private System.Windows.Forms.ToolStripButton tsbSave;

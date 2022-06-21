@@ -1,29 +1,37 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Moq;
 using System;
 using System.Linq;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
     [TestClass]
     public class ExportPagePresenterTests
     {
-        private Mock<IExportPageView> exportView;
+        private Mock<IExportPageView> mockExportView;
+        private Mock<IWorkerHost> mockWorkerHost;
+        private Mock<IDataMigrationService> mockDataMigrationService;
         private ExportPagePresenter systemUnderTest;
 
         [TestInitialize]
         public void TestSetup()
         {
-            exportView = new Mock<IExportPageView>();
+            mockExportView = new Mock<IExportPageView>();
+            mockWorkerHost = new Mock<IWorkerHost>();
+            mockDataMigrationService = new Mock<IDataMigrationService>();
 
-            systemUnderTest = new ExportPagePresenter(exportView.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object);
         }
 
         [TestMethod]
-        public void Contructor_ShouldSetDefaultConfigProperties()
+        public void Constructor_ShouldSetDefaultConfigProperties()
         {
             // Arrange
             var exportConfig = new CrmExporterConfig();
@@ -38,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Arrange
             var exportConfigFilePath = @"TestData\ExportConfig.json";
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns(exportConfigFilePath);
 
@@ -46,7 +54,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.LoadConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
             VerifyViewPropertiesSet(exportConfig);
         }
 
@@ -54,7 +62,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void LoadConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
         {
             // Arrange
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns("a-random-non-existent-file");
 
@@ -62,7 +70,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.LoadConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
             VerifyViewPropertiesNotSet();
         }
 
@@ -70,7 +78,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void LoadConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
         {
             // Arrange
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns("");
 
@@ -78,7 +86,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.LoadConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
             VerifyViewPropertiesNotSet();
         }
 
@@ -87,11 +95,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
-            exportView.SetupGet(x => x.PageSize).Returns(1000);
-            exportView.SetupGet(x => x.BatchSize).Returns(2000);
-            exportView.SetupGet(x => x.TopCount).Returns(3000);
-            exportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
-            exportView
+            mockExportView.SetupGet(x => x.PageSize).Returns(1000);
+            mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
+            mockExportView.SetupGet(x => x.TopCount).Returns(3000);
+            mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
+            mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
 
@@ -99,7 +107,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.SaveConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
@@ -113,7 +121,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
         {
             // Arrange
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns("a-random-non-existent-file");
 
@@ -121,14 +129,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.SaveConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
         }
 
         [TestMethod]
         public void SaveConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
         {
             // Arrange
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns("");
 
@@ -136,7 +144,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.SaveConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
         }
 
         [TestMethod]
@@ -145,10 +153,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Arrange
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns(exportConfigFilePath);
-            exportView
+            mockExportView
                 .Setup(x => x.AskForFilePathToSave(exportConfigFilePath))
                 .Returns(exportConfigFilePath);
 
@@ -157,24 +165,54 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             systemUnderTest.SaveConfig();
 
             // Assert
-            exportView.VerifyAll();
+            mockExportView.VerifyAll();
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldReadValuesFromView()
+        {
+            // Arrange
+            var mockIOrganisationService = new Mock<IOrganizationService>();
+            mockExportView.SetupGet(x => x.PageSize).Returns(1000);
+            mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
+            mockExportView.SetupGet(x => x.TopCount).Returns(3000);
+            mockExportView.SetupGet(x => x.DataFormat).Returns(CdsDataMigratorLibrary.Enums.DataFormat.Json);
+            mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
+            mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
+            mockExportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
+
+            // Act
+            systemUnderTest.RunConfig();
+            var workInfo = mockWorkerHost.Invocations.First().Arguments.First().As<WorkAsyncInfo>();
+            workInfo.Work(null, null);
+
+            // Assert
+            mockExportView.VerifyAll();
+            workInfo.Message.Should().Be("Exporting data...");
+            mockDataMigrationService.Verify(x => x.ExportData(mockIOrganisationService.Object, CdsDataMigratorLibrary.Enums.DataFormat.Json, It.IsAny<CrmExporterConfig>()));
+            var exportConfig = mockDataMigrationService.Invocations.First().Arguments.Skip(2).First().As<CrmExporterConfig>();
+            exportConfig.PageSize.Should().Be(1000);
+            exportConfig.BatchSize.Should().Be(2000);
+            exportConfig.TopCount.Should().Be(3000);
+            exportConfig.CrmMigrationToolSchemaPaths.Count.Should().Be(1);
+            exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
         }
 
         private void VerifyViewPropertiesSet(CrmExporterConfig exportConfig)
         {
-            exportView.VerifySet(x => x.PageSize = exportConfig.PageSize, "Page size does not match config");
-            exportView.VerifySet(x => x.BatchSize = exportConfig.BatchSize, "Batch size does not match config");
-            exportView.VerifySet(x => x.TopCount = exportConfig.TopCount, "Top count does not match config");
-            exportView.VerifySet(x => x.CrmMigrationToolSchemaPath = exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault(), "Schema Path does not match config");
+            mockExportView.VerifySet(x => x.PageSize = exportConfig.PageSize, "Page size does not match config");
+            mockExportView.VerifySet(x => x.BatchSize = exportConfig.BatchSize, "Batch size does not match config");
+            mockExportView.VerifySet(x => x.TopCount = exportConfig.TopCount, "Top count does not match config");
+            mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault(), "Schema Path does not match config");
         }
 
         private void VerifyViewPropertiesNotSet()
         {
             // One time is expected in the constuctor, not after the file is loaded.
-            exportView.VerifySet(x => x.PageSize = It.IsAny<int>(), Times.Once, "Page size was set unexpectedly");
-            exportView.VerifySet(x => x.BatchSize = It.IsAny<int>(), Times.Once, "Batch size was set unexpectedly");
-            exportView.VerifySet(x => x.TopCount = It.IsAny<int>(), Times.Once, "Top count was set unexpectedly");
-            exportView.VerifySet(x => x.CrmMigrationToolSchemaPath = It.IsAny<string>(), Times.Once, "Schema path was set unexpectedly");
+            mockExportView.VerifySet(x => x.PageSize = It.IsAny<int>(), Times.Once, "Page size was set unexpectedly");
+            mockExportView.VerifySet(x => x.BatchSize = It.IsAny<int>(), Times.Once, "Batch size was set unexpectedly");
+            mockExportView.VerifySet(x => x.TopCount = It.IsAny<int>(), Times.Once, "Top count was set unexpectedly");
+            mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = It.IsAny<string>(), Times.Once, "Schema path was set unexpectedly");
         }
     }
 }

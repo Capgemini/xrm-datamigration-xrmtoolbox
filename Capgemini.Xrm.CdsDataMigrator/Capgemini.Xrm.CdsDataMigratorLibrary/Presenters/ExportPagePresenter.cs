@@ -1,23 +1,27 @@
-﻿using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using System;
-using System.Collections.Generic;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public class ExportPagePresenter
     {
         private readonly IExportPageView view;
+        private readonly IWorkerHost workerHost;
+        private readonly IDataMigrationService dataMigrationService;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService)
         {
             this.view = view;
+            this.workerHost = workerHost;
+            this.dataMigrationService = dataMigrationService;
+
             this.config = new CrmExporterConfig();
             WriteFormInputFromConfig();
         }
@@ -60,7 +64,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public void RunConfig()
         {
-            ReadFormInputIntoConfig();
+            try
+            {
+                ReadFormInputIntoConfig();
+                workerHost.WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Exporting data...",
+                    Work = (bw, e) => dataMigrationService.ExportData(view.Service, view.DataFormat, config),
+                });
+            }
+            catch
+            {
+                // TODO: Handle exception
+            }
         }
 
         private void ReadFormInputIntoConfig()

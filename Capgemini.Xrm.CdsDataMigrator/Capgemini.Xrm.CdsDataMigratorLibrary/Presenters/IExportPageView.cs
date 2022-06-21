@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -22,6 +25,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool SeperateFilesPerEntity { get; set; }
         //List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
         //Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
+        DataFormat DataFormat { get; set; }
+        IOrganizationService Service { get; } 
 
         string AskForFilePathToOpen();
         string AskForFilePathToSave(string existingFileName = "");
