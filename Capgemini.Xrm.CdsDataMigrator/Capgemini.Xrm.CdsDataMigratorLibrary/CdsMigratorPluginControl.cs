@@ -53,7 +53,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
 
                     var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ExportWizard)));
 
-                    DataExportWizard.LoggerService = new LoggerService(DataExportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
+                    DataExportWizard.LoggerService = new LogToTextboxService(DataExportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
                     DataExportWizard.MigratorFactory = new CrmGenericMigratorFactory();
                     DataExportWizard.DataMigrationService = new DataMigrationService(DataExportWizard.LoggerService, DataExportWizard.MigratorFactory);
                     DataExportWizard.Presenter = new ExportPresenter(DataExportWizard, DataExportWizard.LoggerService, DataExportWizard.DataMigrationService);
@@ -65,7 +65,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 if (actionName == "TargetConnection" || actionName == "")
                 {
                     var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ImportWizard)));
-                    DataImportWizard.LoggerService = new LoggerService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
+                    DataImportWizard.LoggerService = new LogToTextboxService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
                     DataImportWizard.OrganizationService = detail.ServiceClient;
                     DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
                     DataImportWizard.OnActionStarted += OnActionStarted;

@@ -262,6 +262,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AbstractLogger.cs" />
     <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
@@ -272,7 +273,8 @@
     <Compile Include="Services\ILogManagerContainer.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\INotificationService.cs" />
-    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\LogToFileService.cs" />
+    <Compile Include="Services\LogToTextboxService.cs" />
     <Compile Include="Services\LogManagerContainer.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
