@@ -2,6 +2,7 @@ name: $(GITVERSION_FullSemVer)
 trigger: none
 pr:
   - master
+  - refactor/*
 pool:
   vmImage: 'windows-latest'
 stages:
