@@ -16,15 +16,5 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 
             actual.Should().NotBeNull();
         }
-
-        [TestMethod]
-        public void SaveConfigData()
-        {
-            SettingFileHandler.GetConfigData<ListController>(out Settings config);
-
-            var actual = SettingFileHandler.SaveConfigData<ListController>(config);
-
-            actual.Should().BeFalse();
-        }
     }
 }
