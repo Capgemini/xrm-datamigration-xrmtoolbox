@@ -183,14 +183,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Act
             systemUnderTest.RunConfig();
-            var workInfo = mockWorkerHost.Invocations.First().Arguments.First().As<WorkAsyncInfo>();
+            var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
             workInfo.Work(null, null);
 
             // Assert
             mockExportView.VerifyAll();
             workInfo.Message.Should().Be("Exporting data...");
             mockDataMigrationService.Verify(x => x.ExportData(mockIOrganisationService.Object, CdsDataMigratorLibrary.Enums.DataFormat.Json, It.IsAny<CrmExporterConfig>()));
-            var exportConfig = mockDataMigrationService.Invocations.First().Arguments.Skip(2).First().As<CrmExporterConfig>();
+            var exportConfig = mockDataMigrationService.Invocations[0].Arguments[2].As<CrmExporterConfig>();
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
             exportConfig.TopCount.Should().Be(3000);
