@@ -61,8 +61,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         string IExportPageView.FilePrefix
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => tbxFileNamePrefix.Text;
+            set => tbxFileNamePrefix.Text = value;
         }
 
         bool IExportPageView.SeperateFilesPerEntity
