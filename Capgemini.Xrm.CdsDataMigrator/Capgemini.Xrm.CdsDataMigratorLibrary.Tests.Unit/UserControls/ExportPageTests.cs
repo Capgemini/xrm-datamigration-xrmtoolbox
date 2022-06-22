@@ -60,35 +60,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
             }
         }
 
-        //[TestMethod]
-        //public void OnlyActiveRecords_GetSet_True()
-        //{
-        //    // Arrange
-        //    var value = true;
-        //    using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
-        //    {
-        //        // Act
-        //        systemUnderTest.As<IExportPageView>().OnlyActiveRecords = value;
+        [TestMethod]
+        public void OnlyActiveRecords_GetSet()
+        {
+            // Arrange
+            var value = true;
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().OnlyActiveRecords = value;
 
-        //        // Assert
-        //        systemUnderTest.As<IExportPageView>().OnlyActiveRecords.Should().Be(value);
-        //    }
-        //}
-
-        //[TestMethod]
-        //public void OnlyActiveRecords_GetSet_False()
-        //{
-        //    // Arrange
-        //    var value = false;
-        //    using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
-        //    {
-        //        // Act
-        //        systemUnderTest.As<IExportPageView>().OnlyActiveRecords = value;
-
-        //        // Assert
-        //        systemUnderTest.As<IExportPageView>().OnlyActiveRecords.Should().Be(value);
-        //    }
-        //}
+                // Assert
+                systemUnderTest.As<IExportPageView>().OnlyActiveRecords.Should().Be(value);
+            }
+        }
 
         [TestMethod]
         public void JsonFolderPath_GetSet()
@@ -147,6 +132,51 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
 
                 // Assert
                 systemUnderTest.As<IExportPageView>().DataFormat.Should().Be(value);
+            }
+        }
+
+        [TestMethod]
+        public void OneEntityPerBatch_GetSet()
+        {
+            // Arrange
+            var value = false;
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().OneEntityPerBatch = value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().OneEntityPerBatch.Should().Be(value);
+            }
+        }
+
+        [TestMethod]
+        public void SeperateFilesPerEntity_GetSet()
+        {
+            // Arrange
+            var value = false;
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().SeperateFilesPerEntity= value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().SeperateFilesPerEntity.Should().Be(value);
+            }
+        }
+
+        [TestMethod]
+        public void FilePrefix_GetSet()
+        {
+            // Arrange
+            var value = "Some string";
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().FilePrefix = value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().FilePrefix.Should().Be(value);
             }
         }
 
