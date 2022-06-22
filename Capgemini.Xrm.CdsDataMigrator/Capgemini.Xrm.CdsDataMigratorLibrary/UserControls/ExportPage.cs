@@ -55,8 +55,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         bool IExportPageView.OneEntityPerBatch
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => tcbOneEntityPerBatch.Checked;
+            set => tcbOneEntityPerBatch.Checked = value;
         }
 
         string IExportPageView.FilePrefix

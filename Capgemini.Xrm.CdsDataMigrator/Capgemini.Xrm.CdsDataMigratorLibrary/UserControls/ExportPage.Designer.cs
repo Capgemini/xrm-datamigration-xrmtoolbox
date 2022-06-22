@@ -61,6 +61,8 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblOneEntityPerBatch = new System.Windows.Forms.Label();
+            this.tcbOneEntityPerBatch = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.gbxFetchSettings.SuspendLayout();
             this.tlpFetchSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxPageSize)).BeginInit();
@@ -112,6 +114,7 @@
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFetchSettings.Size = new System.Drawing.Size(817, 161);
             this.tlpFetchSettings.TabIndex = 0;
             // 
@@ -222,9 +225,11 @@
             this.lblActiveRecords.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblActiveRecords.Location = new System.Drawing.Point(3, 116);
             this.lblActiveRecords.Name = "lblActiveRecords";
-            this.lblActiveRecords.Size = new System.Drawing.Size(128, 45);
+            this.lblActiveRecords.Size = new System.Drawing.Size(128, 51);
             this.lblActiveRecords.TabIndex = 9;
             this.lblActiveRecords.Text = "Only active records?";
+            this.toolTip.SetToolTip(this.lblActiveRecords, "When enabled, an additional filter will be applied to only export records that ar" +
+        "e active.");
             // 
             // tcbActiveRecords
             // 
@@ -262,6 +267,8 @@
             this.tlpWriteSettings.Controls.Add(this.fplFileTypes, 1, 0);
             this.tlpWriteSettings.Controls.Add(this.fisOutputDirectory, 1, 1);
             this.tlpWriteSettings.Controls.Add(this.nbxBatchSize, 1, 3);
+            this.tlpWriteSettings.Controls.Add(this.lblOneEntityPerBatch, 0, 4);
+            this.tlpWriteSettings.Controls.Add(this.tcbOneEntityPerBatch, 1, 4);
             this.tlpWriteSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpWriteSettings.Location = new System.Drawing.Point(10, 23);
             this.tlpWriteSettings.Name = "tlpWriteSettings";
@@ -437,6 +444,29 @@
             this.tlpMainLayout.Size = new System.Drawing.Size(853, 411);
             this.tlpMainLayout.TabIndex = 7;
             // 
+            // lblOneEntityPerBatch
+            // 
+            this.lblOneEntityPerBatch.AutoSize = true;
+            this.lblOneEntityPerBatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblOneEntityPerBatch.Location = new System.Drawing.Point(3, 88);
+            this.lblOneEntityPerBatch.Name = "lblOneEntityPerBatch";
+            this.lblOneEntityPerBatch.Size = new System.Drawing.Size(126, 74);
+            this.lblOneEntityPerBatch.TabIndex = 8;
+            this.lblOneEntityPerBatch.Text = "One entity per batch?";
+            this.toolTip.SetToolTip(this.lblOneEntityPerBatch, "When enabled, entities of the same type will be stored in each file. This only ap" +
+        "plied to JSON exports.");
+            // 
+            // tcbOneEntityPerBatch
+            // 
+            this.tcbOneEntityPerBatch.AutoSize = true;
+            this.tcbOneEntityPerBatch.Location = new System.Drawing.Point(135, 91);
+            this.tcbOneEntityPerBatch.Name = "tcbOneEntityPerBatch";
+            this.tcbOneEntityPerBatch.Padding = new System.Windows.Forms.Padding(4);
+            this.tcbOneEntityPerBatch.Size = new System.Drawing.Size(52, 25);
+            this.tcbOneEntityPerBatch.TabIndex = 9;
+            this.tcbOneEntityPerBatch.Text = "Yes";
+            this.tcbOneEntityPerBatch.UseVisualStyleBackColor = true;
+            // 
             // ExportPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -500,5 +530,7 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label lblActiveRecords;
         private ToggleCheckBox tcbActiveRecords;
+        private System.Windows.Forms.Label lblOneEntityPerBatch;
+        private ToggleCheckBox tcbOneEntityPerBatch;
     }
 }
