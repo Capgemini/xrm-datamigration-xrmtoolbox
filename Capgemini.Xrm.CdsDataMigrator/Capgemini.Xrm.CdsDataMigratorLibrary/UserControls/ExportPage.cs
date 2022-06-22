@@ -98,15 +98,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         string IExportPageView.AskForFilePathToOpen()
         {
-            openFileDialog1.ShowDialog();
-            return openFileDialog1.FileName;
+            openFileDialog.ShowDialog();
+            return openFileDialog.FileName;
         }
 
         string IExportPageView.AskForFilePathToSave(string existingFileName)
         {
-            saveFileDialog1.FileName = existingFileName;
-            saveFileDialog1.ShowDialog();
-            return saveFileDialog1.FileName;
+            saveFileDialog.FileName = existingFileName;
+            saveFileDialog.ShowDialog();
+            return saveFileDialog.FileName;
         }
 
         #endregion
