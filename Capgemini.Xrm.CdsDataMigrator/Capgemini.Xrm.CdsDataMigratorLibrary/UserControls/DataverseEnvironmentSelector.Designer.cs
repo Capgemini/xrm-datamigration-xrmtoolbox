@@ -32,25 +32,25 @@
             this.lblConnectionName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // btnSelect
             // 
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnSelect.Location = new System.Drawing.Point(180, 0);
-            this.btnSelect.Name = "button1";
+            this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(22, 34);
             this.btnSelect.TabIndex = 2;
             this.btnSelect.Text = "...";
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
-            // label1
+            // lblConnectionName
             // 
             this.lblConnectionName.AutoSize = true;
             this.lblConnectionName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblConnectionName.Location = new System.Drawing.Point(0, 0);
-            this.lblConnectionName.Name = "label1";
+            this.lblConnectionName.Name = "lblConnectionName";
             this.lblConnectionName.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
-            this.lblConnectionName.Size = new System.Drawing.Size(121, 18);
+            this.lblConnectionName.Size = new System.Drawing.Size(151, 23);
             this.lblConnectionName.TabIndex = 3;
             this.lblConnectionName.Text = "Please select an environment";
             // 

@@ -67,8 +67,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         bool IExportPageView.SeperateFilesPerEntity
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => tcbSeparateFilesPerEntity.Checked;
+            set => tcbSeparateFilesPerEntity.Checked = value;
         }
 
         string IExportPageView.CrmMigrationToolSchemaPath

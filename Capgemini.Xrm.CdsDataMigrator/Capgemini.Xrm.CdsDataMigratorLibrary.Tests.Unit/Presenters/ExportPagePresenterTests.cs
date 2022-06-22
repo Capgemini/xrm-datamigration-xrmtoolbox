@@ -182,6 +182,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
             mockExportView.SetupGet(x => x.OnlyActiveRecords).Returns(true);
             mockExportView.SetupGet(x => x.OneEntityPerBatch).Returns(false);
+            mockExportView.SetupGet(x => x.SeperateFilesPerEntity).Returns(false);
             mockExportView.SetupGet(x => x.DataFormat).Returns(CdsDataMigratorLibrary.Enums.DataFormat.Json);
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
@@ -202,6 +203,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.TopCount.Should().Be(3000);
             exportConfig.OnlyActiveRecords.Should().Be(true);
             exportConfig.OneEntityPerBatch.Should().Be(false);
+            exportConfig.SeperateFilesPerEntity.Should().Be(false);
             exportConfig.CrmMigrationToolSchemaPaths.Count.Should().Be(1);
             exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
         }
@@ -214,6 +216,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault(), "Schema Path does not match config");
             mockExportView.VerifySet(x => x.OnlyActiveRecords = exportConfig.OnlyActiveRecords, "Only active records does not match config");
             mockExportView.VerifySet(x => x.OneEntityPerBatch = exportConfig.OneEntityPerBatch, "One entity per batch does not match config");
+            mockExportView.VerifySet(x => x.SeperateFilesPerEntity = exportConfig.OneEntityPerBatch, "Separate files per entity does not match config");
         }
 
         private void VerifyViewPropertiesNotSet()
@@ -225,6 +228,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = It.IsAny<string>(), Times.Once, "Schema path was set unexpectedly");
             mockExportView.VerifySet(x => x.OnlyActiveRecords = It.IsAny<bool>(), Times.Once, "Only active records was set unexpectedly");
             mockExportView.VerifySet(x => x.OneEntityPerBatch = It.IsAny<bool>(), Times.Once, "One entity per batch was set unexpectedly");
+            mockExportView.VerifySet(x => x.SeperateFilesPerEntity = It.IsAny<bool>(), Times.Once, "Separate files per entity was set unexpectedly");
         }
     }
 }

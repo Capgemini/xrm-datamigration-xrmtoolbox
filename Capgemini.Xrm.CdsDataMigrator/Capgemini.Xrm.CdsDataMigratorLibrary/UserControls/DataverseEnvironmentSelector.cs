@@ -21,11 +21,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         protected override void OnLoad(EventArgs e)
         {
             xrmToolBoxControl = FindPluginControlBase();
+
+            if (xrmToolBoxControl is null) return;
+
             OnConnectionUpdated(null, new ConnectionUpdatedEventArgs(xrmToolBoxControl.Service, xrmToolBoxControl.ConnectionDetail));
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
+            if (xrmToolBoxControl is null) return;
+
             xrmToolBoxControl.ConnectionUpdated += OnConnectionUpdated;
             xrmToolBoxControl.RaiseRequestConnectionEvent(new RequestConnectionEventArgs
             {

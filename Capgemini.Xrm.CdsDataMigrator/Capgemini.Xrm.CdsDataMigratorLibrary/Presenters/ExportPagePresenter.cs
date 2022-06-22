@@ -89,7 +89,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.JsonFolderPath = view.JsonFolderPath;
             config.OnlyActiveRecords = view.OnlyActiveRecords;
             config.OneEntityPerBatch = view.OneEntityPerBatch;
-            //config.SeperateFilesPerEntity = view.SeperateFilesPerEntity;
+            config.SeperateFilesPerEntity = view.SeperateFilesPerEntity;
             //config.FilePrefix = view.FilePrefix;
         }
 
@@ -102,7 +102,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.JsonFolderPath = config.JsonFolderPath;
             view.OnlyActiveRecords = config.OnlyActiveRecords;
             view.OneEntityPerBatch = config.OneEntityPerBatch;
-            //view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
+            view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             //view.FilePrefix = config.FilePrefix;
         }
     }
