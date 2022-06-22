@@ -43,8 +43,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
         bool IExportPageView.OnlyActiveRecords
         {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => tcbActiveRecords.Checked;
+            set => tcbActiveRecords.Checked = value;
         }
 
         string IExportPageView.JsonFolderPath

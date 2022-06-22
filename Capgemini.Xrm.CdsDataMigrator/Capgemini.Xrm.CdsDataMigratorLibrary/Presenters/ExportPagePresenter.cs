@@ -87,8 +87,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.CrmMigrationToolSchemaPaths.Clear();
             config.CrmMigrationToolSchemaPaths.Add(view.CrmMigrationToolSchemaPath);
             config.JsonFolderPath = view.JsonFolderPath;
+            config.OnlyActiveRecords = view.OnlyActiveRecords;
             //config.OneEntityPerBatch = view.OneEntityPerBatch;
-            //config.OnlyActiveRecords = view.OnlyActiveRecords;
             //config.SeperateFilesPerEntity = view.SeperateFilesPerEntity;
             //config.FilePrefix = view.FilePrefix;
         }
@@ -100,8 +100,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.TopCount = config.TopCount;
             view.CrmMigrationToolSchemaPath = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
             view.JsonFolderPath = config.JsonFolderPath;
+            view.OnlyActiveRecords = config.OnlyActiveRecords;
             //view.OneEntityPerBatch = config.OneEntityPerBatch;
-            //view.OnlyActiveRecords = config.OnlyActiveRecords;
             //view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             //view.FilePrefix = config.FilePrefix;
         }

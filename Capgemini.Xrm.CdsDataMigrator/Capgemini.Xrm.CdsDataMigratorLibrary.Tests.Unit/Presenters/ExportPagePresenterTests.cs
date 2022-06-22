@@ -98,6 +98,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
+            mockExportView.SetupGet(x => x.OnlyActiveRecords).Returns(true);
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
@@ -112,6 +113,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
             exportConfig.TopCount.Should().Be(3000);
+            exportConfig.OnlyActiveRecords.Should().Be(true);
             exportConfig.CrmMigrationToolSchemaPaths.Count.Should().Be(1);
             exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
         }
@@ -176,6 +178,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
+            mockExportView.SetupGet(x => x.OnlyActiveRecords).Returns(true);
             mockExportView.SetupGet(x => x.DataFormat).Returns(CdsDataMigratorLibrary.Enums.DataFormat.Json);
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
@@ -194,6 +197,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
             exportConfig.TopCount.Should().Be(3000);
+            exportConfig.OnlyActiveRecords.Should().Be(true);
             exportConfig.CrmMigrationToolSchemaPaths.Count.Should().Be(1);
             exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
         }
@@ -204,6 +208,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.BatchSize = exportConfig.BatchSize, "Batch size does not match config");
             mockExportView.VerifySet(x => x.TopCount = exportConfig.TopCount, "Top count does not match config");
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault(), "Schema Path does not match config");
+            mockExportView.VerifySet(x => x.OnlyActiveRecords = exportConfig.OnlyActiveRecords, "Only active records does not match config");
         }
 
         private void VerifyViewPropertiesNotSet()
@@ -213,6 +218,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.BatchSize = It.IsAny<int>(), Times.Once, "Batch size was set unexpectedly");
             mockExportView.VerifySet(x => x.TopCount = It.IsAny<int>(), Times.Once, "Top count was set unexpectedly");
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaPath = It.IsAny<string>(), Times.Once, "Schema path was set unexpectedly");
+            mockExportView.VerifySet(x => x.OnlyActiveRecords = It.IsAny<bool>(), Times.Once, "Only active records was set unexpectedly");
         }
     }
 }
