@@ -28,25 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportPage));
             this.gbxFetchSettings = new System.Windows.Forms.GroupBox();
             this.tlpFetchSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblSchemaFile = new System.Windows.Forms.Label();
+            this.lblPageSize = new System.Windows.Forms.Label();
+            this.lblTopCount = new System.Windows.Forms.Label();
             this.nbxPageSize = new System.Windows.Forms.NumericUpDown();
             this.nbxTopCount = new System.Windows.Forms.NumericUpDown();
             this.fisSchemaFile = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FileInputSelector();
-            this.label7 = new System.Windows.Forms.Label();
+            this.lblEnvironment = new System.Windows.Forms.Label();
             this.dataverseEnvironmentSelector1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector();
             this.gbxWriteSettings = new System.Windows.Forms.GroupBox();
             this.tlpWriteSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblFileType = new System.Windows.Forms.Label();
+            this.lblOutputDirectory = new System.Windows.Forms.Label();
+            this.fplFileTypes = new System.Windows.Forms.FlowLayoutPanel();
             this.rbnDataFormatJson = new System.Windows.Forms.RadioButton();
             this.rbnDataFormatCsv = new System.Windows.Forms.RadioButton();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblBatchSize = new System.Windows.Forms.Label();
             this.nbxBatchSize = new System.Windows.Forms.NumericUpDown();
             this.fisOutputDirectory = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FolderInputSelector();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -57,13 +58,14 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.gbxFetchSettings.SuspendLayout();
             this.tlpFetchSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxPageSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbxTopCount)).BeginInit();
             this.gbxWriteSettings.SuspendLayout();
             this.tlpWriteSettings.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.fplFileTypes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxBatchSize)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.tlpMainLayout.SuspendLayout();
@@ -76,7 +78,7 @@
             this.gbxFetchSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbxFetchSettings.Location = new System.Drawing.Point(8, 8);
             this.gbxFetchSettings.Name = "gbxFetchSettings";
-            this.gbxFetchSettings.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.gbxFetchSettings.Padding = new System.Windows.Forms.Padding(10);
             this.gbxFetchSettings.Size = new System.Drawing.Size(837, 194);
             this.gbxFetchSettings.TabIndex = 0;
             this.gbxFetchSettings.TabStop = false;
@@ -89,14 +91,14 @@
             this.tlpFetchSettings.ColumnCount = 2;
             this.tlpFetchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.45274F));
             this.tlpFetchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.54726F));
-            this.tlpFetchSettings.Controls.Add(this.label1, 0, 1);
-            this.tlpFetchSettings.Controls.Add(this.label2, 0, 2);
-            this.tlpFetchSettings.Controls.Add(this.label3, 0, 3);
+            this.tlpFetchSettings.Controls.Add(this.lblEnvironment, 0, 0);
+            this.tlpFetchSettings.Controls.Add(this.lblSchemaFile, 0, 1);
+            this.tlpFetchSettings.Controls.Add(this.lblPageSize, 0, 2);
+            this.tlpFetchSettings.Controls.Add(this.lblTopCount, 0, 3);
+            this.tlpFetchSettings.Controls.Add(this.dataverseEnvironmentSelector1, 1, 0);
+            this.tlpFetchSettings.Controls.Add(this.fisSchemaFile, 1, 1);
             this.tlpFetchSettings.Controls.Add(this.nbxPageSize, 1, 2);
             this.tlpFetchSettings.Controls.Add(this.nbxTopCount, 1, 3);
-            this.tlpFetchSettings.Controls.Add(this.fisSchemaFile, 1, 1);
-            this.tlpFetchSettings.Controls.Add(this.label7, 0, 0);
-            this.tlpFetchSettings.Controls.Add(this.dataverseEnvironmentSelector1, 1, 0);
             this.tlpFetchSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFetchSettings.Location = new System.Drawing.Point(10, 23);
             this.tlpFetchSettings.Name = "tlpFetchSettings";
@@ -109,39 +111,44 @@
             this.tlpFetchSettings.Size = new System.Drawing.Size(817, 161);
             this.tlpFetchSettings.TabIndex = 0;
             // 
-            // label1
+            // lblSchemaFile
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 33);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Schema File";
+            this.lblSchemaFile.AutoSize = true;
+            this.lblSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSchemaFile.Location = new System.Drawing.Point(3, 31);
+            this.lblSchemaFile.Name = "lblSchemaFile";
+            this.lblSchemaFile.Size = new System.Drawing.Size(128, 33);
+            this.lblSchemaFile.TabIndex = 0;
+            this.lblSchemaFile.Text = "Schema File";
+            this.toolTip.SetToolTip(this.lblSchemaFile, "The path to a Schema file that defines the entities and columns to export. This c" +
+        "an be generated from the Schema tab or using Microsoft\'s Configuration exporter." +
+        "");
             // 
-            // label2
+            // lblPageSize
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(125, 26);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Page Size";
+            this.lblPageSize.AutoSize = true;
+            this.lblPageSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPageSize.Location = new System.Drawing.Point(3, 64);
+            this.lblPageSize.Name = "lblPageSize";
+            this.lblPageSize.Size = new System.Drawing.Size(128, 26);
+            this.lblPageSize.TabIndex = 1;
+            this.lblPageSize.Text = "Page Size";
+            this.toolTip.SetToolTip(this.lblPageSize, "The number of records to export in each request.");
             // 
-            // label3
+            // lblTopCount
             // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 90);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(125, 26);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Top Count";
+            this.lblTopCount.AutoSize = true;
+            this.lblTopCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTopCount.Location = new System.Drawing.Point(3, 90);
+            this.lblTopCount.Name = "lblTopCount";
+            this.lblTopCount.Size = new System.Drawing.Size(128, 26);
+            this.lblTopCount.TabIndex = 2;
+            this.lblTopCount.Text = "Top Count";
+            this.toolTip.SetToolTip(this.lblTopCount, "The maxium number of records to export. ");
             // 
             // nbxPageSize
             // 
-            this.nbxPageSize.Location = new System.Drawing.Point(134, 67);
+            this.nbxPageSize.Location = new System.Drawing.Point(137, 67);
             this.nbxPageSize.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -163,7 +170,7 @@
             // 
             // nbxTopCount
             // 
-            this.nbxTopCount.Location = new System.Drawing.Point(134, 93);
+            this.nbxTopCount.Location = new System.Drawing.Point(137, 93);
             this.nbxTopCount.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -177,31 +184,32 @@
             // 
             this.fisSchemaFile.AutoSize = true;
             this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fisSchemaFile.Location = new System.Drawing.Point(135, 35);
-            this.fisSchemaFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fisSchemaFile.Location = new System.Drawing.Point(138, 35);
+            this.fisSchemaFile.Margin = new System.Windows.Forms.Padding(4);
             this.fisSchemaFile.MinimumSize = new System.Drawing.Size(100, 25);
             this.fisSchemaFile.Name = "fisSchemaFile";
-            this.fisSchemaFile.Size = new System.Drawing.Size(661, 25);
+            this.fisSchemaFile.Size = new System.Drawing.Size(675, 25);
             this.fisSchemaFile.TabIndex = 5;
             this.fisSchemaFile.Value = "";
             // 
-            // label7
+            // lblEnvironment
             // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(125, 31);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Environment";
+            this.lblEnvironment.AutoSize = true;
+            this.lblEnvironment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEnvironment.Location = new System.Drawing.Point(3, 0);
+            this.lblEnvironment.Name = "lblEnvironment";
+            this.lblEnvironment.Size = new System.Drawing.Size(128, 31);
+            this.lblEnvironment.TabIndex = 7;
+            this.lblEnvironment.Text = "Environment";
+            this.toolTip.SetToolTip(this.lblEnvironment, "The Dataverse environment you want to export data from.");
             // 
             // dataverseEnvironmentSelector1
             // 
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(135, 4);
-            this.dataverseEnvironmentSelector1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(138, 4);
+            this.dataverseEnvironmentSelector1.Margin = new System.Windows.Forms.Padding(4);
             this.dataverseEnvironmentSelector1.Name = "dataverseEnvironmentSelector1";
-            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(661, 23);
+            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(675, 23);
             this.dataverseEnvironmentSelector1.TabIndex = 8;
             // 
             // gbxWriteSettings
@@ -210,7 +218,7 @@
             this.gbxWriteSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbxWriteSettings.Location = new System.Drawing.Point(8, 208);
             this.gbxWriteSettings.Name = "gbxWriteSettings";
-            this.gbxWriteSettings.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.gbxWriteSettings.Padding = new System.Windows.Forms.Padding(10);
             this.gbxWriteSettings.Size = new System.Drawing.Size(837, 195);
             this.gbxWriteSettings.TabIndex = 1;
             this.gbxWriteSettings.TabStop = false;
@@ -219,15 +227,16 @@
             // tlpWriteSettings
             // 
             this.tlpWriteSettings.AutoScroll = true;
+            this.tlpWriteSettings.AutoSize = true;
             this.tlpWriteSettings.ColumnCount = 2;
             this.tlpWriteSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.21937F));
             this.tlpWriteSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.78063F));
-            this.tlpWriteSettings.Controls.Add(this.label4, 0, 0);
-            this.tlpWriteSettings.Controls.Add(this.label5, 0, 1);
-            this.tlpWriteSettings.Controls.Add(this.flowLayoutPanel1, 1, 0);
-            this.tlpWriteSettings.Controls.Add(this.label6, 0, 3);
-            this.tlpWriteSettings.Controls.Add(this.nbxBatchSize, 1, 3);
+            this.tlpWriteSettings.Controls.Add(this.lblFileType, 0, 0);
+            this.tlpWriteSettings.Controls.Add(this.lblOutputDirectory, 0, 1);
+            this.tlpWriteSettings.Controls.Add(this.lblBatchSize, 0, 3);
+            this.tlpWriteSettings.Controls.Add(this.fplFileTypes, 1, 0);
             this.tlpWriteSettings.Controls.Add(this.fisOutputDirectory, 1, 1);
+            this.tlpWriteSettings.Controls.Add(this.nbxBatchSize, 1, 3);
             this.tlpWriteSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpWriteSettings.Location = new System.Drawing.Point(10, 23);
             this.tlpWriteSettings.Name = "tlpWriteSettings";
@@ -241,36 +250,38 @@
             this.tlpWriteSettings.Size = new System.Drawing.Size(817, 162);
             this.tlpWriteSettings.TabIndex = 0;
             // 
-            // label4
+            // lblFileType
             // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(3, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(126, 29);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "File Type";
+            this.lblFileType.AutoSize = true;
+            this.lblFileType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFileType.Location = new System.Drawing.Point(3, 0);
+            this.lblFileType.Name = "lblFileType";
+            this.lblFileType.Size = new System.Drawing.Size(126, 29);
+            this.lblFileType.TabIndex = 0;
+            this.lblFileType.Text = "File Type";
+            this.toolTip.SetToolTip(this.lblFileType, "The type of file the data will be stored in.");
             // 
-            // label5
+            // lblOutputDirectory
             // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(3, 29);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(126, 33);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Output Directory";
+            this.lblOutputDirectory.AutoSize = true;
+            this.lblOutputDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblOutputDirectory.Location = new System.Drawing.Point(3, 29);
+            this.lblOutputDirectory.Name = "lblOutputDirectory";
+            this.lblOutputDirectory.Size = new System.Drawing.Size(126, 33);
+            this.lblOutputDirectory.TabIndex = 1;
+            this.lblOutputDirectory.Text = "Output Directory";
+            this.toolTip.SetToolTip(this.lblOutputDirectory, "The directory where the data files will be stored.");
             // 
-            // flowLayoutPanel1
+            // fplFileTypes
             // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.rbnDataFormatJson);
-            this.flowLayoutPanel1.Controls.Add(this.rbnDataFormatCsv);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(135, 3);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(679, 23);
-            this.flowLayoutPanel1.TabIndex = 3;
+            this.fplFileTypes.AutoSize = true;
+            this.fplFileTypes.Controls.Add(this.rbnDataFormatJson);
+            this.fplFileTypes.Controls.Add(this.rbnDataFormatCsv);
+            this.fplFileTypes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fplFileTypes.Location = new System.Drawing.Point(135, 3);
+            this.fplFileTypes.Name = "fplFileTypes";
+            this.fplFileTypes.Size = new System.Drawing.Size(679, 23);
+            this.fplFileTypes.TabIndex = 3;
             // 
             // rbnDataFormatJson
             // 
@@ -294,15 +305,16 @@
             this.rbnDataFormatCsv.Text = "CSV";
             this.rbnDataFormatCsv.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // lblBatchSize
             // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 62);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(126, 26);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Batch Size";
+            this.lblBatchSize.AutoSize = true;
+            this.lblBatchSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblBatchSize.Location = new System.Drawing.Point(3, 62);
+            this.lblBatchSize.Name = "lblBatchSize";
+            this.lblBatchSize.Size = new System.Drawing.Size(126, 26);
+            this.lblBatchSize.TabIndex = 5;
+            this.lblBatchSize.Text = "Batch Size";
+            this.toolTip.SetToolTip(this.lblBatchSize, "The maximum number of records to store in each data file.");
             // 
             // nbxBatchSize
             // 
@@ -332,7 +344,7 @@
             this.fisOutputDirectory.AutoSize = true;
             this.fisOutputDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fisOutputDirectory.Location = new System.Drawing.Point(136, 33);
-            this.fisOutputDirectory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fisOutputDirectory.Margin = new System.Windows.Forms.Padding(4);
             this.fisOutputDirectory.MinimumSize = new System.Drawing.Size(100, 25);
             this.fisOutputDirectory.Name = "fisOutputDirectory";
             this.fisOutputDirectory.Size = new System.Drawing.Size(677, 25);
@@ -415,10 +427,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.nbxPageSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbxTopCount)).EndInit();
             this.gbxWriteSettings.ResumeLayout(false);
+            this.gbxWriteSettings.PerformLayout();
             this.tlpWriteSettings.ResumeLayout(false);
             this.tlpWriteSettings.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
+            this.fplFileTypes.ResumeLayout(false);
+            this.fplFileTypes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxBatchSize)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -434,15 +447,15 @@
         private System.Windows.Forms.GroupBox gbxFetchSettings;
         private System.Windows.Forms.GroupBox gbxWriteSettings;
         private System.Windows.Forms.TableLayoutPanel tlpFetchSettings;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblSchemaFile;
+        private System.Windows.Forms.Label lblPageSize;
+        private System.Windows.Forms.Label lblTopCount;
         private System.Windows.Forms.NumericUpDown nbxPageSize;
         private System.Windows.Forms.NumericUpDown nbxTopCount;
         private System.Windows.Forms.TableLayoutPanel tlpWriteSettings;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label lblFileType;
+        private System.Windows.Forms.Label lblOutputDirectory;
+        private System.Windows.Forms.FlowLayoutPanel fplFileTypes;
         private System.Windows.Forms.RadioButton rbnDataFormatJson;
         private System.Windows.Forms.RadioButton rbnDataFormatCsv;
         private System.Windows.Forms.ToolStrip toolStrip1;
@@ -451,13 +464,14 @@
         private System.Windows.Forms.ToolStripButton tsbRun;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblBatchSize;
         private System.Windows.Forms.NumericUpDown nbxBatchSize;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private FileInputSelector fisSchemaFile;
         private FolderInputSelector fisOutputDirectory;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblEnvironment;
         private DataverseEnvironmentSelector dataverseEnvironmentSelector1;
         private System.Windows.Forms.TableLayoutPanel tlpMainLayout;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
