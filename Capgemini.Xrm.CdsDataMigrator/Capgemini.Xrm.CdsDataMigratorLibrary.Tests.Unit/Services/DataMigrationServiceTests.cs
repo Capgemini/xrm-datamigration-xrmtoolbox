@@ -193,7 +193,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var mockOrganisationService = new Mock<IOrganizationService>();
             var mockStoreReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>();
             var mockStoreWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>();
-            var mockGenericCrmDataMigrator = new Mock<GenericCrmDataMigrator>(loggerMock.Object, mockStoreReader.Object, mockStoreWriter.Object);
+            var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
 
             migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
                                     DataFormat.Json,
@@ -218,8 +218,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                 It.IsAny<CrmSchemaConfiguration>()),
                 Times.Once);
 
-            // TODO make this testable
-            // mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
+            mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
         }
 
         [TestMethod]
@@ -230,7 +229,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var mockOrganisationService = new Mock<IOrganizationService>();
             var mockStoreReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>();
             var mockStoreWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>();
-            var mockGenericCrmDataMigrator = new Mock<GenericCrmDataMigrator>(loggerMock.Object, mockStoreReader.Object, mockStoreWriter.Object);
+            var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
 
             migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
                                     DataFormat.Csv,
@@ -255,8 +254,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                 It.IsAny<CrmSchemaConfiguration>()),
                 Times.Once);
 
-            // TODO: Make testable
-            // mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
+            mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
         }
 
         [TestMethod]
