@@ -67,6 +67,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             exporter.MigrateData();
         }
 
+        public void ExportData(IOrganizationService service, DataFormat format, CrmExporterConfig config)
+        {
+            tokenSource = new CancellationTokenSource();
+
+            var repo = new EntityRepository(service, new ServiceRetryExecutor());
+
+            var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
+
+            var exporter = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+
+            exporter.MigrateData();
+        }
+
         public void CancelDataExport()
         {
             tokenSource?.Cancel();
@@ -80,19 +93,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             config.JsonFolderPath = exportSettings.SavePath;
             config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
             config.BatchSize = exportSettings.BatchSize;
-        }
-
-        public void ExportData(IOrganizationService service, DataFormat format, CrmExporterConfig config)
-        {
-            tokenSource = new CancellationTokenSource();
-
-            var repo = new EntityRepository(service, new ServiceRetryExecutor());
-
-            var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
-
-            var exporter = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
-
-            exporter.MigrateData();
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public interface IExportPageView
     {
-        //List<string> ExcludedFields { get; set; }
-        //string FetchXMLFolderPath { get; set; }
+        //TODO: List<string> ExcludedFields { get; set; }
+        //TODO: string FetchXMLFolderPath { get; set; }
         string CrmMigrationToolSchemaPath { get; set; }
         // Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
         int PageSize { get; set; }
@@ -23,8 +23,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool OneEntityPerBatch { get; set; }
         string FilePrefix { get; set; }
         bool SeperateFilesPerEntity { get; set; }
-        //List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
-        //Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
+        //TODO: List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
+        //TODO: Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
         DataFormat DataFormat { get; set; }
         IOrganizationService Service { get; } 
 

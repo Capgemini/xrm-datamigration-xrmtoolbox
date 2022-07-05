@@ -79,7 +79,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         DataFormat IExportPageView.DataFormat
         {
-            get => rbnDataFormatJson.Checked ? DataFormat.Json : rbnDataFormatCsv.Checked ? DataFormat.Csv : DataFormat.Unknown;
+            get
+            {
+                if (rbnDataFormatJson.Checked) return DataFormat.Json;
+                if (rbnDataFormatCsv.Checked) return DataFormat.Csv;
+                return DataFormat.Unknown;
+            }
             set
             {
                 rbnDataFormatJson.Checked = value == DataFormat.Json;
