@@ -49,6 +49,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             try
             {
                 ReadFormInputIntoConfig();
+                // TODO: Validate Config
                 configFilePath = view.AskForFilePathToSave(configFilePath);
                 if (File.Exists(configFilePath))
                 {
@@ -67,10 +68,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             try
             {
                 ReadFormInputIntoConfig();
+                // TODO: Validate Config
                 workerHost.WorkAsync(new WorkAsyncInfo
                 {
                     Message = "Exporting data...",
                     Work = (bw, e) => dataMigrationService.ExportData(view.Service, view.DataFormat, config),
+                    PostWorkCallBack = (e) =>
+                    {
+                        if (e.Error != null)
+                        {
+                            // TODO: Handle error
+                        }
+
+                        // TODO: Success message
+                    }
                 });
             }
             catch
