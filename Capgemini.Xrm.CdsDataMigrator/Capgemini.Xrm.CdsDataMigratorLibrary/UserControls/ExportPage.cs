@@ -10,15 +10,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ExportPage : UserControl, IExportPageView
     {
-        private readonly ExportPagePresenter presenter;
+        private ExportPagePresenter presenter;
 
         public ExportPage()
         {
             InitializeComponent();
+        }
 
+        protected override void OnLoad(EventArgs e)
+        {
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-
             presenter = new ExportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
         }
 
