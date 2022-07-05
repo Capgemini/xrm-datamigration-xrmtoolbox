@@ -3,6 +3,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -17,8 +18,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
         }
 
+        [ExcludeFromCodeCoverage]
         protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
             presenter = new ExportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
@@ -103,12 +107,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #region action mappings
 
+        [ExcludeFromCodeCoverage]
         string IExportPageView.AskForFilePathToOpen()
         {
             openFileDialog.ShowDialog();
             return openFileDialog.FileName;
         }
 
+        [ExcludeFromCodeCoverage]
         string IExportPageView.AskForFilePathToSave(string existingFileName)
         {
             saveFileDialog.FileName = existingFileName;
@@ -120,16 +126,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #region event mappings
 
+        [ExcludeFromCodeCoverage]
         private void loadButton_Click(object sender, EventArgs e)
         {
             presenter.LoadConfig();
         }
 
+        [ExcludeFromCodeCoverage]
         private void saveButton_Click(object sender, EventArgs e)
         {
             presenter.SaveConfig();
         }
 
+        [ExcludeFromCodeCoverage]
         private void runButton_Click(object sender, EventArgs e)
         {
             presenter.RunConfig();
@@ -137,6 +146,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #endregion
 
+        [ExcludeFromCodeCoverage]
         private PluginControlBase FindPluginControlBase()
         {
             var parent = Parent;

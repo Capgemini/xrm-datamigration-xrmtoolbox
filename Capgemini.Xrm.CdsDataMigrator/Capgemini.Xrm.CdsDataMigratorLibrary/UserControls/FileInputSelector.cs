@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
+    [ExcludeFromCodeCoverage]
     public partial class FileInputSelector : UserControl
     {
         public FileInputSelector()
