@@ -1,8 +1,10 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -12,10 +14,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ExportPage : UserControl, IExportPageView
     {
         private ExportPagePresenter presenter;
+        private ExportFilterForm exportFilterForm;
 
         public ExportPage()
         {
             InitializeComponent();
+
+            this.exportFilterForm = new ExportFilterForm();
         }
 
         [ExcludeFromCodeCoverage]
@@ -103,6 +108,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             get => dataverseEnvironmentSelector1.Service;
         }
 
+        Dictionary<string, string> IExportPageView.CrmMigrationToolSchemaFilters
+        {
+            get => exportFilterForm.EntityFilters;
+            set => exportFilterForm.EntityFilters = value;
+        }
+
         #endregion
 
         #region action mappings
@@ -142,6 +153,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         private void runButton_Click(object sender, EventArgs e)
         {
             presenter.RunConfig();
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void btnFetchXmlFilters_Click(object sender, EventArgs e)
+        {
+            exportFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
+            this.exportFilterForm.ShowDialog(this);
         }
 
         #endregion

@@ -1,5 +1,8 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using XrmToolBox.Extensibility;
@@ -90,6 +93,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
+        public CrmSchemaConfiguration GetSchemaConfiguration()
+        {
+            if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
+            {
+                return null;
+            }
+
+            try
+            {
+                return CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         private void ReadFormInputIntoConfig()
         {
             config.BatchSize = view.BatchSize;
@@ -102,6 +122,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.OneEntityPerBatch = view.OneEntityPerBatch;
             config.SeperateFilesPerEntity = view.SeperateFilesPerEntity;
             config.FilePrefix = view.FilePrefix;
+            config.CrmMigrationToolSchemaFilters.Clear();
+            if (view.CrmMigrationToolSchemaFilters != null)
+            {
+                foreach (var filter in view.CrmMigrationToolSchemaFilters)
+                {
+                    config.CrmMigrationToolSchemaFilters.Add(filter.Key, filter.Value);
+                }
+            }
         }
 
         private void WriteFormInputFromConfig()
@@ -115,6 +143,29 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.OneEntityPerBatch = config.OneEntityPerBatch;
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
+            WriteCrmMigrationToolSchemaFiltersFromConfig();
         }
+
+        private void WriteCrmMigrationToolSchemaFiltersFromConfig()
+        {
+            view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
+
+            if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
+            {
+                return; // No file to read from
+            }
+
+            try
+            {
+                var schema = CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
+                foreach (var entity in schema.Entities.Where(x => !view.CrmMigrationToolSchemaFilters.ContainsKey(x.Name)))
+                {
+                    view.CrmMigrationToolSchemaFilters.Add(entity.Name, string.Empty);
+                }
+            }
+            catch { }
+        }
+
+
     }
 }

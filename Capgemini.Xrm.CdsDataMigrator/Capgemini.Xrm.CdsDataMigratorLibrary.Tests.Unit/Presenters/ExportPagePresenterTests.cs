@@ -1,11 +1,13 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -103,6 +105,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
             mockExportView.SetupGet(x => x.FilePrefix).Returns("Release_X_");
+            mockExportView.SetupGet(x => x.CrmMigrationToolSchemaFilters).Returns(new Dictionary<string, string> { { "entity", "filters" } });
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -122,6 +125,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
             exportConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
             exportConfig.FilePrefix.Should().Be("Release_X_");
+            exportConfig.CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(new Dictionary<string, string> { { "entity", "filters" } });
         }
 
         [TestMethod]
@@ -191,6 +195,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaPath).Returns(@"C:\\Some\Path\To\A\Schema.xml");
             mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
             mockExportView.SetupGet(x => x.FilePrefix).Returns("Release_X_");
+            mockExportView.SetupGet(x => x.CrmMigrationToolSchemaFilters).Returns(new Dictionary<string, string> { { "entity", "filters" } });
             mockExportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
 
             // Act
@@ -213,6 +218,68 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.CrmMigrationToolSchemaPaths.FirstOrDefault().Should().Be(@"C:\\Some\Path\To\A\Schema.xml");
             exportConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
             exportConfig.FilePrefix.Should().Be("Release_X_");
+            exportConfig.CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(new Dictionary<string, string> { { "entity", "filters" } });
+        }
+
+        [TestMethod]
+        public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsNull()
+        {
+            // Arrange
+            mockExportView
+                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                .Returns(() => null);
+
+            // Act
+            var result = systemUnderTest.GetSchemaConfiguration();
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsEmpty()
+        {
+            // Arrange
+            mockExportView
+                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                .Returns(" ");
+
+            // Act
+            var result = systemUnderTest.GetSchemaConfiguration();
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsInvalid()
+        {
+            // Arrange
+            mockExportView
+                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                .Returns("a-random-non-existent-file");
+
+            // Act
+            var result = systemUnderTest.GetSchemaConfiguration();
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void GetSchemaConfiguration_ShouldReturnSchemaWhenCrmMigrationToolSchemaPathIsValid()
+        {
+            // Arrange
+            var filePath = @"TestData\apointmentsSchema.xml";
+            mockExportView
+                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                .Returns(filePath);
+
+            // Act
+            var result = systemUnderTest.GetSchemaConfiguration();
+
+            // Assert
+            result.Should().BeEquivalentTo(CrmSchemaConfiguration.ReadFromFile(filePath));
         }
 
         private void VerifyViewPropertiesSet(CrmExporterConfig exportConfig)
@@ -225,6 +292,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.OneEntityPerBatch = exportConfig.OneEntityPerBatch, "One entity per batch does not match config");
             mockExportView.VerifySet(x => x.SeperateFilesPerEntity = exportConfig.OneEntityPerBatch, "Separate files per entity does not match config");
             mockExportView.VerifySet(x => x.FilePrefix = exportConfig.FilePrefix, "File prefix does not match config");
+            mockExportView.VerifySet(x => x.CrmMigrationToolSchemaFilters = exportConfig.CrmMigrationToolSchemaFilters, "CrmMigrationToolSchemaFilters does not match config");
         }
 
         private void VerifyViewPropertiesNotSet()
@@ -238,6 +306,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.OneEntityPerBatch = It.IsAny<bool>(), Times.Once, "One entity per batch was set unexpectedly");
             mockExportView.VerifySet(x => x.SeperateFilesPerEntity = It.IsAny<bool>(), Times.Once, "Separate files per entity was set unexpectedly");
             mockExportView.VerifySet(x => x.FilePrefix = It.IsAny<string>(), Times.Once, "File prefix was set unexpectedly");
+            mockExportView.VerifySet(x => x.CrmMigrationToolSchemaFilters = It.IsAny<Dictionary<string, string>>(), "CrmMigrationToolSchemaFilters was set unexpectedly");
         }
     }
 }

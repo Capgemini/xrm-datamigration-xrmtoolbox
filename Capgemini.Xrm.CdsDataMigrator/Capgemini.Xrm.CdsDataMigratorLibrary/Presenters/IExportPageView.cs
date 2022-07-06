@@ -1,11 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Microsoft.Xrm.Sdk;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -14,7 +9,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         //TODO: List<string> ExcludedFields { get; set; }
         //TODO: string FetchXMLFolderPath { get; set; }
         string CrmMigrationToolSchemaPath { get; set; }
-        // Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
+        Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
         int PageSize { get; set; }
         int BatchSize { get; set; }
         int TopCount { get; set; }

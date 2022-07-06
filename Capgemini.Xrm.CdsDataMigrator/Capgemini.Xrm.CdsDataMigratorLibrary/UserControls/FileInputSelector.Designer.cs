@@ -33,40 +33,43 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
-            // textBox1
+            // tbxInput
             // 
             this.tbxInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbxInput.Location = new System.Drawing.Point(0, 0);
-            this.tbxInput.Name = "textBox1";
-            this.tbxInput.Size = new System.Drawing.Size(300, 20);
+            this.tbxInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxInput.Name = "tbxInput";
+            this.tbxInput.Size = new System.Drawing.Size(400, 22);
             this.tbxInput.TabIndex = 0;
             // 
-            // button1
+            // btnSelect
             // 
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSelect.Location = new System.Drawing.Point(300, 0);
-            this.btnSelect.Name = "button1";
-            this.btnSelect.Size = new System.Drawing.Size(22, 25);
+            this.btnSelect.Location = new System.Drawing.Point(400, 0);
+            this.btnSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(29, 31);
             this.btnSelect.TabIndex = 1;
             this.btnSelect.Text = "...";
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
-            // openFileDialog1
+            // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
             // FileInputSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.tbxInput);
             this.Controls.Add(this.btnSelect);
-            this.MinimumSize = new System.Drawing.Size(100, 25);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(133, 31);
             this.Name = "FileInputSelector";
-            this.Size = new System.Drawing.Size(322, 25);
+            this.Size = new System.Drawing.Size(429, 31);
             this.ResumeLayout(false);
             this.PerformLayout();
 

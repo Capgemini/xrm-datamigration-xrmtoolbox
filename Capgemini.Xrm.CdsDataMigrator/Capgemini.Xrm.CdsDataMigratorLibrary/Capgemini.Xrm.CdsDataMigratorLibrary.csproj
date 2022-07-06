@@ -212,12 +212,19 @@
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\FormControlExtensions.cs" />
+    <Compile Include="Forms\ExportFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportFilterForm.Designer.cs">
+      <DependentUpon>ExportFilterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FilterEditor.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FilterEditor.Designer.cs">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,8 +263,11 @@
     <Compile Include="CdsMigratorPluginControl.designer.cs">
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
+    <Compile Include="Presenters\IExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\IExportFilterFormView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -343,6 +353,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ExportFilterForm.resx">
+      <DependentUpon>ExportFilterForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterEditor.resx">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -364,15 +377,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportPage.resx">
       <DependentUpon>ExportPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportWizard.resx">
       <DependentUpon>ExportWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\FolderInputSelector.resx">
       <DependentUpon>FolderInputSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\FileInputSelector.resx">
       <DependentUpon>FileInputSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>
