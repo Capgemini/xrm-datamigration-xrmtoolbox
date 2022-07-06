@@ -180,5 +180,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
             }
         }
 
+        [TestMethod]
+        public void CrmMigrationToolSchemaFilters_GetSet()
+        {
+            // Arrange
+            var value = new Dictionary<string, string> { { "entity", "<filter></filter>"} };
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().CrmMigrationToolSchemaFilters = value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(value);
+            }
+        }
+
     }
 }

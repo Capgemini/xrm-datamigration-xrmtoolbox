@@ -109,23 +109,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void OnVisible_ShouldRemoveEntityListWhenNoLongerPresentInTheSchema()
         {
             //Arrange
-            var schemaOld = new CrmSchemaConfiguration();
-            schemaOld.Entities.Add(new CrmEntity
+            var entity = new CrmEntity
             {
                 DisplayName = "Entity1",
                 Name = "entity1"
-            });
-            mockExportView
-                .SetupGet(x => x.SchemaConfiguration)
-                .Returns(schemaOld);
-            mockExportView
-                .SetupGet(x => x.EntityList)
-                .Returns(schemaOld.Entities.Select(x => new ListBoxItem<CrmEntity> { DisplayName = x.DisplayName, Item = x }));
-            mockExportView
-                .SetupGet(x => x.EntityFilters)
-                .Returns(new Dictionary<string, string>());
-            
+            };
+            var schemaOld = new CrmSchemaConfiguration();
+            schemaOld.Entities.Add(entity);
+            mockExportView.SetupGet(x => x.SchemaConfiguration).Returns(schemaOld);
+            mockExportView.SetupGet(x => x.EntityList).Returns(schemaOld.Entities.Select(x => new ListBoxItem<CrmEntity> { DisplayName = x.DisplayName, Item = x }));
+            mockExportView.SetupGet(x => x.EntityFilters).Returns(new Dictionary<string, string>());
+            mockExportView.SetupGet(x => x.SelectedEntity).Returns(entity);
+            mockExportView.SetupGet(x => x.FilterText).Returns("<filter></filter>");
+
             systemUnderTest.OnVisible(); // Loads old schema entities
+            systemUnderTest.UpdateFilterForEntity();
 
             var schemaNew = new CrmSchemaConfiguration();
             schemaNew.Entities.Add(new CrmEntity

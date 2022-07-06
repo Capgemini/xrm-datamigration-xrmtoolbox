@@ -143,29 +143,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.OneEntityPerBatch = config.OneEntityPerBatch;
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
-            WriteCrmMigrationToolSchemaFiltersFromConfig();
-        }
-
-        private void WriteCrmMigrationToolSchemaFiltersFromConfig()
-        {
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
-
-            if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
-            {
-                return; // No file to read from
-            }
-
-            try
-            {
-                var schema = CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
-                foreach (var entity in schema.Entities.Where(x => !view.CrmMigrationToolSchemaFilters.ContainsKey(x.Name)))
-                {
-                    view.CrmMigrationToolSchemaFilters.Add(entity.Name, string.Empty);
-                }
-            }
-            catch { }
         }
-
 
     }
 }

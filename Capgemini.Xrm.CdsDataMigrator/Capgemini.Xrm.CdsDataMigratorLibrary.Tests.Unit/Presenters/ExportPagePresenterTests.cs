@@ -270,7 +270,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnSchemaWhenCrmMigrationToolSchemaPathIsValid()
         {
             // Arrange
-            var filePath = @"TestData\apointmentsSchema.xml";
+            var filePath = @"TestData\BusinessUnitSchema.xml";
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(filePath);
