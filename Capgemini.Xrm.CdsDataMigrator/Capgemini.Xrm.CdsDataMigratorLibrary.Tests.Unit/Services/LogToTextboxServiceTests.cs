@@ -12,7 +12,7 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
-    public class LoggerServiceTests
+    public class LogToTextboxServiceTests
     {
         private const string Message = "Test message";
         private const string DateFormat = "dd-MMM-yyyy";
@@ -21,14 +21,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         private readonly Mock<ILogManagerContainer> logManagerContainerMock = new Mock<ILogManagerContainer>();
         private readonly TextBox logTextBox = new TextBox();
 
-        private LoggerService systemUnderTest;
+        private LogToTextboxService systemUnderTest;
 
         [TestInitialize]
         public void Setup()
         {
             SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
 
-            systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
+            systemUnderTest = new LogToTextboxService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object);
 
             logTextBox.Text = "";
         }
@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         [TestMethod]
         public void MessageLogger()
         {
-            FluentActions.Invoking(() => systemUnderTest = new LoggerService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object))
+            FluentActions.Invoking(() => systemUnderTest = new LogToTextboxService(logTextBox, SynchronizationContext.Current, logManagerContainerMock.Object))
                         .Should()
                         .NotThrow();
         }

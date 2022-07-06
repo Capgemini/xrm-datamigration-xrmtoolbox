@@ -1,10 +1,13 @@
 ﻿using Capgemini.DataMigration.Core;
 using Capgemini.DataMigration.Resiliency.Polly;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Repositories;
+using Microsoft.Xrm.Sdk;
 using System;
+using System.Linq;
 using System.Threading;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
@@ -60,6 +63,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             var schema = CrmSchemaConfiguration.ReadFromFile(exportSettings.SchemaPath);
 
             var exporter = migratorFactory.GetCrmDataMigrator(exportSettings.DataFormat, logger, repo, exportConfig, tokenSource.Token, schema);
+
+            exporter.MigrateData();
+        }
+
+        public void ExportData(IOrganizationService service, DataFormat format, CrmExporterConfig config)
+        {
+            tokenSource = new CancellationTokenSource();
+
+            var repo = new EntityRepository(service, new ServiceRetryExecutor());
+
+            var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
+
+            var exporter = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
             exporter.MigrateData();
         }

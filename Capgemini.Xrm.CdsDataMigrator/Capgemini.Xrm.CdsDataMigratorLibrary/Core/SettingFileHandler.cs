@@ -16,18 +16,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Core
 
             return allok;
         }
-
-        public static bool SaveConfigData<T>(Settings config)
-        {
-            try
-            {
-                SettingsManager.Instance.Save(typeof(T), config);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
     }
 }
