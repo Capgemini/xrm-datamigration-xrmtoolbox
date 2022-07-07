@@ -130,6 +130,15 @@
             this.tsbShowExportPage.Text = "Data Export (new)";
             this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
             // 
+            // tsbShowImportPage
+            // 
+            this.tsbShowExportPage.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.export;
+            this.tsbShowExportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbShowExportPage.Name = "tsbShowImportPage";
+            this.tsbShowExportPage.Size = new System.Drawing.Size(157, 25);
+            this.tsbShowExportPage.Text = "Data Import (new)";
+            this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
+            // 
             // SchemaGeneratorWizard
             // 
             this.SchemaGeneratorWizard.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -233,6 +242,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonDataExport;
         private System.Windows.Forms.ToolStrip toolStripPluginOptionMenu;
         private UserControls.ExportPage exportPage1;
+        private UserControls.ImportPage importPage1;
         private System.Windows.Forms.ToolStripButton tsbShowExportPage;
     }
 }

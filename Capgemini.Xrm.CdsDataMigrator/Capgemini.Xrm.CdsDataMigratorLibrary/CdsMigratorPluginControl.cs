@@ -122,5 +122,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         {
             exportPage1.BringToFront();
         }
+
+        private void tsbShowImportPage_Click(object sender, EventArgs e)
+        {
+            importPage1.BringToFront();
+        }
     }
 }
