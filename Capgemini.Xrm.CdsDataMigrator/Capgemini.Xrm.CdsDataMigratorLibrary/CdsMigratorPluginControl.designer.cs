@@ -45,6 +45,7 @@
             this.DataImportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ImportWizard();
             this.DataExportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ExportWizard();
             this.exportPage1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ExportPage();
+            this.importPage1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ImportPage();
             this.toolStripPluginOptionMenu.SuspendLayout();
             this.SuspendLayout();
             // 
