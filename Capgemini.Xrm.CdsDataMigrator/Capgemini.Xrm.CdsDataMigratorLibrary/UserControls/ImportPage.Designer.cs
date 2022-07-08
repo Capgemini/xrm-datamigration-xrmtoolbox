@@ -140,7 +140,7 @@
             this.lblEnvironment.Size = new System.Drawing.Size(171, 28);
             this.lblEnvironment.TabIndex = 7;
             this.lblEnvironment.Text = "Environment";
-            this.toolTip.SetToolTip(this.lblEnvironment, "The Dataverse environment you want to export data from.");
+            this.toolTip.SetToolTip(this.lblEnvironment, "The Dataverse environment you want to Import data from.");
             // 
             // lblSchemaFile
             // 
@@ -152,8 +152,8 @@
             this.lblSchemaFile.Size = new System.Drawing.Size(171, 41);
             this.lblSchemaFile.TabIndex = 0;
             this.lblSchemaFile.Text = "Schema File";
-            this.toolTip.SetToolTip(this.lblSchemaFile, "The path to a Schema file that defines the entities and columns to export. This c" +
-        "an be generated from the Schema tab or using Microsoft\'s Configuration exporter." +
+            this.toolTip.SetToolTip(this.lblSchemaFile, "The path to a Schema file that defines the entities and columns to Import. This c" +
+        "an be generated from the Schema tab or using Microsoft\'s Configuration Importer." +
         "");
             // 
             // lblPageSize
@@ -166,7 +166,7 @@
             this.lblPageSize.Size = new System.Drawing.Size(171, 30);
             this.lblPageSize.TabIndex = 1;
             this.lblPageSize.Text = "Page Size";
-            this.toolTip.SetToolTip(this.lblPageSize, "The number of records to export in each request.");
+            this.toolTip.SetToolTip(this.lblPageSize, "The number of records to Import in each request.");
             // 
             // lblTopCount
             // 
@@ -178,7 +178,7 @@
             this.lblTopCount.Size = new System.Drawing.Size(171, 30);
             this.lblTopCount.TabIndex = 2;
             this.lblTopCount.Text = "Top Count";
-            this.toolTip.SetToolTip(this.lblTopCount, "The maxium number of records to export. ");
+            this.toolTip.SetToolTip(this.lblTopCount, "The maxium number of records to Import. ");
             // 
             // dataverseEnvironmentSelector1
             // 
@@ -248,7 +248,7 @@
             this.lblActiveRecords.Size = new System.Drawing.Size(171, 38);
             this.lblActiveRecords.TabIndex = 9;
             this.lblActiveRecords.Text = "Only active records?";
-            this.toolTip.SetToolTip(this.lblActiveRecords, "Restricts the export based on records status.");
+            this.toolTip.SetToolTip(this.lblActiveRecords, "Restricts the Import based on records status.");
             // 
             // tcbActiveRecords
             // 
@@ -448,7 +448,7 @@
             this.lblOneEntityPerBatch.Size = new System.Drawing.Size(168, 38);
             this.lblOneEntityPerBatch.TabIndex = 8;
             this.lblOneEntityPerBatch.Text = "One entity per batch?";
-            this.toolTip.SetToolTip(this.lblOneEntityPerBatch, "Only applies of SeperateFilesPerEntity is false. If this is false then Export fil" +
+            this.toolTip.SetToolTip(this.lblOneEntityPerBatch, "Only applies of SeperateFilesPerEntity is false. If this is false then Import fil" +
         "es are created upto the BatchSize value containing data from one or more entitie" +
         "s.");
             // 
@@ -500,7 +500,7 @@
             this.lblFileNamePrefix.Size = new System.Drawing.Size(168, 30);
             this.lblFileNamePrefix.TabIndex = 12;
             this.lblFileNamePrefix.Text = "File name prefix";
-            this.toolTip.SetToolTip(this.lblFileNamePrefix, "Defines the common prefix for all exported files.");
+            this.toolTip.SetToolTip(this.lblFileNamePrefix, "Defines the common prefix for all Imported files.");
             // 
             // tbxFileNamePrefix
             // 
