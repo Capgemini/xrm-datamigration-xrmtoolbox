@@ -20,7 +20,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             InitializeComponent();
 
-            // this.exportFilterForm = new ExportFilterForm();
+             this.exportFilterForm = new ExportFilterForm();
         }
 
         [ExcludeFromCodeCoverage]
