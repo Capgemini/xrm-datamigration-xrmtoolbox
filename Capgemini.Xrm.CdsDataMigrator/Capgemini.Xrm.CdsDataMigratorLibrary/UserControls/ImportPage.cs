@@ -11,16 +11,16 @@ using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
-    public partial class ImportPage : UserControl, IImportPageView
+    public partial class ImportPage : UserControl, IExportPageView
     {
-        private ImportPagePresenter presenter;
-        private ExportFilterForm importFilterForm;
+        private ExportPagePresenter presenter;
+        private ExportFilterForm exportFilterForm;
 
         public ImportPage()
         {
             InitializeComponent();
 
-            this.importFilterForm = new ExportFilterForm();
+            // this.exportFilterForm = new ExportFilterForm();
         }
 
         [ExcludeFromCodeCoverage]
@@ -30,65 +30,65 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-            presenter = new ImportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
+            presenter = new ExportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
         }
 
         #region input mapping
 
-        int IImportPageView.PageSize
+        int IExportPageView.PageSize
         {
             get => (int)nbxPageSize.Value;
             set => nbxPageSize.Value = value;
         }
 
-        int IImportPageView.BatchSize
+        int IExportPageView.BatchSize
         {
             get => (int)nbxBatchSize.Value;
             set => nbxBatchSize.Value = value;
         }
 
-        int IImportPageView.TopCount
+        int IExportPageView.TopCount
         {
             get => (int)nbxTopCount.Value;
             set => nbxTopCount.Value = value;
         }
-        bool IImportPageView.OnlyActiveRecords
+        bool IExportPageView.OnlyActiveRecords
         {
             get => tcbActiveRecords.Checked;
             set => tcbActiveRecords.Checked = value;
         }
 
-        string IImportPageView.JsonFolderPath
+        string IExportPageView.JsonFolderPath
         {
             get => fisOutputDirectory.Value;
             set => fisOutputDirectory.Value = value;
         }
 
-        bool IImportPageView.OneEntityPerBatch
+        bool IExportPageView.OneEntityPerBatch
         {
             get => tcbOneEntityPerBatch.Checked;
             set => tcbOneEntityPerBatch.Checked = value;
         }
 
-        string IImportPageView.FilePrefix
+        string IExportPageView.FilePrefix
         {
             get => tbxFileNamePrefix.Text;
             set => tbxFileNamePrefix.Text = value;
         }
 
-        bool IImportPageView.SeperateFilesPerEntity
+        bool IExportPageView.SeperateFilesPerEntity
         {
             get => tcbSeparateFilesPerEntity.Checked;
             set => tcbSeparateFilesPerEntity.Checked = value;
         }
 
-        string IImportPageView.CrmMigrationToolSchemaPath
+        string IExportPageView.CrmMigrationToolSchemaPath
         {
             get => fisSchemaFile.Value;
             set => fisSchemaFile.Value = value;
         }
 
-        DataFormat IImportPageView.DataFormat
+        DataFormat IExportPageView.DataFormat
         {
             get
             {
@@ -103,15 +103,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             }
         }
 
-        IOrganizationService IImportPageView.Service
+        IOrganizationService IExportPageView.Service
         {
             get => dataverseEnvironmentSelector1.Service;
         }
 
-        Dictionary<string, string> IImportPageView.CrmMigrationToolSchemaFilters
+        Dictionary<string, string> IExportPageView.CrmMigrationToolSchemaFilters
         {
-            get => importFilterForm.EntityFilters;
-            set => importFilterForm.EntityFilters = value;
+            get => exportFilterForm.EntityFilters;
+            set => exportFilterForm.EntityFilters = value;
         }
 
         #endregion
@@ -119,14 +119,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         #region action mappings
 
         [ExcludeFromCodeCoverage]
-        string IImportPageView.AskForFilePathToOpen()
+        string IExportPageView.AskForFilePathToOpen()
         {
             openFileDialog.ShowDialog();
             return openFileDialog.FileName;
         }
 
         [ExcludeFromCodeCoverage]
-        string IImportPageView.AskForFilePathToSave(string existingFileName)
+        string IExportPageView.AskForFilePathToSave(string existingFileName)
         {
             saveFileDialog.FileName = existingFileName;
             saveFileDialog.ShowDialog();
@@ -158,8 +158,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         [ExcludeFromCodeCoverage]
         private void btnFetchXmlFilters_Click(object sender, EventArgs e)
         {
-            importFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
-            this.importFilterForm.ShowDialog(this);
+            exportFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
+            this.exportFilterForm.ShowDialog(this);
         }
 
         #endregion

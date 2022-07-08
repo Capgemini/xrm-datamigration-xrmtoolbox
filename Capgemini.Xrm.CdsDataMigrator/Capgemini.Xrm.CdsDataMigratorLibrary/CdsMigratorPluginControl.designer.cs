@@ -135,7 +135,7 @@
             // 
             // tsbShowImportPage
             // 
-            this.tsbShowImportPage.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.export;
+            this.tsbShowImportPage.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Import;
             this.tsbShowImportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowImportPage.Name = "tsbShowImportPage";
             this.tsbShowImportPage.Size = new System.Drawing.Size(157, 25);

@@ -422,8 +422,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportPage.resx">
       <DependentUpon>ImportPage.cs</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ImportPage1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>

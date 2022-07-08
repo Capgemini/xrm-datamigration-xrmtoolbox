@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 {
-    public partial class ImportFilterForm : Form, IImportFilterFormView
+    public partial class FilterFormImport : Form, IImportFilterFormView
     {
         private readonly IImportFilterFormPresenter presenter;
 
-        public ImportFilterForm(IImportFilterFormPresenter presenter = null)
+        public FilterFormImport(IImportFilterFormPresenter presenter = null)
         {
             InitializeComponent();
 

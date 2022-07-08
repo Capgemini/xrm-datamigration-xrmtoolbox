@@ -1,6 +1,6 @@
 ﻿namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 {
-    partial class ImportFilterForm
+    partial class FilterFormImport
     {
         /// <summary>
         /// Required designer variable.

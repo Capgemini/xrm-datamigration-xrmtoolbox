@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportPage));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportPage));
             this.gbxFetchSettings = new System.Windows.Forms.GroupBox();
             this.tlpFetchSettings = new System.Windows.Forms.TableLayoutPanel();
             this.lblEnvironment = new System.Windows.Forms.Label();
@@ -69,6 +69,7 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.gbxFetchSettings.SuspendLayout();
             this.tlpFetchSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbxPageSize)).BeginInit();
@@ -516,7 +517,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoad,
             this.tsbSave,
-            this.tsbRun});
+            this.tsbRun,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1137, 27);
@@ -525,28 +527,25 @@
             // 
             // tsbLoad
             // 
-            this.tsbLoad.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoad.Image")));
             this.tsbLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoad.Name = "tsbLoad";
-            this.tsbLoad.Size = new System.Drawing.Size(66, 24);
+            this.tsbLoad.Size = new System.Drawing.Size(46, 24);
             this.tsbLoad.Text = "Load";
             this.tsbLoad.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // tsbSave
             // 
-            this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
-            this.tsbSave.Size = new System.Drawing.Size(64, 24);
+            this.tsbSave.Size = new System.Drawing.Size(44, 24);
             this.tsbSave.Text = "Save";
             this.tsbSave.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // tsbRun
             // 
-            this.tsbRun.Image = ((System.Drawing.Image)(resources.GetObject("tsbRun.Image")));
             this.tsbRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRun.Name = "tsbRun";
-            this.tsbRun.Size = new System.Drawing.Size(58, 24);
+            this.tsbRun.Size = new System.Drawing.Size(38, 24);
             this.tsbRun.Text = "Run";
             this.tsbRun.Click += new System.EventHandler(this.runButton_Click);
             // 
@@ -572,14 +571,23 @@
             this.tlpMainLayout.Size = new System.Drawing.Size(1137, 588);
             this.tlpMainLayout.TabIndex = 7;
             // 
-            // ExportPage
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
+            // ImportPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpMainLayout);
             this.Controls.Add(this.toolStrip1);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "ExportPage";
+            this.Name = "ImportPage";
             this.Size = new System.Drawing.Size(1137, 615);
             this.gbxFetchSettings.ResumeLayout(false);
             this.gbxFetchSettings.PerformLayout();
@@ -644,5 +652,6 @@
         private System.Windows.Forms.TextBox tbxFileNamePrefix;
         private System.Windows.Forms.Button btnFetchXmlFilters;
         private System.Windows.Forms.Label lblFetchXmlFilters;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

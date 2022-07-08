@@ -103,15 +103,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         public void ImportData(IOrganizationService service, DataFormat format, CrmImportConfig config)
         {
-            tokenSource = new CancellationTokenSource();
+            //tokenSource = new CancellationTokenSource();
 
-            var repo = new EntityRepository(service, new ServiceRetryExecutor());
+            //var repo = new EntityRepository(service, new ServiceRetryExecutor());
 
-            var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
+            //var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
 
-            var importer = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+            //var importer = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
-            importer.MigrateData();
+            //importer.MigrateData();
         }
 
         public void CancelDataImport()
