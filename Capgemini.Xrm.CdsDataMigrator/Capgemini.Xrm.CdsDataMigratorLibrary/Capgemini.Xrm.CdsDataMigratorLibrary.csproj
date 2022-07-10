@@ -275,6 +275,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\AbstractLogger.cs" />
     <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
@@ -297,6 +302,12 @@
     </Compile>
     <Compile Include="UserControls\DataverseEnvironmentSelector.Designer.cs">
       <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EntityListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityListView.Designer.cs">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ExportPage.cs">
       <SubType>UserControl</SubType>
@@ -322,11 +333,29 @@
     <Compile Include="UserControls\FileInputSelector.Designer.cs">
       <DependentUpon>FileInputSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\GeneratedSchemaLocationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GeneratedSchemaLocationControl.Designer.cs">
+      <DependentUpon>GeneratedSchemaLocationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ImportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\ImportWizard.designer.cs">
       <DependentUpon>ImportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.Designer.cs">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SchemaGeneratorPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SchemaGeneratorPage.Designer.cs">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SchemaWizard.cs">
       <SubType>UserControl</SubType>
@@ -372,8 +401,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\DataverseEnvironmentSelector.resx">
       <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EntityListView.resx">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportPage.resx">
       <DependentUpon>ExportPage.cs</DependentUpon>
@@ -390,8 +426,17 @@
       <DependentUpon>FileInputSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GeneratedSchemaLocationControl.resx">
+      <DependentUpon>GeneratedSchemaLocationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ListManagerView.resx">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SchemaGeneratorPage.resx">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SchemaWizard.resx">
       <DependentUpon>SchemaWizard.cs</DependentUpon>

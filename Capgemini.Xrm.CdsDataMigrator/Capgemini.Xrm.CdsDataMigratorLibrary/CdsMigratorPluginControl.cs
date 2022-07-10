@@ -122,5 +122,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         {
             exportPage1.BringToFront();
         }
+
+        private void ShowSchemaManager(object sender, EventArgs e)
+        {
+            sgpManageSchema.BringToFront();
+        }
     }
 }
