@@ -31,9 +31,9 @@
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.tlpDetailsPane = new System.Windows.Forms.TableLayoutPanel();
             this.generatedSchemaLocationControl1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.GeneratedSchemaLocationControl();
-            this.entityListView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.EntityListView();
             this.listManagerView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
             this.listManagerView2 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
+            this.entityListView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.EntityListView();
             this.tlpMainLayout.SuspendLayout();
             this.tlpDetailsPane.SuspendLayout();
             this.SuspendLayout();
@@ -41,8 +41,8 @@
             // tlpMainLayout
             // 
             this.tlpMainLayout.ColumnCount = 2;
-            this.tlpMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.79244F));
-            this.tlpMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.20757F));
+            this.tlpMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tlpMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMainLayout.Controls.Add(this.tlpDetailsPane, 1, 0);
             this.tlpMainLayout.Controls.Add(this.entityListView1, 0, 0);
             this.tlpMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -50,7 +50,6 @@
             this.tlpMainLayout.Name = "tlpMainLayout";
             this.tlpMainLayout.RowCount = 1;
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 615F));
             this.tlpMainLayout.Size = new System.Drawing.Size(1137, 615);
             this.tlpMainLayout.TabIndex = 0;
             // 
@@ -62,13 +61,13 @@
             this.tlpDetailsPane.Controls.Add(this.listManagerView1, 0, 1);
             this.tlpDetailsPane.Controls.Add(this.listManagerView2, 0, 2);
             this.tlpDetailsPane.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDetailsPane.Location = new System.Drawing.Point(319, 3);
+            this.tlpDetailsPane.Location = new System.Drawing.Point(303, 3);
             this.tlpDetailsPane.Name = "tlpDetailsPane";
             this.tlpDetailsPane.RowCount = 3;
-            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 230F));
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDetailsPane.Size = new System.Drawing.Size(815, 609);
+            this.tlpDetailsPane.Size = new System.Drawing.Size(831, 609);
             this.tlpDetailsPane.TabIndex = 0;
             // 
             // generatedSchemaLocationControl1
@@ -76,32 +75,34 @@
             this.generatedSchemaLocationControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.generatedSchemaLocationControl1.Location = new System.Drawing.Point(3, 3);
             this.generatedSchemaLocationControl1.Name = "generatedSchemaLocationControl1";
-            this.generatedSchemaLocationControl1.Size = new System.Drawing.Size(809, 94);
+            this.generatedSchemaLocationControl1.Size = new System.Drawing.Size(825, 224);
             this.generatedSchemaLocationControl1.TabIndex = 0;
+            // 
+            // listManagerView1
+            // 
+            this.listManagerView1.DisplayedItemsName = "Available Attributes";
+            this.listManagerView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listManagerView1.Location = new System.Drawing.Point(3, 233);
+            this.listManagerView1.Name = "listManagerView1";
+            this.listManagerView1.Size = new System.Drawing.Size(825, 183);
+            this.listManagerView1.TabIndex = 1;
+            // 
+            // listManagerView2
+            // 
+            this.listManagerView2.DisplayedItemsName = "Available Relationships";
+            this.listManagerView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listManagerView2.Location = new System.Drawing.Point(3, 422);
+            this.listManagerView2.Name = "listManagerView2";
+            this.listManagerView2.Size = new System.Drawing.Size(825, 184);
+            this.listManagerView2.TabIndex = 2;
             // 
             // entityListView1
             // 
             this.entityListView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.entityListView1.Location = new System.Drawing.Point(3, 3);
             this.entityListView1.Name = "entityListView1";
-            this.entityListView1.Size = new System.Drawing.Size(310, 609);
+            this.entityListView1.Size = new System.Drawing.Size(294, 609);
             this.entityListView1.TabIndex = 1;
-            // 
-            // listManagerView1
-            // 
-            this.listManagerView1.DisplayedItemsName = "Available Attributes";
-            this.listManagerView1.Location = new System.Drawing.Point(3, 103);
-            this.listManagerView1.Name = "listManagerView1";
-            this.listManagerView1.Size = new System.Drawing.Size(809, 233);
-            this.listManagerView1.TabIndex = 1;
-            // 
-            // listManagerView2
-            // 
-            this.listManagerView2.DisplayedItemsName = "Available Relationships";
-            this.listManagerView2.Location = new System.Drawing.Point(3, 357);
-            this.listManagerView2.Name = "listManagerView2";
-            this.listManagerView2.Size = new System.Drawing.Size(809, 233);
-            this.listManagerView2.TabIndex = 2;
             // 
             // SchemaGeneratorPage
             // 
