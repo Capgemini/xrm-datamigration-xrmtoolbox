@@ -6,24 +6,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public interface IImportPageView
     {
-        //TODO: List<string> ExcludedFields { get; set; }
-        //TODO: string FetchXMLFolderPath { get; set; }
-        string CrmMigrationToolSchemaPath { get; set; }
-        Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
-        int PageSize { get; set; }
-        int BatchSize { get; set; }
-        int TopCount { get; set; }
-        bool OnlyActiveRecords { get; set; }
+        bool IgnoreStatuses { get; set; }
+        List<string> IgnoreStatusesExceptions { get; set; }
+        bool IgnoreSystemFields { get; set; }
+        //TODO: List<string> MigrationConfig { get; set; }
+        List<string> AdditionalFieldsToIgnore { get; set; }
+        int SaveBatchSize { get; set; }
         string JsonFolderPath { get; set; }
-        bool OneEntityPerBatch { get; set; }
+        List<string> EntitiesToSync { get; set; }
+        List<string> NoUpsertEntities { get; set; }
+        List<string> PluginsToDeactivate { get; set; }
+        List<string> ProcessesToDeactivate { get; set; }
+        bool DeactivateAllProcesses { get; set; }
         string FilePrefix { get; set; }
-        bool SeperateFilesPerEntity { get; set; }
-        //TODO: List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
-        //TODO: Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
-        DataFormat DataFormat { get; set; }
-        IOrganizationService Service { get; }
-
-        string AskForFilePathToOpen();
-        string AskForFilePathToSave(string existingFileName = "");
+        List<string> PassOneReferences { get; set; }
+        List<string> FieldsToObfuscate { get; set; }
+        //TODO: List<string> NoUpdateEntities { get; set; }
     }
 }
