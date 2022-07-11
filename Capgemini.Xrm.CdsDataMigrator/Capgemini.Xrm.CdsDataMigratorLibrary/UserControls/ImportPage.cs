@@ -14,13 +14,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ImportPage : UserControl, IImportPageView
     {
         private ImportPagePresenter presenter;
-        private FilterFormImport importFilterForm;
+        //private FilterFormImport importFilterForm;
 
         public ImportPage()
         {
             InitializeComponent();
 
-            this.importFilterForm = new FilterFormImport();
+            //this.importFilterForm = new FilterFormImport();
         }
 
         [ExcludeFromCodeCoverage]
@@ -34,28 +34,48 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         #region input mapping
-
-        int IImportPageView.PageSize
+        
+        bool IImportPageView.IgnoreStatuses
         {
-            get => (int)nbxPageSize.Value;
-            set => nbxPageSize.Value = value;
+            get => tcbIgnoreStatuses.Checked;
+            set => tcbIgnoreStatuses.Checked = value;
         }
 
-        int IImportPageView.BatchSize
+        //TO DO - update to get and set correct list of status exceptions
+        List<string> IImportPageView.IgnoreStatusesExceptions
         {
-            get => (int)nbxBatchSize.Value;
-            set => nbxBatchSize.Value = value;
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
         }
 
-        int IImportPageView.TopCount
+        // TO DO - migration config
+
+        //TO DO - update to get and set correct list of status exceptions
+        List<string> IImportPageView.AdditionalFieldsToIgnore
         {
-            get => (int)nbxTopCount.Value;
-            set => nbxTopCount.Value = value;
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
         }
-        bool IImportPageView.OnlyActiveRecords
+
+        bool IImportPageView.IgnoreSystemFields
         {
-            get => tcbActiveRecords.Checked;
-            set => tcbActiveRecords.Checked = value;
+            get => tcbIgnoreSystemFields.Checked;
+            set => tcbIgnoreSystemFields.Checked = value;
+        }
+
+        // TO DO - add setter to SaveBatch size and decide on value
+        int IImportPageView.SaveBatchSize
+        {
+            get
+            {
+                return 200;
+            }
         }
 
         string IImportPageView.JsonFolderPath
@@ -64,29 +84,76 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => fisOutputDirectory.Value = value;
         }
 
-        bool IImportPageView.OneEntityPerBatch
+        //TO DO - update to get and set correct list of Entities to Sync
+        List<string> IImportPageView.EntitiesToSync
         {
-            get => tcbOneEntityPerBatch.Checked;
-            set => tcbOneEntityPerBatch.Checked = value;
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
+        }
+
+        //TO DO - update to get and set correct list of Entities to Sync
+        List<string> IImportPageView.NoUpsertEntities
+        {
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
+        }
+
+        //TO DO - update to get and set correct list of No Upsert Entities
+        List<string> IImportPageView.PluginsToDeactivate
+        {
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
+        }
+
+        //TO DO - update to get and set correct list of Plugins To Deactivate
+        List<string> IImportPageView.ProcessesToDeactivate
+        {
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
+        }
+
+        // TO DO - add setter to SaveBatch size and decide on value
+        bool IImportPageView.DeactivateAllProcesses
+        {
+            get
+            {
+                return true;
+            }
         }
 
         string IImportPageView.FilePrefix
         {
-            get => tbxFileNamePrefix.Text;
-            set => tbxFileNamePrefix.Text = value;
+            get => fisOutputDirectory.Value;
+            set => fisOutputDirectory.Value = value;
         }
 
-        bool IImportPageView.SeperateFilesPerEntity
+        //TO DO - update to get and set correct list of Fields to Obfiscate
+        List<string> IImportPageView.FieldsToObfuscate
         {
-            get => tcbSeparateFilesPerEntity.Checked;
-            set => tcbSeparateFilesPerEntity.Checked = value;
+            get
+            {
+                return new List<string>();
+            }
+            set => new List<string>();
         }
-
-        string IImportPageView.CrmMigrationToolSchemaPath
-        {
-            get => fisSchemaFile.Value;
-            set => fisSchemaFile.Value = value;
-        }
+        
+        //Dictionary<string, string> IImportPageView.CrmMigrationToolSchemaFilters
+        //{
+        //    get => importFilterForm.EntityFilters;
+        //    set => importFilterForm.EntityFilters = value;
+        //}
 
         DataFormat IImportPageView.DataFormat
         {
@@ -106,12 +173,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         IOrganizationService IImportPageView.Service
         {
             get => dataverseEnvironmentSelector1.Service;
-        }
-
-        Dictionary<string, string> IImportPageView.CrmMigrationToolSchemaFilters
-        {
-            get => importFilterForm.EntityFilters;
-            set => importFilterForm.EntityFilters = value;
         }
 
         #endregion
@@ -155,12 +216,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             presenter.RunConfig();
         }
 
-        [ExcludeFromCodeCoverage]
-        private void btnFetchXmlFilters_Click(object sender, EventArgs e)
-        {
-            importFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
-            this.importFilterForm.ShowDialog(this);
-        }
+        //[ExcludeFromCodeCoverage]
+        //private void btnFetchXmlFilters_Click(object sender, EventArgs e)
+        //{
+        //    importFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
+        //    this.importFilterForm.ShowDialog(this);
+        //}
 
         #endregion
 

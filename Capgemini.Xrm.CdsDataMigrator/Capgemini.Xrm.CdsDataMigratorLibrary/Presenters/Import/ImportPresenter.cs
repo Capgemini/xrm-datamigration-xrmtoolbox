@@ -21,7 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
             this.importView.SelectImportLocationHandler += SelectImportLocation;
             this.importView.SelectImportConfigFileHandler += SelectImportConfig;
-            this.importView.SelectSchemaFileHandler += SelectSchemaFile;
+            //this.importView.SelectSchemaFileHandler += SelectSchemaFile;
             this.importView.ImportDataHandler += ImportData;
             this.importView.CancelHandler += CancelAction;
         }
@@ -89,11 +89,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             importView.ImportConfigFileLocation = importConfigFileName;
         }
 
-        [ExcludeFromCodeCoverage]
-        private void SelectSchemaFile(object sender, EventArgs e)
-        {
-            string schemaFileName = importView.ShowFileDialog();
-            importView.ImportSchemaFileLocation = schemaFileName;
-        }
+        //[ExcludeFromCodeCoverage]
+        //private void SelectSchemaFile(object sender, EventArgs e)
+        //{
+        //    string schemaFileName = importView.ShowFileDialog();
+        //    importView.ImportSchemaFileLocation = schemaFileName;
+        //}
     }
 }

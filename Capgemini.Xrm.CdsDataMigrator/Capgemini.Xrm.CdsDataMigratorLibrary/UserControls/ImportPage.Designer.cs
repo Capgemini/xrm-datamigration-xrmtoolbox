@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportPage));
             this.gbxFetchSettings = new System.Windows.Forms.GroupBox();
             this.tlpFetchSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.toggleCheckBox1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.tcbIgnoreStatuses = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.lblEnvironment = new System.Windows.Forms.Label();
             this.lblSchemaFile = new System.Windows.Forms.Label();
             this.lblPageSize = new System.Windows.Forms.Label();
@@ -42,7 +42,7 @@
             this.nbxPageSize = new System.Windows.Forms.NumericUpDown();
             this.nbxTopCount = new System.Windows.Forms.NumericUpDown();
             this.lblActiveRecords = new System.Windows.Forms.Label();
-            this.tcbActiveRecords = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
+            this.tcbIgnoreSystemFields = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ToggleCheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.gbxWriteSettings = new System.Windows.Forms.GroupBox();
             this.tlpWriteSettings = new System.Windows.Forms.TableLayoutPanel();
@@ -103,7 +103,7 @@
             this.tlpFetchSettings.ColumnCount = 2;
             this.tlpFetchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.45274F));
             this.tlpFetchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.54726F));
-            this.tlpFetchSettings.Controls.Add(this.toggleCheckBox1, 1, 6);
+            this.tlpFetchSettings.Controls.Add(this.tcbIgnoreStatuses, 1, 6);
             this.tlpFetchSettings.Controls.Add(this.lblEnvironment, 0, 0);
             this.tlpFetchSettings.Controls.Add(this.lblSchemaFile, 0, 1);
             this.tlpFetchSettings.Controls.Add(this.lblPageSize, 0, 2);
@@ -113,7 +113,7 @@
             this.tlpFetchSettings.Controls.Add(this.nbxPageSize, 1, 2);
             this.tlpFetchSettings.Controls.Add(this.nbxTopCount, 1, 3);
             this.tlpFetchSettings.Controls.Add(this.lblActiveRecords, 0, 4);
-            this.tlpFetchSettings.Controls.Add(this.tcbActiveRecords, 1, 4);
+            this.tlpFetchSettings.Controls.Add(this.tcbIgnoreSystemFields, 1, 4);
             this.tlpFetchSettings.Controls.Add(this.textBox1, 0, 6);
             this.tlpFetchSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFetchSettings.Location = new System.Drawing.Point(13, 27);
@@ -132,17 +132,17 @@
             this.tlpFetchSettings.Size = new System.Drawing.Size(1278, 267);
             this.tlpFetchSettings.TabIndex = 0;
             // 
-            // toggleCheckBox1
+            // tcbIgnoreStatuses
             // 
-            this.toggleCheckBox1.AutoSize = true;
-            this.toggleCheckBox1.Location = new System.Drawing.Point(214, 196);
-            this.toggleCheckBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.toggleCheckBox1.Name = "toggleCheckBox1";
-            this.toggleCheckBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.toggleCheckBox1.Size = new System.Drawing.Size(63, 19);
-            this.toggleCheckBox1.TabIndex = 14;
-            this.toggleCheckBox1.Text = "Yes";
-            this.toggleCheckBox1.UseVisualStyleBackColor = true;
+            this.tcbIgnoreStatuses.AutoSize = true;
+            this.tcbIgnoreStatuses.Location = new System.Drawing.Point(268, 245);
+            this.tcbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(4);
+            this.tcbIgnoreStatuses.Name = "tcbIgnoreStatuses";
+            this.tcbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(5);
+            this.tcbIgnoreStatuses.Size = new System.Drawing.Size(79, 24);
+            this.tcbIgnoreStatuses.TabIndex = 14;
+            this.tcbIgnoreStatuses.Text = "Yes";
+            this.tcbIgnoreStatuses.UseVisualStyleBackColor = true;
             // 
             // lblEnvironment
             // 
@@ -151,7 +151,7 @@
             this.lblEnvironment.Location = new System.Drawing.Point(4, 0);
             this.lblEnvironment.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEnvironment.Name = "lblEnvironment";
-            this.lblEnvironment.Size = new System.Drawing.Size(202, 16);
+            this.lblEnvironment.Size = new System.Drawing.Size(253, 20);
             this.lblEnvironment.TabIndex = 7;
             this.lblEnvironment.Text = "Environment";
             this.toolTip.SetToolTip(this.lblEnvironment, "The Dataverse environment you want to Import data from.");
@@ -160,10 +160,10 @@
             // 
             this.lblSchemaFile.AutoSize = true;
             this.lblSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSchemaFile.Location = new System.Drawing.Point(4, 16);
+            this.lblSchemaFile.Location = new System.Drawing.Point(5, 20);
             this.lblSchemaFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSchemaFile.Name = "lblSchemaFile";
-            this.lblSchemaFile.Size = new System.Drawing.Size(202, 41);
+            this.lblSchemaFile.Size = new System.Drawing.Size(253, 51);
             this.lblSchemaFile.TabIndex = 0;
             this.lblSchemaFile.Text = "Schema File";
             this.toolTip.SetToolTip(this.lblSchemaFile, "The path to a Schema file that defines the entities and columns to Import. This c" +
@@ -174,10 +174,10 @@
             // 
             this.lblPageSize.AutoSize = true;
             this.lblPageSize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPageSize.Location = new System.Drawing.Point(4, 57);
+            this.lblPageSize.Location = new System.Drawing.Point(5, 71);
             this.lblPageSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPageSize.Name = "lblPageSize";
-            this.lblPageSize.Size = new System.Drawing.Size(202, 30);
+            this.lblPageSize.Size = new System.Drawing.Size(253, 38);
             this.lblPageSize.TabIndex = 1;
             this.lblPageSize.Text = "Save Page Size";
             this.toolTip.SetToolTip(this.lblPageSize, "The number of records to Import in each request.");
@@ -186,10 +186,10 @@
             // 
             this.lblTopCount.AutoSize = true;
             this.lblTopCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTopCount.Location = new System.Drawing.Point(4, 87);
+            this.lblTopCount.Location = new System.Drawing.Point(5, 109);
             this.lblTopCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTopCount.Name = "lblTopCount";
-            this.lblTopCount.Size = new System.Drawing.Size(202, 30);
+            this.lblTopCount.Size = new System.Drawing.Size(253, 38);
             this.lblTopCount.TabIndex = 2;
             this.lblTopCount.Text = "Max Threads";
             this.toolTip.SetToolTip(this.lblTopCount, "The maxium number of records to Import. ");
@@ -198,21 +198,21 @@
             // 
             this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Local;
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(215, 5);
+            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(269, 6);
             this.dataverseEnvironmentSelector1.Margin = new System.Windows.Forms.Padding(5);
             this.dataverseEnvironmentSelector1.Name = "dataverseEnvironmentSelector1";
-            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(1058, 6);
+            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(1323, 8);
             this.dataverseEnvironmentSelector1.TabIndex = 8;
             // 
             // fisSchemaFile
             // 
             this.fisSchemaFile.AutoSize = true;
             this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fisSchemaFile.Location = new System.Drawing.Point(215, 21);
+            this.fisSchemaFile.Location = new System.Drawing.Point(269, 26);
             this.fisSchemaFile.Margin = new System.Windows.Forms.Padding(5);
             this.fisSchemaFile.MinimumSize = new System.Drawing.Size(133, 31);
             this.fisSchemaFile.Name = "fisSchemaFile";
-            this.fisSchemaFile.Size = new System.Drawing.Size(1058, 31);
+            this.fisSchemaFile.Size = new System.Drawing.Size(1323, 39);
             this.fisSchemaFile.TabIndex = 5;
             this.fisSchemaFile.Value = "";
             // 
@@ -231,7 +231,7 @@
             0,
             0});
             this.nbxPageSize.Name = "nbxPageSize";
-            this.nbxPageSize.Size = new System.Drawing.Size(34, 22);
+            this.nbxPageSize.Size = new System.Drawing.Size(22, 22);
             this.nbxPageSize.TabIndex = 3;
             this.nbxPageSize.Value = new decimal(new int[] {
             1,
@@ -249,40 +249,40 @@
             0,
             0});
             this.nbxTopCount.Name = "nbxTopCount";
-            this.nbxTopCount.Size = new System.Drawing.Size(34, 22);
+            this.nbxTopCount.Size = new System.Drawing.Size(22, 22);
             this.nbxTopCount.TabIndex = 4;
             // 
             // lblActiveRecords
             // 
             this.lblActiveRecords.AutoSize = true;
             this.lblActiveRecords.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblActiveRecords.Location = new System.Drawing.Point(4, 117);
+            this.lblActiveRecords.Location = new System.Drawing.Point(5, 146);
             this.lblActiveRecords.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblActiveRecords.Name = "lblActiveRecords";
-            this.lblActiveRecords.Size = new System.Drawing.Size(202, 38);
+            this.lblActiveRecords.Size = new System.Drawing.Size(253, 48);
             this.lblActiveRecords.TabIndex = 9;
             this.lblActiveRecords.Text = "Ignore System Fields";
             this.toolTip.SetToolTip(this.lblActiveRecords, "Restricts the Import based on records status.");
             // 
-            // tcbActiveRecords
+            // tcbIgnoreSystemFields
             // 
-            this.tcbActiveRecords.AutoSize = true;
-            this.tcbActiveRecords.Location = new System.Drawing.Point(214, 121);
-            this.tcbActiveRecords.Margin = new System.Windows.Forms.Padding(4);
-            this.tcbActiveRecords.Name = "tcbActiveRecords";
-            this.tcbActiveRecords.Padding = new System.Windows.Forms.Padding(5);
-            this.tcbActiveRecords.Size = new System.Drawing.Size(63, 30);
-            this.tcbActiveRecords.TabIndex = 10;
-            this.tcbActiveRecords.Text = "Yes";
-            this.tcbActiveRecords.UseVisualStyleBackColor = true;
+            this.tcbIgnoreSystemFields.AutoSize = true;
+            this.tcbIgnoreSystemFields.Location = new System.Drawing.Point(268, 151);
+            this.tcbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(4);
+            this.tcbIgnoreSystemFields.Name = "tcbIgnoreSystemFields";
+            this.tcbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(5);
+            this.tcbIgnoreSystemFields.Size = new System.Drawing.Size(79, 38);
+            this.tcbIgnoreSystemFields.TabIndex = 10;
+            this.tcbIgnoreSystemFields.Text = "Yes";
+            this.tcbIgnoreSystemFields.UseVisualStyleBackColor = true;
             // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Control;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(3, 195);
+            this.textBox1.Location = new System.Drawing.Point(4, 244);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(128, 15);
+            this.textBox1.Size = new System.Drawing.Size(103, 19);
             this.textBox1.TabIndex = 13;
             this.textBox1.Text = "Ignore Record Status";
             // 
@@ -361,7 +361,7 @@
             // 
             this.lblBatchSize.AutoSize = true;
             this.lblBatchSize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBatchSize.Location = new System.Drawing.Point(4, 108);
+            this.lblBatchSize.Location = new System.Drawing.Point(4, 107);
             this.lblBatchSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblBatchSize.Name = "lblBatchSize";
             this.lblBatchSize.Size = new System.Drawing.Size(199, 30);
@@ -375,7 +375,7 @@
             this.fplFileTypes.Controls.Add(this.rbnDataFormatJson);
             this.fplFileTypes.Controls.Add(this.rbnDataFormatCsv);
             this.fplFileTypes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fplFileTypes.Location = new System.Drawing.Point(212, 4);
+            this.fplFileTypes.Location = new System.Drawing.Point(211, 4);
             this.fplFileTypes.Margin = new System.Windows.Forms.Padding(4);
             this.fplFileTypes.Name = "fplFileTypes";
             this.fplFileTypes.Size = new System.Drawing.Size(1063, 28);
@@ -458,7 +458,7 @@
             // tcbOneEntityPerBatch
             // 
             this.tcbOneEntityPerBatch.AutoSize = true;
-            this.tcbOneEntityPerBatch.Location = new System.Drawing.Point(212, 141);
+            this.tcbOneEntityPerBatch.Location = new System.Drawing.Point(211, 141);
             this.tcbOneEntityPerBatch.Margin = new System.Windows.Forms.Padding(4);
             this.tcbOneEntityPerBatch.Name = "tcbOneEntityPerBatch";
             this.tcbOneEntityPerBatch.Padding = new System.Windows.Forms.Padding(5);
@@ -471,7 +471,7 @@
             // 
             this.lblSeparateFilesPerEntity.AutoSize = true;
             this.lblSeparateFilesPerEntity.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSeparateFilesPerEntity.Location = new System.Drawing.Point(4, 176);
+            this.lblSeparateFilesPerEntity.Location = new System.Drawing.Point(4, 175);
             this.lblSeparateFilesPerEntity.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSeparateFilesPerEntity.Name = "lblSeparateFilesPerEntity";
             this.lblSeparateFilesPerEntity.Size = new System.Drawing.Size(199, 93);
@@ -484,7 +484,7 @@
             // tcbSeparateFilesPerEntity
             // 
             this.tcbSeparateFilesPerEntity.AutoSize = true;
-            this.tcbSeparateFilesPerEntity.Location = new System.Drawing.Point(212, 180);
+            this.tcbSeparateFilesPerEntity.Location = new System.Drawing.Point(211, 179);
             this.tcbSeparateFilesPerEntity.Margin = new System.Windows.Forms.Padding(4);
             this.tcbSeparateFilesPerEntity.Name = "tcbSeparateFilesPerEntity";
             this.tcbSeparateFilesPerEntity.Padding = new System.Windows.Forms.Padding(5);
@@ -508,7 +508,7 @@
             // tbxFileNamePrefix
             // 
             this.tbxFileNamePrefix.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbxFileNamePrefix.Location = new System.Drawing.Point(212, 81);
+            this.tbxFileNamePrefix.Location = new System.Drawing.Point(211, 81);
             this.tbxFileNamePrefix.Margin = new System.Windows.Forms.Padding(4);
             this.tbxFileNamePrefix.Name = "tbxFileNamePrefix";
             this.tbxFileNamePrefix.Size = new System.Drawing.Size(1063, 22);
@@ -643,7 +643,7 @@
         private System.Windows.Forms.TextBox tbxFileNamePrefix;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.TableLayoutPanel tlpFetchSettings;
-        private ToggleCheckBox toggleCheckBox1;
+        private ToggleCheckBox tcbIgnoreStatuses;
         private System.Windows.Forms.Label lblEnvironment;
         private System.Windows.Forms.Label lblSchemaFile;
         private System.Windows.Forms.Label lblPageSize;
@@ -653,7 +653,7 @@
         private System.Windows.Forms.NumericUpDown nbxPageSize;
         private System.Windows.Forms.NumericUpDown nbxTopCount;
         private System.Windows.Forms.Label lblActiveRecords;
-        private ToggleCheckBox tcbActiveRecords;
+        private ToggleCheckBox tcbIgnoreSystemFields;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lblFileNamePrefix;
     }
