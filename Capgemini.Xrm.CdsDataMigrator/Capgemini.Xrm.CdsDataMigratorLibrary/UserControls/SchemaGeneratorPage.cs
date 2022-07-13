@@ -16,5 +16,26 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var entities = new List<Microsoft.Xrm.Sdk.Metadata.EntityMetadata>();
+            for (int i = 0; i < 50; i++)
+            {
+                entities.Add(new Microsoft.Xrm.Sdk.Metadata.EntityMetadata()
+                {
+                    LogicalName = $"Enity {i}",
+                    DisplayName = new Microsoft.Xrm.Sdk.Label($"Enity {i}",100)
+                });
+            }
+
+            entityListView1.Entities = entities;
+            
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+           var g =  entityListView1.SelectedEntities;
+        }
     }
 }

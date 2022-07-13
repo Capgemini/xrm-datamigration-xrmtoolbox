@@ -289,8 +289,12 @@
     <Compile Include="Mocks\MockupForWizardButtons.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Mocks\MockEntityListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
+    <Compile Include="UserControls\EntityListViewTests.cs" />
     <Compile Include="UserControls\WizardButtonsTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -30,11 +30,9 @@
         {
             this.tplMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.lvEntities = new System.Windows.Forms.ListView();
-            this.clEntDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.clEntLogicalName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.checkBoxShowSystemAttributes = new System.Windows.Forms.CheckBox();
             this.checkBoxSelectUnselectAll = new System.Windows.Forms.CheckBox();
+            this.treeViewEntities = new System.Windows.Forms.TreeView();
             this.tplMainLayout.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,17 +41,18 @@
             this.tplMainLayout.ColumnCount = 2;
             this.tplMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00001F));
             this.tplMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.99999F));
-            this.tplMainLayout.Controls.Add(this.lvEntities, 0, 2);
             this.tplMainLayout.Controls.Add(this.label1, 0, 0);
             this.tplMainLayout.Controls.Add(this.checkBoxShowSystemAttributes, 1, 1);
             this.tplMainLayout.Controls.Add(this.checkBoxSelectUnselectAll, 0, 1);
+            this.tplMainLayout.Controls.Add(this.treeViewEntities, 0, 2);
             this.tplMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tplMainLayout.Location = new System.Drawing.Point(0, 0);
             this.tplMainLayout.Name = "tplMainLayout";
             this.tplMainLayout.RowCount = 3;
             this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tplMainLayout.Size = new System.Drawing.Size(400, 500);
             this.tplMainLayout.TabIndex = 0;
             // 
@@ -65,35 +64,6 @@
             this.label1.Size = new System.Drawing.Size(109, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Available entities";
-            // 
-            // lvEntities
-            // 
-            this.lvEntities.CheckBoxes = true;
-            this.lvEntities.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.clEntDisplayName,
-            this.clEntLogicalName});
-            this.tplMainLayout.SetColumnSpan(this.lvEntities, 2);
-            this.lvEntities.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvEntities.FullRowSelect = true;
-            this.lvEntities.HideSelection = false;
-            this.lvEntities.Location = new System.Drawing.Point(4, 64);
-            this.lvEntities.Margin = new System.Windows.Forms.Padding(4);
-            this.lvEntities.MultiSelect = false;
-            this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(392, 432);
-            this.lvEntities.TabIndex = 108;
-            this.lvEntities.UseCompatibleStateImageBehavior = false;
-            this.lvEntities.View = System.Windows.Forms.View.Details;
-            // 
-            // clEntDisplayName
-            // 
-            this.clEntDisplayName.Text = "Display Name";
-            this.clEntDisplayName.Width = 162;
-            // 
-            // clEntLogicalName
-            // 
-            this.clEntLogicalName.Text = "Logical Name";
-            this.clEntLogicalName.Width = 187;
             // 
             // checkBoxShowSystemAttributes
             // 
@@ -115,6 +85,16 @@
             this.checkBoxSelectUnselectAll.Text = "Select/Unselect All";
             this.checkBoxSelectUnselectAll.UseVisualStyleBackColor = true;
             // 
+            // treeView1
+            // 
+            this.treeViewEntities.CheckBoxes = true;
+            this.tplMainLayout.SetColumnSpan(this.treeViewEntities, 2);
+            this.treeViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewEntities.Location = new System.Drawing.Point(3, 63);
+            this.treeViewEntities.Name = "treeView1";
+            this.treeViewEntities.Size = new System.Drawing.Size(394, 434);
+            this.treeViewEntities.TabIndex = 111;
+            // 
             // EntityListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -132,10 +112,8 @@
 
         private System.Windows.Forms.TableLayoutPanel tplMainLayout;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListView lvEntities;
-        private System.Windows.Forms.ColumnHeader clEntDisplayName;
-        private System.Windows.Forms.ColumnHeader clEntLogicalName;
         private System.Windows.Forms.CheckBox checkBoxShowSystemAttributes;
         private System.Windows.Forms.CheckBox checkBoxSelectUnselectAll;
+        private System.Windows.Forms.TreeView treeViewEntities;
     }
 }
