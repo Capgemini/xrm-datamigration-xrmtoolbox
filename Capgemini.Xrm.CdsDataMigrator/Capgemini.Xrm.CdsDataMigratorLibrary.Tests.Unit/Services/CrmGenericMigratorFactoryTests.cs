@@ -37,7 +37,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         public void RequestJsonMigrator()
         {
             var logger = new Mock<ILogger>().Object;
-            var entityRepo = new Mock<IEntityRepository>().Object;
+            var entityRepoMock = new Mock<IEntityRepository>();
+            entityRepoMock.SetupGet(x => x.GetEntityMetadataCache).Returns(new Mock<IEntityMetadataCache>().Object);
             var exportConfig = new CrmExporterConfig
             {
                 JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
@@ -45,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var cancellationToken = CancellationToken.None;
             var schema = new CrmSchemaConfiguration();
 
-            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Json, logger, entityRepo, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Json, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
 
             migrator.Should().BeOfType<CrmFileDataExporter>();
         }
@@ -54,7 +55,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         public void RequestCSVMigrator()
         {
             var logger = new Mock<ILogger>().Object;
-            var entityRepo = new Mock<IEntityRepository>().Object;
+            var entityRepoMock = new Mock<IEntityRepository>();
+            entityRepoMock.SetupGet(x => x.GetEntityMetadataCache).Returns(new Mock<IEntityMetadataCache>().Object);
             var exportConfig = new CrmExporterConfig
             {
                 JsonFolderPath = Path.Combine(Environment.CurrentDirectory, "temp")
@@ -63,7 +65,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var schema = new CrmSchemaConfiguration();
             schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
 
-            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Csv, logger, entityRepo, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Csv, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
 
             migrator.Should().BeOfType<CrmFileDataExporterCsv>();
         }
