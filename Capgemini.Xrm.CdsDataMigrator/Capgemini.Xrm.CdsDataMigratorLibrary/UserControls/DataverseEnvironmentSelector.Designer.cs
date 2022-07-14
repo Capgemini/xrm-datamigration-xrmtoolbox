@@ -36,7 +36,7 @@
             // 
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnSelect.Location = new System.Drawing.Point(240, 0);
-            this.btnSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSelect.Margin = new System.Windows.Forms.Padding(4);
             this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(29, 42);
             this.btnSelect.TabIndex = 2;
@@ -62,7 +62,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lblConnectionName);
             this.Controls.Add(this.btnSelect);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DataverseEnvironmentSelector";
             this.Size = new System.Drawing.Size(269, 42);
             this.ResumeLayout(false);

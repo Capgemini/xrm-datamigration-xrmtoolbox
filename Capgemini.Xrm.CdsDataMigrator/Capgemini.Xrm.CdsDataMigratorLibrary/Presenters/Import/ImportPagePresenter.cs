@@ -112,17 +112,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private void ReadFormInputIntoConfig()
         {
-            //config.BatchSize = view.BatchSize;
-            //config.PageSize = view.PageSize;
-            //config.TopCount = view.TopCount;
-            //config.CrmMigrationToolSchemaPaths.Clear();
-            //config.CrmMigrationToolSchemaPaths.Add(view.CrmMigrationToolSchemaPath);
-            //config.JsonFolderPath = view.JsonFolderPath;
-            //config.OnlyActiveRecords = view.OnlyActiveRecords;
-            //config.OneEntityPerBatch = view.OneEntityPerBatch;
-            //config.SeperateFilesPerEntity = view.SeperateFilesPerEntity;
-            //config.FilePrefix = view.FilePrefix;
-            //config.CrmMigrationToolSchemaFilters.Clear();
+            config.IgnoreStatuses = view.IgnoreStatuses;
+            config.IgnoreSystemFields = view.IgnoreSystemFields;
+            config.SaveBatchSize = view.SaveBatchSize;
+            config.JsonFolderPath = view.JsonFolderPath;
+            config.FilePrefix = view.FilePrefix;
+
+            //TO DO: incorporate schema file
             //if (view.CrmMigrationToolSchemaFilters != null)
             //{
             //    foreach (var filter in view.CrmMigrationToolSchemaFilters)
@@ -134,15 +130,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private void WriteFormInputFromConfig()
         {
-            //view.BatchSize = config.BatchSize;
+            view.SaveBatchSize = config.SaveBatchSize;
             //view.PageSize = config.PageSize;
             //view.TopCount = config.TopCount;
             //view.CrmMigrationToolSchemaPath = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
-            //view.JsonFolderPath = config.JsonFolderPath;
-            //view.OnlyActiveRecords = config.OnlyActiveRecords;
+            view.JsonFolderPath = config.JsonFolderPath;
+            view.IgnoreSystemFields = config.IgnoreSystemFields;
             //view.OneEntityPerBatch = config.OneEntityPerBatch;
             //view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
-            //view.FilePrefix = config.FilePrefix;
+            view.FilePrefix = config.FilePrefix;
             //view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
         }
 

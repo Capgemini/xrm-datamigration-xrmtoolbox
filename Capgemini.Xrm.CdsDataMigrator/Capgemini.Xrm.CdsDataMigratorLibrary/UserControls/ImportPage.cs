@@ -14,13 +14,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ImportPage : UserControl, IImportPageView
     {
         private ImportPagePresenter presenter;
-        //private FilterFormImport importFilterForm;
 
         public ImportPage()
         {
             InitializeComponent();
-
-            //this.importFilterForm = new FilterFormImport();
         }
 
         [ExcludeFromCodeCoverage]
@@ -34,11 +31,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         #region input mapping
-        
+
+        // TO DO - decide on value
+        int IImportPageView.SaveBatchSize
+        {
+            get => (int)nbxPageSize.Value;
+            set => nbxPageSize.Value = value;
+        }
+
         bool IImportPageView.IgnoreStatuses
         {
-            get => tcbIgnoreStatuses.Checked;
-            set => tcbIgnoreStatuses.Checked = value;
+            get => tcbIgnoreRecordStatus.Checked;
+            set => tcbIgnoreRecordStatus.Checked = value;
+        }
+
+        bool IImportPageView.IgnoreSystemFields
+        {
+            get => tcbIgnoreSystemFields.Checked;
+            set => tcbIgnoreSystemFields.Checked = value;
         }
 
         //TO DO - update to get and set correct list of status exceptions
@@ -61,21 +71,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 return new List<string>();
             }
             set => new List<string>();
-        }
-
-        bool IImportPageView.IgnoreSystemFields
-        {
-            get => tcbIgnoreSystemFields.Checked;
-            set => tcbIgnoreSystemFields.Checked = value;
-        }
-
-        // TO DO - add setter to SaveBatch size and decide on value
-        int IImportPageView.SaveBatchSize
-        {
-            get
-            {
-                return 200;
-            }
         }
 
         string IImportPageView.JsonFolderPath

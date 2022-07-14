@@ -14,7 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         //TODO: List<string> MigrationConfig { get; set; }
         List<string> AdditionalFieldsToIgnore { get; set; }
         // TODO: add setter to SaveBatchSize
-        int SaveBatchSize { get; }
+        int SaveBatchSize { get; set; }
         string JsonFolderPath { get; set; }
         List<string> EntitiesToSync { get; set; }
         List<string> NoUpsertEntities { get; set; }
