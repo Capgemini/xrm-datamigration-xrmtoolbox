@@ -23,6 +23,7 @@
     <PackageId>Capgemini.DataMigration.XrmToolBoxPlugin</PackageId>
     <PackageProjectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</PackageProjectUrl>
     <PackageTags>XrmToolBox Plugins</PackageTags>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
