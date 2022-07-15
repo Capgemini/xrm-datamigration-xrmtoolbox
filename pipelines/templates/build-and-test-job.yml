@@ -94,7 +94,7 @@ jobs:
         displayName: Pack NuGet package
         inputs:
           command: pack
-          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.nuspec            
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj            
           packDestination: '$(Build.ArtifactStagingDirectory)/out'
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2
