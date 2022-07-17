@@ -21,11 +21,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             {
                 var list = new List<EntityMetadata>();
 
-                if (treeViewEntities?.Nodes !=null)
+                if (treeViewEntities?.Nodes != null)
                 {
-                    list =  treeViewEntities.Nodes.Cast<TreeNode>()
+                    list = treeViewEntities.Nodes.Cast<TreeNode>()
                                                   .Where(x => x.Checked)
-                                                  .Select(x=> (EntityMetadata)x.Tag).ToList();
+                                                  .Select(x => (EntityMetadata)x.Tag).ToList();
                 }
 
                 return list;
@@ -46,9 +46,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
                 if (entities != null)
                 {
+                    //foreach (EntityMetadata entity in inputCachedMetadata)
+                    //{
+                    //    var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
+                    //    var item = new ListViewItem(name)
+                    //    {
+                    //        Tag = entity
+                    //    };
+                    //    item.SubItems.Add(entity.LogicalName);
+                    //    IsInvalidForCustomization(entity, item);
+                    //    UpdateCheckBoxesEntities(entity, item, inputEntityAttributes);
+
+                    //    sourceEntitiesList.Add(item);
+                    //}
                     foreach (var item in entities)
                     {
-                        var entityNode = new TreeNode($"{item.DisplayName.LocalizedLabels.FirstOrDefault()?.Label} ({item.LogicalName})")
+                        var displayName = item.DisplayName.UserLocalizedLabel == null ? string.Empty : item.DisplayName.UserLocalizedLabel.Label;
+
+                        var entityNode = new TreeNode($"{displayName} ({item.LogicalName})")
                         {
                             Tag = item
                         };

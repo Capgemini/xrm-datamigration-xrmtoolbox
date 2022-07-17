@@ -20,6 +20,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
     {
         private readonly Settings settings;
 
+        private SchemaGeneratorPresenter schemaGeneratorPresenter;
+        private IDataMigrationService dataMigrationService;
+        private ILogManager loggerService;
+        private ICrmGenericMigratorFactory migratorFactory;
+
         public CdsMigratorPluginControl()
         {
             SettingFileHandler.GetConfigData<SchemaWizard>(out settings);
@@ -28,7 +33,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             DataExportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.Settings = settings;
-            SchemaGeneratorWizard.BringToFront();
+            SchemaGeneratorWizard.BringToFront();            
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -36,7 +41,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
-            {
+            {   
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
@@ -44,6 +49,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     SchemaGeneratorWizard.NotificationService = new NotificationService();
                     SchemaGeneratorWizard.ExceptionService = new ExceptionService();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
+
+                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService());
+
                 }
 
                 if (actionName == "SourceConnection" || actionName == "")

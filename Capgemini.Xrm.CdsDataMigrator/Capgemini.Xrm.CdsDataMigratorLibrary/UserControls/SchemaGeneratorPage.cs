@@ -1,41 +1,38 @@
-﻿using System;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
-    public partial class SchemaGeneratorPage : UserControl
+    public partial class SchemaGeneratorPage : UserControl, ISchemaGeneratorView
     {
+        private List<EntityMetadata> entityMetadataList;
+
         public SchemaGeneratorPage()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public List<EntityMetadata> EntityMetadataList
         {
-            var entities = new List<Microsoft.Xrm.Sdk.Metadata.EntityMetadata>();
-            for (int i = 0; i < 50; i++)
+            get => entityMetadataList;
+            set
             {
-                entities.Add(new Microsoft.Xrm.Sdk.Metadata.EntityMetadata()
-                {
-                    LogicalName = $"Enity {i}",
-                    DisplayName = new Microsoft.Xrm.Sdk.Label($"Enity {i}",100)
-                });
+                entityMetadataList = value;
+                entityListView1.Entities = entityMetadataList;
             }
-
-            entityListView1.Entities = entities;
-            
         }
+        public Dictionary<string, HashSet<string>> EntityAttributes { get; set; }
+        public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
+        public bool ShowSystemAttributes { get; set; }
 
-        private void button2_Click(object sender, EventArgs e)
+        public event EventHandler RetrieveEntities;
+
+        private void RaiseRefreshEntitiesEvent(object sender, EventArgs e)
         {
-           var g =  entityListView1.SelectedEntities;
+            RetrieveEntities?.Invoke(sender, e);
         }
     }
 }
