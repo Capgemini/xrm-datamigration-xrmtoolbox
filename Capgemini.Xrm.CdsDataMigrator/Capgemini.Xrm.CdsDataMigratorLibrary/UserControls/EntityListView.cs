@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
         }
 
+        public event EventHandler ShowSystemEntitiesChanged;
+
         public List<EntityMetadata> SelectedEntities
         {
             get
@@ -29,6 +32,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 }
 
                 return list;
+            }
+        }
+
+        public bool ShowSystemEntities
+        {
+            get
+            {
+                return checkBoxShowSystemAttributes.Checked;
+            }
+            set
+            {
+                checkBoxShowSystemAttributes.Checked = value;
             }
         }
 
@@ -71,6 +86,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                         treeViewEntities.Nodes.Add(entityNode);
                     }
                 }
+            }
+        }
+
+        private void ShowSystemAttributesCheckedChanged(object sender, EventArgs e)
+        {
+            if (ShowSystemEntitiesChanged != null)
+            {
+                ShowSystemEntitiesChanged(this, e);
             }
         }
     }

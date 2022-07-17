@@ -27,31 +27,44 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.exceptionService = exceptionService;
             if (this.view != null)
             {
-                this.view.RetrieveEntities += RetrieveEntities;
+                this.view.RetrieveEntities += HandleRetrieveEntitiesRequest;
+                this.view.ShowSystemEntitiesChanged += ShowSystemEntitiesChanged;
             }
         }
 
-        private void RetrieveEntities(object sender, System.EventArgs e)
+        public List<EntityMetadata> RetrieveEntitiesFromDatasource()
         {
             var inputCachedMetadata = new List<EntityMetadata>();
 
-            if (inputCachedMetadata.Count == 0 )//|| isNewConnection) ///TODO: address new connection
-            { 
-                var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService); 
+            if (inputCachedMetadata.Count == 0)//|| isNewConnection) ///TODO: address new connection
+            {
+                var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
                 var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
 
                 if (!view.ShowSystemAttributes)
                 {
                     sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
                 }
-                
+
                 if (sourceList != null)
-                { 
+                {
                     inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
                 }
             }
 
-            view.EntityMetadataList = inputCachedMetadata;
+            return inputCachedMetadata;
         }
+
+        private void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
+        {
+            view.EntityMetadataList = RetrieveEntitiesFromDatasource();
+        }
+
+        private void HandleRetrieveEntitiesRequest(object sender, System.EventArgs e)
+        {
+             view.EntityMetadataList = RetrieveEntitiesFromDatasource();
+        }
+
+
     }
 }

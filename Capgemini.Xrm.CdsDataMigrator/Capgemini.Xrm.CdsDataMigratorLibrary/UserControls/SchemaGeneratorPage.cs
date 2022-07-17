@@ -13,7 +13,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public SchemaGeneratorPage()
         {
             InitializeComponent();
+
+            entityListView1.ShowSystemEntitiesChanged += EntityListView1_ShowSystemEntitiesChanged;
         }
+
+        private void EntityListView1_ShowSystemEntitiesChanged(object sender, EventArgs e)
+        {
+            if (ShowSystemEntitiesChanged != null)
+            {
+                ShowSystemEntitiesChanged(this, e);
+            }
+        }
+
+        public event EventHandler ShowSystemEntitiesChanged;
 
         public List<EntityMetadata> EntityMetadataList
         {

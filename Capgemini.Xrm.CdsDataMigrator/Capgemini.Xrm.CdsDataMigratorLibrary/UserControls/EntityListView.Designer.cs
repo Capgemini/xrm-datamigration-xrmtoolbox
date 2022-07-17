@@ -74,6 +74,7 @@
             this.checkBoxShowSystemAttributes.TabIndex = 109;
             this.checkBoxShowSystemAttributes.Text = "Show System Attributes";
             this.checkBoxShowSystemAttributes.UseVisualStyleBackColor = true;
+            this.checkBoxShowSystemAttributes.CheckedChanged += new System.EventHandler(this.ShowSystemAttributesCheckedChanged);
             // 
             // checkBoxSelectUnselectAll
             // 
@@ -85,13 +86,13 @@
             this.checkBoxSelectUnselectAll.Text = "Select/Unselect All";
             this.checkBoxSelectUnselectAll.UseVisualStyleBackColor = true;
             // 
-            // treeView1
+            // treeViewEntities
             // 
             this.treeViewEntities.CheckBoxes = true;
             this.tplMainLayout.SetColumnSpan(this.treeViewEntities, 2);
             this.treeViewEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewEntities.Location = new System.Drawing.Point(3, 63);
-            this.treeViewEntities.Name = "treeView1";
+            this.treeViewEntities.Name = "treeViewEntities";
             this.treeViewEntities.Size = new System.Drawing.Size(394, 434);
             this.treeViewEntities.TabIndex = 111;
             // 
