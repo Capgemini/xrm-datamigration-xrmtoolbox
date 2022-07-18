@@ -29,6 +29,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.Settings = settings;
             SchemaGeneratorWizard.BringToFront();
+
+            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService);
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;

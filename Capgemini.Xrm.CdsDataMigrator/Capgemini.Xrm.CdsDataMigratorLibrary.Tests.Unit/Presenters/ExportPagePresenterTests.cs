@@ -53,7 +53,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -69,7 +69,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("a-random-non-existent-file");
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -85,7 +85,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("");
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -111,7 +111,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -138,7 +138,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("a-random-non-existent-file");
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -153,7 +153,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("");
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -173,8 +173,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.LoadConfig();
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -199,7 +199,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
 
             // Act
-            systemUnderTest.RunConfig();
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
             var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
             workInfo.Work(null, null);
 
@@ -225,12 +225,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsNull()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
-                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                            .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(() => null);
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -240,12 +244,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsEmpty()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(" ");
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -255,12 +263,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsInvalid()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns("a-random-non-existent-file");
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -271,12 +283,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var filePath = @"TestData\BusinessUnitSchema.xml";
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(filePath);
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeEquivalentTo(CrmSchemaConfiguration.ReadFromFile(filePath));
