@@ -1,6 +1,7 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.DataMigration.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -196,6 +197,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
 
                 // Assert
                 systemUnderTest.As<IExportPageView>().CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(value);
+            }
+        }
+
+        [TestMethod]
+        public void SchemaConfiguration_GetSet()
+        {
+            // Arrange
+            var value = new CrmSchemaConfiguration();
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().SchemaConfiguration = value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().SchemaConfiguration.Should().BeEquivalentTo(value);
             }
         }
 

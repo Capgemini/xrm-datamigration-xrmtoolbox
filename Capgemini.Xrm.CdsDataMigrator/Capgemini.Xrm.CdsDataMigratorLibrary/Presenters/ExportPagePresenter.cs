@@ -3,6 +3,7 @@ using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using XrmToolBox.Extensibility;
@@ -155,13 +156,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
         }
-
+        
+        [ExcludeFromCodeCoverage]
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        [ExcludeFromCodeCoverage]
         protected virtual void Dispose(bool disposing)
         {
             this.view.LoadConfigClicked -= LoadConfig;

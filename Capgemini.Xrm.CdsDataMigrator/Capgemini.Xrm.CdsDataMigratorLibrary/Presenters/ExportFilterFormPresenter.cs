@@ -1,6 +1,7 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Model;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
@@ -56,12 +57,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.EntityFilters[view.SelectedEntity.Name] = view.FilterText;
         }
 
+        [ExcludeFromCodeCoverage]
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        [ExcludeFromCodeCoverage]
         protected virtual void Dispose(bool disposing)
         {
             this.view.OnVisible -= OnVisible;
