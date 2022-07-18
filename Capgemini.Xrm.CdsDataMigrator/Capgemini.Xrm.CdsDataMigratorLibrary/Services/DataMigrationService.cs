@@ -96,17 +96,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             config.BatchSize = exportSettings.BatchSize;
         }
 
-        public void ImportData(IOrganizationService service, DataFormat format, CrmImportConfig config)
+        public void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config)
         {
             tokenSource = new CancellationTokenSource();
 
             var repo = new EntityRepository(service, new ServiceRetryExecutor());
 
-            //var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.firstordefault());
+            //var schema2 = CrmSchemaConfiguration.ReadFromFile(schema);
 
-            //var importer = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+            var importer = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
-            //importer.MigrateData();
+            importer.MigrateData();
             return;
         }
 

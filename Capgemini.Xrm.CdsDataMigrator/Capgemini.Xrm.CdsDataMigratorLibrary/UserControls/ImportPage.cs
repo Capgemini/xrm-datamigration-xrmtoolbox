@@ -34,14 +34,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         int IImportPageView.SaveBatchSize
         {
-            get => (int)nbxPageSize.Value;
-            set => nbxPageSize.Value = value;
+            get => (int)nbxSaveBatchSize.Value;
+            set => nbxSaveBatchSize.Value = value;
         }
 
         bool IImportPageView.IgnoreStatuses
         {
-            get => tcbIgnoreRecordStatus.Checked;
-            set => tcbIgnoreRecordStatus.Checked = value;
+            get => tcbIgnoreStatuses.Checked;
+            set => tcbIgnoreStatuses.Checked = value;
         }
 
         bool IImportPageView.IgnoreSystemFields
@@ -53,8 +53,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         // file being imported from
         string IImportPageView.JsonFolderPath
         {
-            get => fisOutputDirectory.Value;
-            set => fisOutputDirectory.Value = value;
+            get => fisJsonFolderPath.Value;
+            set => fisJsonFolderPath.Value = value;
         }
         
         DataFormat IImportPageView.DataFormat
@@ -75,6 +75,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         IOrganizationService IImportPageView.Service
         {
             get => dataverseEnvironmentSelector1.Service;
+        }
+
+        string IImportPageView.CrmMigrationToolSchemaPath
+        {
+            get => fisSchemaFile.Value;
+            set => fisSchemaFile.Value = value;
         }
 
         #endregion

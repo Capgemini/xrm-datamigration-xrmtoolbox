@@ -11,6 +11,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool IgnoreSystemFields { get; set; }
         string JsonFolderPath { get; set; }
 
+        string CrmMigrationToolSchemaPath { get; set; }
+
         string AskForFilePathToOpen();
         string AskForFilePathToSave(string existingFileName = "");
 

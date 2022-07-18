@@ -2,9 +2,7 @@
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -72,10 +70,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 ReadFormInputIntoConfig();
                 // TODO: Validate Config
+                var schema = GetSchemaConfiguration();
                 workerHost.WorkAsync(new WorkAsyncInfo
                 {
                     Message = "Importing data...",
-                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, config),
+                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, schema, config),
                     PostWorkCallBack = (e) =>
                     {
                         if (e.Error != null)
@@ -93,31 +92,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        //public CrmSchemaConfiguration GetSchemaConfiguration()
-        //{
-        //    if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
-        //    {
-        //        return null;
-        //    }
-
-        //    try
-        //    {
-        //        return CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //}
+        public CrmSchemaConfiguration GetSchemaConfiguration()
+        {
+            try
+            {
+                return CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         private void ReadFormInputIntoConfig()
         {
             config.SaveBatchSize = view.SaveBatchSize;
             config.IgnoreStatuses = view.IgnoreStatuses;
             config.IgnoreSystemFields = view.IgnoreSystemFields;
-
-            //config.JsonFolderPath = view.JsonFolderPath;
-            //config.FilePrefix = view.FilePrefix;
+            config.JsonFolderPath = view.JsonFolderPath;
 
             //TO DO: incorporate schema file
             //if (view.CrmMigrationToolSchemaFilters != null)
@@ -132,19 +124,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private void WriteFormInputFromConfig()
         {
             view.SaveBatchSize = config.SaveBatchSize;
-
-
-
-            //view.PageSize = config.PageSize;
-            //view.TopCount = config.TopCount;
-            //view.CrmMigrationToolSchemaPath = config.CrmMigrationToolSchemaPaths.FirstOrDefault();
-            //view.JsonFolderPath = config.JsonFolderPath;
-            //view.IgnoreSystemFields = config.IgnoreSystemFields;
-            //view.OneEntityPerBatch = config.OneEntityPerBatch;
-            //view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
-            //view.FilePrefix = config.FilePrefix;
-            //view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
+            view.IgnoreStatuses = config.IgnoreStatuses;
+            view.IgnoreSystemFields = config.IgnoreSystemFields;
+            view.JsonFolderPath = config.JsonFolderPath;
         }
-
     }
 }
