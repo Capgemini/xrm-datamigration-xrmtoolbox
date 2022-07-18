@@ -158,6 +158,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
             this.view.LoadConfigClicked -= LoadConfig;
             this.view.SaveConfigClicked -= SaveConfig;
             this.view.RunConfigClicked -= RunConfig;

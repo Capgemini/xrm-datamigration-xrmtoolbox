@@ -58,6 +58,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
             this.view.OnVisible -= OnVisible;
             this.view.OnEntitySelected -= OnEntitySelected;
             this.view.OnFilterTextChanged -= UpdateFilterForEntity;
