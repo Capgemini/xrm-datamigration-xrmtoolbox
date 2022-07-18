@@ -3,6 +3,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,11 +98,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
             var value = "Some string";
             using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
             {
+                bool isCalled = false;
+                systemUnderTest.SchemaConfigPathChanged += (sender, e) => isCalled = true;
                 // Act
                 systemUnderTest.As<IExportPageView>().CrmMigrationToolSchemaPath = value;
 
                 // Assert
                 systemUnderTest.As<IExportPageView>().CrmMigrationToolSchemaPath.Should().Be(value);
+                isCalled.Should().BeTrue();
             }
         }
 

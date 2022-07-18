@@ -10,7 +10,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
-    public class ExportPagePresenter
+    public class ExportPagePresenter : IDisposable
     {
         private readonly IExportPageView view;
         private readonly IWorkerHost workerHost;
@@ -25,11 +25,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
 
+            this.view.LoadConfigClicked += LoadConfig;
+            this.view.SaveConfigClicked += SaveConfig;
+            this.view.RunConfigClicked += RunConfig;
+            this.view.SchemaConfigPathChanged += SchemaConfigPathChanged;
+
             this.config = new CrmExporterConfig();
             WriteFormInputFromConfig();
         }
 
-        public void LoadConfig()
+        private void LoadConfig(object sender, EventArgs args)
         {
             try
             {
@@ -47,7 +52,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public void SaveConfig()
+        private void SaveConfig(object sender, EventArgs args)
         {
             try
             {
@@ -66,7 +71,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public void RunConfig()
+        private void RunConfig(object sender, EventArgs args)
         {
             try
             {
@@ -93,7 +98,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public CrmSchemaConfiguration GetSchemaConfiguration()
+        private void SchemaConfigPathChanged(object sender, EventArgs args)
+        {
+            this.view.SchemaConfiguration = GetSchemaConfiguration();
+        }
+
+        private  CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
             {
@@ -146,5 +156,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
         }
 
+        public void Dispose()
+        {
+            this.view.LoadConfigClicked -= LoadConfig;
+            this.view.SaveConfigClicked -= SaveConfig;
+            this.view.RunConfigClicked -= RunConfig;
+        }
     }
 }
