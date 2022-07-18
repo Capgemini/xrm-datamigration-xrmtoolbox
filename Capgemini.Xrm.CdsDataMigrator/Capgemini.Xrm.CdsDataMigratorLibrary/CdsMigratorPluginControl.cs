@@ -68,7 +68,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     DataImportWizard.LoggerService = new LogToTextboxService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
                     DataImportWizard.OrganizationService = detail.ServiceClient;
                     DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
-                    // seDataImportWizard.Presenter = new ImportPresenter(DataImportWizard, DataImportWizard.LoggerService, DataImportWizard.DataMigrationService);
                     DataImportWizard.OnActionStarted += OnActionStarted;
                     DataImportWizard.OnActionProgressed += OnActionProgressed;
                     DataImportWizard.OnActionCompleted += OnActionCompleted;

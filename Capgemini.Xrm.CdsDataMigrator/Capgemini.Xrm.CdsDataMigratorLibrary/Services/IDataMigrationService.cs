@@ -12,7 +12,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         void CancelDataExport();
 
-        void ImportData(ImportSettings importSettings);
         void ImportData(IOrganizationService service, DataFormat format, CrmImportConfig config);
 
         void CancelDataImport();

@@ -213,14 +213,13 @@
             this.exportPage1.TabIndex = 50;
             // 
             // importPage1
-            //
+            // 
             this.importPage1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.importPage1.Location = new System.Drawing.Point(0, 0);
             this.importPage1.Margin = new System.Windows.Forms.Padding(5);
             this.importPage1.Name = "importPage1";
             this.importPage1.Size = new System.Drawing.Size(1829, 738);
             this.importPage1.TabIndex = 0;
-
             // 
             // CdsMigratorPluginControl
             // 

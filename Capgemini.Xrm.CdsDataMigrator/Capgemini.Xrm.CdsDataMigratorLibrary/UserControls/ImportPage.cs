@@ -32,7 +32,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #region input mapping
 
-        // TO DO - decide on value
         int IImportPageView.SaveBatchSize
         {
             get => (int)nbxPageSize.Value;
@@ -51,105 +50,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => tcbIgnoreSystemFields.Checked = value;
         }
 
-        //TO DO - update to get and set correct list of status exceptions
-        List<string> IImportPageView.IgnoreStatusesExceptions
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
-        // TO DO - migration config
-
-        //TO DO - update to get and set correct list of status exceptions
-        List<string> IImportPageView.AdditionalFieldsToIgnore
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
+        // file being imported from
         string IImportPageView.JsonFolderPath
         {
             get => fisOutputDirectory.Value;
             set => fisOutputDirectory.Value = value;
         }
-
-        //TO DO - update to get and set correct list of Entities to Sync
-        List<string> IImportPageView.EntitiesToSync
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
-        //TO DO - update to get and set correct list of Entities to Sync
-        List<string> IImportPageView.NoUpsertEntities
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
-        //TO DO - update to get and set correct list of No Upsert Entities
-        List<string> IImportPageView.PluginsToDeactivate
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
-        //TO DO - update to get and set correct list of Plugins To Deactivate
-        List<string> IImportPageView.ProcessesToDeactivate
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
-
-        // TO DO - add setter to SaveBatch size and decide on value
-        bool IImportPageView.DeactivateAllProcesses
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        string IImportPageView.FilePrefix
-        {
-            get => fisOutputDirectory.Value;
-            set => fisOutputDirectory.Value = value;
-        }
-
-        //TO DO - update to get and set correct list of Fields to Obfiscate
-        List<string> IImportPageView.FieldsToObfuscate
-        {
-            get
-            {
-                return new List<string>();
-            }
-            set => new List<string>();
-        }
         
-        //Dictionary<string, string> IImportPageView.CrmMigrationToolSchemaFilters
-        //{
-        //    get => importFilterForm.EntityFilters;
-        //    set => importFilterForm.EntityFilters = value;
-        //}
-
         DataFormat IImportPageView.DataFormat
         {
             get
@@ -194,6 +101,29 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         #region event mappings
 
         [ExcludeFromCodeCoverage]
+        private void Button3Click(object sender, EventArgs e)
+        {
+            var fd = openFileDialog.ShowDialog();
+
+            if (fd == DialogResult.OK)
+            {
+                tbImportSchema.Text = openFileDialog.FileName;
+            }
+        }
+
+        public void RadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            rbnDataFormatCsv.Checked = !rbnDataFormatJson.Checked;
+            groupBox1.Visible = false;
+        }
+
+        public void RadioButton1CheckedChanged(object sender, EventArgs e)
+        {
+            rbnDataFormatJson.Checked = !rbnDataFormatCsv.Checked;
+            groupBox1.Visible = true;
+        }
+
+        [ExcludeFromCodeCoverage]
         private void loadButton_Click(object sender, EventArgs e)
         {
             presenter.LoadConfig();
@@ -210,14 +140,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             presenter.RunConfig();
         }
-
-        //[ExcludeFromCodeCoverage]
-        //private void btnFetchXmlFilters_Click(object sender, EventArgs e)
-        //{
-        //    importFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
-        //    this.importFilterForm.ShowDialog(this);
-        //}
-
+        
         #endregion
 
         [ExcludeFromCodeCoverage]

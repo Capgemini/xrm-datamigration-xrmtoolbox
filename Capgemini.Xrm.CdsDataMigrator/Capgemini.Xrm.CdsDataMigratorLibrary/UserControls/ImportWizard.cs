@@ -17,7 +17,6 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using System.Diagnostics.CodeAnalysis;
 using XrmToolBox.Extensibility.Interfaces;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
 {
@@ -71,8 +70,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls
         public IStatusBarMessenger StatusBarMessenger { get; set; }
 
         public ILogManager LoggerService { get; set; }
-
-        public ImportPresenter Presenter { get; set; }
 
         public void PerformImportAction(string importSchemaFilePath, int maxThreads, bool jsonFormat, Capgemini.DataMigration.Core.ILogger currentLogger, IEntityRepositoryService entityRepositoryService, CrmImportConfig currentImportConfig, CancellationTokenSource tokenSource)
         {
