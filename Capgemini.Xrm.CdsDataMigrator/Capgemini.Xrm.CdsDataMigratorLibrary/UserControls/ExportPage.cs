@@ -26,6 +26,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
 
             this.exportFilterForm = new ExportFilterForm();
+            this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
         }
 
         #region input mapping

@@ -1,19 +1,24 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Model;
+using System;
 using System.Linq;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
-    public class ExportFilterFormPresenter : IExportFilterFormPresenter
+    public class ExportFilterFormPresenter : IDisposable
     {
         public readonly IExportFilterFormView view;
 
         public ExportFilterFormPresenter(IExportFilterFormView view)
         {
             this.view = view;
+
+            this.view.OnVisible += OnVisible;
+            this.view.OnEntitySelected += OnEntitySelected;
+            this.view.OnFilterTextChanged += UpdateFilterForEntity;
         }
 
-        public void OnVisible()
+        public void OnVisible(object sender, EventArgs e)
         {
             if (view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
             {
@@ -41,15 +46,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public void OnEntitySelected()
+        public void OnEntitySelected(object sender, EventArgs e)
         {
             view.FilterText = view.EntityFilters.TryGetValue(view.SelectedEntity.Name, out var filters) ? filters : string.Empty;
         }
 
-        public void UpdateFilterForEntity()
+        public void UpdateFilterForEntity(object sender, EventArgs e)
         {
             view.EntityFilters[view.SelectedEntity.Name] = view.FilterText;
         }
 
+        public void Dispose()
+        {
+            this.view.OnVisible -= OnVisible;
+            this.view.OnEntitySelected -= OnEntitySelected;
+            this.view.OnFilterTextChanged -= UpdateFilterForEntity;
+        }
     }
 }
