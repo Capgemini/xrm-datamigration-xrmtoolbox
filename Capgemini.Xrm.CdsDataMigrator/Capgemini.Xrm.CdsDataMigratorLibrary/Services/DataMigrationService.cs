@@ -102,8 +102,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
             var repo = new EntityRepository(service, new ServiceRetryExecutor());
 
-            //var schema2 = CrmSchemaConfiguration.ReadFromFile(schema);
-
             var importer = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
             importer.MigrateData();
