@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -14,10 +15,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             InitializeComponent();
 
-            entityListView1.ShowSystemEntitiesChanged += EntityListView1_ShowSystemEntitiesChanged;
+            entityListView1.ShowSystemEntitiesChanged += EntityListViewShowSystemEntitiesChanged;
+            entityListView1.CurrentSelectedEntityChanged += EntityListViewCurrentSelectedEntityChanged;
         }
 
-        private void EntityListView1_ShowSystemEntitiesChanged(object sender, EventArgs e)
+        private void EntityListViewCurrentSelectedEntityChanged(object sender, MigratorEventArgs<EntityMetadata> e)
+        {
+            if (CurrentSelectedEntityChanged != null)
+            {
+                CurrentSelectedEntityChanged(this, e);
+            }
+        }
+
+        private void EntityListViewShowSystemEntitiesChanged(object sender, EventArgs e)
         {
             if (ShowSystemEntitiesChanged != null)
             {
@@ -26,6 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         public event EventHandler ShowSystemEntitiesChanged;
+        public event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
 
         public List<EntityMetadata> EntityMetadataList
         {
@@ -36,7 +47,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 entityListView1.Entities = entityMetadataList;
             }
         }
-        public Dictionary<string, HashSet<string>> EntityAttributes { get; set; }
+        public List<AttributeMetadata> EntityAttributes {// get { return listManagerView1.EntityAttributes; } 
+            set {
+
+                listManagerView1.EntityAttributes = value;
+            } }
         public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
         public bool ShowSystemAttributes { get; set; }
 

@@ -16,5 +16,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             InitializeComponent();
         }
+
+        public string SchemaFilename { get; set; }
     }
 }

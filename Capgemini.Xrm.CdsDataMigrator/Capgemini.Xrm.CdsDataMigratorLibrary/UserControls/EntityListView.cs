@@ -17,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         public event EventHandler ShowSystemEntitiesChanged;
+        public event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
 
         public List<EntityMetadata> SelectedEntities
         {
@@ -34,6 +35,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 return list;
             }
         }
+
+        //public EntityMetadata CurrentSelectedEntity { get; private set; }
+        //{
+        //    get
+        //    {
+        //        var list = new List<EntityMetadata>();
+
+        //        if (treeViewEntities?.Nodes != null)
+        //        {
+        //            list = treeViewEntities.Nodes.Cast<TreeNode>()
+        //                                          .Where(x => x.Checked)
+        //                                          .Select(x => (EntityMetadata)x.Tag).ToList();
+        //        }
+
+        //        return list;
+        //    }
+        //}
 
         public bool ShowSystemEntities
         {
@@ -96,5 +114,37 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 ShowSystemEntitiesChanged(this, e);
             }
         }
+
+        private void SelectUnselectAllCheckedChanged(object sender, EventArgs e)
+        {
+            foreach (TreeNode item in treeViewEntities.Nodes)
+            {
+                item.Checked = checkBoxSelectUnselectAll.Checked;
+            }
+        }
+
+        private void HandleTreeViewEntitiesAfterSelect(object sender, TreeViewEventArgs e)
+        {
+           // var entityMetadata = e.Node.Tag as EntityMetadata;
+            //if (entityMetadata != null)
+            //{
+            var handler = CurrentSelectedEntityChanged;
+            if (handler != null)
+            {
+                handler(this, new MigratorEventArgs<EntityMetadata>(e.Node.Tag as EntityMetadata));
+            }
+            //    CurrentSelectedEntity = e.Node.Tag as EntityMetadata;
+            //}
+        }
+    }
+
+    public class MigratorEventArgs<T> : EventArgs
+    {
+        public MigratorEventArgs(T input)
+        {
+            Input = input;
+        }
+
+        public T Input { get; }
     }
 }

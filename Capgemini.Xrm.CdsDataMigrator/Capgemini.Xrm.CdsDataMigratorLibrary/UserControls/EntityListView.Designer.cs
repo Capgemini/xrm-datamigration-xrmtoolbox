@@ -85,6 +85,7 @@
             this.checkBoxSelectUnselectAll.TabIndex = 110;
             this.checkBoxSelectUnselectAll.Text = "Select/Unselect All";
             this.checkBoxSelectUnselectAll.UseVisualStyleBackColor = true;
+            this.checkBoxSelectUnselectAll.CheckedChanged += new System.EventHandler(this.SelectUnselectAllCheckedChanged);
             // 
             // treeViewEntities
             // 
@@ -95,6 +96,7 @@
             this.treeViewEntities.Name = "treeViewEntities";
             this.treeViewEntities.Size = new System.Drawing.Size(394, 434);
             this.treeViewEntities.TabIndex = 111;
+            this.treeViewEntities.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.HandleTreeViewEntitiesAfterSelect);
             // 
             // EntityListView
             // 

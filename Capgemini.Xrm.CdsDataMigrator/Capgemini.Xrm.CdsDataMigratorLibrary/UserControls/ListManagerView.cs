@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using Microsoft.Xrm.Sdk.Metadata;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set
             {
                 labelDisplayedItemsName.Text = value;
+            }
+        }
+
+        //Dictionary<string, HashSet<string>> EntityAttributes
+        public List<AttributeMetadata> EntityAttributes
+        {
+            //get { }
+            set
+            {
+                listViewItems.Items.Clear();
+                foreach (var item in value)
+                {
+                    string newItem = item.SchemaName;//.DisplayName.UserLocalizedLabel.Label;
+                    listViewItems.Items.Add(newItem);
+                }
             }
         }
     }

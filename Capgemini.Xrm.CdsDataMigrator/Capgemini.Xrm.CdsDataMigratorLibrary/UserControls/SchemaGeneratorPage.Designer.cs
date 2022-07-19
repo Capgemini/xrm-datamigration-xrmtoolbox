@@ -31,14 +31,13 @@
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.tlpDetailsPane = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonConnect = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtRetrieveEntities = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbtMappings = new System.Windows.Forms.ToolStripButton();
-            this.lookupMappings = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbtFilters = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.loadSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.saveSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,11 +45,12 @@
             this.saveMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.loadSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadFiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButtonConnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtMappings = new System.Windows.Forms.ToolStripButton();
+            this.lookupMappings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtFilters = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelConnection = new System.Windows.Forms.ToolStripLabel();
             this.generatedSchemaLocationControl1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.GeneratedSchemaLocationControl();
@@ -90,7 +90,7 @@
             this.tlpDetailsPane.Location = new System.Drawing.Point(353, 38);
             this.tlpDetailsPane.Name = "tlpDetailsPane";
             this.tlpDetailsPane.RowCount = 3;
-            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 230F));
+            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDetailsPane.Size = new System.Drawing.Size(781, 574);
@@ -123,19 +123,6 @@
             this.toolStrip2.TabIndex = 95;
             this.toolStrip2.Text = "toolStrip1";
             // 
-            // toolStripButtonConnect
-            // 
-            this.toolStripButtonConnect.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.toolStripButtonConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonConnect.Name = "toolStripButtonConnect";
-            this.toolStripButtonConnect.Size = new System.Drawing.Size(91, 28);
-            this.toolStripButtonConnect.Text = "Connect";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
-            // 
             // tsbtRetrieveEntities
             // 
             this.tsbtRetrieveEntities.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.entities;
@@ -150,34 +137,46 @@
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 31);
             // 
-            // tsbtMappings
+            // toolStripDropDownButton2
             // 
-            this.tsbtMappings.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Mapping;
-            this.tsbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtMappings.Name = "tsbtMappings";
-            this.tsbtMappings.Size = new System.Drawing.Size(103, 28);
-            this.tsbtMappings.Text = "Mappings";
+            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadSchemaToolStripMenuItem,
+            this.loadFiltersToolStripMenuItem,
+            this.loadMappingsToolStripMenuItem,
+            this.loadAllToolStripMenuItem});
+            this.toolStripDropDownButton2.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(80, 28);
+            this.toolStripDropDownButton2.Text = "Load";
             // 
-            // lookupMappings
+            // loadSchemaToolStripMenuItem
             // 
-            this.lookupMappings.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Mapping;
-            this.lookupMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.lookupMappings.Name = "lookupMappings";
-            this.lookupMappings.Size = new System.Drawing.Size(156, 28);
-            this.lookupMappings.Text = "Lookup Mappings";
+            this.loadSchemaToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.loadSchemaToolStripMenuItem.Name = "loadSchemaToolStripMenuItem";
+            this.loadSchemaToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
+            this.loadSchemaToolStripMenuItem.Text = "Load Schema";
             // 
-            // toolStripSeparator4
+            // loadFiltersToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+            this.loadFiltersToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.loadFiltersToolStripMenuItem.Name = "loadFiltersToolStripMenuItem";
+            this.loadFiltersToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
+            this.loadFiltersToolStripMenuItem.Text = "Load Filters and Lookup Mappings";
             // 
-            // tsbtFilters
+            // loadMappingsToolStripMenuItem
             // 
-            this.tsbtFilters.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Filter;
-            this.tsbtFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbtFilters.Name = "tsbtFilters";
-            this.tsbtFilters.Size = new System.Drawing.Size(76, 28);
-            this.tsbtFilters.Text = "Filters";
+            this.loadMappingsToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.loadMappingsToolStripMenuItem.Name = "loadMappingsToolStripMenuItem";
+            this.loadMappingsToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
+            this.loadMappingsToolStripMenuItem.Text = "Load Guid Id Mappings";
+            // 
+            // loadAllToolStripMenuItem
+            // 
+            this.loadAllToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.loadAllToolStripMenuItem.Name = "loadAllToolStripMenuItem";
+            this.loadAllToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
+            this.loadAllToolStripMenuItem.Text = "Load All";
             // 
             // toolStripSeparator3
             // 
@@ -230,46 +229,47 @@
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(6, 31);
             // 
-            // toolStripDropDownButton2
+            // toolStripButtonConnect
             // 
-            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadSchemaToolStripMenuItem,
-            this.loadFiltersToolStripMenuItem,
-            this.loadMappingsToolStripMenuItem,
-            this.loadAllToolStripMenuItem});
-            this.toolStripDropDownButton2.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(80, 28);
-            this.toolStripDropDownButton2.Text = "Load";
+            this.toolStripButtonConnect.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
+            this.toolStripButtonConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonConnect.Name = "toolStripButtonConnect";
+            this.toolStripButtonConnect.Size = new System.Drawing.Size(91, 28);
+            this.toolStripButtonConnect.Text = "Connect";
             // 
-            // loadSchemaToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.loadSchemaToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.loadSchemaToolStripMenuItem.Name = "loadSchemaToolStripMenuItem";
-            this.loadSchemaToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.loadSchemaToolStripMenuItem.Text = "Load Schema";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
             // 
-            // loadFiltersToolStripMenuItem
+            // tsbtMappings
             // 
-            this.loadFiltersToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.loadFiltersToolStripMenuItem.Name = "loadFiltersToolStripMenuItem";
-            this.loadFiltersToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.loadFiltersToolStripMenuItem.Text = "Load Filters and Lookup Mappings";
+            this.tsbtMappings.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Mapping;
+            this.tsbtMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtMappings.Name = "tsbtMappings";
+            this.tsbtMappings.Size = new System.Drawing.Size(103, 28);
+            this.tsbtMappings.Text = "Mappings";
             // 
-            // loadMappingsToolStripMenuItem
+            // lookupMappings
             // 
-            this.loadMappingsToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.loadMappingsToolStripMenuItem.Name = "loadMappingsToolStripMenuItem";
-            this.loadMappingsToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.loadMappingsToolStripMenuItem.Text = "Load Guid Id Mappings";
+            this.lookupMappings.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Mapping;
+            this.lookupMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.lookupMappings.Name = "lookupMappings";
+            this.lookupMappings.Size = new System.Drawing.Size(156, 28);
+            this.lookupMappings.Text = "Lookup Mappings";
             // 
-            // loadAllToolStripMenuItem
+            // toolStripSeparator4
             // 
-            this.loadAllToolStripMenuItem.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.CRM;
-            this.loadAllToolStripMenuItem.Name = "loadAllToolStripMenuItem";
-            this.loadAllToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.loadAllToolStripMenuItem.Text = "Load All";
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsbtFilters
+            // 
+            this.tsbtFilters.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Filter;
+            this.tsbtFilters.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbtFilters.Name = "tsbtFilters";
+            this.tsbtFilters.Size = new System.Drawing.Size(76, 28);
+            this.tsbtFilters.Text = "Filters";
             // 
             // toolStripSeparator2
             // 
@@ -288,25 +288,26 @@
             this.generatedSchemaLocationControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.generatedSchemaLocationControl1.Location = new System.Drawing.Point(3, 3);
             this.generatedSchemaLocationControl1.Name = "generatedSchemaLocationControl1";
-            this.generatedSchemaLocationControl1.Size = new System.Drawing.Size(775, 224);
+            this.generatedSchemaLocationControl1.SchemaFilename = null;
+            this.generatedSchemaLocationControl1.Size = new System.Drawing.Size(775, 29);
             this.generatedSchemaLocationControl1.TabIndex = 0;
             // 
             // listManagerView1
             // 
             this.listManagerView1.DisplayedItemsName = "Available Attributes";
             this.listManagerView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listManagerView1.Location = new System.Drawing.Point(3, 233);
+            this.listManagerView1.Location = new System.Drawing.Point(3, 38);
             this.listManagerView1.Name = "listManagerView1";
-            this.listManagerView1.Size = new System.Drawing.Size(775, 166);
+            this.listManagerView1.Size = new System.Drawing.Size(775, 263);
             this.listManagerView1.TabIndex = 1;
             // 
             // listManagerView2
             // 
             this.listManagerView2.DisplayedItemsName = "Available Relationships";
             this.listManagerView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listManagerView2.Location = new System.Drawing.Point(3, 405);
+            this.listManagerView2.Location = new System.Drawing.Point(3, 307);
             this.listManagerView2.Name = "listManagerView2";
-            this.listManagerView2.Size = new System.Drawing.Size(775, 166);
+            this.listManagerView2.Size = new System.Drawing.Size(775, 264);
             this.listManagerView2.TabIndex = 2;
             // 
             // entityListView1
@@ -315,6 +316,7 @@
             this.entityListView1.Entities = null;
             this.entityListView1.Location = new System.Drawing.Point(3, 38);
             this.entityListView1.Name = "entityListView1";
+            this.entityListView1.ShowSystemEntities = false;
             this.entityListView1.Size = new System.Drawing.Size(344, 574);
             this.entityListView1.TabIndex = 1;
             // 
