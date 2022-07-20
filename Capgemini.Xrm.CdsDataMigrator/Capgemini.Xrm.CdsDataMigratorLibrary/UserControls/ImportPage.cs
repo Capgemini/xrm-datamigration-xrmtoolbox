@@ -1,10 +1,7 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -13,7 +10,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ImportPage : UserControl, IImportPageView
     {
-        private ImportPagePresenter presenter;
+        //private ImportPagePresenter presenter;
+
+        public event EventHandler LoadConfigClicked;
+        public event EventHandler SaveConfigClicked;
+        public event EventHandler RunConfigClicked;
 
         public ImportPage()
         {
@@ -21,14 +22,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         [ExcludeFromCodeCoverage]
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
+        //protected override void OnLoad(EventArgs e)
+        //{
+        //    base.OnLoad(e);
 
-            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
-            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-            presenter = new ImportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
-        }
+        //    var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+        //    var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+        //    presenter = new ImportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
+        //}
 
         #region input mapping
 
@@ -132,34 +133,34 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         [ExcludeFromCodeCoverage]
         private void loadButton_Click(object sender, EventArgs e)
         {
-            presenter.LoadConfig();
+            this.LoadConfigClicked?.Invoke(this, EventArgs.Empty);
         }
 
         [ExcludeFromCodeCoverage]
         private void saveButton_Click(object sender, EventArgs e)
         {
-            presenter.SaveConfig();
+            this.SaveConfigClicked?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]
         private void runButton_Click(object sender, EventArgs e)
         {
-            presenter.RunConfig();
+            this.RunConfigClicked?.Invoke(sender, e);
         }
         
         #endregion
 
-        [ExcludeFromCodeCoverage]
-        private PluginControlBase FindPluginControlBase()
-        {
-            var parent = Parent;
+        //[ExcludeFromCodeCoverage]
+        //private PluginControlBase FindPluginControlBase()
+        //{
+        //    var parent = Parent;
 
-            while (!(parent is PluginControlBase || parent is null))
-            {
-                parent = parent?.Parent;
-            }
+        //    while (!(parent is PluginControlBase || parent is null))
+        //    {
+        //        parent = parent?.Parent;
+        //    }
 
-            return parent as PluginControlBase;
-        }
+        //    return parent as PluginControlBase;
+        //}
     }
 }

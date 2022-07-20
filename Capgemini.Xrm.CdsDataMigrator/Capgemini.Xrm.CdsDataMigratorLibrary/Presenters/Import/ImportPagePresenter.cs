@@ -1,6 +1,7 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using System.Diagnostics.CodeAnalysis;
 using System;
 using System.IO;
 using XrmToolBox.Extensibility;
@@ -8,12 +9,12 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
-    public class ImportPagePresenter
+    public class ImportPagePresenter : IDisposable
     {
         private readonly IImportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
-
+        
         private CrmImportConfig config;
         private string configFilePath;
 
@@ -23,11 +24,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
 
+            this.view.LoadConfigClicked += LoadConfig;
+            this.view.SaveConfigClicked += SaveConfig;
+            this.view.RunConfigClicked += RunConfig;
+
             this.config = new CrmImportConfig();
             WriteFormInputFromConfig();
         }
 
-        public void LoadConfig()
+        private void LoadConfig(object sender, EventArgs args)
         {
             try
             {
@@ -45,7 +50,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public void SaveConfig()
+        private void SaveConfig(object sender, EventArgs args)
         {
             try
             {
@@ -64,7 +69,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-        public void RunConfig()
+        private void RunConfig(object sender, EventArgs args)
         {
             try
             {
@@ -127,6 +132,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        [ExcludeFromCodeCoverage]
+        protected virtual void Dispose(bool disposing)
+        {
+            this.view.LoadConfigClicked -= LoadConfig;
+            this.view.SaveConfigClicked -= SaveConfig;
+            this.view.RunConfigClicked -= RunConfig;
         }
     }
 }
