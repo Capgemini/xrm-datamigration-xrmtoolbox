@@ -258,6 +258,18 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         }
 
         [TestMethod]
+        public void ImportDataAsJsonV2()
+        {
+
+        }
+
+        [TestMethod]
+        public void ImportDataAsCsvV2()
+        {
+   
+        }
+
+        [TestMethod]
         public void CancelDataExportShouldNotThrowExceptionEvenIfCancellationTokenSourceIsNull()
         {
             FluentActions.Invoking(() => systemUnderTest.CancelDataExport())

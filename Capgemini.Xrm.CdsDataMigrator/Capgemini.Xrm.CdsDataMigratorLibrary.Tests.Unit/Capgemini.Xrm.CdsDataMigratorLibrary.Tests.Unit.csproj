@@ -261,6 +261,7 @@
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
+    <Compile Include="Presenters\ImportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LogToTextboxServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Controllers\ListControllerTests.cs" />
     <Compile Include="UserControls\ExportPageTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
+    <Compile Include="UserControls\ImportPageTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
     <Compile Include="Mocks\MockupForWizardButtons.cs">
       <SubType>UserControl</SubType>
