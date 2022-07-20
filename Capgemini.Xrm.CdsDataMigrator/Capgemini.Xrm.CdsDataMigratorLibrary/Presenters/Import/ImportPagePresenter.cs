@@ -99,6 +99,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public CrmSchemaConfiguration GetSchemaConfiguration()
         {
+            if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
+            {
+                return null;
+            }
             try
             {
                 return CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
