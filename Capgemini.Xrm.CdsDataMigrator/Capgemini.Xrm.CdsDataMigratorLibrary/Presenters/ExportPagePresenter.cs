@@ -86,10 +86,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            // TODO: Handle error
+                            view.ShowError(e.Error);
                         }
-
-                        // TODO: Success message
+                        else
+                        {
+                            view.ShowSuccess("Data export is complete.");
+                        }
                     }
                 });
             }

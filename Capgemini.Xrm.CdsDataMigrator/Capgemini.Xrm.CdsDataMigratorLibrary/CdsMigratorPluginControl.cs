@@ -7,8 +7,10 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -82,6 +84,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             if (actionName == "")
             {
                 base.UpdateConnection(newService, detail, actionName, parameter);
+            }
+        }
+
+
+        public void ShowError(Exception error)
+        {
+            string message = error.Message + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
+            string caption = "Oops, an error occured";
+
+            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+
+            if (result == DialogResult.Yes)
+            {
+                Process.Start(LogFilePath);
+            }
+        }
+
+        public void ShowSuccess(string message)
+        {
+            string caption = "Success" + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
+            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (result == DialogResult.Yes)
+            {
+                Process.Start(LogFilePath);
             }
         }
 

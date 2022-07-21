@@ -135,6 +135,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             return saveFileDialog.FileName;
         }
 
+        public void ShowError(Exception error)
+        {
+            FindPluginControlBase().ShowError(error);
+
+            // TODO: Replace with `FindPluginControlBase().ShowErrorDialog(error)` when we update XrmToolBox.
+            // https://www.xrmtoolbox.com/documentation/for-developers/plugincontrolbase-base-class/#error
+        }
+
+        public void ShowSuccess(string message)
+        {
+            FindPluginControlBase().ShowSuccess(message);
+        }
+
+
         #endregion
 
         #region event mappings
@@ -164,5 +178,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         #endregion
+
+        private CdsMigratorPluginControl FindPluginControlBase()
+        {
+            var parent = Parent;
+
+            while (!(parent is CdsMigratorPluginControl || parent is null))
+            {
+                parent = parent?.Parent;
+            }
+
+            return parent as CdsMigratorPluginControl;
+        }
     }
 }
