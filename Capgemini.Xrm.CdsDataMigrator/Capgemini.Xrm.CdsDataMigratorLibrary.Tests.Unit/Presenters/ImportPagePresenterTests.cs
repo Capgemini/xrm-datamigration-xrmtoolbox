@@ -7,8 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -176,20 +174,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
             mockImportView.SetupGet(x => x.IgnoreSystemFields).Returns(true);
             mockImportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
+            mockImportView.SetupGet(x => x.DataFormat).Returns(CdsDataMigratorLibrary.Enums.DataFormat.Json);
+            mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
 
             // Act
             mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
 
             var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
             workInfo.Work(null, null);
-
-
+            
             // Assert
             mockImportView.VerifyAll();
             workInfo.Message.Should().Be("Importing data...");
-            mockDataMigrationService.Verify(x => x.ImportData(mockIOrganisationService.Object, CdsDataMigratorLibrary.Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()));
+            mockDataMigrationService.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()));
 
-            var importConfig = mockDataMigrationService.Invocations[0].Arguments[2].As<CrmImportConfig>();
+            var importConfig = mockDataMigrationService.Invocations[0].Arguments[3].As<CrmImportConfig>();
 
             importConfig.SaveBatchSize.Should().Be(1000);
             importConfig.IgnoreStatuses.Should().Be(true);
