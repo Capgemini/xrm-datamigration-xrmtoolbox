@@ -36,9 +36,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void SelectedEntity_GetSet()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
             var value = new CrmEntity();
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
                 systemUnderTest.As<IExportFilterFormView>().EntityList = new List<ListBoxItem<CrmEntity>>
                 {
@@ -57,10 +56,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void SelectedEntity_ShouldNotifyPresenterWhenUpdated()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
             var value = new CrmEntity();
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
+                var isCalled = false;
+                systemUnderTest.OnEntitySelected += (object sender, EventArgs e) => isCalled = true;
+
                 systemUnderTest.As<IExportFilterFormView>().EntityList = new List<ListBoxItem<CrmEntity>>
                 {
                     new ListBoxItem<CrmEntity> { DisplayName = "Entity", Item = value } 
@@ -70,7 +71,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
                 systemUnderTest.As<IExportFilterFormView>().SelectedEntity = value;
 
                 // Assert
-                mockPresenter.Verify(x => x.OnEntitySelected());
+                isCalled.Should().BeTrue();
             }
         }
 
@@ -108,9 +109,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void FilterText_GetSet()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
             var value = "some text";
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
                 // Act
                 systemUnderTest.As<IExportFilterFormView>().FilterText = value;
@@ -124,15 +124,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void FilterText_ShouldNotifyPresenterWhenSet()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
             var value = "some text";
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
+                var isCalled = false;
+                systemUnderTest.OnFilterTextChanged += (object sender, EventArgs e) => isCalled = true;
+
                 // Act
                 systemUnderTest.As<IExportFilterFormView>().FilterText = value;
 
                 // Assert
-                mockPresenter.Verify(x => x.UpdateFilterForEntity());
+                isCalled.Should().BeTrue();
             }
         }
 
@@ -140,14 +142,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void OnVisibleChanged_ShouldNotifyPresenterWhenTrue()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
+                var isCalled = false;
+                systemUnderTest.OnVisible += (object sender, EventArgs e) => isCalled = true;
+
                 // Act
                 systemUnderTest.Visible = true;
 
                 // Assert
-                mockPresenter.Verify(x => x.OnVisible(), Times.Once);
+                isCalled.Should().BeTrue();
             }
         }
 
@@ -155,14 +159,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void OnVisibleChanged_ShouldNotNotifyPresenterWhenFalse()
         {
             // Arrange
-            var mockPresenter = new Mock<IExportFilterFormPresenter>();
-            using (var systemUnderTest = new ExportFilterForm(mockPresenter.Object))
+            using (var systemUnderTest = new ExportFilterForm())
             {
+                var isCalled = false;
+                systemUnderTest.OnVisible += (object sender, EventArgs e) => isCalled = true;
                 // Act
                 systemUnderTest.Visible = false;
 
                 // Assert
-                mockPresenter.Verify(x => x.OnVisible(), Times.Never);
+                isCalled.Should().BeFalse();
             }
         }
     }

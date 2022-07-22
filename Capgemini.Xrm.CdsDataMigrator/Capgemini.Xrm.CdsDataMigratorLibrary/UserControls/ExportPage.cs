@@ -2,6 +2,7 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
@@ -13,24 +14,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ExportPage : UserControl, IExportPageView
     {
-        private ExportPagePresenter presenter;
         private ExportFilterForm exportFilterForm;
+
+        public event EventHandler LoadConfigClicked;
+        public event EventHandler SaveConfigClicked;
+        public event EventHandler RunConfigClicked;
+        public event EventHandler SchemaConfigPathChanged;
 
         public ExportPage()
         {
             InitializeComponent();
 
             this.exportFilterForm = new ExportFilterForm();
-        }
-
-        [ExcludeFromCodeCoverage]
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
-            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-            presenter = new ExportPagePresenter(this, FindPluginControlBase(), dataMigrationService);
+            this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
         }
 
         #region input mapping
@@ -85,7 +81,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         string IExportPageView.CrmMigrationToolSchemaPath
         {
             get => fisSchemaFile.Value;
-            set => fisSchemaFile.Value = value;
+            set { fisSchemaFile.Value = value; SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty); }
         }
 
         DataFormat IExportPageView.DataFormat
@@ -114,6 +110,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => exportFilterForm.EntityFilters = value;
         }
 
+        CrmSchemaConfiguration IExportPageView.SchemaConfiguration
+        {
+            get => exportFilterForm.SchemaConfiguration;
+            set => exportFilterForm.SchemaConfiguration = value;
+        }
+
         #endregion
 
         #region action mappings
@@ -140,41 +142,27 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         [ExcludeFromCodeCoverage]
         private void loadButton_Click(object sender, EventArgs e)
         {
-            presenter.LoadConfig();
+            this.LoadConfigClicked?.Invoke(this, EventArgs.Empty);
         }
 
         [ExcludeFromCodeCoverage]
         private void saveButton_Click(object sender, EventArgs e)
         {
-            presenter.SaveConfig();
+            this.SaveConfigClicked?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]
         private void runButton_Click(object sender, EventArgs e)
         {
-            presenter.RunConfig();
+            this.RunConfigClicked?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]
         private void btnFetchXmlFilters_Click(object sender, EventArgs e)
         {
-            exportFilterForm.SchemaConfiguration = presenter.GetSchemaConfiguration();
             this.exportFilterForm.ShowDialog(this);
         }
 
         #endregion
-
-        [ExcludeFromCodeCoverage]
-        private PluginControlBase FindPluginControlBase()
-        {
-            var parent = Parent;
-
-            while (!(parent is PluginControlBase || parent is null))
-            {
-                parent = parent?.Parent;
-            }
-
-            return parent as PluginControlBase;
-        }
     }
 }
