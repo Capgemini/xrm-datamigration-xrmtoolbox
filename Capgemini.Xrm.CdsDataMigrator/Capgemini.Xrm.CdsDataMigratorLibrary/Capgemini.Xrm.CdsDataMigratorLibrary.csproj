@@ -264,14 +264,14 @@
     <Compile Include="CdsMigratorPluginControl.designer.cs">
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenters\Export\ExportFilterFormPresenter.cs" />
-    <Compile Include="Presenters\Export\ExportPagePresenter.cs" />
-    <Compile Include="Presenters\Export\ExportPresenter.cs" />
-    <Compile Include="Presenters\Export\IExportFilterFormPresenter.cs" />
-    <Compile Include="Presenters\Export\IExportFilterFormView.cs" />
-    <Compile Include="Presenters\Export\IExportPageView.cs" />
-    <Compile Include="Presenters\Import\IImportPageView.cs" />
-    <Compile Include="Presenters\Import\ImportPagePresenter.cs" />
+    <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\ExportPagePresenter.cs" />
+    <Compile Include="Presenters\ExportPresenter.cs" />
+    <Compile Include="Presenters\IExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\IExportFilterFormView.cs" />
+    <Compile Include="Presenters\IExportPageView.cs" />
+    <Compile Include="Presenters\IImportPageView.cs" />
+    <Compile Include="Presenters\ImportPagePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -352,7 +352,7 @@
     <Compile Include="UserControls\WizardButtons.Designer.cs">
       <DependentUpon>WizardButtons.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenters\Export\IExportView.cs" />
+    <Compile Include="Presenters\IExportView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\stylecop.json">
