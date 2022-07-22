@@ -107,7 +107,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 return CrmSchemaConfiguration.ReadFromFile(view.CrmMigrationToolSchemaPath);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -119,15 +119,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.IgnoreStatuses = view.IgnoreStatuses;
             config.IgnoreSystemFields = view.IgnoreSystemFields;
             config.JsonFolderPath = view.JsonFolderPath;
-
-            //TO DO: incorporate schema file
-            //if (view.CrmMigrationToolSchemaFilters != null)
-            //{
-            //    foreach (var filter in view.CrmMigrationToolSchemaFilters)
-            //    {
-            //        config.CrmMigrationToolSchemaFilters.Add(filter.Key, filter.Value);
-            //    }
-            //}
         }
 
         private void WriteFormInputFromConfig()
