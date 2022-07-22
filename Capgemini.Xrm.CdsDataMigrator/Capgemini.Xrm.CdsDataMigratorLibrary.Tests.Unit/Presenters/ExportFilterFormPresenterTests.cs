@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(() => null);
 
             // Act
-            systemUnderTest.OnVisible();
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             mockExportView.Verify(x => x.ShowMessage(
@@ -58,7 +58,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(new CrmSchemaConfiguration());
 
             // Act
-            systemUnderTest.OnVisible();
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             mockExportView.Verify(x => x.ShowMessage(
@@ -93,7 +93,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(new Dictionary<string, string>());
 
             // Act
-            systemUnderTest.OnVisible();
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifySet(
@@ -122,8 +122,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.SelectedEntity).Returns(entity);
             mockExportView.SetupGet(x => x.FilterText).Returns("<filter></filter>");
 
-            systemUnderTest.OnVisible(); // Loads old schema entities
-            systemUnderTest.UpdateFilterForEntity();
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty); // Loads old schema entities
+            mockExportView.Raise(x => x.OnEntitySelected += null, EventArgs.Empty);
 
             var schemaNew = new CrmSchemaConfiguration();
             schemaNew.Entities.Add(new CrmEntity
@@ -139,7 +139,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(schemaNew.Entities.Select(x => new ListBoxItem<CrmEntity> { DisplayName = x.DisplayName, Item = x }));
 
             // Act
-            systemUnderTest.OnVisible();
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifySet(
@@ -167,7 +167,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(entityFilters);
 
             // Act
-            systemUnderTest.OnEntitySelected();
+            mockExportView.Raise(x => x.OnEntitySelected += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifySet(x => x.FilterText = "<filter></filter/>", Times.Once);
@@ -186,7 +186,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(entityFilters);
 
             // Act
-            systemUnderTest.OnEntitySelected();
+            mockExportView.Raise(x => x.OnEntitySelected += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifySet(x => x.FilterText = String.Empty, Times.Once);
@@ -208,7 +208,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(entityFilters);
 
             // Act
-            systemUnderTest.UpdateFilterForEntity();
+            mockExportView.Raise(x => x.OnFilterTextChanged += null, EventArgs.Empty);
 
             // Assert
             entityFilters.ContainsKey("entity").Should().BeTrue();

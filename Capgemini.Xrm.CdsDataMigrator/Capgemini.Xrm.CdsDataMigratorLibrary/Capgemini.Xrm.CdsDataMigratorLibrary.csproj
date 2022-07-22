@@ -267,7 +267,6 @@
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
-    <Compile Include="Presenters\IExportFilterFormPresenter.cs" />
     <Compile Include="Presenters\IExportFilterFormView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />
     <Compile Include="Presenters\IImportPageView.cs" />

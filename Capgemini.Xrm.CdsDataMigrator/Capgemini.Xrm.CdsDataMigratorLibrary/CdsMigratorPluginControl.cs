@@ -33,6 +33,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
             this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService);
+            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService);
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
