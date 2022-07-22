@@ -64,7 +64,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Arrange
             mockImportView
                 .Setup(x => x.AskForFilePathToOpen())
-                .Returns("a-random-non-existent-file");
+                .Returns("$a-random-non-existent-file$");
 
             // Act
             mockImportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
