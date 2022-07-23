@@ -16,6 +16,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         //Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
         ListView EntityAttributeList { get; }
         ListView EntityRelationshipList { get; }
+        TreeView EntityList { get; }
+        Cursor Cursor { get; set; }
 
         event EventHandler RetrieveEntities;
         event EventHandler ShowSystemEntitiesChanged;

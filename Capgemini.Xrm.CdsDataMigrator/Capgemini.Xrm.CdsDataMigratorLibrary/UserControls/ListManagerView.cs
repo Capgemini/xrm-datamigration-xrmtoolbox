@@ -32,6 +32,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         public ListView ListView => listViewItems;
 
+        private void SelectUnselectAllCheckedChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listViewItems.Items)
+            {
+                item.Checked = checkBoxSelectUnselectAll.Checked;
+            }
+        }
+
         //Dictionary<string, HashSet<string>> EntityAttributes
         //public List<AttributeMetadata> EntityAttributes
         //{

@@ -65,6 +65,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             }
         }
 
+        public TreeView EntityList => treeViewEntities;
+
         public List<EntityMetadata> Entities
         {
             get
@@ -136,15 +138,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             //    CurrentSelectedEntity = e.Node.Tag as EntityMetadata;
             //}
         }
-    }
-
-    public class MigratorEventArgs<T> : EventArgs
-    {
-        public MigratorEventArgs(T input)
-        {
-            Input = input;
-        }
-
-        public T Input { get; }
     }
 }

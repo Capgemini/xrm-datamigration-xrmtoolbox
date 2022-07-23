@@ -70,6 +70,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         public ListView EntityAttributeList => listManagerView1.ListView;
         public ListView EntityRelationshipList => listManagerView2.ListView;
+        public TreeView EntityList => entityListView1.EntityList;
 
         public event EventHandler RetrieveEntities;
 

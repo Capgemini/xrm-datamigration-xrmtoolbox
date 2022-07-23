@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxSelectUnselectAll = new System.Windows.Forms.CheckBox();
             this.listViewItems = new System.Windows.Forms.ListView();
             this.clAttDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clAttLogicalName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clAttType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clAttComment = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.checkBoxSelectUnselectAll = new System.Windows.Forms.CheckBox();
             this.labelDisplayedItemsName = new System.Windows.Forms.Label();
             this.tlpMainLayout.SuspendLayout();
             this.SuspendLayout();
@@ -55,17 +55,6 @@
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMainLayout.Size = new System.Drawing.Size(915, 233);
             this.tlpMainLayout.TabIndex = 0;
-            // 
-            // checkBoxSelectUnselectAll
-            // 
-            this.checkBoxSelectUnselectAll.AutoSize = true;
-            this.checkBoxSelectUnselectAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxSelectUnselectAll.Location = new System.Drawing.Point(3, 28);
-            this.checkBoxSelectUnselectAll.Name = "checkBoxSelectUnselectAll";
-            this.checkBoxSelectUnselectAll.Size = new System.Drawing.Size(909, 19);
-            this.checkBoxSelectUnselectAll.TabIndex = 0;
-            this.checkBoxSelectUnselectAll.Text = "Select/Unselect All";
-            this.checkBoxSelectUnselectAll.UseVisualStyleBackColor = true;
             // 
             // listViewItems
             // 
@@ -105,6 +94,18 @@
             // 
             this.clAttComment.Text = "Comment";
             this.clAttComment.Width = 200;
+            // 
+            // checkBoxSelectUnselectAll
+            // 
+            this.checkBoxSelectUnselectAll.AutoSize = true;
+            this.checkBoxSelectUnselectAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxSelectUnselectAll.Location = new System.Drawing.Point(3, 28);
+            this.checkBoxSelectUnselectAll.Name = "checkBoxSelectUnselectAll";
+            this.checkBoxSelectUnselectAll.Size = new System.Drawing.Size(909, 19);
+            this.checkBoxSelectUnselectAll.TabIndex = 0;
+            this.checkBoxSelectUnselectAll.Text = "Select/Unselect All";
+            this.checkBoxSelectUnselectAll.UseVisualStyleBackColor = true;
+            this.checkBoxSelectUnselectAll.CheckedChanged += new System.EventHandler(this.SelectUnselectAllCheckedChanged);
             // 
             // labelDisplayedItemsName
             // 

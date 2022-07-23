@@ -353,6 +353,7 @@
     <Compile Include="UserControls\ListManagerView.Designer.cs">
       <DependentUpon>ListManagerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\MigratorEventArgs.cs" />
     <Compile Include="UserControls\SchemaGeneratorPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

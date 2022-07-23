@@ -22,6 +22,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IMetadataService metadataService;
         private readonly INotificationService notificationService;
         private readonly IExceptionService exceptionService;
+        private readonly List<EntityMetadata> cachedMetadata = new List<EntityMetadata>();
+        private bool workingstate;
 
         public SchemaGeneratorPresenter(ISchemaGeneratorView view, IOrganizationService organizationService, IMetadataService metadataService, INotificationService notificationService, IExceptionService exceptionService)
         {
@@ -38,46 +40,61 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-
-
-        public List<EntityMetadata> RetrieveEntitiesFromDatasource()
+        public async Task RetrieveEntitiesFromDatasource()
         {
-            var inputCachedMetadata = new List<EntityMetadata>();
-
-            if (inputCachedMetadata.Count == 0)//|| isNewConnection) ///TODO: address new connection
+            if (!workingstate)
             {
-                var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
-                var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
+                //ClearAllListViews();
+                ManageWorkingState(true);
 
-                if (!view.ShowSystemAttributes)
+                //informationPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 150);
+
+                view.EntityMetadataList = await Task.Run(() =>
                 {
-                    sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
-                }
+                    var inputCachedMetadata = new List<EntityMetadata>();
 
-                if (sourceList != null)
-                {
-                    inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
-                }
+                    if (inputCachedMetadata.Count == 0)//|| isNewConnection) ///TODO: address new connection
+                    {
+                        var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
+                        var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
 
-                ///TODO; handle when retrieving entities result to erorrs or no results
-                //if (exception != null)
-                //{
-                //    notificationService.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
-                //}
-                //else
-                //{
-                //    if (items != null && items.Count > 0)
-                //    {
-                //        listView.Items.AddRange(items.ToArray());
-                //    }
-                //    else
-                //    {
-                //        notificationService.DisplayWarningFeedback(owner, "The system does not contain any entities");
-                //    }
-                //}
+                        //var controller = new EntityController();
+                        //e.Result = controller.RetrieveSourceEntitiesList(view.ShowSystemAttributes, cachedMetadata, entityAttributes, serviceParameters);
+
+                        if (!view.ShowSystemAttributes)
+                        {
+                            sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
+                        }
+
+                        if (sourceList != null)
+                        {
+                            inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
+                        }
+
+                        ///TODO; handle when retrieving entities result to erorrs or no results
+                        //if (exception != null)
+                        //{
+                        //    notificationService.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
+                        //}
+                        //else
+                        //{
+                        //    if (items != null && items.Count > 0)
+                        //    {
+                        //        listView.Items.AddRange(items.ToArray());
+                        //    }
+                        //    else
+                        //    {
+                        //        notificationService.DisplayWarningFeedback(owner, "The system does not contain any entities");
+                        //    }
+                        //}
+                    }
+
+                    return inputCachedMetadata;
+                });
+
+                // view.EntityMetadataList = await RetrieveEntitiesFromDatasource();
+                ManageWorkingState(false);
             }
-
-            return inputCachedMetadata;
         }
 
         //public async Task PopulateAttributes(string entityLogicalName, List<EntityMetadata> listViewSelectedItem, ServiceParameters serviceParameters)
@@ -153,14 +170,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         }
 
 
-        private void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
+        private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
         {
-            view.EntityMetadataList = RetrieveEntitiesFromDatasource();
+            await RetrieveEntitiesFromDatasource();
         }
 
-        private void HandleRetrieveEntitiesRequest(object sender, System.EventArgs e)
+        private async void HandleRetrieveEntitiesRequest(object sender, System.EventArgs e)
         {
-            view.EntityMetadataList = RetrieveEntitiesFromDatasource();
+            await RetrieveEntitiesFromDatasource();
         }
 
         private async void HandleCurrentSelectedEntityChanged(object sender, UserControls.MigratorEventArgs<EntityMetadata> e)
@@ -173,12 +190,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             //var controller = new EntityController();
             //controller.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
 
-            //old
-            //var result = GetAttributeList(e.Input.LogicalName);
-            //view.EntityAttributes = result;
         }
 
         public Settings Settings { get; set; }
+
+        public void ManageWorkingState(bool working)
+        {
+            workingstate = working;
+            view.EntityList.Enabled = !working;
+            view.EntityAttributeList.Enabled = !working;
+            view.EntityRelationshipList.Enabled = !working;
+            view.Cursor = working ? Cursors.WaitCursor : Cursors.Default;
+        }
 
         public async Task PopulateAttributes(string entityLogicalName,/* ListViewItem listViewSelectedItem,*/ ServiceParameters serviceParameters)
         {
@@ -197,10 +220,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 var attributeController = new AttributeController();
                 try
-                { 
+                {
                     var unmarkedattributes = new List<string>();
                     var entityAttributes = new Dictionary<string, HashSet<string>>();
-                            //var unmarkedattributes = Settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
+                    //var unmarkedattributes = Settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
                     var attributes = attributeController.GetAttributeList(entityLogicalName, view.ShowSystemAttributes, serviceParameters);
                     result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
                 }
@@ -210,8 +233,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
             });
             var controller = new ListController();
-            var e = new RunWorkerCompletedEventArgs(result, error, false); 
-            controller.OnPopulateCompletedAction(e, notificationService, null,view.EntityAttributeList , view.ShowSystemAttributes);
+            var e = new RunWorkerCompletedEventArgs(result, error, false);
+            controller.OnPopulateCompletedAction(e, notificationService, null, view.EntityAttributeList, view.ShowSystemAttributes);
             //ManageWorkingState(false);
             // }
             //}
@@ -219,34 +242,34 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships,/* ListViewItem listViewSelectedItem,*/ ServiceParameters migratorParameters)
         {
-           // if (!workingstate)
-           // {
-                //lvRelationship.Items.Clear();
-                //InitFilter(listViewSelectedItem);
-                //if (listViewSelectedItem != null)
-                //{
-                    Exception error = null;
-                    List<ListViewItem> result = null;
+            // if (!workingstate)
+            // {
+            //lvRelationship.Items.Clear();
+            //InitFilter(listViewSelectedItem);
+            //if (listViewSelectedItem != null)
+            //{
+            Exception error = null;
+            List<ListViewItem> result = null;
 
-                    await Task.Run(() =>
-                    {
-                        var controller = new RelationshipController();
+            await Task.Run(() =>
+            {
+                var controller = new RelationshipController();
 
-                        try
-                        {
-                            result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
-                        }
-                        catch (Exception ex)
-                        {
-                            error = ex;
-                        }
-                    });
-                    var listController = new ListController();
-                    var e = new RunWorkerCompletedEventArgs(result, error, false);
-                    listController.OnPopulateCompletedAction(e, notificationService, null, view.EntityRelationshipList, view.ShowSystemAttributes);
-                    //ManageWorkingState(false);
-               // }
-           // }
+                try
+                {
+                    result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+            });
+            var listController = new ListController();
+            var e = new RunWorkerCompletedEventArgs(result, error, false);
+            listController.OnPopulateCompletedAction(e, notificationService, null, view.EntityRelationshipList, view.ShowSystemAttributes);
+            //ManageWorkingState(false);
+            // }
+            // }
         }
 
     }
