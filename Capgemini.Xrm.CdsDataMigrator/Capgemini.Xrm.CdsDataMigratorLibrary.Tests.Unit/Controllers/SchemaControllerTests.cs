@@ -135,7 +135,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
                 var inputAttributeMapping = new AttributeTypeMapping();
                 var inputCrmSchemaConfiguration = new DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox))
+                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox.Text))
                              .Should()
                              .NotThrow();
             }
@@ -167,7 +167,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             {
                 var inputCrmSchemaConfiguration = new DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox))
+                FluentActions.Invoking(() => systemUnderTest.SaveSchema(serviceParameters, inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, inputCrmSchemaConfiguration, schemaPathTextBox.Text))
                              .Should()
                              .NotThrow();
             }
@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             {
                 var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath, schemaConfiguration))
+                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath.Text, schemaConfiguration))
                              .Should()
                              .NotThrow();
             }
@@ -198,7 +198,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 
                 var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath, schemaConfiguration))
+                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath.Text, schemaConfiguration))
                              .Should()
                              .NotThrow();
             }

@@ -335,11 +335,11 @@
     <Compile Include="UserControls\FileInputSelector.Designer.cs">
       <DependentUpon>FileInputSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\GeneratedSchemaLocationControl.cs">
+    <Compile Include="UserControls\SchemaLocationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\GeneratedSchemaLocationControl.Designer.cs">
-      <DependentUpon>GeneratedSchemaLocationControl.cs</DependentUpon>
+    <Compile Include="UserControls\SchemaLocationControl.Designer.cs">
+      <DependentUpon>SchemaLocationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ImportWizard.cs">
       <SubType>UserControl</SubType>
@@ -353,7 +353,7 @@
     <Compile Include="UserControls\ListManagerView.Designer.cs">
       <DependentUpon>ListManagerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MigratorEventArgs.cs" />
+    <Compile Include="Models\MigratorEventArgs.cs" />
     <Compile Include="UserControls\SchemaGeneratorPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -429,8 +429,8 @@
       <DependentUpon>FileInputSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\GeneratedSchemaLocationControl.resx">
-      <DependentUpon>GeneratedSchemaLocationControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\SchemaLocationControl.resx">
+      <DependentUpon>SchemaLocationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>

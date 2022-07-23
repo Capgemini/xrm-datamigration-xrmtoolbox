@@ -36,12 +36,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, TextBox schemaPathTextBox)
+        public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, string schemaPath)
         {
             if (AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters))
             {
                 CollectCrmEntityFields(inputCheckedEntity, inputCrmSchemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
-                GenerateXMLFile(schemaPathTextBox, inputCrmSchemaConfiguration);
+
+                GenerateXMLFile(schemaPath, inputCrmSchemaConfiguration);
                 inputCrmSchemaConfiguration.Entities.Clear();
             }
             else
@@ -50,11 +51,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public void GenerateXMLFile(TextBox tbSchemaPath, CrmSchemaConfiguration schemaConfiguration)
+        public void GenerateXMLFile(string schemaFilePath, CrmSchemaConfiguration schemaConfiguration)
         {
-            if (!string.IsNullOrWhiteSpace(tbSchemaPath.Text))
+            if (!string.IsNullOrWhiteSpace(schemaFilePath))
             {
-                schemaConfiguration.SaveToFile(tbSchemaPath.Text);
+                schemaConfiguration.SaveToFile(schemaFilePath);
             }
         }
     }

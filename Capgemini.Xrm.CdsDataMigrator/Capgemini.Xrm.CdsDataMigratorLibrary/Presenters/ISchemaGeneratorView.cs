@@ -1,5 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
-using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
@@ -17,10 +17,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         ListView EntityAttributeList { get; }
         ListView EntityRelationshipList { get; }
         TreeView EntityList { get; }
+        List<EntityMetadata> SelectedEntities { get; }
         Cursor Cursor { get; set; }
 
         event EventHandler RetrieveEntities;
         event EventHandler ShowSystemEntitiesChanged;
+        event EventHandler<MigratorEventArgs<string>> LoadSchema;
+        event EventHandler<MigratorEventArgs<string>> SaveSchema;
         event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
     }
 }

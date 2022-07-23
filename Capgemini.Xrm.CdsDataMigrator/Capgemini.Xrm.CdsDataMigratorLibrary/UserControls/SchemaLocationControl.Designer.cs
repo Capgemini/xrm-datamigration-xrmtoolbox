@@ -1,6 +1,6 @@
 ﻿namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
-    partial class GeneratedSchemaLocationControl
+    partial class SchemaLocationControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.tplMainLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.fileInputSelector3 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FileInputSelector();
             this.label8 = new System.Windows.Forms.Label();
+            this.fileInputSelectorSchema = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FileInputSelector();
             this.tplMainLayout.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,27 +40,15 @@
             this.tplMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
             this.tplMainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tplMainLayout.Controls.Add(this.label8, 0, 0);
-            this.tplMainLayout.Controls.Add(this.fileInputSelector3, 1, 0);
+            this.tplMainLayout.Controls.Add(this.fileInputSelectorSchema, 1, 0);
             this.tplMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tplMainLayout.Location = new System.Drawing.Point(0, 0);
             this.tplMainLayout.Name = "tplMainLayout";
             this.tplMainLayout.RowCount = 1;
             this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tplMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tplMainLayout.Size = new System.Drawing.Size(702, 30);
             this.tplMainLayout.TabIndex = 0;
-            // 
-            // fileInputSelector3
-            // 
-            this.fileInputSelector3.AutoSize = true;
-            this.fileInputSelector3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileInputSelector3.Location = new System.Drawing.Point(164, 4);
-            this.fileInputSelector3.Margin = new System.Windows.Forms.Padding(4);
-            this.fileInputSelector3.MinimumSize = new System.Drawing.Size(133, 31);
-            this.fileInputSelector3.Name = "fileInputSelector3";
-            this.fileInputSelector3.Size = new System.Drawing.Size(534, 32);
-            this.fileInputSelector3.TabIndex = 37;
-            this.fileInputSelector3.Value = "";
             // 
             // label8
             // 
@@ -74,12 +62,24 @@
             this.label8.Text = "Schema File Path";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // GeneratedSchemaLocationControl
+            // fileInputSelectorSchema
+            // 
+            this.fileInputSelectorSchema.AutoSize = true;
+            this.fileInputSelectorSchema.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileInputSelectorSchema.Location = new System.Drawing.Point(164, 4);
+            this.fileInputSelectorSchema.Margin = new System.Windows.Forms.Padding(4);
+            this.fileInputSelectorSchema.MinimumSize = new System.Drawing.Size(133, 31);
+            this.fileInputSelectorSchema.Name = "fileInputSelectorSchema";
+            this.fileInputSelectorSchema.Size = new System.Drawing.Size(534, 32);
+            this.fileInputSelectorSchema.TabIndex = 37;
+            this.fileInputSelectorSchema.Value = "";
+            // 
+            // SchemaLocationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tplMainLayout);
-            this.Name = "GeneratedSchemaLocationControl";
+            this.Name = "SchemaLocationControl";
             this.Size = new System.Drawing.Size(702, 30);
             this.tplMainLayout.ResumeLayout(false);
             this.tplMainLayout.PerformLayout();
@@ -90,7 +90,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tplMainLayout;
-        private FileInputSelector fileInputSelector3;
+        private FileInputSelector fileInputSelectorSchema;
         private System.Windows.Forms.Label label8;
     }
 }

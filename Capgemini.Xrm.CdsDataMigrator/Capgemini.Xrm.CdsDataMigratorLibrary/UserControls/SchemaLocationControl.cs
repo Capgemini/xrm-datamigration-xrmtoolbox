@@ -10,13 +10,13 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
-    public partial class GeneratedSchemaLocationControl : UserControl
+    public partial class SchemaLocationControl : UserControl
     {
-        public GeneratedSchemaLocationControl()
+        public SchemaLocationControl()
         {
             InitializeComponent();
         }
 
-        public string SchemaFilename { get; set; }
+        public string SchemaFilenamePath => fileInputSelectorSchema.Value;
     }
 }

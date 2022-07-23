@@ -281,7 +281,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 
             var serviceParameters = GenerateMigratorParameters();
 
-            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
+            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
 
             actual.Count.Should().Be(1);
         }
@@ -295,7 +295,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             var inputCachedMetadata = new List<EntityMetadata>();
             var serviceParameters = GenerateMigratorParameters();
 
-            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
+            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes, serviceParameters);
 
             actual.Count.Should().Be(1);
         }

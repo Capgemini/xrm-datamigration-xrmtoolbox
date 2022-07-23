@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Metadata;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -72,11 +72,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public ListView EntityRelationshipList => listManagerView2.ListView;
         public TreeView EntityList => entityListView1.EntityList;
 
-        public event EventHandler RetrieveEntities;
+        public List<EntityMetadata> SelectedEntities => entityListView1.SelectedEntities;
 
-        private void RaiseRefreshEntitiesEvent(object sender, EventArgs e)
+        public event EventHandler RetrieveEntities;
+        public event EventHandler<MigratorEventArgs<string>> LoadSchema;
+        public event EventHandler<MigratorEventArgs<string>> SaveSchema;
+
+        private void RefreshEntitiesButtonClick(object sender, EventArgs e)
         {
             RetrieveEntities?.Invoke(sender, e);
+        }
+
+        private void LoadSchemaButtonClick(object sender, EventArgs e)
+        {
+            LoadSchema?.Invoke(sender, new MigratorEventArgs<string>(schemaLocationControl1.SchemaFilenamePath));
+        }
+
+        private void SaveSchemaButtonClick(object sender, EventArgs e)
+        {
+            SaveSchema?.Invoke(sender, new MigratorEventArgs<string>(schemaLocationControl1.SchemaFilenamePath));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
 {
     public class MigratorEventArgs<T> : EventArgs
     {

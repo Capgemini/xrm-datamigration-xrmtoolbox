@@ -254,7 +254,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     {
                         var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
                         var controller = new EntityController();
-                        e.Result = controller.RetrieveSourceEntitiesList(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes, serviceParameters);
+                        e.Result = controller.RetrieveSourceEntitiesListToBeDeleted(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes, serviceParameters);
                     };
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
@@ -354,7 +354,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
             var controller = new SchemaController();
 
-            controller.SaveSchema(serviceParameters, checkedEntity, entityRelationships, entityAttributes, attributeMapping, crmSchemaConfiguration, tbSchemaPath);
+            controller.SaveSchema(serviceParameters, checkedEntity, entityRelationships, entityAttributes, attributeMapping, crmSchemaConfiguration, tbSchemaPath.Text);
         }
 
         private void ButtonSchemaFolderPathClick(object sender, EventArgs e)
@@ -504,7 +504,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             entityController.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
 
             var schemaController = new SchemaController();
-            schemaController.GenerateXMLFile(tbSchemaPath, crmSchemaConfiguration);
+            schemaController.GenerateXMLFile(tbSchemaPath.Text, crmSchemaConfiguration);
             crmSchemaConfiguration.Entities.Clear();
         }
 

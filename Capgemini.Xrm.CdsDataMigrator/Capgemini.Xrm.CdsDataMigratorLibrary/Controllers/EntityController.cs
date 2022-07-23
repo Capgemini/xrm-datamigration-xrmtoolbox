@@ -21,7 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
     public class EntityController : ControllerBase
     {
-        public List<ListViewItem> RetrieveSourceEntitiesList(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
+        public List<ListViewItem> RetrieveSourceEntitiesListToBeDeleted(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
         {
             var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
 
@@ -47,7 +47,43 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
                 };
                 item.SubItems.Add(entity.LogicalName);
                 IsInvalidForCustomization(entity, item);
-                UpdateCheckBoxesEntities(entity, item, inputEntityAttributes);
+                //UpdateCheckBoxesEntities(entity, item, inputEntityAttributes);
+                item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
+
+                sourceEntitiesList.Add(item);
+            }
+
+            return sourceEntitiesList;
+        }
+
+        public List<TreeNode> RetrieveSourceEntitiesList(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
+        {
+            var sourceList = serviceParameters.MetadataService.RetrieveEntities(serviceParameters.OrganizationService);
+
+            if (!showSystemAttributes)
+            {
+                sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
+            }
+
+            if (sourceList != null)
+            {
+                inputCachedMetadata.Clear();
+                inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
+            }
+
+            var sourceEntitiesList = new List<TreeNode>();
+
+            foreach (EntityMetadata entity in inputCachedMetadata)
+            {
+                var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
+
+                var item = new TreeNode($"{name} ({entity.LogicalName})")
+                {
+                    Tag = entity
+                };
+
+                IsInvalidForCustomization(entity, item);
+                item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
 
                 sourceEntitiesList.Add(item);
             }
@@ -56,6 +92,29 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
         }
 
         public void IsInvalidForCustomization(EntityMetadata entity, ListViewItem item)
+        {
+            if (entity != null)
+            {
+                if (entity.IsCustomEntity != null && entity.IsCustomEntity.Value)
+                {
+                    item.ForeColor = Color.DarkGreen;
+                }
+
+                if (entity.IsIntersect != null && entity.IsIntersect.Value)
+                {
+                    item.ForeColor = Color.Red;
+                    item.ToolTipText = "Intersect Entity, ";
+                }
+
+                if (entity.IsLogicalEntity != null && entity.IsLogicalEntity.Value)
+                {
+                    item.ForeColor = Color.Red;
+                    item.ToolTipText = "Logical Entity";
+                }
+            }
+        }
+
+        public void IsInvalidForCustomization(EntityMetadata entity, TreeNode item)
         {
             if (entity != null)
             {
@@ -110,7 +169,37 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
+        public void PopulateEntitiesListView(List<TreeNode> items, Exception exception, IWin32Window owner, TreeView treeView, INotificationService notificationService)
+        {
+            if (exception != null)
+            {
+                notificationService.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
+            }
+            else
+            {
+                if (items != null && items.Count > 0)
+                {
+                    treeView.Nodes.AddRange(items.ToArray());
+                }
+                else
+                {
+                    notificationService.DisplayWarningFeedback(owner, "The system does not contain any entities");
+                }
+            }
+        }
+
         public string GetEntityLogicalName(ListViewItem entityitem)
+        {
+            string logicalName = null;
+            if (entityitem != null && entityitem.Tag != null)
+            {
+                var entity = (EntityMetadata)entityitem.Tag;
+                logicalName = entity.LogicalName;
+            }
+            return logicalName;
+        }
+
+        public string GetEntityLogicalName(TreeNode entityitem)
         {
             string logicalName = null;
             if (entityitem != null && entityitem.Tag != null)
@@ -141,10 +230,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        private void UpdateCheckBoxesEntities(EntityMetadata entity, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityAttributes)
-        {
-            item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
-        }
+        //private void UpdateCheckBoxesEntities(EntityMetadata entity, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityAttributes)
+        //{
+        //    item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
+        //}
 
         private static void ExtractRelationships(CrmEntity entities, HashSet<string> relationShipSet)
         {
