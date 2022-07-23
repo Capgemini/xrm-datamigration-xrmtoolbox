@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -11,8 +12,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     {
         bool ShowSystemAttributes { get; set; }
         List<EntityMetadata> EntityMetadataList { get; set; }
-        List<AttributeMetadata> EntityAttributes {   set; }
-        Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
+        //List<AttributeMetadata> EntityAttributes {   set; }
+        //Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
+        ListView EntityAttributeList { get; }
+        ListView EntityRelationshipList { get; }
 
         event EventHandler RetrieveEntities;
         event EventHandler ShowSystemEntitiesChanged;

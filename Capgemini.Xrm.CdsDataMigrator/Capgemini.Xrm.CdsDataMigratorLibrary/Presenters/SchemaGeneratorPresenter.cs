@@ -1,12 +1,17 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using System.ComponentModel;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -75,40 +80,40 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return inputCachedMetadata;
         }
 
-        public async Task PopulateAttributes(string entityLogicalName, List<EntityMetadata> listViewSelectedItem, ServiceParameters serviceParameters)
-        {
-            //if (!workingstate)
-            //{
-            //    lvAttributes.Items.Clear();
-            //    chkAllAttributes.Checked = true;
+        //public async Task PopulateAttributes(string entityLogicalName, List<EntityMetadata> listViewSelectedItem, ServiceParameters serviceParameters)
+        //{
+        //    //if (!workingstate)
+        //    //{
+        //    //    lvAttributes.Items.Clear();
+        //    //    chkAllAttributes.Checked = true;
 
-            //InitFilter(listViewSelectedItem);
-            if (listViewSelectedItem != null)
-            {
-                // Exception error = null;
-                //  List<ListViewItem> result = null;
+        //    //InitFilter(listViewSelectedItem);
+        //    if (listViewSelectedItem != null)
+        //    {
+        //        // Exception error = null;
+        //        //  List<ListViewItem> result = null;
 
-                // await Task.Run(() =>
-                //    {
-                //   var attributeController = new AttributeController();
-                // try
-                // {
-                //  var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                //   var attributes = attributeController.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
-                //      result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
-                //  }
-                //catch (Exception ex)
-                // {
-                //   error = ex;
-                // }
-                //    });
-                //var controller = new ListController();
-                //var e = new RunWorkerCompletedEventArgs(result, error, false);
-                //controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
-                //ManageWorkingState(false);
-            }
-            // }
-        }
+        //        // await Task.Run(() =>
+        //        //    {
+        //        //   var attributeController = new AttributeController();
+        //        // try
+        //        // {
+        //        //  var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
+        //        //   var attributes = attributeController.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
+        //        //      result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
+        //        //  }
+        //        //catch (Exception ex)
+        //        // {
+        //        //   error = ex;
+        //        // }
+        //        //    });
+        //        //var controller = new ListController();
+        //        //var e = new RunWorkerCompletedEventArgs(result, error, false);
+        //        //controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
+        //        //ManageWorkingState(false);
+        //    }
+        //    // }
+        //}
 
 
         public List<AttributeMetadata> GetAttributeList(string entityLogicalName)//, ServiceParameters serviceParameters)
@@ -158,10 +163,91 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.EntityMetadataList = RetrieveEntitiesFromDatasource();
         }
 
-        private void HandleCurrentSelectedEntityChanged(object sender, UserControls.MigratorEventArgs<EntityMetadata> e)
+        private async void HandleCurrentSelectedEntityChanged(object sender, UserControls.MigratorEventArgs<EntityMetadata> e)
         {
-            var result = GetAttributeList(e.Input.LogicalName);
-            view.EntityAttributes = result;
+            var inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+            var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
+
+            await PopulateAttributes(e.Input.LogicalName,/* listViewSelectedItem,*/ serviceParameters);
+            await PopulateRelationship(e.Input.LogicalName, inputEntityRelationships,/* listViewSelectedItem,*/ serviceParameters);
+            //var controller = new EntityController();
+            //controller.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
+
+            //old
+            //var result = GetAttributeList(e.Input.LogicalName);
+            //view.EntityAttributes = result;
         }
+
+        public Settings Settings { get; set; }
+
+        public async Task PopulateAttributes(string entityLogicalName,/* ListViewItem listViewSelectedItem,*/ ServiceParameters serviceParameters)
+        {
+            // if (!workingstate)
+            // {
+            //   lvAttributes.Items.Clear();
+            //   chkAllAttributes.Checked = true;
+
+            //   InitFilter(listViewSelectedItem);
+            //    if (listViewSelectedItem != null)
+            // {
+            Exception error = null;
+            List<ListViewItem> result = null;
+
+            await Task.Run(() =>
+            {
+                var attributeController = new AttributeController();
+                try
+                { 
+                    var unmarkedattributes = new List<string>();
+                    var entityAttributes = new Dictionary<string, HashSet<string>>();
+                            //var unmarkedattributes = Settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
+                    var attributes = attributeController.GetAttributeList(entityLogicalName, view.ShowSystemAttributes, serviceParameters);
+                    result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+            });
+            var controller = new ListController();
+            var e = new RunWorkerCompletedEventArgs(result, error, false); 
+            controller.OnPopulateCompletedAction(e, notificationService, null,view.EntityAttributeList , view.ShowSystemAttributes);
+            //ManageWorkingState(false);
+            // }
+            //}
+        }
+
+        public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships,/* ListViewItem listViewSelectedItem,*/ ServiceParameters migratorParameters)
+        {
+           // if (!workingstate)
+           // {
+                //lvRelationship.Items.Clear();
+                //InitFilter(listViewSelectedItem);
+                //if (listViewSelectedItem != null)
+                //{
+                    Exception error = null;
+                    List<ListViewItem> result = null;
+
+                    await Task.Run(() =>
+                    {
+                        var controller = new RelationshipController();
+
+                        try
+                        {
+                            result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
+                        }
+                        catch (Exception ex)
+                        {
+                            error = ex;
+                        }
+                    });
+                    var listController = new ListController();
+                    var e = new RunWorkerCompletedEventArgs(result, error, false);
+                    listController.OnPopulateCompletedAction(e, notificationService, null, view.EntityRelationshipList, view.ShowSystemAttributes);
+                    //ManageWorkingState(false);
+               // }
+           // }
+        }
+
     }
 }

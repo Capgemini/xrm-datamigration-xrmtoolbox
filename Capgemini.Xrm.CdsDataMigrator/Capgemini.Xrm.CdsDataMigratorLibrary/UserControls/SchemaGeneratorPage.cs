@@ -47,13 +47,29 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 entityListView1.Entities = entityMetadataList;
             }
         }
-        public List<AttributeMetadata> EntityAttributes {// get { return listManagerView1.EntityAttributes; } 
-            set {
+        //public List<AttributeMetadata> EntityAttributes
+        //{// get { return listManagerView1.EntityAttributes; } 
+        //    set
+        //    {
 
-                listManagerView1.EntityAttributes = value;
-            } }
+        //        listManagerView1.EntityAttributes = value;
+        //    }
+        //}
+        //public ListView EntityAttributeList
+        //{// get { return listManagerView1.EntityAttributes; } 
+        //    get => listManagerView1.ListView;
+        //    //set
+        //    //{
+
+        //    //    listManagerView1.ListView = value;
+        //    //}
+        //}
+       
         public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
         public bool ShowSystemAttributes { get; set; }
+
+        public ListView EntityAttributeList => listManagerView1.ListView;
+        public ListView EntityRelationshipList => listManagerView2.ListView;
 
         public event EventHandler RetrieveEntities;
 

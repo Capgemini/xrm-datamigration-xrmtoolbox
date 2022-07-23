@@ -30,19 +30,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             }
         }
 
+        public ListView ListView => listViewItems;
+
         //Dictionary<string, HashSet<string>> EntityAttributes
-        public List<AttributeMetadata> EntityAttributes
-        {
-            //get { }
-            set
-            {
-                listViewItems.Items.Clear();
-                foreach (var item in value)
-                {
-                    string newItem = item.SchemaName;//.DisplayName.UserLocalizedLabel.Label;
-                    listViewItems.Items.Add(newItem);
-                }
-            }
-        }
+        //public List<AttributeMetadata> EntityAttributes
+        //{
+        //    //get { }
+        //    set
+        //    {
+        //        listViewItems.Items.Clear();
+        //        foreach (var item in value)
+        //        {
+        //            string newItem = item.SchemaName;//.DisplayName.UserLocalizedLabel.Label;
+        //            listViewItems.Items.Add(newItem);
+        //        }
+        //    }
+        //}
     }
 }
