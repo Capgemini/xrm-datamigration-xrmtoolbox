@@ -41,7 +41,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldSetConfigProperties_WhenValidFilePathSelected()
+        public void LoadConfig_ShouldSetConfigPropertiesWhenValidFilePathSelected()
         {
             // Arrange
             var importConfigFilePath = @"TestData\ImportConfig.json";
@@ -59,7 +59,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
+        public void LoadConfig_ShouldDoNothingWhenInvalidFilePathSelected()
         {
             // Arrange
             mockImportView
@@ -75,7 +75,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
+        public void LoadConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockImportView
@@ -91,8 +91,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldUpdateOrCreateConfigFile_WhenValidFilePathSelected()
+        public void SaveConfig_ShouldUpdateOrCreateConfigFileWhenValidFilePathSelected()
         {
+            // Arrange
             var importConfigFilePath = @"TestData\NewImportConfig.json";
             mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
@@ -116,8 +117,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
 
         [TestMethod]
-        //[Ignore("What is an invalid file?")] -- Check to see if this test should be included
-        public void SaveConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
+        [Ignore("What is an invalid file?")]
+        // To do: add UI logic that prevents invalid file from being saved
+        public void SaveConfig_ShouldDoNothingWhenInvalidFilePathSelected()
         {
             // Arrange
             mockImportView
@@ -132,7 +134,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldDoNothing_whenEmptyFilePathSelected()
+        public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockImportView
@@ -161,7 +163,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
-            mockImportView.VerifyAll();
+            mockImportView.Verify(x => x.AskForFilePathToSave(importConfigFilePath));
         }
 
         [TestMethod]

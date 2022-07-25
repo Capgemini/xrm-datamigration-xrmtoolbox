@@ -43,7 +43,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldSetConfigProperties_WhenValidFilePathSelected()
+        public void LoadConfig_ShouldSetConfigPropertiesWhenValidFilePathSelected()
         {
             // Arrange
             var exportConfigFilePath = @"TestData\ExportConfig.json";
@@ -77,7 +77,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
+        public void LoadConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockExportView
@@ -93,7 +93,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldUpdateOrCreateConfigFile_WhenValidFilePathSelected()
+        public void SaveConfig_ShouldUpdateOrCreateConfigFileWhenValidFilePathSelected()
         {
             // Arrange
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
@@ -130,7 +130,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
         [TestMethod]
         [Ignore("What is an invalid file?")]
-        public void SaveConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
+        public void SaveConfig_ShouldDoNothingWhenInvalidFilePathSelected()
         {
             // Arrange
             mockExportView
@@ -145,7 +145,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
+        public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockExportView
