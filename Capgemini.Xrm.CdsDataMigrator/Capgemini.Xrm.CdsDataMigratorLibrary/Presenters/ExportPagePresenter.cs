@@ -47,9 +47,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 config = CrmExporterConfig.GetConfiguration(configFilePath);
                 WriteFormInputFromConfig();
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle execption. 
+                view.ShowError(ex);
             }
         }
 
@@ -66,9 +66,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
                 config.SaveConfiguration(configFilePath);
             }
-            catch
+            catch(Exception ex)
             {
-                // TODO: Handle exception
+                view.ShowError(ex);
             }
         }
 
@@ -95,9 +95,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     }
                 });
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                view.ShowError(ex);
             }
         }
 
