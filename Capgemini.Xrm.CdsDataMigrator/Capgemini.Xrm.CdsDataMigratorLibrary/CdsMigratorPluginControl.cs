@@ -32,6 +32,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
 
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+            this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService);
             this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService);
         }
 
@@ -125,6 +126,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         private void tsbShowExportPage_Click(object sender, EventArgs e)
         {
             exportPage1.BringToFront();
+        }
+
+        private void tsbShowImportPage_Click(object sender, EventArgs e)
+        {
+            importPage1.BringToFront();
         }
     }
 }

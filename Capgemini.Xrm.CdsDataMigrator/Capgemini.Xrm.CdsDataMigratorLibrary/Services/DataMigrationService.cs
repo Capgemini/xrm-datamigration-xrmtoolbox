@@ -17,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
         private readonly ILogger logger;
         private readonly ICrmGenericMigratorFactory migratorFactory;
         private CrmExporterConfig exportConfig;
+        private CrmImportConfig importConfig;
         private CancellationTokenSource tokenSource;
 
         public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
@@ -93,6 +94,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             config.JsonFolderPath = exportSettings.SavePath;
             config.OnlyActiveRecords = !exportSettings.ExportInactiveRecords;
             config.BatchSize = exportSettings.BatchSize;
+        }
+
+        public void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config)
+        {
+            tokenSource = new CancellationTokenSource();
+
+            var repo = new EntityRepository(service, new ServiceRetryExecutor());
+
+            var importer = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+
+            importer.MigrateData();
+            return;
+        }
+
+        public void CancelDataImport()
+        {
+            tokenSource?.Cancel();
         }
     }
 }

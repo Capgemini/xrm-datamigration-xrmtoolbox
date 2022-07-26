@@ -25,5 +25,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
                     throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
             }
         }
+
+        public IGenericCrmDataMigrator GetCrmImportDataMigrator(DataFormat dataFormat, ILogger logger, IEntityRepository repo, CrmImportConfig importConfig, CancellationToken token, CrmSchemaConfiguration schema)
+        {
+            switch (dataFormat)
+            {
+                case DataFormat.Json:
+                    return new CrmFileDataImporter(logger, repo, importConfig, token);
+
+                case DataFormat.Csv:
+                    return new CrmFileDataImporterCsv(logger, repo, importConfig, schema, token);
+
+                default:
+                    throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
+            }
+        }
     }
 }
