@@ -70,15 +70,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         public void ExportData(IOrganizationService service, DataFormat format, CrmExporterConfig config)
         {
-            tokenSource = new CancellationTokenSource();
+            try
+            {
+                tokenSource = new CancellationTokenSource();
 
-            var repo = new EntityRepository(service, new ServiceRetryExecutor());
+                var repo = new EntityRepository(service, new ServiceRetryExecutor());
 
-            var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
+                var schema = CrmSchemaConfiguration.ReadFromFile(config.CrmMigrationToolSchemaPaths.FirstOrDefault());
 
-            var exporter = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+                var exporter = migratorFactory.GetCrmDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
-            exporter.MigrateData();
+                exporter.MigrateData();
+            }
+            catch (Exception error)
+            {
+                logger.LogError(error.Message);
+                throw;
+            }
         }
 
         public void CancelDataExport()

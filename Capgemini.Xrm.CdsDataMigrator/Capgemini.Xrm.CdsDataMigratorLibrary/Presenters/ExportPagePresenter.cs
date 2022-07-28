@@ -16,15 +16,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IExportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
+        private readonly INotifier notifier;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
+            this.notifier = notifier;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -47,9 +49,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 config = CrmExporterConfig.GetConfiguration(configFilePath);
                 WriteFormInputFromConfig();
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle execption. 
+                notifier.ShowError(ex);
             }
         }
 
@@ -66,9 +68,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
                 config.SaveConfiguration(configFilePath);
             }
-            catch
+            catch(Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
 
@@ -86,16 +88,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            // TODO: Handle error
+                            notifier.ShowError(e.Error);
                         }
-
-                        // TODO: Success message
+                        else
+                        {
+                            notifier.ShowSuccess("Data export is complete.");
+                        }
                     }
                 });
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
 

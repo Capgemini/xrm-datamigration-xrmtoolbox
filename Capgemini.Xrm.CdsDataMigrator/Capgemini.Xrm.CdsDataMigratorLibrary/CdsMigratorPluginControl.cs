@@ -7,8 +7,10 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -16,7 +18,7 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
     [ExcludeFromCodeCoverage]
-    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
+    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger, INotifier
     {
         private readonly Settings settings;
 
@@ -33,7 +35,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
             this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService);
-            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService);
+            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this);
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -82,6 +84,33 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             if (actionName == "")
             {
                 base.UpdateConnection(newService, detail, actionName, parameter);
+            }
+        }
+
+
+        public void ShowError(Exception error)
+        {
+            string message = error.Message + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
+            string caption = "Oops, an error occured";
+
+            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            // TODO: Replace with `FindPluginControlBase().ShowErrorDialog(error)` when we update XrmToolBox.
+            // https://www.xrmtoolbox.com/documentation/for-developers/plugincontrolbase-base-class/#error
+
+            if (result == DialogResult.Yes)
+            {
+                Process.Start(LogFilePath);
+            }
+        }
+
+        public void ShowSuccess(string message)
+        {
+            string caption = "Success" + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
+            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (result == DialogResult.Yes)
+            {
+                Process.Start(LogFilePath);
             }
         }
 

@@ -258,6 +258,40 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         }
 
         [TestMethod]
+        public void ExportData_ShouldNotifyExecptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception.");
+            var exportConfig = new CrmExporterConfig();
+            exportConfig.CrmMigrationToolSchemaPaths.Add("TestData/ContactSchemaWithOwner.xml");
+            var mockOrganisationService = new Mock<IOrganizationService>();
+            var mockStoreReader = new Mock<IDataStoreReader<Entity, EntityWrapper>>();
+            var mockStoreWriter = new Mock<IDataStoreWriter<Entity, EntityWrapper>>();
+            var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
+
+            migratorFactoryMock.Setup(x => x.GetCrmDataMigrator(
+                                    DataFormat.Json,
+                                    loggerMock.Object,
+                                    It.IsAny<EntityRepository>(),
+                                    exportConfig,
+                                    It.IsAny<CancellationToken>(),
+                                    It.IsAny<CrmSchemaConfiguration>()))
+                                .Returns(mockGenericCrmDataMigrator.Object)
+                                .Verifiable();
+
+            mockGenericCrmDataMigrator
+                .Setup(x => x.MigrateData())
+                .Throws(thrownException);
+
+            // Act
+            var action = FluentActions.Invoking(() => systemUnderTest.ExportData(mockOrganisationService.Object, DataFormat.Json, exportConfig));
+
+            // Assert
+            action.Should().Throw<Exception>().WithMessage(thrownException.Message);
+            loggerMock.Verify(x => x.LogError(thrownException.Message));
+        }
+
+        [TestMethod]
         public void ImportDataAsJsonV2()
         {
             var importConfig = new CrmImportConfig();
@@ -272,12 +306,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                         importConfig,
                         It.IsAny<CancellationToken>(),
                         MockCrmSchemaConfig.Object))
-                   .Returns(mockGenericCrmDataMigrator.Object)
-                   .Verifiable();
+                    .Returns(mockGenericCrmDataMigrator.Object)
+                    .Verifiable();
 
             FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Json, MockCrmSchemaConfig.Object, importConfig))
-                         .Should()
-                         .NotThrow();
+                        .Should()
+                        .NotThrow();
 
             migratorFactoryMock.Verify(x => x.GetCrmImportDataMigrator(
                 DataFormat.Json,
@@ -306,12 +340,12 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                         importConfig,
                         It.IsAny<CancellationToken>(),
                         MockCrmSchemaConfig.Object))
-                   .Returns(mockGenericCrmDataMigrator.Object)
-                   .Verifiable();
+                    .Returns(mockGenericCrmDataMigrator.Object)
+                    .Verifiable();
 
             FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Csv, MockCrmSchemaConfig.Object, importConfig))
-                         .Should()
-                         .NotThrow();
+                        .Should()
+                        .NotThrow();
 
             migratorFactoryMock.Verify(x => x.GetCrmImportDataMigrator(
                 DataFormat.Csv,

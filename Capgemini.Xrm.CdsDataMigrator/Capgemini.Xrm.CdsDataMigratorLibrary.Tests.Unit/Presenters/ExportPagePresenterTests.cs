@@ -1,5 +1,7 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
@@ -20,6 +22,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         private Mock<IExportPageView> mockExportView;
         private Mock<IWorkerHost> mockWorkerHost;
         private Mock<IDataMigrationService> mockDataMigrationService;
+        private Mock<INotifier> mockNotifier;
         private ExportPagePresenter systemUnderTest;
 
         [TestInitialize]
@@ -28,8 +31,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView = new Mock<IExportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
             mockDataMigrationService = new Mock<IDataMigrationService>();
+            mockNotifier = new Mock<INotifier>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object, mockNotifier.Object);
         }
 
         [TestMethod]
@@ -90,6 +94,23 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Assert
             mockExportView.VerifyAll();
             VerifyViewPropertiesNotSet();
+        }
+
+        [TestMethod]
+        public void LoadConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockExportView
+                .Setup(x => x.AskForFilePathToOpen())
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
         }
 
         [TestMethod]
@@ -181,6 +202,23 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
+        public void SaveConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
         public void RunConfig_ShouldReadValuesFromView()
         {
             // Arrange
@@ -219,6 +257,53 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
             exportConfig.FilePrefix.Should().Be("Release_X_");
             exportConfig.CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(new Dictionary<string, string> { { "entity", "filters" } });
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockWorkerHost
+                .Setup(x => x.WorkAsync(It.IsAny<WorkAsyncInfo>()))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownInsideWorkerHost()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockDataMigrationService
+                .Setup(x => x.ExportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmExporterConfig>()))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifySuccessWhenNotExceptionIsThrownInsideWorkerHost()
+        {
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowSuccess("Data export is complete."));
         }
 
         [TestMethod]
