@@ -18,7 +18,7 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
     [ExcludeFromCodeCoverage]
-    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
+    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger, INotifier
     {
         private readonly Settings settings;
 
@@ -35,7 +35,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
             this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService);
-            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService);
+            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this);
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -94,6 +94,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             string caption = "Oops, an error occured";
 
             var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            // TODO: Replace with `FindPluginControlBase().ShowErrorDialog(error)` when we update XrmToolBox.
+            // https://www.xrmtoolbox.com/documentation/for-developers/plugincontrolbase-base-class/#error
 
             if (result == DialogResult.Yes)
             {

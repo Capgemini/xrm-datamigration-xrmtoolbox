@@ -33,7 +33,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         string AskForFilePathToOpen();
         string AskForFilePathToSave(string existingFileName = "");
-        void ShowError(Exception error);
-        void ShowSuccess(string message);
     }
 }

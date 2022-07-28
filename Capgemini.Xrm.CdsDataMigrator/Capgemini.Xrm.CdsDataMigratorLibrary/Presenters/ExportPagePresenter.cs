@@ -16,15 +16,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IExportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
+        private readonly INotifier notifier;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
+            this.notifier = notifier;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -49,7 +51,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                view.ShowError(ex);
+                notifier.ShowError(ex);
             }
         }
 
@@ -68,7 +70,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch(Exception ex)
             {
-                view.ShowError(ex);
+                notifier.ShowError(ex);
             }
         }
 
@@ -86,18 +88,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            view.ShowError(e.Error);
+                            notifier.ShowError(e.Error);
                         }
                         else
                         {
-                            view.ShowSuccess("Data export is complete.");
+                            notifier.ShowSuccess("Data export is complete.");
                         }
                     }
                 });
             }
             catch (Exception ex)
             {
-                view.ShowError(ex);
+                notifier.ShowError(ex);
             }
         }
 

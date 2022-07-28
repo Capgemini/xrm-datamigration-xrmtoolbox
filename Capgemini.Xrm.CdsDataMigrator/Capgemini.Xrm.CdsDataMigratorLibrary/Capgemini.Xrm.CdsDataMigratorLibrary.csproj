@@ -287,6 +287,7 @@
     <Compile Include="Services\ILogManagerContainer.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\INotificationService.cs" />
+    <Compile Include="Services\INotifier.cs" />
     <Compile Include="Services\LogToFileService.cs" />
     <Compile Include="Services\LogToTextboxService.cs" />
     <Compile Include="Services\LogManagerContainer.cs" />
