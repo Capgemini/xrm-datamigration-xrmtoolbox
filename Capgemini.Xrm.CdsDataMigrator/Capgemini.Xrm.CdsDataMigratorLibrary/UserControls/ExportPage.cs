@@ -27,6 +27,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             this.exportFilterForm = new ExportFilterForm();
             this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
+            this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
 
         #region input mapping
@@ -81,7 +82,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         string IExportPageView.CrmMigrationToolSchemaPath
         {
             get => fisSchemaFile.Value;
-            set { fisSchemaFile.Value = value; SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty); }
+            set { fisSchemaFile.Value = value; }
         }
 
         DataFormat IExportPageView.DataFormat
