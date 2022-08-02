@@ -1,0 +1,48 @@
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.DataMigration.Model;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
+{
+    public class ImportMappingsFormPresenter : IDisposable
+    {
+        public readonly IImportMappingsFormView view;
+
+        public ImportMappingsFormPresenter(IImportMappingsFormView view)
+        {
+            this.view = view;
+
+            this.view.OnVisible += OnVisible;
+        }
+
+        public void OnVisible(object sender, EventArgs e)
+        {
+            if(view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
+            {
+                view.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", 
+                System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+
+                view.Close();
+                return;
+            }
+
+            view.EntityList = view.SchemaConfiguration.Entities
+                .Select(x => new ListBoxItem<CrmEntity> { DisplayName = x.DisplayName, Item = x });
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        [ExcludeFromCodeCoverage]
+        protected virtual void Dispose(bool disposing)
+        {
+            this.view.OnVisible -= OnVisible;
+        }
+    }
+}

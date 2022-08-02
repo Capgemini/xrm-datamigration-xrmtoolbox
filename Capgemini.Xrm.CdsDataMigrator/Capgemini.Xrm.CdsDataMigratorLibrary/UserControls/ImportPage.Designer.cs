@@ -64,6 +64,8 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnGuidMappings = new System.Windows.Forms.Button();
+            this.lblGuidMappings = new System.Windows.Forms.Label();
             this.fisJsonFolderPath = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.FolderInputSelector();
             this.gbxFetchSettings.SuspendLayout();
             this.tlpFetchSettings.SuspendLayout();
@@ -103,6 +105,8 @@
             this.tlpFetchSettings.Controls.Add(this.lblFileType, 0, 1);
             this.tlpFetchSettings.Controls.Add(this.fplFileTypes, 1, 1);
             this.tlpFetchSettings.Controls.Add(this.groupBox1, 1, 2);
+            this.tlpFetchSettings.Controls.Add(this.lblGuidMappings, 0, 3);
+            this.tlpFetchSettings.Controls.Add(this.btnGuidMappings, 1, 3);
             this.tlpFetchSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFetchSettings.Location = new System.Drawing.Point(13, 27);
             this.tlpFetchSettings.Margin = new System.Windows.Forms.Padding(4);
@@ -209,6 +213,27 @@
             this.rbnDataFormatCsv.Text = "CSV";
             this.rbnDataFormatCsv.UseVisualStyleBackColor = true;
             this.rbnDataFormatCsv.CheckedChanged += new System.EventHandler(this.RadioButton1CheckedChanged);
+            //
+            // btnGuidMappings
+            // 
+            this.btnGuidMappings.AutoSize = true;
+            this.btnGuidMappings.Location = new System.Drawing.Point(182, 170);
+            this.btnGuidMappings.Name = "btnGuidMappings";
+            this.btnGuidMappings.Size = new System.Drawing.Size(60, 26);
+            this.btnGuidMappings.TabIndex = 11;
+            this.btnGuidMappings.Text = "Edit";
+            this.btnGuidMappings.UseVisualStyleBackColor = true;
+            this.btnGuidMappings.Click += new System.EventHandler(this.TabStripButtonMappingsClick);
+            // 
+            // lblGuidMappings
+            // 
+            this.lblGuidMappings.AutoSize = true;
+            this.lblGuidMappings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGuidMappings.Location = new System.Drawing.Point(3, 167);
+            this.lblGuidMappings.Name = "lblGuidMappings";
+            this.lblGuidMappings.Size = new System.Drawing.Size(173, 74);
+            this.lblGuidMappings.TabIndex = 12;
+            this.lblGuidMappings.Text = "Update GUID Mappings";
             // 
             // lblEnvironment
             // 
@@ -539,5 +564,7 @@
         private System.Windows.Forms.NumericUpDown nbxSaveBatchSize;
         private System.Windows.Forms.NumericUpDown nbxTopCount;
         private ToggleCheckBox tcbIgnoreSystemFields;
+        private System.Windows.Forms.Button btnGuidMappings;
+        private System.Windows.Forms.Label lblGuidMappings;
     }
 }

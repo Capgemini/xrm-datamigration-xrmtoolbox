@@ -17,16 +17,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         
         private CrmImportConfig config;
         private string configFilePath;
+        private readonly INotifier notifier;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
+            this.notifier = notifier;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
             this.view.RunConfigClicked += RunConfig;
+            this.view.SchemaConfigPathChanged += SchemaConfigPathChanged;
 
             this.config = new CrmImportConfig();
             WriteFormInputFromConfig();
@@ -97,6 +100,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
+        private void SchemaConfigPathChanged(object sender, EventArgs args)
+        {
+            this.view.SchemaConfiguration = GetSchemaConfiguration();
+        }
+        
         public CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))

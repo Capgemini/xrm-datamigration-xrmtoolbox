@@ -2,7 +2,6 @@
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -13,6 +12,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool IgnoreSystemFields { get; set; }
         string JsonFolderPath { get; set; }
 
+        CrmSchemaConfiguration SchemaConfiguration { get; set; }
         string CrmMigrationToolSchemaPath { get; set; }
 
         string AskForFilePathToOpen();
@@ -20,9 +20,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         DataFormat DataFormat { get; set; }
         IOrganizationService Service { get; }
-
+        
         event EventHandler LoadConfigClicked;
         event EventHandler SaveConfigClicked;
         event EventHandler RunConfigClicked;
+        event EventHandler SchemaConfigPathChanged;
     }
 }
