@@ -124,7 +124,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public void RadioButtonCheckedChanged(object sender, EventArgs e)
         {
             rbnDataFormatCsv.Checked = !rbnDataFormatJson.Checked;
-            groupBox1.Visible = false;
         }
 
         public void RadioButton1CheckedChanged(object sender, EventArgs e)

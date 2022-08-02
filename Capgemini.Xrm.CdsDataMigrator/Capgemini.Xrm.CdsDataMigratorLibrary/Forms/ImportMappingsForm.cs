@@ -15,7 +15,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
     public partial class ImportMappingsForm : Form, IImportMappingsFormView
     {
         public event EventHandler OnVisible;
-        public event EventHandler CurrentCellChanged;
 
         public ImportMappingsForm()
         {

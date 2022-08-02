@@ -137,7 +137,7 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Schema file (CSV only)";
-            this.groupBox1.Visible = false;
+            this.groupBox1.Visible = true;
             // 
             // fisSchemaFile
             // 
