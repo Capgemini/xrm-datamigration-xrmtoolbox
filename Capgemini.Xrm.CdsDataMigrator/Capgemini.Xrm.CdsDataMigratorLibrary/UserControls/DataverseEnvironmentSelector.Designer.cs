@@ -34,11 +34,13 @@
             // 
             // btnSelect
             // 
+            this.btnSelect.AutoSize = true;
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSelect.Location = new System.Drawing.Point(240, 0);
-            this.btnSelect.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSelect.Location = new System.Drawing.Point(172, 0);
+            this.btnSelect.Margin = new System.Windows.Forms.Padding(0);
+            this.btnSelect.MinimumSize = new System.Drawing.Size(30, 24);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(29, 42);
+            this.btnSelect.Size = new System.Drawing.Size(30, 24);
             this.btnSelect.TabIndex = 2;
             this.btnSelect.Text = "...";
             this.btnSelect.UseVisualStyleBackColor = true;
@@ -49,22 +51,21 @@
             this.lblConnectionName.AutoSize = true;
             this.lblConnectionName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblConnectionName.Location = new System.Drawing.Point(0, 0);
-            this.lblConnectionName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblConnectionName.Name = "lblConnectionName";
-            this.lblConnectionName.Padding = new System.Windows.Forms.Padding(0, 6, 7, 6);
-            this.lblConnectionName.Size = new System.Drawing.Size(190, 28);
+            this.lblConnectionName.Padding = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.lblConnectionName.Size = new System.Drawing.Size(151, 23);
             this.lblConnectionName.TabIndex = 3;
             this.lblConnectionName.Text = "Please select an environment";
             // 
             // DataverseEnvironmentSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lblConnectionName);
             this.Controls.Add(this.btnSelect);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(0, 20);
             this.Name = "DataverseEnvironmentSelector";
-            this.Size = new System.Drawing.Size(269, 42);
+            this.Size = new System.Drawing.Size(202, 24);
             this.ResumeLayout(false);
             this.PerformLayout();
 
