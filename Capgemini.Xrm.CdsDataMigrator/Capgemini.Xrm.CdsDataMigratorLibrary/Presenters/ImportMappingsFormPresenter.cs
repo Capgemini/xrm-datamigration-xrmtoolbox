@@ -28,8 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return;
             }
 
-            view.EntityList = view.SchemaConfiguration.Entities
-                .Select(x => new ListBoxItem<CrmEntity> { DisplayName = x.DisplayName, Item = x });
+            view.EntityList = view.SchemaConfiguration.Entities.Select(x => x.DisplayName).OrderBy(n => n);
         }
 
         [ExcludeFromCodeCoverage]

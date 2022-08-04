@@ -12,7 +12,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     {   
         CrmSchemaConfiguration SchemaConfiguration { get; }
         event EventHandler OnVisible;
-        IEnumerable<ListBoxItem<CrmEntity>> EntityList { get; set; }
+
+        IEnumerable<string> EntityList { get; set; }
 
         void Close();
         DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);

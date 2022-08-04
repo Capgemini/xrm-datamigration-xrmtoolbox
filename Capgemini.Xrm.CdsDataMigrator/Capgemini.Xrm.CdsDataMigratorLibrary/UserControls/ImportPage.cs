@@ -16,7 +16,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
-        public event EventHandler HandleMappingControllerClicked;
         public event EventHandler SchemaConfigPathChanged;
 
         public ImportPage()

@@ -1,9 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Model;
-using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -27,9 +23,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         public CrmSchemaConfiguration SchemaConfiguration { get; set; }
 
-        IEnumerable<ListBoxItem<CrmEntity>> IImportMappingsFormView.EntityList
+        IEnumerable<string> IImportMappingsFormView.EntityList
         {
-            get => clEntity.Items.Cast<ListBoxItem<CrmEntity>>();
+            // Check the get method
+            get => clEntity.Items.Cast<string>();
             set
             {
                 clEntity.Items.Clear();
@@ -63,19 +60,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-            var defaultValues = new object[] { Guid.Empty.ToString(), Guid.Empty.ToString(), "Account" };
+
+            var defaultValues = new object[] { Guid.Empty.ToString(), Guid.Empty.ToString(), clEntity.Items[0] };
             e.Row.SetValues(defaultValues);
         }
-
+        
         private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void dgvMappings_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            //Temporary solution to hide critical failure
-            e.Cancel = true;
+            var cell = dgvMappings.CurrentCell;
+
+            if (cell.IsInEditMode)
+            {
+                dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
 
         #endregion

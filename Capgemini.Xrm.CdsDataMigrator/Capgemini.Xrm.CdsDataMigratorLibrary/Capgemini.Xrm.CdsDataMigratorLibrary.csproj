@@ -375,6 +375,9 @@
     <EmbeddedResource Include="Forms\FilterEditor.resx">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImportMappingsForm.resx">
+      <DependentUpon>ImportMappingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MappingList.resx">
       <DependentUpon>MappingList.cs</DependentUpon>
     </EmbeddedResource>
