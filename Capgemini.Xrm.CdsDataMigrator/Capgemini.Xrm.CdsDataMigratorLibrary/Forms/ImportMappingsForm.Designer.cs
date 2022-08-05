@@ -105,6 +105,7 @@
             this.dgvMappings.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridView1_CurrentCellDirtyStateChanged);
             this.dgvMappings.Size = new System.Drawing.Size(1125, 289);
             this.dgvMappings.TabIndex = 4;
+            //this.dgvMappings.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvMappings_DataError);
             this.dgvMappings.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.DataGridViewMappingsDefaultValuesNeeded);
             // 
             // clSourceID

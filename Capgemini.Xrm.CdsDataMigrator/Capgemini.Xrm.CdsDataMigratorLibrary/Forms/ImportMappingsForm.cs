@@ -1,7 +1,11 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Forms;
@@ -34,6 +38,27 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
         }
 
+        public List<DataGridViewRow> Mappings
+        {
+            get
+            {
+                List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+                foreach (DataGridViewRow row in dgvMappings.Rows)
+                {  
+                    mappings.Add(row);
+                }
+                return mappings;
+            }
+            set
+            {
+                dgvMappings.Rows.Clear();
+                foreach (DataGridViewRow row in value)
+                {
+                    dgvMappings.Rows.Add(row);
+                }
+            }
+        }
+
         #endregion
 
         #region action mappings
@@ -57,14 +82,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
             base.OnVisibleChanged(e);
         }
-        
+
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-
             var defaultValues = new object[] { Guid.Empty.ToString(), Guid.Empty.ToString(), clEntity.Items[0] };
             e.Row.SetValues(defaultValues);
         }
-        
+
         private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
@@ -73,7 +97,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
             var cell = dgvMappings.CurrentCell;
-
             if (cell.IsInEditMode)
             {
                 dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);

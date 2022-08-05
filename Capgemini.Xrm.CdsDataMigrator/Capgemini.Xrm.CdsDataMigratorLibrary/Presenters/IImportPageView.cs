@@ -2,6 +2,8 @@
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -13,6 +15,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         string JsonFolderPath { get; set; }
 
         CrmSchemaConfiguration SchemaConfiguration { get; set; }
+        List<DataGridViewRow> Mappings { get; set; }
         string CrmMigrationToolSchemaPath { get; set; }
 
         string AskForFilePathToOpen();

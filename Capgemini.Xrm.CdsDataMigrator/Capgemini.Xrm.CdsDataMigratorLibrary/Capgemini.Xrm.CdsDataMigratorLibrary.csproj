@@ -230,6 +230,7 @@
     <Compile Include="Forms\ImportMappingsForm.Designer.cs">
       <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Item.cs" />
     <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>
@@ -257,6 +258,7 @@
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Models\MappingItem.cs" />
     <Compile Include="Models\RecordCountModel.cs" />
     <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Models\SaveAllSettings.cs" />

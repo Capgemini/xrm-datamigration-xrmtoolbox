@@ -4,6 +4,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
@@ -84,6 +85,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             get => importMappingsForm.SchemaConfiguration;
             set => importMappingsForm.SchemaConfiguration = value;
+        }
+
+        List<DataGridViewRow> IImportPageView.Mappings
+        {
+            get => importMappingsForm.Mappings;
+            set => importMappingsForm.Mappings = value;
         }
 
         #endregion

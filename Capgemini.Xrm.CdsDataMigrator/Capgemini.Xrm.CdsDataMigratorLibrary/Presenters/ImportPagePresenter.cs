@@ -6,6 +6,9 @@ using System;
 using System.IO;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using NuGet;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -127,6 +130,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.IgnoreStatuses = view.IgnoreStatuses;
             config.IgnoreSystemFields = view.IgnoreSystemFields;
             config.JsonFolderPath = view.JsonFolderPath;
+            if (config.MigrationConfig == null)
+            {
+                config.MigrationConfig = new MappingConfiguration();
+            }
+            var mappings = GetMappingsInCorrectDataType();
+            config.MigrationConfig.Mappings.Clear();
+            config.MigrationConfig.Mappings.AddRange(mappings);
         }
 
         private void WriteFormInputFromConfig()
@@ -135,6 +145,68 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
+        }
+
+        private Dictionary<string, Dictionary<Guid, Guid>> GetMappingsInCorrectDataType()
+        {
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
+            foreach (DataGridViewRow row in view.Mappings)
+            {
+                if (DoesRowContainEmptyCell(row) == true)
+                    break;
+                var sourceId = Guid.Parse((string)row.Cells[0].FormattedValue);
+                var targetId = Guid.Parse((string)row.Cells[1].FormattedValue);
+                var entity = row.Cells[2].FormattedValue.ToString();
+                var guidsDictionary = new Dictionary<Guid, Guid>();
+                mappings = GetUpdatedMappings(sourceId, targetId, entity, mappings, guidsDictionary);
+            }
+            return mappings;
+        }
+
+        private Dictionary<string, Dictionary<Guid, Guid>> GetUpdatedMappings(Guid sourceId, Guid targetId, string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings, Dictionary<Guid, Guid> guidsDictionary)
+        {
+                if (DoesRowContainDefaultGuids(sourceId, targetId) == false)
+                {
+                    guidsDictionary.Add(sourceId, targetId);
+                    if (DoesEntityMappingAlreadyExist(entity, mappings) == true)
+                        {
+                        mappings[entity].Add(sourceId, targetId);
+                        }
+                        else
+                        {
+                        mappings.Add(entity, guidsDictionary);
+                        }
+                        return mappings;
+                 }
+                return mappings;
+        }
+
+        private bool DoesRowContainDefaultGuids(Guid sourceId, Guid targetId)
+        {
+            if (sourceId == Guid.Empty || targetId == Guid.Empty)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool DoesEntityMappingAlreadyExist(string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings)
+        {
+
+            if (mappings.ContainsKey(entity))
+            {
+                return true;
+            }
+            return false;
+        }
+    
+        private static bool DoesRowContainEmptyCell(DataGridViewRow row)
+        {
+            if (row.Cells[0].Value == "" || row.Cells[1].FormattedValue == "" || row.Cells[2].FormattedValue == "")
+            {
+                return true;
+            }
+            return false;
         }
 
         [ExcludeFromCodeCoverage]
