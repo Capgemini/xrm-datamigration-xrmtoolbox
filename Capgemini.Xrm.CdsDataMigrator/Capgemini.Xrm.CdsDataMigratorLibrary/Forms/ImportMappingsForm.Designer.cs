@@ -95,9 +95,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvMappings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMappings.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clEntity,
             this.clSourceID,
-            this.clTargetID,
-            this.clEntity});
+            this.clTargetID
+            });
             this.dgvMappings.Location = new System.Drawing.Point(15, 85);
             this.dgvMappings.Margin = new System.Windows.Forms.Padding(4);
             this.dgvMappings.Name = "dgvMappings";
@@ -105,7 +106,6 @@
             this.dgvMappings.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridView1_CurrentCellDirtyStateChanged);
             this.dgvMappings.Size = new System.Drawing.Size(1125, 289);
             this.dgvMappings.TabIndex = 4;
-            //this.dgvMappings.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvMappings_DataError);
             this.dgvMappings.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.DataGridViewMappingsDefaultValuesNeeded);
             // 
             // clSourceID

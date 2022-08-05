@@ -230,7 +230,6 @@
     <Compile Include="Forms\ImportMappingsForm.Designer.cs">
       <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Item.cs" />
     <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>

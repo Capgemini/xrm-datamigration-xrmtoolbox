@@ -154,9 +154,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 if (DoesRowContainEmptyCell(row) == true)
                     break;
-                var sourceId = Guid.Parse((string)row.Cells[0].FormattedValue);
-                var targetId = Guid.Parse((string)row.Cells[1].FormattedValue);
-                var entity = row.Cells[2].FormattedValue.ToString();
+                var entity = row.Cells[0].FormattedValue.ToString();
+                var sourceId = Guid.Parse((string)row.Cells[1].FormattedValue);
+                var targetId = Guid.Parse((string)row.Cells[2].FormattedValue);
                 var guidsDictionary = new Dictionary<Guid, Guid>();
                 mappings = GetUpdatedMappings(sourceId, targetId, entity, mappings, guidsDictionary);
             }
@@ -202,7 +202,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     
         private static bool DoesRowContainEmptyCell(DataGridViewRow row)
         {
-            if (row.Cells[0].Value == "" || row.Cells[1].FormattedValue == "" || row.Cells[2].FormattedValue == "")
+            if (row.Cells[0].FormattedValue == "" || row.Cells[1].FormattedValue == "" || row.Cells[2].FormattedValue == "")
             {
                 return true;
             }

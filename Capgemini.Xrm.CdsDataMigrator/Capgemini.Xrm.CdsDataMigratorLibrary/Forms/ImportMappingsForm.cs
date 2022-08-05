@@ -85,7 +85,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-            var defaultValues = new object[] { Guid.Empty.ToString(), Guid.Empty.ToString(), clEntity.Items[0] };
+            var defaultValues = new object[] { clEntity.Items[0], Guid.Empty.ToString(), Guid.Empty.ToString() };
             e.Row.SetValues(defaultValues);
         }
 
