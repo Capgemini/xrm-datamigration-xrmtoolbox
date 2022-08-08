@@ -6,7 +6,10 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
+using NuGet;
 using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -18,6 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         private Mock<IImportPageView> mockImportView;
         private Mock<IWorkerHost> mockWorkerHost;
         private Mock<IDataMigrationService> mockDataMigrationService;
+        private Mock<INotifier> mockNotifier;
         private ImportPagePresenter systemUnderTest;
 
         [TestInitialize]
@@ -26,8 +30,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView = new Mock<IImportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
             mockDataMigrationService = new Mock<IDataMigrationService>();
+            mockNotifier = new Mock<INotifier>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object, mockNotifier.Object);
         }
 
         [TestMethod]
@@ -95,10 +100,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
             // Arrange
             var importConfigFilePath = @"TestData\NewImportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var configMappings = ProvideMappingsAsConfigType();
+
             mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
             mockImportView.SetupGet(x => x.IgnoreSystemFields).Returns(true);
             mockImportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
             mockImportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(importConfigFilePath);
@@ -113,6 +122,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             importConfig.IgnoreStatuses.Should().Be(true);
             importConfig.IgnoreSystemFields.Should().Be(true);
             importConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
+            importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
         }
 
 
@@ -275,6 +285,32 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.VerifySet(x => x.IgnoreStatuses = It.IsAny<bool>(), Times.Once, "IgnoreStatusese was set unexpectedly");
             mockImportView.VerifySet(x => x.IgnoreSystemFields = It.IsAny<bool>(), Times.Once, "IgnoreSystemFields was set unexpectedly");
             mockImportView.VerifySet(x => x.JsonFolderPath = It.IsAny<string>(), Times.Once, "JsonFolderPathh was set unexpectedly");
+        }
+
+        private List<DataGridViewRow> ProvideMappingsAsViewType()
+        {
+            List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000001" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000002" });
+            mappings.Add(dataGridViewRow);
+            return mappings;
+        }
+
+        private MappingConfiguration ProvideMappingsAsConfigType()
+        {
+            var importConfig = new CrmImportConfig();
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
+            var guidsDictionary = new Dictionary<Guid, Guid>();
+            var entity = "Account";
+            var sourceId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+            var targetId = Guid.Parse("00000000-0000-0000-0000-000000000002");
+            guidsDictionary.Add(sourceId, targetId);
+            mappings.Add(entity, guidsDictionary);
+            importConfig.MigrationConfig = new MappingConfiguration();
+            importConfig.MigrationConfig.Mappings.AddRange(mappings);
+            return importConfig.MigrationConfig;
         }
     }  
 }

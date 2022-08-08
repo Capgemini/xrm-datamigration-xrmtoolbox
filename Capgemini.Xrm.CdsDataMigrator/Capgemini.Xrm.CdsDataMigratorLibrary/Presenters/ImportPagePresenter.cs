@@ -134,7 +134,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 config.MigrationConfig = new MappingConfiguration();
             }
-            var mappings = GetMappingsInCorrectDataType();
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = GetMappingsInCorrectDataType();
             config.MigrationConfig.Mappings.Clear();
             config.MigrationConfig.Mappings.AddRange(mappings);
         }
@@ -152,11 +152,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (DoesRowContainEmptyCell(row) == true)
+                if (AreAllCellsPopulated(row) == false)
                     break;
-                var entity = row.Cells[0].FormattedValue.ToString();
-                var sourceId = Guid.Parse((string)row.Cells[1].FormattedValue);
-                var targetId = Guid.Parse((string)row.Cells[2].FormattedValue);
+                var entity = row.Cells[0].Value.ToString();
+                var sourceId = Guid.Parse((string)row.Cells[1].Value);
+                var targetId = Guid.Parse((string)row.Cells[2].Value);
                 var guidsDictionary = new Dictionary<Guid, Guid>();
                 mappings = GetUpdatedMappings(sourceId, targetId, entity, mappings, guidsDictionary);
             }
@@ -200,13 +200,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return false;
         }
     
-        private static bool DoesRowContainEmptyCell(DataGridViewRow row)
+        private static bool AreAllCellsPopulated(DataGridViewRow row)
         {
-            if (row.Cells[0].FormattedValue == "" || row.Cells[1].FormattedValue == "" || row.Cells[2].FormattedValue == "")
+            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
 
         [ExcludeFromCodeCoverage]
