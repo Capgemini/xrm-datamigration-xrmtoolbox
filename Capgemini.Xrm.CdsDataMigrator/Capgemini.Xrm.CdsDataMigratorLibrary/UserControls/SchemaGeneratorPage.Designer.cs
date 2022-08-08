@@ -31,15 +31,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchemaGeneratorPage));
             this.tlpMainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.tlpDetailsPane = new System.Windows.Forms.TableLayoutPanel();
-            this.schemaLocationControl1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.SchemaLocationControl();
-            this.listManagerView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
-            this.listManagerView2 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
-            this.entityListView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.EntityListView();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbtRetrieveEntities = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtLoadSchema = new System.Windows.Forms.ToolStripButton();
             this.tsbSaveSchema = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbtCurrentConnection = new System.Windows.Forms.ToolStripLabel();
+            this.schemaLocationControl1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.SchemaLocationControl();
+            this.lmvAttributes = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
+            this.lmvRelationships = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
+            this.entityListView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.EntityListView();
             this.tlpMainLayout.SuspendLayout();
             this.tlpDetailsPane.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -67,8 +69,8 @@
             this.tlpDetailsPane.ColumnCount = 1;
             this.tlpDetailsPane.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDetailsPane.Controls.Add(this.schemaLocationControl1, 0, 0);
-            this.tlpDetailsPane.Controls.Add(this.listManagerView1, 0, 1);
-            this.tlpDetailsPane.Controls.Add(this.listManagerView2, 0, 2);
+            this.tlpDetailsPane.Controls.Add(this.lmvAttributes, 0, 1);
+            this.tlpDetailsPane.Controls.Add(this.lmvRelationships, 0, 2);
             this.tlpDetailsPane.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpDetailsPane.Location = new System.Drawing.Point(353, 38);
             this.tlpDetailsPane.Name = "tlpDetailsPane";
@@ -79,42 +81,6 @@
             this.tlpDetailsPane.Size = new System.Drawing.Size(781, 574);
             this.tlpDetailsPane.TabIndex = 0;
             // 
-            // schemaLocationControl1
-            // 
-            this.schemaLocationControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.schemaLocationControl1.Location = new System.Drawing.Point(3, 3);
-            this.schemaLocationControl1.Name = "schemaLocationControl1";
-            this.schemaLocationControl1.Size = new System.Drawing.Size(775, 29);
-            this.schemaLocationControl1.TabIndex = 0;
-            // 
-            // listManagerView1
-            // 
-            this.listManagerView1.DisplayedItemsName = "Available Attributes";
-            this.listManagerView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listManagerView1.Location = new System.Drawing.Point(3, 38);
-            this.listManagerView1.Name = "listManagerView1";
-            this.listManagerView1.Size = new System.Drawing.Size(775, 263);
-            this.listManagerView1.TabIndex = 1;
-            // 
-            // listManagerView2
-            // 
-            this.listManagerView2.DisplayedItemsName = "Available Relationships";
-            this.listManagerView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listManagerView2.Location = new System.Drawing.Point(3, 307);
-            this.listManagerView2.Name = "listManagerView2";
-            this.listManagerView2.Size = new System.Drawing.Size(775, 264);
-            this.listManagerView2.TabIndex = 2;
-            // 
-            // entityListView1
-            // 
-            this.entityListView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.entityListView1.Entities = null;
-            this.entityListView1.Location = new System.Drawing.Point(3, 38);
-            this.entityListView1.Name = "entityListView1";
-            this.entityListView1.ShowSystemEntities = false;
-            this.entityListView1.Size = new System.Drawing.Size(344, 574);
-            this.entityListView1.TabIndex = 1;
-            // 
             // toolStrip2
             // 
             this.tlpMainLayout.SetColumnSpan(this.toolStrip2, 2);
@@ -123,7 +89,9 @@
             this.tsbtRetrieveEntities,
             this.toolStripSeparator5,
             this.tsbtLoadSchema,
-            this.tsbSaveSchema});
+            this.tsbSaveSchema,
+            this.toolStripSeparator1,
+            this.tsbtCurrentConnection});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -164,6 +132,55 @@
             this.tsbSaveSchema.Text = "Save Schema";
             this.tsbSaveSchema.Click += new System.EventHandler(this.SaveSchemaButtonClick);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsbtCurrentConnection
+            // 
+            this.tsbtCurrentConnection.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbtCurrentConnection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.tsbtCurrentConnection.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.tsbtCurrentConnection.Name = "tsbtCurrentConnection";
+            this.tsbtCurrentConnection.Size = new System.Drawing.Size(0, 28);
+            // 
+            // schemaLocationControl1
+            // 
+            this.schemaLocationControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.schemaLocationControl1.Location = new System.Drawing.Point(3, 3);
+            this.schemaLocationControl1.Name = "schemaLocationControl1";
+            this.schemaLocationControl1.Size = new System.Drawing.Size(775, 29);
+            this.schemaLocationControl1.TabIndex = 0;
+            // 
+            // lmvAttributes
+            // 
+            this.lmvAttributes.DisplayedItemsName = "Available Attributes";
+            this.lmvAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lmvAttributes.Location = new System.Drawing.Point(3, 38);
+            this.lmvAttributes.Name = "lmvAttributes";
+            this.lmvAttributes.Size = new System.Drawing.Size(775, 263);
+            this.lmvAttributes.TabIndex = 1;
+            // 
+            // lmvRelationships
+            // 
+            this.lmvRelationships.DisplayedItemsName = "Available Relationships";
+            this.lmvRelationships.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lmvRelationships.Location = new System.Drawing.Point(3, 307);
+            this.lmvRelationships.Name = "lmvRelationships";
+            this.lmvRelationships.Size = new System.Drawing.Size(775, 264);
+            this.lmvRelationships.TabIndex = 2;
+            // 
+            // entityListView1
+            // 
+            this.entityListView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.entityListView1.Entities = null;
+            this.entityListView1.Location = new System.Drawing.Point(3, 38);
+            this.entityListView1.Name = "entityListView1";
+            this.entityListView1.ShowSystemEntities = false;
+            this.entityListView1.Size = new System.Drawing.Size(344, 574);
+            this.entityListView1.TabIndex = 1;
+            // 
             // SchemaGeneratorPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -186,12 +203,14 @@
         private System.Windows.Forms.TableLayoutPanel tlpDetailsPane;
         private EntityListView entityListView1;
         private SchemaLocationControl schemaLocationControl1;
-        private ListManagerView listManagerView1;
-        private ListManagerView listManagerView2;
+        private ListManagerView lmvAttributes;
+        private ListManagerView lmvRelationships;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton tsbtRetrieveEntities;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton tsbtLoadSchema;
         private System.Windows.Forms.ToolStripButton tsbSaveSchema;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel tsbtCurrentConnection;
     }
 }

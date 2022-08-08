@@ -96,6 +96,7 @@
             this.treeViewEntities.Name = "treeViewEntities";
             this.treeViewEntities.Size = new System.Drawing.Size(394, 434);
             this.treeViewEntities.TabIndex = 111;
+            this.treeViewEntities.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.HandleTreeViewEntitiesAfterCheck);
             this.treeViewEntities.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.HandleTreeViewEntitiesAfterSelect);
             // 
             // EntityListView

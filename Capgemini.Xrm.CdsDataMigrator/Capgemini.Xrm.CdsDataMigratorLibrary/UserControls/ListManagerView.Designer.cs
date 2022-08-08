@@ -74,6 +74,8 @@
             this.listViewItems.TabIndex = 65;
             this.listViewItems.UseCompatibleStateImageBehavior = false;
             this.listViewItems.View = System.Windows.Forms.View.Details;
+            this.listViewItems.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewItems_ColumnClick);
+            this.listViewItems.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listViewItems_ItemCheck);
             // 
             // clAttDisplayName
             // 

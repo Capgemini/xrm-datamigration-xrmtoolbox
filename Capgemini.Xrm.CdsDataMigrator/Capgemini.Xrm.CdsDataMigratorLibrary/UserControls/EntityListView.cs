@@ -19,6 +19,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         public event EventHandler ShowSystemEntitiesChanged;
         public event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
+        public event EventHandler<MigratorEventArgs<TreeNode>> EntitySelected;
 
         public List<EntityMetadata> SelectedEntities
         {
@@ -36,23 +37,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 return list;
             }
         }
-
-        //public EntityMetadata CurrentSelectedEntity { get; private set; }
-        //{
-        //    get
-        //    {
-        //        var list = new List<EntityMetadata>();
-
-        //        if (treeViewEntities?.Nodes != null)
-        //        {
-        //            list = treeViewEntities.Nodes.Cast<TreeNode>()
-        //                                          .Where(x => x.Checked)
-        //                                          .Select(x => (EntityMetadata)x.Tag).ToList();
-        //        }
-
-        //        return list;
-        //    }
-        //}
 
         public bool ShowSystemEntities
         {
@@ -82,19 +66,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
                 if (entities != null)
                 {
-                    //foreach (EntityMetadata entity in inputCachedMetadata)
-                    //{
-                    //    var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
-                    //    var item = new ListViewItem(name)
-                    //    {
-                    //        Tag = entity
-                    //    };
-                    //    item.SubItems.Add(entity.LogicalName);
-                    //    IsInvalidForCustomization(entity, item);
-                    //    UpdateCheckBoxesEntities(entity, item, inputEntityAttributes);
-
-                    //    sourceEntitiesList.Add(item);
-                    //}
                     foreach (var item in entities)
                     {
                         var displayName = item.DisplayName.UserLocalizedLabel == null ? string.Empty : item.DisplayName.UserLocalizedLabel.Label;
@@ -125,19 +96,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 item.Checked = checkBoxSelectUnselectAll.Checked;
             }
         }
-
         private void HandleTreeViewEntitiesAfterSelect(object sender, TreeViewEventArgs e)
         {
-           // var entityMetadata = e.Node.Tag as EntityMetadata;
-            //if (entityMetadata != null)
-            //{
-            var handler = CurrentSelectedEntityChanged;
-            if (handler != null)
-            {
-                handler(this, new MigratorEventArgs<EntityMetadata>(e.Node.Tag as EntityMetadata));
-            }
-            //    CurrentSelectedEntity = e.Node.Tag as EntityMetadata;
-            //}
+            CurrentSelectedEntityChanged?.Invoke(this, new MigratorEventArgs<EntityMetadata>(e.Node.Tag as EntityMetadata));
+        }
+
+        private void HandleTreeViewEntitiesAfterCheck(object sender, TreeViewEventArgs e)
+        {
+            EntitySelected?.Invoke(this, new MigratorEventArgs<TreeNode>(e.Node));
         }
     }
 }

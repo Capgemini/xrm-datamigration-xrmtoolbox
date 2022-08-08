@@ -504,7 +504,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             entityController.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
 
             var schemaController = new SchemaController();
-            schemaController.GenerateXMLFile(tbSchemaPath.Text, crmSchemaConfiguration);
+            schemaController.GenerateXmlFile(tbSchemaPath.Text, crmSchemaConfiguration);
             crmSchemaConfiguration.Entities.Clear();
         }
 

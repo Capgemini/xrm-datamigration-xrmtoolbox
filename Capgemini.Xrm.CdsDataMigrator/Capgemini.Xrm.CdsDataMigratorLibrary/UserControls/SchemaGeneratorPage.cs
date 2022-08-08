@@ -17,26 +17,54 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             entityListView1.ShowSystemEntitiesChanged += EntityListViewShowSystemEntitiesChanged;
             entityListView1.CurrentSelectedEntityChanged += EntityListViewCurrentSelectedEntityChanged;
+            entityListView1.EntitySelected += HandleEntityListViewEntitySelected; ;
+            lmvAttributes.ListViewColumnClick += AttributesListViewColumnClick;
+            lmvAttributes.ListViewItemCheck += AttributesListViewItemCheck;
+            lmvRelationships.ListViewColumnClick += RelationshipListViewColumnClick;
+            lmvRelationships.ListViewItemCheck += RelationshipListViewItemCheck;
+        }
+
+        private void HandleEntityListViewEntitySelected(object sender, MigratorEventArgs<TreeNode> e)
+        {
+            EntitySelected?.Invoke(this, e);
         }
 
         private void EntityListViewCurrentSelectedEntityChanged(object sender, MigratorEventArgs<EntityMetadata> e)
         {
-            if (CurrentSelectedEntityChanged != null)
-            {
-                CurrentSelectedEntityChanged(this, e);
-            }
+            CurrentSelectedEntityChanged?.Invoke(this, e);
         }
 
         private void EntityListViewShowSystemEntitiesChanged(object sender, EventArgs e)
         {
-            if (ShowSystemEntitiesChanged != null)
-            {
-                ShowSystemEntitiesChanged(this, e);
-            }
+            ShowSystemEntitiesChanged?.Invoke(this, e);
+        }
+
+        private void RelationshipListViewColumnClick(object sender, MigratorEventArgs<int> e)
+        {
+            SortAttributesList?.Invoke(this, e);
+        }
+
+        private void AttributesListViewColumnClick(object sender, MigratorEventArgs<int> e)
+        {
+            SortRelationshipList?.Invoke(this, e);
+        }
+
+        private void AttributesListViewItemCheck(object sender, MigratorEventArgs<ItemCheckEventArgs> e)
+        {
+            AttributeSelected?.Invoke(this,e);
+        }
+        private void RelationshipListViewItemCheck(object sender, MigratorEventArgs<ItemCheckEventArgs> e)
+        {
+            RelationshipSelected?.Invoke(this, e);
         }
 
         public event EventHandler ShowSystemEntitiesChanged;
         public event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
+        public event EventHandler<MigratorEventArgs<int>> SortAttributesList;
+        public event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> AttributeSelected;
+        public event EventHandler<MigratorEventArgs<int>> SortRelationshipList;
+        public event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> RelationshipSelected;
+        public event EventHandler<MigratorEventArgs<TreeNode>> EntitySelected;
 
         public List<EntityMetadata> EntityMetadataList
         {
@@ -47,32 +75,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 entityListView1.Entities = entityMetadataList;
             }
         }
-        //public List<AttributeMetadata> EntityAttributes
-        //{// get { return listManagerView1.EntityAttributes; } 
-        //    set
-        //    {
-
-        //        listManagerView1.EntityAttributes = value;
-        //    }
-        //}
-        //public ListView EntityAttributeList
-        //{// get { return listManagerView1.EntityAttributes; } 
-        //    get => listManagerView1.ListView;
-        //    //set
-        //    //{
-
-        //    //    listManagerView1.ListView = value;
-        //    //}
-        //}
        
         public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
         public bool ShowSystemAttributes { get; set; }
 
-        public ListView EntityAttributeList => listManagerView1.ListView;
-        public ListView EntityRelationshipList => listManagerView2.ListView;
+        public ListView EntityAttributeList => lmvAttributes.ListView;
+        public ListView EntityRelationshipList => lmvRelationships.ListView;
         public TreeView EntityList => entityListView1.EntityList;
 
         public List<EntityMetadata> SelectedEntities => entityListView1.SelectedEntities;
+
+        public string CurrentConnection { get => tsbtCurrentConnection.Text; set => tsbtCurrentConnection.Text = value; }
 
         public event EventHandler RetrieveEntities;
         public event EventHandler<MigratorEventArgs<string>> LoadSchema;

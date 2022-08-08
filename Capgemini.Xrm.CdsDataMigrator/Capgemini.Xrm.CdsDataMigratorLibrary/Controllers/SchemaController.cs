@@ -33,7 +33,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             {
                 CollectCrmEntityFields(inputCheckedEntity, inputCrmSchemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
 
-                GenerateXMLFile(schemaPath, inputCrmSchemaConfiguration);
+                GenerateXmlFile(schemaPath, inputCrmSchemaConfiguration);
                 inputCrmSchemaConfiguration.Entities.Clear();
             }
             else
@@ -42,7 +42,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public void GenerateXMLFile(string schemaFilePath, CrmSchemaConfiguration schemaConfiguration)
+        public void GenerateXmlFile(string schemaFilePath, CrmSchemaConfiguration schemaConfiguration)
         {
             if (!string.IsNullOrWhiteSpace(schemaFilePath))
             {

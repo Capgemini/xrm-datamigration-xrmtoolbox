@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using Microsoft.Xrm.Sdk.Metadata;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -17,6 +11,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             InitializeComponent();
         }
+
+        public event EventHandler<MigratorEventArgs<int>> ListViewColumnClick;
+        public event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> ListViewItemCheck;
 
         public string DisplayedItemsName
         {
@@ -34,25 +31,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         private void SelectUnselectAllCheckedChanged(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in listViewItems.Items)
-            {
-                item.Checked = checkBoxSelectUnselectAll.Checked;
-            }
+            listViewItems.Items.OfType<ListViewItem>().ToList().ForEach(item => item.Checked = checkBoxSelectUnselectAll.Checked);
         }
 
-        //Dictionary<string, HashSet<string>> EntityAttributes
-        //public List<AttributeMetadata> EntityAttributes
-        //{
-        //    //get { }
-        //    set
-        //    {
-        //        listViewItems.Items.Clear();
-        //        foreach (var item in value)
-        //        {
-        //            string newItem = item.SchemaName;//.DisplayName.UserLocalizedLabel.Label;
-        //            listViewItems.Items.Add(newItem);
-        //        }
-        //    }
-        //}
+        private void listViewItems_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            ListViewColumnClick?.Invoke(this, new MigratorEventArgs<int>(e.Column));
+        }
+
+        private void listViewItems_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            ListViewItemCheck?.Invoke(this, new MigratorEventArgs<ItemCheckEventArgs>(e));
+        }
+
     }
 }

@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             {
                 var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath.Text, schemaConfiguration))
+                FluentActions.Invoking(() => systemUnderTest.GenerateXmlFile(tbSchemaPath.Text, schemaConfiguration))
                              .Should()
                              .NotThrow();
             }
@@ -198,7 +198,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 
                 var schemaConfiguration = new Capgemini.Xrm.DataMigration.Config.CrmSchemaConfiguration();
 
-                FluentActions.Invoking(() => systemUnderTest.GenerateXMLFile(tbSchemaPath.Text, schemaConfiguration))
+                FluentActions.Invoking(() => systemUnderTest.GenerateXmlFile(tbSchemaPath.Text, schemaConfiguration))
                              .Should()
                              .NotThrow();
             }

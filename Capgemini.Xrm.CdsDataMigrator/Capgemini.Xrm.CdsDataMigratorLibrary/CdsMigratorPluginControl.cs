@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
-        public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        public async override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
             {   
@@ -50,8 +50,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     SchemaGeneratorWizard.ExceptionService = new ExceptionService();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
 
-                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService());
-
+                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService(), settings);
+                    await schemaGeneratorPresenter.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 
                 if (actionName == "SourceConnection" || actionName == "")
