@@ -28,8 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         public CrmSchemaConfiguration SchemaConfiguration { get; set; }
 
         IEnumerable<string> IImportMappingsFormView.EntityList
-        {
-            // Check the get method
+        {   
             get => clEntity.Items.Cast<string>();
             set
             {

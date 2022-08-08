@@ -165,19 +165,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetUpdatedMappings(Guid sourceId, Guid targetId, string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings, Dictionary<Guid, Guid> guidsDictionary)
         {
-                if (DoesRowContainDefaultGuids(sourceId, targetId) == false)
+                if (DoesRowContainDefaultGuids(sourceId, targetId) == true)
                 {
-                    guidsDictionary.Add(sourceId, targetId);
-                    if (DoesEntityMappingAlreadyExist(entity, mappings) == true)
-                        {
-                        mappings[entity].Add(sourceId, targetId);
-                        }
-                        else
-                        {
-                        mappings.Add(entity, guidsDictionary);
-                        }
-                        return mappings;
-                 }
+                    return mappings;
+                }
+                guidsDictionary.Add(sourceId, targetId);
+                if (DoesEntityMappingAlreadyExist(entity, mappings) == true)
+                {
+                    mappings[entity].Add(sourceId, targetId);
+                }
+                else
+                {
+                    mappings.Add(entity, guidsDictionary);
+                }
                 return mappings;
         }
 
