@@ -72,6 +72,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #region event mappings
 
+        [ExcludeFromCodeCoverage]
         protected override void OnVisibleChanged(EventArgs e)
         {
             if (Visible)
@@ -82,12 +83,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             base.OnVisibleChanged(e);
         }
 
+        [ExcludeFromCodeCoverage]
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             var defaultValues = new object[] { clEntity.Items[0], Guid.Empty.ToString(), Guid.Empty.ToString() };
             e.Row.SetValues(defaultValues);
         }
-        
+
+        [ExcludeFromCodeCoverage]
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
             var cell = dgvMappings.CurrentCell;
