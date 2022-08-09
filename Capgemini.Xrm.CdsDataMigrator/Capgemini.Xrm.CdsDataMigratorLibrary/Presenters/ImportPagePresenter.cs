@@ -152,7 +152,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (AreAllCellsPopulated(row) == false)
+                if (!AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var sourceId = Guid.Parse((string)row.Cells[1].Value);
@@ -165,12 +165,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetUpdatedMappings(Guid sourceId, Guid targetId, string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings, Dictionary<Guid, Guid> guidsDictionary)
         {
-                if (DoesRowContainDefaultGuids(sourceId, targetId) == true)
+                if (DoesRowContainDefaultGuids(sourceId, targetId))
                 {
                     return mappings;
                 }
                 guidsDictionary.Add(sourceId, targetId);
-                if (DoesEntityMappingAlreadyExist(entity, mappings) == true)
+                if (DoesEntityMappingAlreadyExist(entity, mappings))
                 {
                     mappings[entity].Add(sourceId, targetId);
                 }

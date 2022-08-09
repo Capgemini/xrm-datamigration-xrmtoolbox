@@ -87,12 +87,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             var defaultValues = new object[] { clEntity.Items[0], Guid.Empty.ToString(), Guid.Empty.ToString() };
             e.Row.SetValues(defaultValues);
         }
-
-        private void ButtonCloseClick(object sender, EventArgs e)
-        {
-            Close();
-        }
-
+        
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
             var cell = dgvMappings.CurrentCell;
@@ -100,6 +95,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             {
                 dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void ButtonCloseClick(object sender, EventArgs e)
+        {
+            Close();
         }
 
         #endregion
