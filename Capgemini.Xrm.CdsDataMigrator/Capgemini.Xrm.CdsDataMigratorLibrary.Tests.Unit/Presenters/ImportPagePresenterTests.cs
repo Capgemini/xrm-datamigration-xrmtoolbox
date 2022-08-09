@@ -147,6 +147,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
             mockImportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns("");
@@ -164,6 +166,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Arrange
             var importConfigFilePath  = @"TestData\NewImportConfig.json";
             var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
             mockImportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns(importConfigFilePath);
@@ -181,13 +185,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
             // Arrange
             var mockIOrganisationService = new Mock<IOrganizationService>();
+            var viewMappings = ProvideMappingsAsViewType();
+            var configMappings = ProvideMappingsAsConfigType();
 
             mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
             mockImportView.SetupGet(x => x.IgnoreSystemFields).Returns(true);
             mockImportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
-            mockImportView.SetupGet(x => x.DataFormat).Returns(CdsDataMigratorLibrary.Enums.DataFormat.Json);
+            mockImportView.SetupGet(x => x.DataFormat).Returns(Enums.DataFormat.Json);
             mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
 
             // Act
             mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
@@ -206,6 +213,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             importConfig.IgnoreStatuses.Should().Be(true);
             importConfig.IgnoreSystemFields.Should().Be(true);
             importConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
+            importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
         }
 
         [TestMethod]
