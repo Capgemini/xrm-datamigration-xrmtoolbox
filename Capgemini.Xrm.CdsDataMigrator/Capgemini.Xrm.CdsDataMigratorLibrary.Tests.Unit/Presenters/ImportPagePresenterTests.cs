@@ -171,6 +171,28 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
         }
 
+        [TestMethod]
+        public void SaveConfig_ShouldCorrectlyAddNewMappingWhenExistingMappingAlreadyExistsForEntity()
+        {
+            // Arrange
+            var importConfigFilePath = @"TestData\NewImportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var newRow = GetRowWithAccountEntityAndValidGuids();
+            viewMappings.Add(newRow);
+            var configMappings = ProvideTwoMappingsForSameEntityAsConfigType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockImportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(importConfigFilePath);
+
+            // Act
+            mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.VerifyAll();
+            var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
+            importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
+        }
 
         [TestMethod]
         [Ignore("What is an invalid file?")]
@@ -368,6 +390,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return importConfig.MigrationConfig;
         }
 
+        private MappingConfiguration ProvideTwoMappingsForSameEntityAsConfigType()
+        {
+            var importConfig = new CrmImportConfig();
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
+            var guidsDictionary = new Dictionary<Guid, Guid>();
+            var entity = "Account";
+            var sourceId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+            var targetId = Guid.Parse("00000000-0000-0000-0000-000000000002");
+            guidsDictionary.Add(sourceId, targetId);
+            mappings.Add(entity, guidsDictionary);
+            mappings[entity].Add(Guid.Parse("00000000-0000-0000-0000-000000000003"), Guid.Parse("00000000-0000-0000-0000-000000000004"));
+            importConfig.MigrationConfig = new MappingConfiguration();
+            importConfig.MigrationConfig.Mappings.AddRange(mappings);
+            return importConfig.MigrationConfig;
+        }
+
         private DataGridViewRow GetRowWithBlankCell()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
@@ -383,6 +421,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000000" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000000" });
+            return dataGridViewRow;
+        }
+
+        private DataGridViewRow GetRowWithAccountEntityAndValidGuids()
+        {
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000003" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000004" });
             return dataGridViewRow;
         }
     }  
