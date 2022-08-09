@@ -135,7 +135,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public void RadioButton1CheckedChanged(object sender, EventArgs e)
         {
             rbnDataFormatJson.Checked = !rbnDataFormatCsv.Checked;
-            groupBox1.Visible = true;
         }
 
         private void TabStripButtonMappingsClick(object sender, EventArgs e)
