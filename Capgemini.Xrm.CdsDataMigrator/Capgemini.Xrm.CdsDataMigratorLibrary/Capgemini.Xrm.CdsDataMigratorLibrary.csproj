@@ -257,7 +257,6 @@
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
-    <Compile Include="Models\MappingItem.cs" />
     <Compile Include="Models\RecordCountModel.cs" />
     <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Models\SaveAllSettings.cs" />
