@@ -148,6 +148,29 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
         }
 
+        [TestMethod]
+        public void SaveConfig_ShouldNotIncludeRowWithDefaultIdsIntheMappings()
+        {
+            // Arrange
+            var importConfigFilePath = @"TestData\NewImportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var newRow = GetRowWithDefaultIds();
+            viewMappings.Add(newRow);
+            var configMappings = ProvideMappingsAsConfigType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockImportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(importConfigFilePath);
+
+            // Act
+            mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.VerifyAll();
+            var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
+            importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
+        }
+
 
         [TestMethod]
         [Ignore("What is an invalid file?")]
@@ -351,6 +374,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000002" });
+            return dataGridViewRow;
+        }
+
+        private DataGridViewRow GetRowWithDefaultIds()
+        {
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000000" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000000" });
             return dataGridViewRow;
         }
     }  
