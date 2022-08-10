@@ -90,7 +90,50 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.Object.EntityList.Count().Should().Be(1);
-            mockImportView.VerifySet(x => x.EntityList = It.Is<IEnumerable<string>>(a => a.First() == "Entity" && a.First() == schema.Entities.FirstOrDefault().DisplayName), Times.Once);
+            mockImportView.VerifySet(x => x.EntityList = It.Is<IEnumerable<string>>(a => a.First() == schema.Entities.FirstOrDefault().DisplayName), Times.Once);
+        }
+
+        [TestMethod]
+        public void OnVisible_ShouldRemoveEntityListWhenNoLongerPresentInTheSchema()
+        {
+            // Arrange
+            var entity = new CrmEntity
+            {
+                DisplayName = "Entity1",
+                Name = "entity1"
+            };
+            var schemaOld = new CrmSchemaConfiguration();
+            schemaOld.Entities.Add(entity);
+            mockImportView.SetupGet(x => x.SchemaConfiguration).Returns(schemaOld);
+            mockImportView
+                .SetupGet(x => x.EntityList)
+                .Returns(schemaOld.Entities.Select(x => x.DisplayName).OrderBy(n => n));
+
+            mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty); // Loads old schema entities
+
+            var schemaNew = new CrmSchemaConfiguration();
+            schemaNew.Entities.Add(new CrmEntity
+            {
+                DisplayName = "Entity2",
+                Name = "entity2"
+            });
+
+            mockImportView
+                .SetupGet(x => x.SchemaConfiguration)
+                .Returns(schemaNew);
+            mockImportView
+                .SetupGet(x => x.EntityList)
+                .Returns(schemaNew.Entities.Select(x => x.DisplayName).OrderBy(n => n));
+
+            // Act
+            mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.Object.EntityList.Count().Should().Be(1);
+            mockImportView.VerifySet(
+               x => x.EntityList = It.Is<IEnumerable<string>>(a =>
+                   a.First() == schemaNew.Entities.FirstOrDefault().DisplayName),
+               Times.Once);
         }
     }
 }
