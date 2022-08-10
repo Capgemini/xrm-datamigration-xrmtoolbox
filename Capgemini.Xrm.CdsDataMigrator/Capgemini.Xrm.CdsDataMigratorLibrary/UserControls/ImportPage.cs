@@ -137,6 +137,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             rbnDataFormatJson.Checked = !rbnDataFormatCsv.Checked;
         }
 
+        [ExcludeFromCodeCoverage]
         private void TabStripButtonMappingsClick(object sender, EventArgs e)
         {
             this.importMappingsForm.ShowDialog(this);

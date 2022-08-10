@@ -102,12 +102,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 // TODO: Handle exception
             }
         }
-
-        private void SchemaConfigPathChanged(object sender, EventArgs args)
-        {
-            this.view.SchemaConfiguration = GetSchemaConfiguration();
-        }
-        
+          
         public CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
@@ -207,6 +202,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return false;
             }
             return true;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void SchemaConfigPathChanged(object sender, EventArgs args)
+        {
+            this.view.SchemaConfiguration = GetSchemaConfiguration();
         }
 
         [ExcludeFromCodeCoverage]
