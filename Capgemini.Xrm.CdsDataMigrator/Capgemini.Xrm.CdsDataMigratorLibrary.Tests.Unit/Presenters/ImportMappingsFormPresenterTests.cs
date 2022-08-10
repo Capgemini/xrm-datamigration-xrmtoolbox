@@ -73,7 +73,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var schema = new CrmSchemaConfiguration();
             schema.Entities.Add(new CrmEntity
             {
-                DisplayName = "Entity",
                 Name = "entity"
 
             });
@@ -83,14 +82,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(schema);
             mockImportView
                 .SetupGet(x => x.EntityList)
-                .Returns(schema.Entities.Select(x => x.DisplayName).OrderBy(n => n));
+                .Returns(schema.Entities.Select(x => x.Name).OrderBy(n => n));
 
             // Act
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             mockImportView.Object.EntityList.Count().Should().Be(1);
-            mockImportView.VerifySet(x => x.EntityList = It.Is<IEnumerable<string>>(a => a.First() == schema.Entities.FirstOrDefault().DisplayName), Times.Once);
+            mockImportView.VerifySet(x => x.EntityList = It.Is<IEnumerable<string>>(a => a.First() == schema.Entities.FirstOrDefault().Name), Times.Once);
         }
 
         [TestMethod]
@@ -99,7 +98,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Arrange
             var entity = new CrmEntity
             {
-                DisplayName = "Entity1",
                 Name = "entity1"
             };
             var schemaOld = new CrmSchemaConfiguration();
@@ -107,14 +105,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.SchemaConfiguration).Returns(schemaOld);
             mockImportView
                 .SetupGet(x => x.EntityList)
-                .Returns(schemaOld.Entities.Select(x => x.DisplayName).OrderBy(n => n));
+                .Returns(schemaOld.Entities.Select(x => x.Name).OrderBy(n => n));
 
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty); // Loads old schema entities
 
             var schemaNew = new CrmSchemaConfiguration();
             schemaNew.Entities.Add(new CrmEntity
             {
-                DisplayName = "Entity2",
                 Name = "entity2"
             });
 
@@ -123,7 +120,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(schemaNew);
             mockImportView
                 .SetupGet(x => x.EntityList)
-                .Returns(schemaNew.Entities.Select(x => x.DisplayName).OrderBy(n => n));
+                .Returns(schemaNew.Entities.Select(x => x.Name).OrderBy(n => n));
 
             // Act
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
@@ -132,7 +129,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Object.EntityList.Count().Should().Be(1);
             mockImportView.VerifySet(
                x => x.EntityList = It.Is<IEnumerable<string>>(a =>
-                   a.First() == schemaNew.Entities.FirstOrDefault().DisplayName),
+                   a.First() == schemaNew.Entities.FirstOrDefault().Name),
                Times.Once);
         }
     }

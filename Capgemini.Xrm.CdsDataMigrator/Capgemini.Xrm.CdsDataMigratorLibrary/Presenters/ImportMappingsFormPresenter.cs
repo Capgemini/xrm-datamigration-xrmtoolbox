@@ -29,7 +29,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return;
             }
 
-            view.EntityList = view.SchemaConfiguration.Entities.Select(x => x.DisplayName).OrderBy(n => n);
+            view.EntityList = view.SchemaConfiguration.Entities.Select(x => x.Name).OrderBy(n => n);
         }
 
         [ExcludeFromCodeCoverage]
