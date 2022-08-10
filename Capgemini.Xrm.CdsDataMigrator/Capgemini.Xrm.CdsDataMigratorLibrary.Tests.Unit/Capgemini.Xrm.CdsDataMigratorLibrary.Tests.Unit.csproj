@@ -263,6 +263,7 @@
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
+    <Compile Include="Presenters\ImportMappingsFormPresenterTests.cs" />
     <Compile Include="Presenters\ImportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LogToTextboxServiceTests.cs" />
