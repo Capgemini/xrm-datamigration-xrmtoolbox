@@ -363,7 +363,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.VerifySet(x => x.JsonFolderPath = It.IsAny<string>(), Times.Once, "JsonFolderPathh was set unexpectedly");
         }
 
-        private List<DataGridViewRow> ProvideMappingsAsViewType()
+        private static List<DataGridViewRow> ProvideMappingsAsViewType()
         {
             List<DataGridViewRow> mappings = new List<DataGridViewRow>();
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
@@ -375,7 +375,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return mappings;
         }
 
-        private MappingConfiguration ProvideMappingsAsConfigType()
+        private static MappingConfiguration ProvideMappingsAsConfigType()
         {
             var importConfig = new CrmImportConfig();
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
@@ -390,7 +390,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return importConfig.MigrationConfig;
         }
 
-        private MappingConfiguration ProvideTwoMappingsForSameEntityAsConfigType()
+        private static MappingConfiguration ProvideTwoMappingsForSameEntityAsConfigType()
         {
             var importConfig = new CrmImportConfig();
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
@@ -406,7 +406,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return importConfig.MigrationConfig;
         }
 
-        private DataGridViewRow GetRowWithBlankCell()
+        private static DataGridViewRow GetRowWithBlankCell()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
@@ -415,7 +415,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return dataGridViewRow;
         }
 
-        private DataGridViewRow GetRowWithDefaultIds()
+        private static DataGridViewRow GetRowWithDefaultIds()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
@@ -424,7 +424,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             return dataGridViewRow;
         }
 
-        private DataGridViewRow GetRowWithAccountEntityAndValidGuids()
+        private static DataGridViewRow GetRowWithAccountEntityAndValidGuids()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
