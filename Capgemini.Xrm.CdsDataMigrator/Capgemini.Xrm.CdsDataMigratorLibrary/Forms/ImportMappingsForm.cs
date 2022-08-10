@@ -1,7 +1,4 @@
-﻿
-using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using System;
 using System.Collections.Generic;
