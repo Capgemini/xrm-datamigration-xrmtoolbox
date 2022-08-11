@@ -1,5 +1,7 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
@@ -93,6 +95,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Assert
             mockImportView.VerifyAll();
             VerifyViewPropertiesNotSet();
+        }
+
+        [TestMethod]
+        public void LoadConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockImportView
+                .Setup(x => x.AskForFilePathToOpen())
+                .Throws(thrownException);
+
+            // Act
+            mockImportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
         }
 
         [TestMethod]
@@ -249,6 +268,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
+        public void SaveConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            var thrownException = new Exception("Test exception");
+            mockImportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Throws(thrownException);
+
+            // Act
+            mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
         public void RunConfig_ShouldReadValuesFromView()
         {
             // Arrange
@@ -282,6 +320,61 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             importConfig.IgnoreSystemFields.Should().Be(true);
             importConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
             importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
+        {
+            // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            var thrownException = new Exception("Test exception");
+            mockWorkerHost
+                .Setup(x => x.WorkAsync(It.IsAny<WorkAsyncInfo>()))
+                .Throws(thrownException);
+
+            // Act
+            mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockImportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownInsideWorkerHost()
+        {
+            // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            var thrownException = new Exception("Test exception");
+            mockDataMigrationService
+                .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()))
+                .Throws(thrownException);
+
+            // Act
+            mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockImportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifySuccessWhenNotExceptionIsThrownInsideWorkerHost()
+        {
+            // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+
+            // Act
+            mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockImportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowSuccess("Data import is complete."));
         }
 
         [TestMethod]

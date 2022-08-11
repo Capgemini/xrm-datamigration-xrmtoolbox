@@ -17,10 +17,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IImportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
+        private readonly INotifier notifier;
         
         private CrmImportConfig config;
         private string configFilePath;
-        private readonly INotifier notifier;
 
         public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
         {
@@ -50,9 +50,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 config = CrmImportConfig.GetConfiguration(configFilePath);
                 WriteFormInputFromConfig();
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle execption. 
+                notifier.ShowError(ex);
             }
         }
 
@@ -69,9 +69,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
                 config.SaveConfiguration(configFilePath);
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
 
@@ -90,16 +90,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            // TODO: Handle error
+                            notifier.ShowError(e.Error);
                         }
-
-                        // TODO: Success message
+                        else
+                        {
+                            notifier.ShowSuccess("Data import is complete.");
+                        }
                     }
                 });
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
           
