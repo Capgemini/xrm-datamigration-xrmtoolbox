@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Microsoft.Win32;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -51,7 +52,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         private void AttributesListViewItemCheck(object sender, MigratorEventArgs<ItemCheckEventArgs> e)
         {
-            AttributeSelected?.Invoke(this,e);
+            AttributeSelected?.Invoke(this, e);
         }
         private void RelationshipListViewItemCheck(object sender, MigratorEventArgs<ItemCheckEventArgs> e)
         {
@@ -75,7 +76,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                 entityListView1.Entities = entityMetadataList;
             }
         }
-       
+
         public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
         public bool ShowSystemAttributes { get; set; }
 
@@ -98,12 +99,26 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         private void LoadSchemaButtonClick(object sender, EventArgs e)
         {
-            LoadSchema?.Invoke(sender, new MigratorEventArgs<string>(schemaLocationControl1.SchemaFilenamePath));
+            using(var fileDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                if (fileDialog.ShowDialog() ==DialogResult.OK)
+                {
+                    var file = fileDialog.FileName;
+                    LoadSchema?.Invoke(sender, new MigratorEventArgs<string>(file));
+                }
+            }
         }
 
         private void SaveSchemaButtonClick(object sender, EventArgs e)
         {
-            SaveSchema?.Invoke(sender, new MigratorEventArgs<string>(schemaLocationControl1.SchemaFilenamePath));
+            using (var fileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var file = fileDialog.FileName;
+                    SaveSchema?.Invoke(sender, new MigratorEventArgs<string>(file));
+                }
+            }            
         }
     }
 }

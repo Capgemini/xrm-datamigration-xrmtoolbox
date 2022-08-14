@@ -248,6 +248,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 var crmSchemaConfiguration = new CrmSchemaConfiguration();
 
                 controller.SaveSchema(serviceParameters, checkedEntity, entityRelationships, entityAttributes, attributeMapping, crmSchemaConfiguration, e.Input);
+
+                notificationService.DisplayFeedback($"Schema File {e.Input} saved!");
             }
             else
             {
@@ -258,6 +260,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private async void LoadSchemaEventHandler(object sender, MigratorEventArgs<string> e)
         {
             await LoadSchemaFile(e.Input, workingstate, notificationService, entityAttributes, entityRelationships);
+            notificationService.DisplayFeedback($"Schema File {e.Input} loaded!");
         }
 
         private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)

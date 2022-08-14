@@ -335,12 +335,6 @@
     <Compile Include="UserControls\FileInputSelector.Designer.cs">
       <DependentUpon>FileInputSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SchemaLocationControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\SchemaLocationControl.Designer.cs">
-      <DependentUpon>SchemaLocationControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ImportWizard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -428,9 +422,6 @@
     <EmbeddedResource Include="UserControls\FileInputSelector.resx">
       <DependentUpon>FileInputSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\SchemaLocationControl.resx">
-      <DependentUpon>SchemaLocationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>

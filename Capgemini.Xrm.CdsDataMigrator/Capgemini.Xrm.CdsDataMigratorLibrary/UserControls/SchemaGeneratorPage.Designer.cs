@@ -38,7 +38,6 @@
             this.tsbSaveSchema = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbtCurrentConnection = new System.Windows.Forms.ToolStripLabel();
-            this.schemaLocationControl1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.SchemaLocationControl();
             this.lmvAttributes = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
             this.lmvRelationships = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.ListManagerView();
             this.entityListView1 = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.EntityListView();
@@ -68,16 +67,15 @@
             // 
             this.tlpDetailsPane.ColumnCount = 1;
             this.tlpDetailsPane.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDetailsPane.Controls.Add(this.schemaLocationControl1, 0, 0);
-            this.tlpDetailsPane.Controls.Add(this.lmvAttributes, 0, 1);
-            this.tlpDetailsPane.Controls.Add(this.lmvRelationships, 0, 2);
+            this.tlpDetailsPane.Controls.Add(this.lmvAttributes, 0, 0);
+            this.tlpDetailsPane.Controls.Add(this.lmvRelationships, 0, 1);
             this.tlpDetailsPane.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpDetailsPane.Location = new System.Drawing.Point(353, 38);
             this.tlpDetailsPane.Name = "tlpDetailsPane";
-            this.tlpDetailsPane.RowCount = 3;
-            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpDetailsPane.RowCount = 2;
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDetailsPane.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpDetailsPane.Size = new System.Drawing.Size(781, 574);
             this.tlpDetailsPane.TabIndex = 0;
             // 
@@ -145,30 +143,22 @@
             this.tsbtCurrentConnection.Name = "tsbtCurrentConnection";
             this.tsbtCurrentConnection.Size = new System.Drawing.Size(0, 28);
             // 
-            // schemaLocationControl1
-            // 
-            this.schemaLocationControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.schemaLocationControl1.Location = new System.Drawing.Point(3, 3);
-            this.schemaLocationControl1.Name = "schemaLocationControl1";
-            this.schemaLocationControl1.Size = new System.Drawing.Size(775, 29);
-            this.schemaLocationControl1.TabIndex = 0;
-            // 
             // lmvAttributes
             // 
             this.lmvAttributes.DisplayedItemsName = "Available Attributes";
             this.lmvAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lmvAttributes.Location = new System.Drawing.Point(3, 38);
+            this.lmvAttributes.Location = new System.Drawing.Point(3, 3);
             this.lmvAttributes.Name = "lmvAttributes";
-            this.lmvAttributes.Size = new System.Drawing.Size(775, 263);
+            this.lmvAttributes.Size = new System.Drawing.Size(775, 281);
             this.lmvAttributes.TabIndex = 1;
             // 
             // lmvRelationships
             // 
             this.lmvRelationships.DisplayedItemsName = "Available Relationships";
             this.lmvRelationships.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lmvRelationships.Location = new System.Drawing.Point(3, 307);
+            this.lmvRelationships.Location = new System.Drawing.Point(3, 290);
             this.lmvRelationships.Name = "lmvRelationships";
-            this.lmvRelationships.Size = new System.Drawing.Size(775, 264);
+            this.lmvRelationships.Size = new System.Drawing.Size(775, 281);
             this.lmvRelationships.TabIndex = 2;
             // 
             // entityListView1
@@ -202,7 +192,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpMainLayout;
         private System.Windows.Forms.TableLayoutPanel tlpDetailsPane;
         private EntityListView entityListView1;
-        private SchemaLocationControl schemaLocationControl1;
         private ListManagerView lmvAttributes;
         private ListManagerView lmvRelationships;
         private System.Windows.Forms.ToolStrip toolStrip2;
