@@ -6,6 +6,9 @@ using System;
 using System.IO;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using NuGet;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -14,19 +17,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IImportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
+        private readonly INotifier notifier;
         
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
+            this.notifier = notifier;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
             this.view.RunConfigClicked += RunConfig;
+            this.view.SchemaConfigPathChanged += SchemaConfigPathChanged;
 
             this.config = new CrmImportConfig();
             WriteFormInputFromConfig();
@@ -44,9 +50,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 config = CrmImportConfig.GetConfiguration(configFilePath);
                 WriteFormInputFromConfig();
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle execption. 
+                notifier.ShowError(ex);
             }
         }
 
@@ -63,9 +69,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
                 config.SaveConfiguration(configFilePath);
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
 
@@ -84,19 +90,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            // TODO: Handle error
+                            notifier.ShowError(e.Error);
                         }
-
-                        // TODO: Success message
+                        else
+                        {
+                            notifier.ShowSuccess("Data import is complete.");
+                        }
                     }
                 });
             }
-            catch
+            catch (Exception ex)
             {
-                // TODO: Handle exception
+                notifier.ShowError(ex);
             }
         }
-
+          
         public CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
@@ -119,6 +127,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             config.IgnoreStatuses = view.IgnoreStatuses;
             config.IgnoreSystemFields = view.IgnoreSystemFields;
             config.JsonFolderPath = view.JsonFolderPath;
+            if (config.MigrationConfig == null)
+            {
+                config.MigrationConfig = new MappingConfiguration();
+            }
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = GetMappingsInCorrectDataType();
+            config.MigrationConfig.Mappings.Clear();
+            config.MigrationConfig.Mappings.AddRange(mappings);
         }
 
         private void WriteFormInputFromConfig()
@@ -127,6 +142,74 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
+        }
+
+        private Dictionary<string, Dictionary<Guid, Guid>> GetMappingsInCorrectDataType()
+        {
+            Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
+            foreach (DataGridViewRow row in view.Mappings)
+            {
+                if (!AreAllCellsPopulated(row))
+                    break;
+                var entity = row.Cells[0].Value.ToString();
+                var sourceId = Guid.Parse((string)row.Cells[1].Value);
+                var targetId = Guid.Parse((string)row.Cells[2].Value);
+                var guidsDictionary = new Dictionary<Guid, Guid>();
+                mappings = GetUpdatedMappings(sourceId, targetId, entity, mappings, guidsDictionary);
+            }
+            return mappings;
+        }
+
+        private Dictionary<string, Dictionary<Guid, Guid>> GetUpdatedMappings(Guid sourceId, Guid targetId, string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings, Dictionary<Guid, Guid> guidsDictionary)
+        {
+                if (DoesRowContainDefaultGuids(sourceId, targetId))
+                {
+                    return mappings;
+                }
+                guidsDictionary.Add(sourceId, targetId);
+                if (DoesEntityMappingAlreadyExist(entity, mappings))
+                {
+                    mappings[entity].Add(sourceId, targetId);
+                }
+                else
+                {
+                    mappings.Add(entity, guidsDictionary);
+                }
+                return mappings;
+        }
+
+        private bool DoesRowContainDefaultGuids(Guid sourceId, Guid targetId)
+        {
+            if (sourceId == Guid.Empty || targetId == Guid.Empty)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool DoesEntityMappingAlreadyExist(string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings)
+        {
+
+            if (mappings.ContainsKey(entity))
+            {
+                return true;
+            }
+            return false;
+        }
+    
+        private static bool AreAllCellsPopulated(DataGridViewRow row)
+        {
+            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void SchemaConfigPathChanged(object sender, EventArgs args)
+        {
+            this.view.SchemaConfiguration = GetSchemaConfiguration();
         }
 
         [ExcludeFromCodeCoverage]

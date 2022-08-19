@@ -1,8 +1,12 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using Capgemini.Xrm.DataMigration.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
@@ -112,6 +116,41 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
 
                 // Assert
                 systemUnderTest.As<IImportPageView>().DataFormat.Should().Be(value);
+            }
+        }
+
+        [TestMethod]
+        public void SchemaConfiguration_GetSet()
+        {
+            //Arrange
+            var value = new CrmSchemaConfiguration();
+            using (var systemUnderTest = new ImportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IImportPageView>().SchemaConfiguration = value;
+
+                // Assert
+                systemUnderTest.As<IImportPageView>().SchemaConfiguration.Should().Be(value);
+            }
+        }
+
+        [TestMethod]
+        public void Mappings_GetSet()
+        {
+            // Arrange
+            List<DataGridViewRow> value = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000001" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000002" });
+            value.Add(dataGridViewRow);
+            using (var systemUnderTest = new ImportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IImportPageView>().Mappings = value;
+
+                // Assert
+                systemUnderTest.As<IImportPageView>().Mappings.FirstOrDefault().Should().BeEquivalentTo(dataGridViewRow);
             }
         }
     }  

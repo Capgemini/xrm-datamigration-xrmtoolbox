@@ -224,6 +224,12 @@
     <Compile Include="Forms\FilterEditor.Designer.cs">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImportMappingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportMappingsForm.Designer.cs">
+      <DependentUpon>ImportMappingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>
@@ -268,7 +274,9 @@
     <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Presenters\IExportFilterFormView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />
+    <Compile Include="Presenters\IImportMappingsFormView.cs" />
     <Compile Include="Presenters\IImportPageView.cs" />
+    <Compile Include="Presenters\ImportMappingsFormPresenter.cs" />
     <Compile Include="Presenters\ImportPagePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -366,6 +374,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterEditor.resx">
       <DependentUpon>FilterEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImportMappingsForm.resx">
+      <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MappingList.resx">
       <DependentUpon>MappingList.cs</DependentUpon>
