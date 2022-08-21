@@ -28,5 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> RelationshipSelected;
         event EventHandler<MigratorEventArgs<TreeNode>> EntitySelected;
 
+        void ShowInformationPanel(string message, int width= 340, int height= 150);
+        void CloseInformationPanel();
     }
 }

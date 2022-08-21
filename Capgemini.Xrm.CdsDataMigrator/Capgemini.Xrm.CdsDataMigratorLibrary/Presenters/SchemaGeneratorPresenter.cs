@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using System.ComponentModel;
 using Capgemini.Xrm.DataMigration.Config;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -34,7 +35,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly HashSet<string> checkedRelationship = new HashSet<string>();
         private readonly Dictionary<string, HashSet<string>> entityAttributes = new Dictionary<string, HashSet<string>>();
         private readonly Dictionary<string, HashSet<string>> entityRelationships = new Dictionary<string, HashSet<string>>();
-        
+
         public SchemaGeneratorPresenter(ISchemaGeneratorView view, IOrganizationService organizationService, IMetadataService metadataService, INotificationService notificationService, IExceptionService exceptionService, Settings settings)
         {
             this.view = view;
@@ -129,7 +130,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
-
         public async Task OnConnectionUpdated(Guid connectedOrgId, string connectedOrgFriendlyName)
         {
             organisationId = connectedOrgId;
@@ -192,13 +192,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 {
                     var crmSchema = CrmSchemaConfiguration.ReadFromFile(schemaFilePath);
                     var controller = new EntityController();
+                    view.ShowInformationPanel("Loading entities...", 340, 150);
                     controller.StoreEntityData(crmSchema.Entities?.ToArray(), inputEntityAttributes, inputEntityRelationships);
                     ClearAllListViews();
                     await PopulateEntities(working);
+
+                    checkedEntity.Clear();
+                    foreach (var item in view.SelectedEntities)
+                    {
+                        checkedEntity.Add(item.LogicalName);
+                    }
                 }
                 catch (Exception ex)
                 {
                     notificationService.DisplayFeedback($"Schema File load error, ensure to load correct Schema file, Error: {ex.Message}");
+                }
+                finally
+                {
+                    view.CloseInformationPanel();
                 }
             }
             else
@@ -227,7 +238,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     });
 
                 controller.PopulateEntitiesListView(entityList, exception, null, view.EntityList, notificationService);
-                ManageWorkingState(false);            
+                ManageWorkingState(false);
             }
         }
 
@@ -247,9 +258,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 var controller = new SchemaController();
                 var crmSchemaConfiguration = new CrmSchemaConfiguration();
 
+                view.ShowInformationPanel($"Saving schema file {e.Input} ...");
+
                 controller.SaveSchema(serviceParameters, checkedEntity, entityRelationships, entityAttributes, attributeMapping, crmSchemaConfiguration, e.Input);
 
-                notificationService.DisplayFeedback($"Schema File {e.Input} saved!");
+                view.CloseInformationPanel();
             }
             else
             {
@@ -260,7 +273,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private async void LoadSchemaEventHandler(object sender, MigratorEventArgs<string> e)
         {
             await LoadSchemaFile(e.Input, workingstate, notificationService, entityAttributes, entityRelationships);
-            notificationService.DisplayFeedback($"Schema File {e.Input} loaded!");
         }
 
         private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
@@ -276,7 +288,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             entityLogicalName = inputEntityLogicalName;
             var serviceParameters = InstantiateServiceParameters();
 
-            await PopulateAttributes(inputEntityLogicalName,serviceParameters);
+            await PopulateAttributes(inputEntityLogicalName, serviceParameters);
 
             await PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, serviceParameters);
             var controller = new EntityController();
@@ -290,7 +302,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         }
 
         private async void HandleCurrentSelectedEntityChanged(object sender, MigratorEventArgs<EntityMetadata> e)
-        {           
+        {
             await HandleListViewEntitiesSelectedIndexChanged(entityRelationships, e.Input.LogicalName, selectedEntity);
         }
 
@@ -317,10 +329,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     var attributeController = new AttributeController();
                     try
                     {
-                        var entityAttributes = new Dictionary<string, HashSet<string>>();
                         var unmarkedattributes = settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
                         var attributes = attributeController.GetAttributeList(entityLogicalName, view.ShowSystemAttributes, serviceParameters);
                         result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
+
                     }
                     catch (Exception ex)
                     {
@@ -355,12 +367,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         error = ex;
                     }
                 });
-                var listController = new ListController();
+                
                 var e = new RunWorkerCompletedEventArgs(result, error, false);
-                listController.OnPopulateCompletedAction(e, notificationService, null, view.EntityRelationshipList, view.ShowSystemAttributes);
+                var listcontroller = new ListController();
+                listcontroller.OnPopulateCompletedAction(e, notificationService, null, view.EntityRelationshipList, view.ShowSystemAttributes);
                 ManageWorkingState(false);
             }
-        }
+        }        
 
         private ServiceParameters InstantiateServiceParameters()
         {

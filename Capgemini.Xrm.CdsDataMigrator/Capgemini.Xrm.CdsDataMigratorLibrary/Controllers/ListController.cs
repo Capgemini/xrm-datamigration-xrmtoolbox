@@ -87,27 +87,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        //public void OnPopulateCompletedAction(List<ListViewItem> result, INotificationService notificationService, IWin32Window owner, ListView listView, bool showSystemAttributes)
-        //{
-        //    //if (e?.Error != null)
-        //    //{
-        //    //    notificationService.DisplayErrorFeedback(owner, $"An error occured: {e.Error.Message}");
-        //    //}
-        //    //else
-        //    //{
-        //    var items = result;// e.Result as List<ListViewItem>;
-        //        if (showSystemAttributes)
-        //        {
-        //            items = items.Where(x => ((AttributeMetadata)x.Tag)?.IsCustomAttribute == true).ToList();
-        //        }
-
-        //        if (items != null)
-        //        {
-        //            listView.Items.AddRange(items.ToArray());
-        //        }
-        //    //}
-        //}
-
         public void HandleMappingControlItemClick(INotificationService notificationService, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
         {
             if (listViewItemIsSelected)

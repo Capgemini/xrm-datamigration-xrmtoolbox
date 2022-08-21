@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Microsoft.Win32;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class SchemaGeneratorPage : UserControl, ISchemaGeneratorView
     {
         private List<EntityMetadata> entityMetadataList;
+        private Panel informationPanel;
 
         public SchemaGeneratorPage()
         {
@@ -119,6 +121,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                     SaveSchema?.Invoke(sender, new MigratorEventArgs<string>(file));
                 }
             }            
+        }
+
+        public void ShowInformationPanel(string mesage, int width = 340, int height = 150)
+        {
+           informationPanel =  InformationPanel.GetInformationPanel(this, mesage, width, height);
+        }
+
+        public void CloseInformationPanel()
+        {
+            informationPanel?.Dispose();
         }
     }
 }

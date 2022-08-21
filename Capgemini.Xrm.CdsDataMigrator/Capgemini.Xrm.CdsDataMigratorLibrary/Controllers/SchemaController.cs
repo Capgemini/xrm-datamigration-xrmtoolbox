@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
             else
             {
-                serviceParameters.NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
+                serviceParameters.NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");                
             }
         }
 
