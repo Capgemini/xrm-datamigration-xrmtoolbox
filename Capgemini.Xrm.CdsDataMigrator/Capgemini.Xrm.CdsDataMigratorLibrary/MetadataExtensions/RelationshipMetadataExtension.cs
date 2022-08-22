@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class RelationshipController : ControllerBase
+    public class RelationshipMetadataExtension : MetadataExtensionBase
     {
         public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ServiceParameters migratorParameters)
         {

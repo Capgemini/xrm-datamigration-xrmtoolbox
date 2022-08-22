@@ -11,12 +11,12 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 {
     [TestClass]
-    public class EntityControllerTests : TestBase
+    public class EntityMetadataExtensionTests : TestBase
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
 
-        private EntityController systemUnderTest;
+        private EntityMetadataExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
             inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            systemUnderTest = new EntityController();
+            systemUnderTest = new EntityMetadataExtension();
         }
 
         [TestMethod]

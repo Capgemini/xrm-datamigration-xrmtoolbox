@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class ListController : ControllerBase
+    public class ListViewExtension : MetadataExtensionBase
     {
         public void SetListViewSorting(ListView listview, int column, string inputOrganisationId, Core.Settings settings)
         {

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class SchemaController : ControllerBase
+    public class SchemaExtension : MetadataExtensionBase
     {
         public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, CollectionParameters collectionParameters, DialogResult dialogResult, SaveFileDialog fileDialog,
     Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile

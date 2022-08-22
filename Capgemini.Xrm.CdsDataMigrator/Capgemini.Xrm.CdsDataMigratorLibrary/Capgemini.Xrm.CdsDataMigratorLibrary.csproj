@@ -238,11 +238,11 @@
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Controllers\AttributeController.cs" />
-    <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="MetadataExtensions\AttributeMetadataExtension.cs" />
+    <Compile Include="MetadataExtensions\ConfigurationExtension.cs" />
     <Compile Include="Models\DataMigrationSettings.cs" />
     <Compile Include="Models\DeserializationSettings.cs" />
-    <Compile Include="Controllers\EntityController.cs" />
+    <Compile Include="MetadataExtensions\EntityMetadataExtension.cs" />
     <Compile Include="Models\ExportConfigSettings.cs" />
     <Compile Include="Models\ExportSettings.cs" />
     <Compile Include="Models\FilterEditorState.cs" />
@@ -250,11 +250,11 @@
     <Compile Include="Models\CollectionParameters.cs" />
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
-    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="MetadataExtensions\MetadataExtensionBase.cs" />
     <Compile Include="Models\RecordCountModel.cs" />
-    <Compile Include="Controllers\RelationshipController.cs" />
+    <Compile Include="MetadataExtensions\RelationshipMetadataExtension.cs" />
     <Compile Include="Models\SaveAllSettings.cs" />
-    <Compile Include="Controllers\SchemaController.cs" />
+    <Compile Include="MetadataExtensions\SchemaExtension.cs" />
     <Compile Include="Models\SerializationSettings.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
     <Compile Include="CdsMigratorPluginControl.cs">
@@ -264,6 +264,7 @@
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
@@ -298,7 +299,7 @@
     <Compile Include="Services\LogManagerContainer.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Controllers\ListController.cs" />
+    <Compile Include="MetadataExtensions\ListViewExtension.cs" />
     <Compile Include="UserControls\DataverseEnvironmentSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -10,11 +10,11 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 {
     [TestClass]
-    public class RelationshipControllerTests : TestBase
+    public class RelationshipMetadataExtensionTests : TestBase
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
 
-        private RelationshipController systemUnderTest;
+        private RelationshipMetadataExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
@@ -22,7 +22,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             SetupServiceMocks();
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
 
-            systemUnderTest = new RelationshipController();
+            systemUnderTest = new RelationshipMetadataExtension();
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 
             using (var listView = new System.Windows.Forms.ListView())
             {
-                var controller = new EntityController();
+                var controller = new EntityMetadataExtension();
                 controller.PopulateEntitiesListView(items, null, null, listView, NotificationServiceMock.Object);
 
                 var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorServiceParameters);

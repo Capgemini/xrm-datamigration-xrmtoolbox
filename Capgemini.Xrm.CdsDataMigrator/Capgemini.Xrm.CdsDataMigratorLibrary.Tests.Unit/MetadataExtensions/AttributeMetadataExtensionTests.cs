@@ -12,11 +12,11 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 {
     [TestClass]
-    public class AttributeControllerTests : TestBase
+    public class AttributeMetadataExtensionTests : TestBase
     {
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
 
-        private AttributeController systemUnderTest;
+        private AttributeMetadataExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
@@ -24,7 +24,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             SetupServiceMocks();
             inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            systemUnderTest = new AttributeController();
+            systemUnderTest = new AttributeMetadataExtension();
         }
 
         [TestMethod]

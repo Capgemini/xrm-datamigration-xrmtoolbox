@@ -225,12 +225,12 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
-    <Compile Include="Controllers\AttributeControllerTests.cs" />
-    <Compile Include="Controllers\ConfigurationControllerTests.cs" />
-    <Compile Include="Controllers\ControllerBaseTests.cs" />
-    <Compile Include="Controllers\EntityControllerTests.cs" />
-    <Compile Include="Controllers\RelationshipControllerTests.cs" />
-    <Compile Include="Controllers\SchemaControllerTests.cs" />
+    <Compile Include="MetadataExtensions\AttributeMetadataExtensionTests.cs" />
+    <Compile Include="MetadataExtensions\ConfigurationExtensionTests.cs" />
+    <Compile Include="MetadataExtensions\MetadataExtensionBaseTests.cs" />
+    <Compile Include="MetadataExtensions\EntityMetadataExtensionTests.cs" />
+    <Compile Include="MetadataExtensions\RelationshipMetadataExtensionTests.cs" />
+    <Compile Include="MetadataExtensions\SchemaExtensionTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
@@ -261,6 +261,7 @@
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
+    <Compile Include="Presenters\SchemaGeneratorParameterBagTests.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LogToTextboxServiceTests.cs" />
@@ -283,7 +284,7 @@
     <Compile Include="Services\LogToFileServiceTests.cs" />
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="Controllers\ListControllerTests.cs" />
+    <Compile Include="MetadataExtensions\ListViewExtensionTests.cs" />
     <Compile Include="UserControls\ExportPageTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
@@ -293,6 +294,8 @@
     <Compile Include="Mocks\MockEntityListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\ListManagerViewTests.cs" />
+    <Compile Include="UserControls\SchemaGeneratorPageTests.cs" />
     <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\EntityListViewTests.cs" />

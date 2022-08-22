@@ -16,12 +16,12 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 {
     [TestClass]
-    public class ListControllerTests : TestBase
+    public class ListViewExtensionTests : TestBase
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
 
-        private ListController systemUnderTest;
+        private ListViewExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
@@ -30,7 +30,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
             inputEntityAttributes = new Dictionary<string, HashSet<string>>();
 
-            systemUnderTest = new ListController();
+            systemUnderTest = new ListViewExtension();
         }
 
         [TestMethod]

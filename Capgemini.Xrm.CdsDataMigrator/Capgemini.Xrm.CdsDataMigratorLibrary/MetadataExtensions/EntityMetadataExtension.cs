@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class EntityController : ControllerBase
+    public class EntityMetadataExtension : MetadataExtensionBase
     {
         public List<ListViewItem> RetrieveSourceEntitiesListToBeDeleted(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes, ServiceParameters serviceParameters)
         {

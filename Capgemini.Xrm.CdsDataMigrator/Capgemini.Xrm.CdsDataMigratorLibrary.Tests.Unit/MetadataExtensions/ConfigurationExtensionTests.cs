@@ -10,16 +10,16 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
 {
     [TestClass]
-    public class ConfigurationControllerTests : TestBase
+    public class ConfigurationExtensionTests : TestBase
     {
-        private ConfigurationController systemUnderTest;
+        private ConfigurationExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
         {
             SetupServiceMocks();
 
-            systemUnderTest = new ConfigurationController();
+            systemUnderTest = new ConfigurationExtension();
         }
 
         [TestMethod]

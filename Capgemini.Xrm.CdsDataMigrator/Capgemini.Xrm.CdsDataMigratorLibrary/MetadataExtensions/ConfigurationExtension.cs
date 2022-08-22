@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class ConfigurationController : ControllerBase
+    public class ConfigurationExtension : MetadataExtensionBase
     {
         public void DataConversion(Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper)
         {

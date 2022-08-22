@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class AttributeController : ControllerBase
+    public class AttributeMetadataExtension : MetadataExtensionBase
     {
         public AttributeMetadata[] GetAttributeList(string entityLogicalName, bool showSystemAttributes, ServiceParameters serviceParameters)
         {
