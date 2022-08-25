@@ -1,5 +1,8 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +15,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
     public partial class ExportLookupMappings : Form, IExportLookupMappingsView
     {
         public event EventHandler OnVisible;
+        public event EventHandler OnEntityColumnChanged;
+        public event EventHandler OnRefFieldChanged;
+        public DataGridView LookupMappings { get; set; }
 
         public ExportLookupMappings()
         {
@@ -22,36 +28,38 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #region data mappings
 
-        public CrmSchemaConfiguration SchemaConfiguration { get; set; }
-
-        IEnumerable<string> IExportLookupMappingsView.EntityList
+        List<EntityMetadata> IExportLookupMappingsView.EntityList
         {
-            get => clEntity.Items.Cast<string>();
             set
             {
                 clEntity.Items.Clear();
-                clEntity.Items.AddRange(value.ToArray());
+                clEntity.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
             }
         }
 
-        public List<DataGridViewRow> LookupMappings
+        AttributeMetadata[] IExportLookupMappingsView.RefFieldLookups
         {
-            get
-            {
-                List<DataGridViewRow> mappings = new List<DataGridViewRow>();
-                foreach (DataGridViewRow row in dgvMappings.Rows)
-                {
-                    mappings.Add(row);
-                }
-                return mappings;
-            }
             set
             {
-                dgvMappings.Rows.Clear();
-                foreach (DataGridViewRow row in value)
+                // Still incorrectly updating items in different rows
+                foreach (DataGridViewRow i in dgvMappings.Rows)
                 {
-                    dgvMappings.Rows.Add(row);
+                    if (i.Index == dgvMappings.CurrentCell.RowIndex)
+                    {
+                        Column2.Items.Clear();
+                        Column2.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
+                    }
                 }
+
+            }
+        }
+
+        AttributeMetadata[] IExportLookupMappingsView.MapFieldLookups
+        {
+            set
+            {
+                Column3.Items.Clear();
+                Column3.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
             }
         }
 
@@ -90,10 +98,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            var cell = dgvMappings.CurrentCell;
-            if (cell.IsInEditMode)
+            LookupMappings = dgvMappings;
+            if (LookupMappings.CurrentCell.IsInEditMode)
             {
-                dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                LookupMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            if (LookupMappings.CurrentCell.ColumnIndex == 0)
+            {
+                dgvMappings.Rows[LookupMappings.CurrentCell.RowIndex].Cells[1].Value = null;
+                dgvMappings.Rows[LookupMappings.CurrentCell.RowIndex].Cells[2].Value = null;
+                this.OnEntityColumnChanged?.Invoke(sender, e);
+            }
+            if (LookupMappings.CurrentCell.ColumnIndex == 1)
+            {
+                this.OnRefFieldChanged?.Invoke(sender, e);
             }
         }
 
@@ -101,6 +119,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void dgvMappings_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            //Temporary solution to hide critical failure
+            e.Cancel = true;
         }
 
         #endregion

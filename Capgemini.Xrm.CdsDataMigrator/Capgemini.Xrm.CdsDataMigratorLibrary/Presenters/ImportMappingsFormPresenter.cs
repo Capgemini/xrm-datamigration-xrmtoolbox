@@ -14,7 +14,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         public ImportMappingsFormPresenter(IImportMappingsFormView view)
         {
             this.view = view;
-
             this.view.OnVisible += OnVisible;
         }
 

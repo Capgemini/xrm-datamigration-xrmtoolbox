@@ -1,7 +1,11 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Model;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,11 +21,43 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view = view;
 
             this.view.OnVisible += OnVisible;
+            this.view.OnEntityColumnChanged += OnEntityColumnChanged;
+            this.view.OnRefFieldChanged += OnRefFieldChanged;
         }
+
+        public IMetadataService MetaDataService { get; set; }
+
+        public IOrganizationService OrganizationService { get; set; }
+
+        public IExceptionService ExceptionService { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
         {
 
+            if (OrganizationService == null)
+            {
+                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                view.Close();
+                return;
+            }
+
+            List<EntityMetadata> entities = MetaDataService.RetrieveEntities(OrganizationService);
+            view.EntityList = entities;
+        }
+
+        public void OnEntityColumnChanged(object sender, EventArgs e)
+        {
+
+            var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentCell.Value, OrganizationService, ExceptionService);
+            view.RefFieldLookups = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
+        }
+
+        public void OnRefFieldChanged(object sender, EventArgs e)
+        {
+            var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentRow.Cells[0].Value, OrganizationService, ExceptionService);
+            view.MapFieldLookups = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
         }
 
         [ExcludeFromCodeCoverage]

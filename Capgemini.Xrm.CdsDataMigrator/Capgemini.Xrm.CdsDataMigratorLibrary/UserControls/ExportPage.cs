@@ -1,9 +1,11 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -17,6 +19,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         private ExportFilterForm exportFilterForm;
         private ExportLookupMappings exportLookupMappingsForm;
 
+        private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+        public IMetadataService MetadataService
+        {
+            set => exportLookupMappingsFormPresenter.MetaDataService = value;
+        }
+        public IOrganizationService OrganizationService
+        {
+            set => exportLookupMappingsFormPresenter.OrganizationService = value;
+        }
+        public IExceptionService ExceptionService
+        {
+            set => exportLookupMappingsFormPresenter.ExceptionService = value;
+        }
+
+
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -29,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             this.exportFilterForm = new ExportFilterForm();
             this.exportLookupMappingsForm = new ExportLookupMappings();
             this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
-            this.exportLookupMappingsForm.Tag = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
+            exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
 
