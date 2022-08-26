@@ -4,6 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -22,6 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool OneEntityPerBatch { get; set; }
         string FilePrefix { get; set; }
         bool SeperateFilesPerEntity { get; set; }
+        List<DataGridViewRow> LookupMappings { get; set; }
         //TODO: List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
         //TODO: Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
         DataFormat DataFormat { get; set; }

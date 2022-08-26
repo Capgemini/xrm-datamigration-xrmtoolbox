@@ -145,6 +145,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     config.CrmMigrationToolSchemaFilters.Add(filter.Key, filter.Value);
                 }
             }
+            //Dictionary<string, Dictionary<string, List<string>>> lookupMappings = GetMappingsInCorrectDataType();
+            //config.LookupMapping.Clear();
+            //config.LookupMapping.AddRange(lookupMappings);
         }
 
         private void WriteFormInputFromConfig()

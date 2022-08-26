@@ -49,7 +49,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public void OnEntityColumnChanged(object sender, EventArgs e)
         {
-
+            view.LookupMappings.Rows[view.LookupMappings.CurrentCell.RowIndex].Cells[1].Value = null;
+            view.LookupMappings.Rows[view.LookupMappings.CurrentCell.RowIndex].Cells[2].Value = null;
             var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentCell.Value, OrganizationService, ExceptionService);
             view.RefFieldLookups = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
         }

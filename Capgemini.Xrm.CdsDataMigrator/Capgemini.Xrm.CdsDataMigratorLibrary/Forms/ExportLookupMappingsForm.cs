@@ -41,25 +41,37 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         {
             set
             {
-                // Still incorrectly updating items in different rows
-                foreach (DataGridViewRow i in dgvMappings.Rows)
-                {
-                    if (i.Index == dgvMappings.CurrentCell.RowIndex)
-                    {
-                        Column2.Items.Clear();
-                        Column2.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
-                    }
-                }
-
+                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[1] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
             }
         }
 
         AttributeMetadata[] IExportLookupMappingsView.MapFieldLookups
         {
             set
+            {   
+                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[2] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            }
+        }
+
+        public List<DataGridViewRow> Mappings
+        {
+            get
             {
-                Column3.Items.Clear();
-                Column3.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
+                List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+                foreach (DataGridViewRow row in dgvMappings.Rows)
+                {
+                    mappings.Add(row);
+                }
+                return mappings;
+            }
+            // setter needed to load existing mappings. Still needs to be implemented
+            set
+            {
+                dgvMappings.Rows.Clear();
+                foreach (DataGridViewRow row in value)
+                {
+                    dgvMappings.Rows.Add(row);
+                }
             }
         }
 
@@ -99,17 +111,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
             LookupMappings = dgvMappings;
-            if (LookupMappings.CurrentCell.IsInEditMode)
+            if (dgvMappings.CurrentCell.IsInEditMode)
             {
-                LookupMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
-            if (LookupMappings.CurrentCell.ColumnIndex == 0)
+            if (dgvMappings.CurrentCell.ColumnIndex == 0)
             {
-                dgvMappings.Rows[LookupMappings.CurrentCell.RowIndex].Cells[1].Value = null;
-                dgvMappings.Rows[LookupMappings.CurrentCell.RowIndex].Cells[2].Value = null;
                 this.OnEntityColumnChanged?.Invoke(sender, e);
             }
-            if (LookupMappings.CurrentCell.ColumnIndex == 1)
+            if (dgvMappings.CurrentCell.ColumnIndex == 1)
             {
                 this.OnRefFieldChanged?.Invoke(sender, e);
             }
