@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using Moq;
 using System;
 using System.Collections.Generic;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using FluentAssertions;
-using Moq;
-using Microsoft.Xrm.Sdk;
-using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 {
@@ -16,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
         private Mock<ISchemaGeneratorView> view;
         private Settings settings;
+        private ServiceParameters serviceParameters;
 
         private SchemaGeneratorPresenter systemUnderTest;
 
@@ -27,12 +29,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             view = new Mock<ISchemaGeneratorView>();
             settings = new Settings();
 
-            systemUnderTest = new SchemaGeneratorPresenter(view.Object,
-                                                    ServiceMock.Object,
-                                                    MetadataServiceMock.Object,
-                                                    NotificationServiceMock.Object,
-                                                    ExceptionServicerMock.Object,
-                                                    settings);
+            systemUnderTest =
+                new SchemaGeneratorPresenter(
+                                    view.Object,
+                                    ServiceMock.Object,
+                                    MetadataServiceMock.Object,
+                                    NotificationServiceMock.Object,
+                                    ExceptionServicerMock.Object,
+                                    settings);
+
+            serviceParameters = new ServiceParameters(ServiceMock.Object, MetadataServiceMock.Object, NotificationServiceMock.Object, ExceptionServicerMock.Object);
         }
 
         [TestMethod]
@@ -122,57 +128,114 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         [TestMethod]
         public void GetAttributeList()
         {
-            Assert.Fail();
+            var inputEntityLogicalName = "account_contact";
+
+            FluentActions.Invoking(() =>
+            systemUnderTest.GetAttributeList(inputEntityLogicalName)
+                )
+                .Should()
+                .NotThrow();
         }
 
         [TestMethod]
         public void FilterAttributes()
         {
-            Assert.Fail();
+            var entityMetadata = InstantiateEntityMetaData("case");
+            bool showSystemAttributes = true;
+
+            FluentActions.Invoking(() =>
+            systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes)
+                )
+                .Should()
+                .NotThrow();
         }
 
         [TestMethod]
         public void ClearMemory()
         {
-            Assert.Fail();
+            FluentActions.Invoking(() =>
+            systemUnderTest.ClearMemory()
+                )
+                .Should()
+                .NotThrow();
         }
 
         [TestMethod]
         public void LoadSchemaFile()
         {
-            Assert.Fail();
+            string schemaFilePath = "";
+            bool working = true;
+            var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            var inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+
+            FluentActions.Invoking(() =>
+            systemUnderTest.LoadSchemaFile(schemaFilePath, working, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships)
+                )
+                .Should()
+                .NotThrow();
         }
 
         [TestMethod]
         public void ClearAllListViews()
         {
-            Assert.Fail();
+            FluentActions.Invoking(() =>
+                systemUnderTest.ClearAllListViews()
+                )
+                .Should()
+                .NotThrow();
         }
 
         [TestMethod]
         public void HandleListViewEntitiesSelectedIndexChanged()
         {
-            Assert.Fail();
+            var inputEntityLogicalName = "account_contact";
+            var inputSelectedEntity = new HashSet<string>();
+
+            FluentActions.Awaiting(() =>
+                systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity)
+                    )
+                    .Should()
+                    .NotThrow();
         }
 
         [TestMethod]
-        public void ManageWorkingState()
+        public void ManageWorkingStateTrue()
         {
-            Assert.Fail();
+            FluentActions.Invoking(() =>
+systemUnderTest.ManageWorkingState(true)
+                )
+                .Should()
+                .NotThrow();
+        }
+
+        [TestMethod]
+        public void ManageWorkingStateFalse()
+        {
+            FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(false))
+                        .Should()
+                        .NotThrow();
         }
 
         [TestMethod]
         public void PopulateAttributes()
         {
-            Assert.Fail();
+            string entityLogicalName = "case";
+
+            FluentActions.Invoking(() => systemUnderTest.PopulateAttributes(entityLogicalName, serviceParameters))
+                        .Should()
+                        .NotThrow();
         }
 
         [TestMethod]
         public void PopulateRelationship()
         {
-            Assert.Fail();
-        }
+            string entityLogicalName = "case";
+            var inputEntityRelationships = new Dictionary<string, HashSet<string>>();
 
+            FluentActions.Invoking(() => systemUnderTest.PopulateRelationship(entityLogicalName, inputEntityRelationships, serviceParameters))
+                            .Should()
+                            .NotThrow();
+        }
 
         [TestMethod]
         public void AddSelectedEntitiesWhenSelectedEntitySetIsNullAndSelectedItemCountIsZero()
@@ -250,6 +313,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 
             selectedEntity.Count.Should().Be(0);
         }
-
     }
 }

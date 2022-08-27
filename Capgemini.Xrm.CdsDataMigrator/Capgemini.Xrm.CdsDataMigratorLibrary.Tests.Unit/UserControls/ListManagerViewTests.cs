@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
 {
@@ -12,9 +14,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
     public class ListManagerViewTests
     {
         [TestMethod]
-        public void ListManagerViewTest()
+        public void ListManagerView()
         {
-            Assert.Fail();
+            using (var systemUnderTest = new ListManagerView())
+            {
+                systemUnderTest.ListView.Items.Count.Should().Be(0);
+            }
         }
+
+
+        //[TestMethod]
+        //public void ListViewColumnClick()
+        //{
+        //    using (var systemUnderTest = new ListManagerView())
+        //    {
+        //        systemUnderTest.ListViewColumnClick += (x, y) => {   };
+        //    }
+        //}
+
     }
 }

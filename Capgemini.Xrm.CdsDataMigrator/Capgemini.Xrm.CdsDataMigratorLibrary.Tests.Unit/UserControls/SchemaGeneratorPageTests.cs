@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
 {
@@ -12,21 +13,44 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
     public class SchemaGeneratorPageTests
     {
         [TestMethod]
-        public void SchemaGeneratorPageTest()
+        public void SchemaGeneratorPage()
         {
-            Assert.Fail();
+            using (var systemUnderTest = new SchemaGeneratorPage())
+            {
+                systemUnderTest.EntityMetadataList.Should().BeNull();
+            }
         }
 
         [TestMethod]
-        public void ShowInformationPanelTest()
+        public void ShowInformationPanel()
         {
-            Assert.Fail();
+            string mesage = "test message";
+            int width = 340;
+            int height = 150;
+
+            using (var systemUnderTest = new SchemaGeneratorPage())
+            {
+                FluentActions.Invoking(() =>
+                {
+                    systemUnderTest.ShowInformationPanel(mesage, width, height);
+                })
+                    .Should()
+                    .NotThrow();
+            }
         }
 
         [TestMethod]
-        public void CloseInformationPanelTest()
+        public void CloseInformationPanel()
         {
-            Assert.Fail();
+            using (var systemUnderTest = new SchemaGeneratorPage())
+            {
+                FluentActions.Invoking(() =>
+                {
+                    systemUnderTest.CloseInformationPanel();
+                })
+                    .Should()
+                    .NotThrow();
+            }
         }
     }
 }

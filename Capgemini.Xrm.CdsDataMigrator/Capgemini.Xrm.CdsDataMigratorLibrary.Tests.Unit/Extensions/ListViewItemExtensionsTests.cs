@@ -1,21 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Xrm.Sdk.Metadata;
 using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 
@@ -26,6 +16,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
+
+
+        [TestInitialize]
+        public void Setup()
+        {
+            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
+            SetupServiceMocks();
+        }
 
         [TestMethod]
         public void IsInvalidForCustomizationIsCustomEntity()
@@ -159,7 +159,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             actual.Should().Be(entityMetadata.LogicalName);
         }
 
-
         [TestMethod]
         public void PopulateEntitiesListViewWhenThereIsAnException()
         {
@@ -227,8 +226,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
             NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
-
-
 
         [TestMethod]
         public void SetListViewSortingWithEmptySettings()

@@ -14,6 +14,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
 
+        [TestInitialize]
+        public void Setup()
+        {
+            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+        }
+
         [TestMethod]
         public void StoreEntityDataNullEntityList()
         {
