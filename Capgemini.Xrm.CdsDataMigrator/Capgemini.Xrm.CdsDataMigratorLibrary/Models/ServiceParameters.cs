@@ -28,10 +28,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
 
         public IExceptionService ExceptionService { get; }
 
-
         public List<TreeNode> RetrieveSourceEntitiesList(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes)
         {
-            var sourceList = MetadataService.RetrieveEntities( OrganizationService);
+            var sourceList = MetadataService.RetrieveEntities(OrganizationService);
 
             if (!showSystemAttributes)
             {
@@ -90,7 +89,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
                 };
                 item.SubItems.Add(entity.LogicalName);
                 item.IsInvalidForCustomization(entity);
-                //UpdateCheckBoxesEntities(entity, item, inputEntityAttributes);
                 item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
 
                 sourceEntitiesList.Add(item);
@@ -133,7 +131,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
             return attributes;
         }
 
-
         public List<ListViewItem> PopulateRelationshipAction(string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             var entityMetaData = MetadataService.RetrieveEntities(inputEntityLogicalName, OrganizationService, ExceptionService);
@@ -144,7 +141,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
                 {
                     var item = new ListViewItem(relationship.IntersectEntityName);
                     AddRelationship(relationship, item, sourceAttributesList);
-                    item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName,  inputEntityRelationships, inputEntityLogicalName);
+                    item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, inputEntityLogicalName);
                 }
             }
 

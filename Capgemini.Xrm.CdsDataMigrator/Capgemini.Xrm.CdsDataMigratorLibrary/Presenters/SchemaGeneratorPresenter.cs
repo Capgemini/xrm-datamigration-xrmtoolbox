@@ -49,7 +49,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 View.AttributeSelected += HandleAttributeSelected;
                 View.SortRelationshipList += HandleSortRelationshipList;
                 View.RelationshipSelected += HandleRelationshipSelected;
-                View.EntitySelected += HandleEntitySelected; ;
+                View.EntitySelected += HandleEntitySelected;
             }
         }
 

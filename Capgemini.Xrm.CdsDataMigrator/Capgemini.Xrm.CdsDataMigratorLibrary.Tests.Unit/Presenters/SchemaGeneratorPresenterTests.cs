@@ -6,6 +6,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -129,28 +130,93 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         }
 
         [TestMethod]
-        public void GetAttributeList()
+        public void GetAttributeListShowSystemAttributesTrue()
         {
-            var inputEntityLogicalName = "account_contact";
+            string entityLogicalName = "case";
 
-            FluentActions.Invoking(() =>
-            systemUnderTest.GetAttributeList(inputEntityLogicalName)
-                )
-                .Should()
-                .NotThrow();
+            var entityResultList = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityResultList, new List<string> { "column1", "column2" });
+
+            MetadataServiceMock.Setup(a => a.RetrieveEntities(It.IsAny<string>(),
+                                                              It.IsAny<IOrganizationService>(),
+                                                              It.IsAny<IExceptionService>()))
+                           .Returns(entityResultList);
+
+            using (var entityList = new System.Windows.Forms.TreeView())
+            {
+                using (var entityAttributeList = new System.Windows.Forms.ListView())
+                {
+                    using (var entityRelationshipList = new System.Windows.Forms.ListView())
+                    {
+                        view.SetupGet(a => a.EntityList).Returns(entityList);
+                        view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
+                        view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
+                        view.SetupGet(a => a.ShowSystemAttributes).Returns(true);
+
+                        var actual = systemUnderTest.GetAttributeList(entityLogicalName);
+
+                        actual.Count.Should().Be(2);
+                    }
+                }
+            }
         }
 
         [TestMethod]
-        public void FilterAttributes()
+        public void GetAttributeListShowSystemAttributesFalse()
         {
-            var entityMetadata = InstantiateEntityMetaData("case");
+            string entityLogicalName = "case";
+
+            var entityResultList = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityResultList, new List<string> { "column1", "column2" });
+
+            MetadataServiceMock.Setup(a => a.RetrieveEntities(It.IsAny<string>(),
+                                                              It.IsAny<IOrganizationService>(),
+                                                              It.IsAny<IExceptionService>()))
+                           .Returns(entityResultList);
+
+            using (var entityList = new System.Windows.Forms.TreeView())
+            {
+                using (var entityAttributeList = new System.Windows.Forms.ListView())
+                {
+                    using (var entityRelationshipList = new System.Windows.Forms.ListView())
+                    {
+                        view.SetupGet(a => a.EntityList).Returns(entityList);
+                        view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
+                        view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
+                        view.SetupGet(a => a.ShowSystemAttributes).Returns(false);
+
+                        var actual = systemUnderTest.GetAttributeList(entityLogicalName);
+
+                        actual.Count.Should().Be(0);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public void FilterAttributesShowSystemAttributesTrue()
+        {
+            var entityLogicalName = "case";
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "column1", "column2" });
             bool showSystemAttributes = true;
 
-            FluentActions.Invoking(() =>
-            systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes)
-                )
-                .Should()
-                .NotThrow();
+            var actual = systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes);
+
+            actual.Count.Should().Be(2);
+        }
+
+        [TestMethod]
+        public void FilterAttributesShowSystemAttributesFalse()
+        {
+            var entityLogicalName = "case";
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "column1", "column2" });
+            bool showSystemAttributes = false;
+
+            var actual = systemUnderTest.FilterAttributes(entityMetadata, showSystemAttributes);
+
+            actual.Count.Should().Be(0);
         }
 
         [TestMethod]
@@ -166,16 +232,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         [TestMethod]
         public void LoadSchemaFile()
         {
-            string schemaFilePath = "";
+            var logicalName = "case";
+            string schemaFilePath = "TestData\\testschemafile.xml";
             bool working = true;
             var inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             var inputEntityRelationships = new Dictionary<string, HashSet<string>>();
 
-            FluentActions.Invoking(() =>
+            var selectedEntities = new List<EntityMetadata> { InstantiateEntityMetaData(logicalName) };
+
+            view.SetupGet(a => a.SelectedEntities).Returns(selectedEntities);
+            view.Setup(a => a.CloseInformationPanel());
+
+            FluentActions.Awaiting(() =>
             systemUnderTest.LoadSchemaFile(schemaFilePath, working, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships)
                 )
                 .Should()
                 .NotThrow();
+
+            view.VerifyGet(a => a.SelectedEntities);
+            view.Verify(a => a.CloseInformationPanel());
         }
 
         [TestMethod]
