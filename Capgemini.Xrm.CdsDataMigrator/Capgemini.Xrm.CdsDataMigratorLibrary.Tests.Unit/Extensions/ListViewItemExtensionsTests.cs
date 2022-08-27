@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
     {
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
-
 
         [TestInitialize]
         public void Setup()
@@ -120,7 +120,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             item.ForeColor.Should().NotBe(System.Drawing.Color.Red);
             item.ToolTipText.Should().NotContain("Logical Entity");
         }
-
 
         [TestMethod]
         public void GetEntityLogicalNameNullListViewItem()
@@ -236,7 +235,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var inputOrganisationId = Guid.NewGuid().ToString();
                 var settings = new Settings();
 
-                FluentActions.Invoking(() => listview.SetListViewSorting( column, inputOrganisationId, settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId, settings))
                              .Should()
                              .NotThrow();
 
@@ -257,7 +256,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var item = new KeyValuePair<Guid, Organisations>(inputOrganisationId, new Organisations());
                 settings.Organisations.Add(item);
 
-                FluentActions.Invoking(() => listview.SetListViewSorting(  column, inputOrganisationId.ToString(), settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId.ToString(), settings))
                              .Should()
                              .NotThrow();
 
@@ -283,7 +282,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var item = new KeyValuePair<Guid, Organisations>(inputOrganisationId, org);
                 settings.Organisations.Add(item);
 
-                FluentActions.Invoking(() => listview.SetListViewSorting( column, inputOrganisationId.ToString(), settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId.ToString(), settings))
                              .Should()
                              .NotThrow();
 
@@ -311,7 +310,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var item = new KeyValuePair<Guid, Organisations>(inputOrganisationId, org);
                 settings.Organisations.Add(item);
 
-                FluentActions.Invoking(() => listview.SetListViewSorting(  column, inputOrganisationId.ToString(), settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId.ToString(), settings))
                              .Should()
                              .NotThrow();
 
@@ -339,7 +338,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var item = new KeyValuePair<Guid, Organisations>(inputOrganisationId, org);
                 settings.Organisations.Add(item);
 
-                FluentActions.Invoking(() => listview.SetListViewSorting(  column, inputOrganisationId.ToString(), settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId.ToString(), settings))
                              .Should()
                              .NotThrow();
 
@@ -367,7 +366,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 var item = new KeyValuePair<Guid, Organisations>(inputOrganisationId, org);
                 settings.Organisations.Add(item);
 
-                FluentActions.Invoking(() => listview.SetListViewSorting(  column, inputOrganisationId.ToString(), settings))
+                FluentActions.Invoking(() => listview.SetListViewSorting(column, inputOrganisationId.ToString(), settings))
                              .Should()
                              .NotThrow();
 
@@ -412,7 +411,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null,  showSystemAttributes))
+                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, showSystemAttributes))
                              .Should()
                              .NotThrow();
             }
@@ -430,7 +429,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
             var attribute = new AttributeMetadata { };
             var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            isCustomAttributeField.SetValue(attribute, (bool?)true);
+            isCustomAttributeField.SetValue(attribute, true);
             item.Tag = attribute;
             result.Add(item);
 
@@ -440,7 +439,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null,   showSystemAttributes))
+                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, showSystemAttributes))
                              .Should()
                              .NotThrow();
 
@@ -460,7 +459,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem { };
             var attribute = new AttributeMetadata { };
             var isCustomAttributeField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            isCustomAttributeField.SetValue(attribute, (bool?)false);
+            isCustomAttributeField.SetValue(attribute, false);
             item.Tag = attribute;
             result.Add(item);
 
@@ -470,7 +469,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null,   showSystemAttributes))
+                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, showSystemAttributes))
                              .Should()
                              .NotThrow();
 
@@ -493,10 +492,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             var customAttribute = new AttributeMetadata();
 
             var isCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            isCustomAttributeField.SetValue(customAttribute, (bool?)false);
+            isCustomAttributeField.SetValue(customAttribute, false);
 
             var secondIsCustomAttributeField = nonCustomAttribute.GetType().GetRuntimeFields().First(a => a.Name == "_isCustomAttribute");
-            secondIsCustomAttributeField.SetValue(customAttribute, (bool?)true);
+            secondIsCustomAttributeField.SetValue(customAttribute, true);
 
             nonCustomItem.Tag = nonCustomAttribute;
             customTtem.Tag = customAttribute;
@@ -509,7 +508,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                                 .Verifiable();
             using (var listView = new System.Windows.Forms.ListView())
             {
-                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null,   showSystemAttributes))
+                FluentActions.Invoking(() => listView.OnPopulateCompletedAction(eventArgs, NotificationServiceMock.Object, null, showSystemAttributes))
                              .Should()
                              .NotThrow();
 
@@ -519,14 +518,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
         }
 
-
         [TestMethod]
         public void InvalidUpdateIsValidForCreate()
         {
             AttributeMetadata attribute = new AttributeMetadata
             {
                 LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)true
+                IsValidForCreate = true
             };
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
@@ -549,7 +547,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -568,7 +566,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -583,11 +581,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 LogicalName = "contactattnoentity1"
             };
             var isLogicalEntityField = attribute.GetType().GetRuntimeFields().First(a => a.Name == "_validForRead");
-            isLogicalEntityField.SetValue(attribute, (bool?)true);
+            isLogicalEntityField.SetValue(attribute, true);
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -606,7 +604,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -619,13 +617,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             var attribute = new AttributeMetadata
             {
                 LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)false,
-                IsValidForUpdate = (bool?)false
+                IsValidForCreate = false,
+                IsValidForUpdate = false
             };
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -638,13 +636,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             var attribute = new AttributeMetadata
             {
                 LogicalName = "contactattnoentity1",
-                IsValidForCreate = (bool?)true,
-                IsValidForUpdate = (bool?)true
+                IsValidForCreate = true,
+                IsValidForUpdate = true
             };
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -663,7 +661,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 
             var item = new System.Windows.Forms.ListViewItem("Item1");
 
-            FluentActions.Invoking(() => item.InvalidUpdate(attribute ))
+            FluentActions.Invoking(() => item.InvalidUpdate(attribute))
                          .Should()
                          .NotThrow();
 
@@ -689,5 +687,162 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             item.ToolTipText.Should().Contain("DeprecatedVersion:");
         }
 
+        [TestMethod]
+        public void UpdateAttributeMetadataCheckBoxesNonExitingsFilterValue()
+        {
+            string inputEntityLogicalName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, "Fake Logical name"))
+                         .Should()
+                         .NotThrow();
+
+            item.Checked.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void UpdateAttributeMetadataCheckBoxesValueDoesNotExistInEntityRelationships()
+        {
+            string inputEntityLogicalName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, inputEntityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            item.Checked.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void UpdateAttributeMetadataCheckBoxesIntersectEntityNameDoesNotExist()
+        {
+            string inputEntityLogicalName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact2",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, inputEntityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            item.Checked.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void UpdateAttributeMetadataCheckBoxesIntersectEntityNameExist()
+        {
+            string inputEntityLogicalName = "account_contact";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, inputEntityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            item.Checked.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void UpdateCheckBoxesRelationshipNullEntityLogicalName()
+        {
+            string inputEntityLogicalName = "account";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, null))
+                         .Should()
+                         .Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void UpdateCheckBoxesRelationshipNonExistingEntityLogicalName()
+        {
+            string inputEntityLogicalName = "account";
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            var entityRelationshipSet = new HashSet<string>() { inputEntityLogicalName };
+
+            inputEntityRelationships.Add(inputEntityLogicalName, entityRelationshipSet);
+
+            var item = new System.Windows.Forms.ListViewItem("Item1");
+
+            FluentActions.Invoking(() => item.UpdateAttributeMetadataCheckBoxes(relationship.IntersectEntityName, inputEntityRelationships, "Random Text"))
+                         .Should()
+                         .NotThrow();
+        }
     }
 }

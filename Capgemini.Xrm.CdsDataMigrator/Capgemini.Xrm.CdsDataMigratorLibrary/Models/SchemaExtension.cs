@@ -64,18 +64,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 
             if (manyToManyRelationship != null)
             {
-                foreach (var relationship in manyToManyRelationship)
+                foreach (var relationship in manyToManyRelationship
+                                                .Where(relationship => inputEntityRelationships.ContainsKey(sourceList.LogicalName))
+                                                .SelectMany(relationship => inputEntityRelationships[sourceList.LogicalName]
+                                                                            .Where(relationshipName => relationshipName ==
+                                                                                                relationship.IntersectEntityName)
+                                                                            .Select(relationshipName => relationship)
+                                                            )
+                         )
                 {
-                    if (inputEntityRelationships.ContainsKey(sourceList.LogicalName))
-                    {
-                        foreach (var relationshipName in inputEntityRelationships[sourceList.LogicalName])
-                        {
-                            if (relationshipName == relationship.IntersectEntityName)
-                            {
-                                StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList);
-                            }
-                        }
-                    }
+                    StoreCrmEntityRelationShipData(crmEntity, relationship, relationshipList);
                 }
             }
 

@@ -614,6 +614,29 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
         }
 
         [TestMethod]
+        public void AreCrmEntityFieldsSelectedEntityMetadataWithNoMatchingAttributes()
+        {
+            var entityLogicalName = "contact";
+            inputCheckedEntity.Add(entityLogicalName);
+            var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityMetadata, new List<string> { "contactId2" });
+
+            var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+            var inputAttributeMapping = new AttributeTypeMapping();
+            var serviceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            var actual = systemUnderTest.AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
+
+            actual.Should().BeFalse();
+            MetadataServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
         public void CollectCrmEntityFieldsCheckedEntityCountIsZero()
         {
             var inputAttributeMapping = new AttributeTypeMapping();

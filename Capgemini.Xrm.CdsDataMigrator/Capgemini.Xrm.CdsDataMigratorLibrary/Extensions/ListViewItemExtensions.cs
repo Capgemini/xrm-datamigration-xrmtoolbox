@@ -100,7 +100,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
             {
                 notificationService.DisplayErrorFeedback(owner, $"An error occured: {e.Error.Message}");
             }
-            else
+            else if (e != null)
             {
                 var items = e.Result as List<ListViewItem>;
                 if (showSystemAttributes)
