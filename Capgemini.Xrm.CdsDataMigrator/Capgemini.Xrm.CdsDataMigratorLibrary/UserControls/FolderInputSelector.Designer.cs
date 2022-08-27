@@ -37,18 +37,17 @@
             // 
             this.tbxInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbxInput.Location = new System.Drawing.Point(0, 0);
-            this.tbxInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbxInput.Margin = new System.Windows.Forms.Padding(0);
             this.tbxInput.Name = "tbxInput";
-            this.tbxInput.Size = new System.Drawing.Size(400, 22);
+            this.tbxInput.Size = new System.Drawing.Size(292, 20);
             this.tbxInput.TabIndex = 0;
             // 
             // btnSelect
             // 
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSelect.Location = new System.Drawing.Point(400, 0);
-            this.btnSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSelect.Location = new System.Drawing.Point(292, 0);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(29, 31);
+            this.btnSelect.Size = new System.Drawing.Size(30, 25);
             this.btnSelect.TabIndex = 1;
             this.btnSelect.Text = "...";
             this.btnSelect.UseVisualStyleBackColor = true;
@@ -56,15 +55,14 @@
             // 
             // FolderInputSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.tbxInput);
             this.Controls.Add(this.btnSelect);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.MinimumSize = new System.Drawing.Size(133, 31);
+            this.MinimumSize = new System.Drawing.Size(100, 24);
             this.Name = "FolderInputSelector";
-            this.Size = new System.Drawing.Size(429, 31);
+            this.Size = new System.Drawing.Size(322, 25);
             this.ResumeLayout(false);
             this.PerformLayout();
 

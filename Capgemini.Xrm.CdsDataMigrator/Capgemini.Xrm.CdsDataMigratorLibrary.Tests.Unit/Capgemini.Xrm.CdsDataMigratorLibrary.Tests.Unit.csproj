@@ -243,8 +243,10 @@
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
     <Compile Include="Extensions\FormControlExtensionsTests.cs" />
+    <Compile Include="Extensions\MockWorkerHostExtensions.cs" />
     <Compile Include="Forms\ExportFilterFormTests.cs" />
     <Compile Include="Forms\FilterEditorTests.cs" />
+    <Compile Include="Forms\ImportMappingsFormTests.cs" />
     <Compile Include="Forms\MappingListLookupTests.cs" />
     <Compile Include="Forms\MappingListTests.cs" />
     <Compile Include="Helpers\ValidationHelpersTests.cs" />
@@ -264,6 +266,8 @@
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
     <Compile Include="Presenters\SchemaGeneratorParameterBagTests.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenterTests.cs" />
+    <Compile Include="Presenters\ImportMappingsFormPresenterTests.cs" />
+    <Compile Include="Presenters\ImportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
     <Compile Include="Services\LogToTextboxServiceTests.cs" />
     <Compile Include="Model\DataMigrationSettingsTests.cs" />
@@ -287,6 +291,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="UserControls\ExportPageTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
+    <Compile Include="UserControls\ImportPageTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />
     <Compile Include="Mocks\MockupForWizardButtons.cs">
       <SubType>UserControl</SubType>

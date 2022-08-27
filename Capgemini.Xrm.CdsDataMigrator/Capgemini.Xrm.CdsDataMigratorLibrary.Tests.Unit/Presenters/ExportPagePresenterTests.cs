@@ -1,5 +1,7 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
@@ -20,6 +22,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         private Mock<IExportPageView> mockExportView;
         private Mock<IWorkerHost> mockWorkerHost;
         private Mock<IDataMigrationService> mockDataMigrationService;
+        private Mock<INotifier> mockNotifier;
         private ExportPagePresenter systemUnderTest;
 
         [TestInitialize]
@@ -28,8 +31,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView = new Mock<IExportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
             mockDataMigrationService = new Mock<IDataMigrationService>();
+            mockNotifier = new Mock<INotifier>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object, mockNotifier.Object);
         }
 
         [TestMethod]
@@ -43,7 +47,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldSetConfigProperties_WhenValidFilePathSelected()
+        public void LoadConfig_ShouldSetConfigPropertiesWhenValidFilePathSelected()
         {
             // Arrange
             var exportConfigFilePath = @"TestData\ExportConfig.json";
@@ -53,7 +57,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -66,10 +70,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Arrange
             mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
-                .Returns("a-random-non-existent-file");
+                .Returns("$a-random-non-existent-file$");
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -77,7 +81,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void LoadConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
+        public void LoadConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockExportView
@@ -85,7 +89,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("");
 
             // Act
-            systemUnderTest.LoadConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -93,7 +97,24 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldUpdateOrCreateConfigFile_WhenValidFilePathSelected()
+        public void LoadConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockExportView
+                .Setup(x => x.AskForFilePathToOpen())
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void SaveConfig_ShouldUpdateOrCreateConfigFileWhenValidFilePathSelected()
         {
             // Arrange
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
@@ -111,7 +132,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -130,7 +151,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
         [TestMethod]
         [Ignore("What is an invalid file?")]
-        public void SaveConfig_ShouldDoNothing_WhenInvalidFilePathSelected()
+        public void SaveConfig_ShouldDoNothingWhenInvalidFilePathSelected()
         {
             // Arrange
             mockExportView
@@ -138,14 +159,14 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("a-random-non-existent-file");
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
         }
 
         [TestMethod]
-        public void SaveConfig_ShouldDoNothing_WhenEmptyFilePathSelected()
+        public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
             mockExportView
@@ -153,7 +174,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns("");
 
             // Act
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
@@ -173,11 +194,28 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 .Returns(exportConfigFilePath);
 
             // Act
-            systemUnderTest.LoadConfig();
-            systemUnderTest.SaveConfig();
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockExportView.VerifyAll();
+        }
+
+        [TestMethod]
+        public void SaveConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
         }
 
         [TestMethod]
@@ -199,7 +237,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
 
             // Act
-            systemUnderTest.RunConfig();
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
             var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
             workInfo.Work(null, null);
 
@@ -222,15 +260,66 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         }
 
         [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockWorkerHost
+                .Setup(x => x.WorkAsync(It.IsAny<WorkAsyncInfo>()))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownInsideWorkerHost()
+        {
+            // Arrange
+            var thrownException = new Exception("Test exception");
+            mockDataMigrationService
+                .Setup(x => x.ExportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmExporterConfig>()))
+                .Throws(thrownException);
+
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowError(thrownException));
+        }
+
+        [TestMethod]
+        public void RunConfig_ShouldNotifySuccessWhenNotExceptionIsThrownInsideWorkerHost()
+        {
+            // Act
+            mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+            mockWorkerHost.ExecuteWork(0);
+
+            // Assert
+            mockExportView.VerifyAll();
+            mockNotifier.Verify(x => x.ShowSuccess("Data export is complete."));
+        }
+
+        [TestMethod]
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsNull()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
-                .SetupGet(x => x.CrmMigrationToolSchemaPath)
+                            .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(() => null);
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -240,12 +329,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsEmpty()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(" ");
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -255,12 +348,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void GetSchemaConfiguration_ShouldReturnNullWhenCrmMigrationToolSchemaPathIsInvalid()
         {
             // Arrange
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns("a-random-non-existent-file");
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeNull();
@@ -271,12 +368,16 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var filePath = @"TestData\BusinessUnitSchema.xml";
+            CrmSchemaConfiguration result = null;
             mockExportView
                 .SetupGet(x => x.CrmMigrationToolSchemaPath)
                 .Returns(filePath);
+            mockExportView
+                .SetupSet(x => x.SchemaConfiguration = It.IsAny<CrmSchemaConfiguration>())
+                .Callback<CrmSchemaConfiguration>(x => result = x);
 
             // Act
-            var result = systemUnderTest.GetSchemaConfiguration();
+            mockExportView.Raise(x => x.SchemaConfigPathChanged += null, EventArgs.Empty);
 
             // Assert
             result.Should().BeEquivalentTo(CrmSchemaConfiguration.ReadFromFile(filePath));

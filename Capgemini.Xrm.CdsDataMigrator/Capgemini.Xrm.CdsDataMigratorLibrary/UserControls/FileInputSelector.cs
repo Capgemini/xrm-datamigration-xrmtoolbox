@@ -11,7 +11,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public FileInputSelector()
         {
             InitializeComponent();
+            tbxInput.TextChanged += (object sender, EventArgs ee) => OnChange?.Invoke(this, EventArgs.Empty);
         }
+
+        public event EventHandler OnChange;
 
         public string Value { 
             get => tbxInput.Text;

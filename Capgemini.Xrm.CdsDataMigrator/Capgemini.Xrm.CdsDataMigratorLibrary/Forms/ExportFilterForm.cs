@@ -13,13 +13,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 {
     public partial class ExportFilterForm : Form, IExportFilterFormView
     {
-        private readonly IExportFilterFormPresenter presenter;
 
-        public ExportFilterForm(IExportFilterFormPresenter presenter = null)
+    public event EventHandler OnVisible;
+    public event EventHandler OnEntitySelected;
+    public event EventHandler OnFilterTextChanged;
+
+    public ExportFilterForm()
         {
             InitializeComponent();
-
-            this.presenter = presenter ?? new ExportFilterFormPresenter(this);
 
             StartPosition = FormStartPosition.CenterParent;
         }
@@ -70,7 +71,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         {
             if (Visible)
             {
-                presenter.OnVisible();
+                this.OnVisible?.Invoke(this, e);
             }
 
             base.OnVisibleChanged(e);
@@ -78,12 +79,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         private void lbxEntityNames_SelectedIndexChanged(object sender, EventArgs e)
         {
-            presenter.OnEntitySelected();
+            this.OnEntitySelected?.Invoke(sender, e);
         }
 
         private void tbxFilterText_TextChanged(object sender, EventArgs e)
         {
-            presenter.UpdateFilterForEntity();
+            this.OnFilterTextChanged?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]

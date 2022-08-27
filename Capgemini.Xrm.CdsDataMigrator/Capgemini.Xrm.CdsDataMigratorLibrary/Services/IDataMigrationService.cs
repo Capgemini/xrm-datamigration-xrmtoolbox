@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Xrm.Sdk;
 
@@ -11,5 +12,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
         void ExportData(IOrganizationService service, DataFormat format, CrmExporterConfig config);
 
         void CancelDataExport();
+
+        void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config);
+
+        void CancelDataImport();
     }
 }
