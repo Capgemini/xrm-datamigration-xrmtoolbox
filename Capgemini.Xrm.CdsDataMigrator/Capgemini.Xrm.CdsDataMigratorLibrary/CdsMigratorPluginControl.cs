@@ -40,15 +40,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
             var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
             this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this);
-            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this); 
+            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this);
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
-        public async override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        public override async void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
-            {   
+            {
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
@@ -94,7 +94,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 base.UpdateConnection(newService, detail, actionName, parameter);
             }
         }
-
 
         public void ShowError(Exception error)
         {
@@ -164,14 +163,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         {
             exportPage1.BringToFront();
         }
- 
+
         private void ShowSchemaManager(object sender, EventArgs e)
         {
             sgpManageSchema.BringToFront();
- 
+        }
+
         private void tsbShowImportPage_Click(object sender, EventArgs e)
         {
-            importPage1.BringToFront(); 
+            importPage1.BringToFront();
         }
     }
 }
