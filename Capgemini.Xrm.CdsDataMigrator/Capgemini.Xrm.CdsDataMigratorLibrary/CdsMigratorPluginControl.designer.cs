@@ -147,7 +147,7 @@
             this.tsbShowImportPage.Name = "tsbShowImportPage";
             this.tsbShowImportPage.Size = new System.Drawing.Size(194, 32);
             this.tsbShowImportPage.Text = "Data Import (new)";
-            this.tsbShowImportPage.Click += new System.EventHandler(this.tsbShowImportPage_Click);
+            this.tsbShowImportPage.Click += new System.EventHandler(this.ShowImportPage_Click);
 
             // 
             // tsbShowExportPage
@@ -157,7 +157,7 @@
             this.tsbShowExportPage.Name = "tsbShowExportPage";
             this.tsbShowExportPage.Size = new System.Drawing.Size(191, 32);
             this.tsbShowExportPage.Text = "Data Export (new)";
-            this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
+            this.tsbShowExportPage.Click += new System.EventHandler(this.ShowExportPage_Click);
             // 
             // sgpManageSchema
             // 

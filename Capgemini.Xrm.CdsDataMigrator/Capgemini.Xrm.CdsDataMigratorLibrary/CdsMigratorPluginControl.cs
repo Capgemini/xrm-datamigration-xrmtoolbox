@@ -23,9 +23,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         private readonly Settings settings;
 
         private SchemaGeneratorPresenter schemaGeneratorPresenter;
-        private IDataMigrationService dataMigrationService;
-        private ILogManager loggerService;
-        private ICrmGenericMigratorFactory migratorFactory;
 
         public CdsMigratorPluginControl()
         {
@@ -159,7 +156,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             DataExportWizard.BringToFront();
         }
 
-        private void tsbShowExportPage_Click(object sender, EventArgs e)
+        private void ShowExportPage_Click(object sender, EventArgs e)
         {
             exportPage1.BringToFront();
         }
@@ -169,7 +166,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             sgpManageSchema.BringToFront();
         }
 
-        private void tsbShowImportPage_Click(object sender, EventArgs e)
+        private void ShowImportPage_Click(object sender, EventArgs e)
         {
             importPage1.BringToFront();
         }

@@ -56,17 +56,30 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             AttributeSelected?.Invoke(this, e);
         }
+
         private void RelationshipListViewItemCheck(object sender, MigratorEventArgs<ItemCheckEventArgs> e)
         {
             RelationshipSelected?.Invoke(this, e);
         }
 
         public event EventHandler ShowSystemEntitiesChanged;
+
         public event EventHandler<MigratorEventArgs<EntityMetadata>> CurrentSelectedEntityChanged;
+
         public event EventHandler<MigratorEventArgs<int>> SortAttributesList;
+
         public event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> AttributeSelected;
+
         public event EventHandler<MigratorEventArgs<int>> SortRelationshipList;
+
         public event EventHandler<MigratorEventArgs<ItemCheckEventArgs>> RelationshipSelected;
+
+        public event EventHandler RetrieveEntities;
+
+        public event EventHandler<MigratorEventArgs<string>> LoadSchema;
+
+        public event EventHandler<MigratorEventArgs<string>> SaveSchema;
+
         public event EventHandler<MigratorEventArgs<TreeNode>> EntitySelected;
 
         public List<EntityMetadata> EntityMetadataList
@@ -80,19 +93,28 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         public Dictionary<string, HashSet<string>> EntityRelationships { get; set; }
+
         public bool ShowSystemAttributes { get; set; }
 
         public ListView EntityAttributeList => lmvAttributes.ListView;
+
         public ListView EntityRelationshipList => lmvRelationships.ListView;
+
         public TreeView EntityList => entityListView1.EntityList;
 
         public List<EntityMetadata> SelectedEntities => entityListView1.SelectedEntities;
 
         public string CurrentConnection { get => tsbtCurrentConnection.Text; set => tsbtCurrentConnection.Text = value; }
 
-        public event EventHandler RetrieveEntities;
-        public event EventHandler<MigratorEventArgs<string>> LoadSchema;
-        public event EventHandler<MigratorEventArgs<string>> SaveSchema;
+        public void ShowInformationPanel(string message, int width = 340, int height = 150)
+        {
+            informationPanel = InformationPanel.GetInformationPanel(this, message, width, height);
+        }
+
+        public void CloseInformationPanel()
+        {
+            informationPanel?.Dispose();
+        }
 
         private void RefreshEntitiesButtonClick(object sender, EventArgs e)
         {
@@ -101,9 +123,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         private void LoadSchemaButtonClick(object sender, EventArgs e)
         {
-            using(var fileDialog = new System.Windows.Forms.OpenFileDialog())
+            using (var fileDialog = new System.Windows.Forms.OpenFileDialog())
             {
-                if (fileDialog.ShowDialog() ==DialogResult.OK)
+                if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var file = fileDialog.FileName;
                     LoadSchema?.Invoke(sender, new MigratorEventArgs<string>(file));
@@ -120,17 +142,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
                     var file = fileDialog.FileName;
                     SaveSchema?.Invoke(sender, new MigratorEventArgs<string>(file));
                 }
-            }            
-        }
-
-        public void ShowInformationPanel(string mesage, int width = 340, int height = 150)
-        {
-           informationPanel =  InformationPanel.GetInformationPanel(this, mesage, width, height);
-        }
-
-        public void CloseInformationPanel()
-        {
-            informationPanel?.Dispose();
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -219,13 +221,52 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         }
 
         [TestMethod]
-        public void PopulateAttributes()
+        public void PopulateAttributesWithNullViewProperties()
         {
             string entityLogicalName = "case";
 
             FluentActions.Invoking(() => systemUnderTest.PopulateAttributes(entityLogicalName, serviceParameters))
                         .Should()
                         .NotThrow();
+        }
+
+        [TestMethod]
+        public void PopulateAttributes()
+        {
+            string entityLogicalName = "case";
+
+            var entityResultList = InstantiateEntityMetaData(entityLogicalName);
+            InsertAttributeList(entityResultList, new List<string> { "column1", "column2" });
+
+            MetadataServiceMock.Setup(a => a.RetrieveEntities(It.IsAny<string>(),
+                                                              It.IsAny<IOrganizationService>(),
+                                                              It.IsAny<IExceptionService>()))
+                           .Returns(entityResultList);
+
+            using (var entityList = new System.Windows.Forms.TreeView())
+            {
+                using (var entityAttributeList = new System.Windows.Forms.ListView())
+                {
+                    using (var entityRelationshipList = new System.Windows.Forms.ListView())
+                    {
+                        view.SetupGet(a => a.EntityList).Returns(entityList);
+                        view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
+                        view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
+
+                        FluentActions.Invoking(() => systemUnderTest.PopulateAttributes(entityLogicalName, serviceParameters))
+                        .Should()
+                        .NotThrow();
+                    }
+                }
+            }
+
+            view.VerifyGet(a => a.ShowSystemAttributes);
+            MetadataServiceMock.Verify(a => a.RetrieveEntities(It.IsAny<string>(),
+                                                              It.IsAny<IOrganizationService>(),
+                                                              It.IsAny<IExceptionService>()));
+            ServiceMock.Verify();
+            NotificationServiceMock.VerifyAll();
+            ExceptionServicerMock.VerifyAll();
         }
 
         [TestMethod]

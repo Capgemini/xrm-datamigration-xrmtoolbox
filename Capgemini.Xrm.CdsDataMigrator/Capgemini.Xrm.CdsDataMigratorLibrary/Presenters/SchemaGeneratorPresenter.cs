@@ -198,33 +198,30 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         public async Task PopulateAttributes(string entityLogicalName, ServiceParameters serviceParameters)
         {
-            if (!workingstate)
+            if (!workingstate && View != null && View.EntityAttributeList != null)
             {
-                if (View != null && View.EntityAttributeList != null)
+                View.EntityAttributeList.Items.Clear();
+
+                Exception error = null;
+                List<ListViewItem> result = null;
+
+                await Task.Run(() =>
                 {
-                    View.EntityAttributeList.Items.Clear();
-
-                    Exception error = null;
-                    List<ListViewItem> result = null;
-
-                    await Task.Run(() =>
+                    try
                     {
-                        try
-                        {
-                            var unmarkedattributes = settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
-                            var attributes = serviceParameters.GetAttributeList(entityLogicalName, View.ShowSystemAttributes);
-                            result = attributes.ProcessAllAttributeMetadata(unmarkedattributes, entityLogicalName, ParameterBag.EntityAttributes);
-                        }
-                        catch (Exception ex)
-                        {
-                            error = ex;
-                        }
-                    });
+                        var unmarkedattributes = settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
+                        var attributes = serviceParameters.GetAttributeList(entityLogicalName, View.ShowSystemAttributes);
+                        result = attributes.ProcessAllAttributeMetadata(unmarkedattributes, entityLogicalName, ParameterBag.EntityAttributes);
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex;
+                    }
+                });
 
-                    var e = new RunWorkerCompletedEventArgs(result, error, false);
-                    View.EntityAttributeList.OnPopulateCompletedAction(e, notificationService, null, View.ShowSystemAttributes);
-                    ManageWorkingState(false);
-                }
+                var e = new RunWorkerCompletedEventArgs(result, error, false);
+                View.EntityAttributeList.OnPopulateCompletedAction(e, notificationService, null, View.ShowSystemAttributes);
+                ManageWorkingState(false);
             }
         }
 
