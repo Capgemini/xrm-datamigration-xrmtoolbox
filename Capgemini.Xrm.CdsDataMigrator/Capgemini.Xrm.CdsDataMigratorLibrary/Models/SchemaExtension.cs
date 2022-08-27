@@ -121,19 +121,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             if (inputEntityAttributes != null && inputEntityAttributes.ContainsKey(entityMetadata.LogicalName))
             {
                 var crmField = new CrmField();
-                foreach (var attributeLogicalName in inputEntityAttributes[entityMetadata.LogicalName])
+                foreach (var _ in inputEntityAttributes[entityMetadata.LogicalName]
+                                            .Where(attributeLogicalName => attribute.LogicalName.Equals(attributeLogicalName, StringComparison.InvariantCulture))
+                                                .Select(attributeLogicalName => new { }))
                 {
-                    if (attribute.LogicalName.Equals(attributeLogicalName, StringComparison.InvariantCulture))
-                    {
-                        crmField.DisplayName = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
-                        crmField.FieldName = attribute.LogicalName;
-                        attributeMapping.AttributeMetadataType = attribute.AttributeTypeName.Value.ToString(CultureInfo.InvariantCulture);
-                        attributeMapping.GetMapping(notificationService);
-                        crmField.FieldType = attributeMapping.AttributeMetadataTypeResult;
-                        StoreLookUpAttribute(attribute, crmField, notificationService);
-                        StoreAttributePrimaryKey(primaryAttribute, crmField);
-                        crmFieldList.Add(crmField);
-                    }
+                    crmField.DisplayName = attribute.DisplayName.UserLocalizedLabel == null ? string.Empty : attribute.DisplayName.UserLocalizedLabel.Label;
+                    crmField.FieldName = attribute.LogicalName;
+                    attributeMapping.AttributeMetadataType = attribute.AttributeTypeName.Value.ToString(CultureInfo.InvariantCulture);
+                    attributeMapping.GetMapping(notificationService);
+                    crmField.FieldType = attributeMapping.AttributeMetadataTypeResult;
+                    StoreLookUpAttribute(attribute, crmField, notificationService);
+                    StoreAttributePrimaryKey(primaryAttribute, crmField);
+                    crmFieldList.Add(crmField);
                 }
             }
         }

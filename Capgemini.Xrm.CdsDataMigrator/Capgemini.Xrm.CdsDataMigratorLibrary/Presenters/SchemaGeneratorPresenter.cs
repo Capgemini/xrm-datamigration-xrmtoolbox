@@ -140,7 +140,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                notificationService.DisplayFeedback($"Please specify the Schema File to load!");
+                notificationService.DisplayFeedback("Please specify the Schema File to load!");
             }
         }
 

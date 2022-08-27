@@ -20,7 +20,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             entityListView1.ShowSystemEntitiesChanged += EntityListViewShowSystemEntitiesChanged;
             entityListView1.CurrentSelectedEntityChanged += EntityListViewCurrentSelectedEntityChanged;
-            entityListView1.EntitySelected += HandleEntityListViewEntitySelected; ;
+            entityListView1.EntitySelected += HandleEntityListViewEntitySelected;
             lmvAttributes.ListViewColumnClick += AttributesListViewColumnClick;
             lmvAttributes.ListViewItemCheck += AttributesListViewItemCheck;
             lmvRelationships.ListViewColumnClick += RelationshipListViewColumnClick;
