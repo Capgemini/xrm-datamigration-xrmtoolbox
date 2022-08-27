@@ -20,17 +20,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
             {
                 systemUnderTest.ListView.Items.Count.Should().Be(0);
             }
-        }
-
-
-        //[TestMethod]
-        //public void ListViewColumnClick()
-        //{
-        //    using (var systemUnderTest = new ListManagerView())
-        //    {
-        //        systemUnderTest.ListViewColumnClick += (x, y) => {   };
-        //    }
-        //}
-
+        } 
     }
 }

@@ -378,7 +378,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
         {
             var entityitem = View.EntityList.SelectedNode;
-            //var enityExtension = new EntityMetadataExtension();
             var logicalName = entityitem.GetEntityLogicalName();
             await HandleListViewEntitiesSelectedIndexChanged(ParameterBag.EntityRelationships, logicalName, ParameterBag.SelectedEntity);
         }

@@ -152,26 +152,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             inputEntityRelationships[$"TestEntity{index}"].Count.Should().Be(maxRelationships);
         }
 
-        //[TestMethod]
-        //public void StoreCrmEntityData()
-        //{
-        //    var entityLogicalName = "contact";
-        //    var attributeSet = new HashSet<string>() { "contactId", "firstname", "lastname" };
-        //    inputEntityAttributes.Add(entityLogicalName, attributeSet);
-        //    var inputAttributeMapping = new AttributeTypeMapping();
-
-        //    var entityMetadata = InstantiateEntityMetaData(entityLogicalName);
-        //    InsertAttributeList(entityMetadata, new List<string> { "contactId", "firstname", "lastname" });
-
-        //    var crmEntity = new CrmEntity();
-        //    var crmEntityList = new List<CrmEntity>();
-
-        //    FluentActions.Invoking(() => crmEntityList.StoreCrmEntityData(crmEntity, entityMetadata, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, NotificationServiceMock.Object))
-        //                         .Should()
-        //                         .NotThrow();
-
-        //    crmEntityList.Count.Should().Be(1);
-        //}
-
     }
 }

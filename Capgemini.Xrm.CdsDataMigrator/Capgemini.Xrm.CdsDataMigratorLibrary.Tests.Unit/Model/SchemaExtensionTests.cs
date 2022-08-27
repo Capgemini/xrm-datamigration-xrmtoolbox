@@ -36,17 +36,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
             systemUnderTest = new SchemaExtension();
         }
 
-        //[TestInitialize]
-        //public void Setup()
-        //{
-        //    SetupServiceMocks();
-        //    inputEntityRelationships = new Dictionary<string, HashSet<string>>();
-        //    inputEntityAttributes = new Dictionary<string, HashSet<string>>();
-        //    inputCheckedEntity = new HashSet<string>();
-
-        //    systemUnderTest = new SchemaExtension();
-        //}
-
         [TestMethod]
         public void SchemaFolderPathActionWithDialogResultCancel()
         {

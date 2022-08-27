@@ -400,7 +400,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     bwFill.DoWork += (sender, e) =>
                     {
                         var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
-                        //var controller = new EntityMetadataExtension();
                         e.Result = serviceParameters.RetrieveSourceEntitiesListToBeDeleted(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes);
                     };
                     bwFill.RunWorkerCompleted += (sender, e) =>
