@@ -95,7 +95,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-
         public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)
         {
             if (!workingstate)
@@ -251,7 +250,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
-
         public void HandleMappingControlItemClick(INotificationService notificationService, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
         {
             if (listViewItemIsSelected)
@@ -360,7 +358,33 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             }
         }
 
+        public void StoreAttributeIfRequiresKey(string logicalName, ItemCheckEventArgs e, Dictionary<string, HashSet<string>> inputEntityAttributes, string inputEntityLogicalName)
+        {
+            var attributeSet = new HashSet<string>();
+            if (e.CurrentValue.ToString() != "Checked")
+            {
+                attributeSet.Add(logicalName);
+            }
 
+            inputEntityAttributes.Add(inputEntityLogicalName, attributeSet);
+        }
+
+        public void StoreAttriubteIfKeyExists(string logicalName, ItemCheckEventArgs e, Dictionary<string, HashSet<string>> inputEntityAttributes, string inputEntityLogicalName)
+        {
+            var attributeSet = inputEntityAttributes[inputEntityLogicalName];
+
+            if (e.CurrentValue.ToString() == "Checked")
+            {
+                if (attributeSet.Contains(logicalName))
+                {
+                    attributeSet.Remove(logicalName);
+                }
+            }
+            else
+            {
+                attributeSet.Add(logicalName);
+            }
+        }
 
         private void PopulateEntities(bool working)
         {
@@ -439,15 +463,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var indexNumber = e.Index;
             var logicalName = lvAttributes.Items[indexNumber].SubItems[1].Text;
-            var controller = new AttributeMetadataExtension();
 
             if (entityAttributes.ContainsKey(entityLogicalName))
             {
-                controller.StoreAttriubteIfKeyExists(logicalName, e, entityAttributes, entityLogicalName);
+                StoreAttriubteIfKeyExists(logicalName, e, entityAttributes, entityLogicalName);
             }
             else
             {
-                controller.StoreAttributeIfRequiresKey(logicalName, e, entityAttributes, entityLogicalName);
+                StoreAttributeIfRequiresKey(logicalName, e, entityAttributes, entityLogicalName);
             }
         }
 
@@ -618,7 +641,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
 
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
-            var metadataExtensionBase = new MetadataExtensionBase();
+            var metadataExtensionBase = new SchemaExtension();
             metadataExtensionBase.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
 
             var schemaController = new SchemaExtension();

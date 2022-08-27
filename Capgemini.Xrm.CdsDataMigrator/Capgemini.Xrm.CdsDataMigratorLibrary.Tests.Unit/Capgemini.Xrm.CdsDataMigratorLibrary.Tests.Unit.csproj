@@ -230,12 +230,8 @@
     <Compile Include="Extensions\TreeNodeExtensionsTests.cs" />
     <Compile Include="Extensions\TreeViewExtensionsTests.cs" />
     <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
-    <Compile Include="MetadataExtensions\AttributeMetadataExtensionTests.cs" />
-    <Compile Include="MetadataExtensions\ConfigurationExtensionTests.cs" />
-    <Compile Include="MetadataExtensions\MetadataExtensionBaseTests.cs" />
-    <Compile Include="MetadataExtensions\EntityMetadataExtensionTests.cs" />
-    <Compile Include="MetadataExtensions\RelationshipMetadataExtensionTests.cs" />
-    <Compile Include="MetadataExtensions\SchemaExtensionTests.cs" />
+    <Compile Include="Model\ConfigurationExtensionTests.cs" />
+    <Compile Include="Model\SchemaExtensionTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
@@ -289,7 +285,6 @@
     <Compile Include="Services\LogToFileServiceTests.cs" />
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="MetadataExtensions\ListViewExtensionTests.cs" />
     <Compile Include="UserControls\ExportPageTests.cs" />
     <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportWizardTests.cs" />

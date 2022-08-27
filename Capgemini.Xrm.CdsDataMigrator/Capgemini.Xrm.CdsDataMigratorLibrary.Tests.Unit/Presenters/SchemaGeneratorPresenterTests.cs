@@ -26,17 +26,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         {
             SetupServiceMocks();
 
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
             view = new Mock<ISchemaGeneratorView>();
             settings = new Settings();
 
-            systemUnderTest =
-                new SchemaGeneratorPresenter(
-                                    view.Object,
-                                    ServiceMock.Object,
-                                    MetadataServiceMock.Object,
-                                    NotificationServiceMock.Object,
-                                    ExceptionServicerMock.Object,
-                                    settings);
+            systemUnderTest = new SchemaGeneratorPresenter(
+                                  view.Object,
+                                  ServiceMock.Object,
+                                  MetadataServiceMock.Object,
+                                  NotificationServiceMock.Object,
+                                  ExceptionServicerMock.Object,
+                                  settings);
 
             serviceParameters = new ServiceParameters(ServiceMock.Object, MetadataServiceMock.Object, NotificationServiceMock.Object, ExceptionServicerMock.Object);
         }
@@ -191,8 +192,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             var inputEntityLogicalName = "account_contact";
             var inputSelectedEntity = new HashSet<string>();
 
-            FluentActions.Awaiting(() =>
-                systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(inputEntityRelationships, inputEntityLogicalName, inputSelectedEntity)
+            FluentActions.Awaiting(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(
+                inputEntityRelationships,
+                inputEntityLogicalName,
+                inputSelectedEntity)
                     )
                     .Should()
                     .NotThrow();
@@ -201,8 +204,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         [TestMethod]
         public void ManageWorkingStateTrue()
         {
-            FluentActions.Invoking(() =>
-systemUnderTest.ManageWorkingState(true)
+            FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(true)
                 )
                 .Should()
                 .NotThrow();
@@ -312,6 +314,103 @@ systemUnderTest.ManageWorkingState(true)
                          .NotThrow();
 
             selectedEntity.Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Count.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsInputEntityAttributesDoesNotContainEntityLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .Throw<KeyNotFoundException>();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsCheckedAndAttributeSetAlreadyContainsLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>() { attributeLogicalName };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+            inputEntityAttributes.Count.Should().Be(1);
+            inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeTrue();
         }
     }
 }

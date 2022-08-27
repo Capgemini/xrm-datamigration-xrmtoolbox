@@ -1,23 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
-using System.Linq;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Model;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using NuGet;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -42,7 +25,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
             return attributes;
         }
 
-        public static List<ListViewItem> ProcessAllAttributeMetadata(this List<AttributeMetadata> attributes, List<string> unmarkedattributes,  string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityAttributes)
+        public static List<ListViewItem> ProcessAllAttributeMetadata(this List<AttributeMetadata> attributes, List<string> unmarkedattributes, string inputEntityLogicalName, Dictionary<string, HashSet<string>> inputEntityAttributes)
         {
             List<ListViewItem> sourceAttributesList = new List<ListViewItem>();
             foreach (AttributeMetadata attribute in attributes)
@@ -60,14 +43,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
             return sourceAttributesList;
         }
 
-
         private static void AddAttribute(AttributeMetadata attribute, ListViewItem item, string typename)
         {
             item.Tag = attribute;
             item.SubItems.Add(attribute.LogicalName);
             item.SubItems.Add(typename.EndsWith("Type", StringComparison.Ordinal) ? typename.Substring(0, typename.LastIndexOf("Type", StringComparison.Ordinal)) : typename);
         }
-
-
     }
 }

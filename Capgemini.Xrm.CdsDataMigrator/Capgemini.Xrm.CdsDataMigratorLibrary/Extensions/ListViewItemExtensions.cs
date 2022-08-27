@@ -1,12 +1,12 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk.Metadata;
-using System.Collections.Generic;
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
 {
@@ -94,7 +94,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
             listview.ListViewItemSorter = new ListViewItemComparer(column, listview.Sorting);
         }
 
-        public static void OnPopulateCompletedAction(this ListView listView, RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner,  bool showSystemAttributes)
+        public static void OnPopulateCompletedAction(this ListView listView, RunWorkerCompletedEventArgs e, INotificationService notificationService, IWin32Window owner, bool showSystemAttributes)
         {
             if (e?.Error != null)
             {
@@ -115,7 +115,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
             }
         }
 
-        public static void UpdateAttributeMetadataCheckBoxes(this ListViewItem item,string predicate,  Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
+        public static void UpdateAttributeMetadataCheckBoxes(this ListViewItem item, string predicate, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
         {
             if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
             {
@@ -204,6 +204,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
                 item.ForeColor = Color.DarkBlue;
             }
         }
-
     }
 }

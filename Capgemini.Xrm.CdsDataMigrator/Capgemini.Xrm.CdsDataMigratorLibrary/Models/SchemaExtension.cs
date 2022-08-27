@@ -1,17 +1,11 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Model;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
-using NuGet;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,8 +13,50 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
-    public class MetadataExtensionBase
+    public class SchemaExtension
     {
+        public bool AreCrmEntityFieldsSelected(HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, ServiceParameters serviceParameters)
+        {
+            var fieldsSelected = false;
+            if (inputCheckedEntity.Count > 0)
+            {
+                var crmEntityList = new List<CrmEntity>();
+
+                foreach (var item in inputCheckedEntity)
+                {
+                    var crmEntity = new CrmEntity();
+                    var sourceList = serviceParameters.MetadataService.RetrieveEntities(item, serviceParameters.OrganizationService, serviceParameters.ExceptionService);
+                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters.NotificationService);
+
+                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
+                    {
+                        fieldsSelected = true;
+                    }
+                    else
+                    {
+                        fieldsSelected = false;
+                        break;
+                    }
+                }
+            }
+
+            return fieldsSelected;
+        }
+
+        public void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, INotificationService notificationService)
+        {
+            crmEntity.Name = sourceList.LogicalName;
+
+            crmEntity.DisplayName = sourceList.DisplayName?.UserLocalizedLabel == null ? string.Empty : sourceList.DisplayName.UserLocalizedLabel.Label;
+
+            crmEntity.EntityCode = sourceList.ObjectTypeCode.ToString();
+            crmEntity.PrimaryIdField = sourceList.PrimaryIdAttribute;
+            crmEntity.PrimaryNameField = sourceList.PrimaryNameAttribute;
+            CollectCrmEntityRelationShip(sourceList, crmEntity, inputEntityRelationships);
+            CollectCrmAttributesFields(sourceList, crmEntity, inputEntityAttributes, inputAttributeMapping, notificationService);
+            crmEntityList.Add(crmEntity);
+        }
+
         public void CollectCrmEntityRelationShip(EntityMetadata sourceList, CrmEntity crmEntity, Dictionary<string, HashSet<string>> inputEntityRelationships)
         {
             var manyToManyRelationship = sourceList.ManyToManyRelationships;
@@ -130,48 +166,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public bool AreCrmEntityFieldsSelected(HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, ServiceParameters serviceParameters)
-        {
-            var fieldsSelected = false;
-            if (inputCheckedEntity.Count > 0)
-            {
-                var crmEntityList = new List<CrmEntity>();
-
-                foreach (var item in inputCheckedEntity)
-                {
-                    var crmEntity = new CrmEntity();
-                    var sourceList = serviceParameters.MetadataService.RetrieveEntities(item, serviceParameters.OrganizationService, serviceParameters.ExceptionService);
-                    StoreCrmEntityData(crmEntity, sourceList, crmEntityList, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters.NotificationService);
-
-                    if (crmEntity.CrmFields != null && crmEntity.CrmFields.Any())
-                    {
-                        fieldsSelected = true;
-                    }
-                    else
-                    {
-                        fieldsSelected = false;
-                        break;
-                    }
-                }
-            }
-
-            return fieldsSelected;
-        }
-
-        public void StoreCrmEntityData(CrmEntity crmEntity, EntityMetadata sourceList, List<CrmEntity> crmEntityList, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, INotificationService notificationService)
-        {
-            crmEntity.Name = sourceList.LogicalName;
-
-            crmEntity.DisplayName = sourceList.DisplayName?.UserLocalizedLabel == null ? string.Empty : sourceList.DisplayName.UserLocalizedLabel.Label;
-
-            crmEntity.EntityCode = sourceList.ObjectTypeCode.ToString();
-            crmEntity.PrimaryIdField = sourceList.PrimaryIdAttribute;
-            crmEntity.PrimaryNameField = sourceList.PrimaryNameAttribute;
-            CollectCrmEntityRelationShip(sourceList, crmEntity, inputEntityRelationships);
-            CollectCrmAttributesFields(sourceList, crmEntity, inputEntityAttributes, inputAttributeMapping, notificationService);
-            crmEntityList.Add(crmEntity);
-        }
-
         public void CollectCrmEntityFields(HashSet<string> inputCheckedEntity, CrmSchemaConfiguration schemaConfiguration, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, ServiceParameters serviceParameters)
         {
             if (inputCheckedEntity.Count > 0)
@@ -190,23 +184,42 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        //public void UpdateAttributeMetadataCheckBoxes(string predicate, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
-        //{
-        //    if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
-        //    {
-        //        foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
-        //        {
-        //            item.Checked |= attr.Equals(predicate, StringComparison.InvariantCulture);
-        //        }
-        //    }
-        //}
+        public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, CollectionParameters collectionParameters, DialogResult dialogResult, SaveFileDialog fileDialog,
+    Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
+    )
+        {
+            if (dialogResult == DialogResult.OK)
+            {
+                schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
 
-        //protected static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
-        //{
-        //    item.SubItems.Add(relationship.IntersectEntityName);
-        //    item.SubItems.Add(relationship.Entity2LogicalName);
-        //    item.SubItems.Add(relationship.Entity2IntersectAttribute);
-        //    sourceAttributesList.Add(item);
-        //}
+                if (File.Exists(schemaPathTextBox.Text))
+                {
+                    loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
+                }
+            }
+        }
+
+        public void SaveSchema(ServiceParameters serviceParameters, HashSet<string> inputCheckedEntity, Dictionary<string, HashSet<string>> inputEntityRelationships, Dictionary<string, HashSet<string>> inputEntityAttributes, AttributeTypeMapping inputAttributeMapping, CrmSchemaConfiguration inputCrmSchemaConfiguration, string schemaPath)
+        {
+            if (AreCrmEntityFieldsSelected(inputCheckedEntity, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters))
+            {
+                CollectCrmEntityFields(inputCheckedEntity, inputCrmSchemaConfiguration, inputEntityRelationships, inputEntityAttributes, inputAttributeMapping, serviceParameters);
+
+                GenerateXmlFile(schemaPath, inputCrmSchemaConfiguration);
+                inputCrmSchemaConfiguration.Entities.Clear();
+            }
+            else
+            {
+                serviceParameters.NotificationService.DisplayFeedback("Please select at least one attribute for each selected entity!");
+            }
+        }
+
+        public void GenerateXmlFile(string schemaFilePath, CrmSchemaConfiguration schemaConfiguration)
+        {
+            if (!string.IsNullOrWhiteSpace(schemaFilePath))
+            {
+                schemaConfiguration.SaveToFile(schemaFilePath);
+            }
+        }
     }
 }

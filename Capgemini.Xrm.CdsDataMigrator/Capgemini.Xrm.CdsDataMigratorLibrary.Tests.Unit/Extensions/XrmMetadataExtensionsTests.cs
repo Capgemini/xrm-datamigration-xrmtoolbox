@@ -3,33 +3,20 @@ using System.Collections.Generic;
 using Microsoft.Xrm.Sdk.Metadata;
 using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using FluentAssertions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 {
     [TestClass()]
     public class XrmMetadataExtensionsTests : TestBase
     {
-
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
-
-        private AttributeMetadataExtension systemUnderTest;
 
         [TestInitialize]
         public void Setup()
         {
             SetupServiceMocks();
-            inputEntityAttributes = new Dictionary<string, HashSet<string>>(); 
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
         }
 
         [TestMethod]
@@ -56,7 +43,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             actual.Count.Should().Be(0);
         }
 
-
         [TestMethod]
         public void ProcessAllAttributeMetadata()
         {
@@ -75,10 +61,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
                 }
             };
 
-            var actual = attributeList.ProcessAllAttributeMetadata(unmarkedattributes,  entityLogicalName, inputEntityAttributes);
+            var actual = attributeList.ProcessAllAttributeMetadata(unmarkedattributes, entityLogicalName, inputEntityAttributes);
 
             actual.Count.Should().BeGreaterThan(0);
         }
-
     }
 }
