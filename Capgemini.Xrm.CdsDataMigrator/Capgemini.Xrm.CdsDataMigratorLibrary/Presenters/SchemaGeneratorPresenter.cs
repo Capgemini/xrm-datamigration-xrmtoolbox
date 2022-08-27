@@ -275,17 +275,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
                 var systemAttributes = View.ShowSystemAttributes;
                 List<TreeNode> entityList = new List<TreeNode>();
-                var controller = new EntityMetadataExtension();
+                var entityMetadataExtender = new EntityMetadataExtension();
                 Exception exception = null;
 
                 await Task.Run(() =>
                     {
                         var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
 
-                        entityList = controller.RetrieveSourceEntitiesList(systemAttributes, ParameterBag.CachedMetadata, ParameterBag.EntityAttributes, serviceParameters);
+                        entityList = entityMetadataExtender.RetrieveSourceEntitiesList(systemAttributes, ParameterBag.CachedMetadata, ParameterBag.EntityAttributes, serviceParameters);
                     });
 
-                controller.PopulateEntitiesListView(entityList, exception, null, View.EntityList, notificationService);
+                entityMetadataExtender.PopulateEntitiesListView(entityList, exception, null, View.EntityList, notificationService);
                 ManageWorkingState(false);
             }
         }
