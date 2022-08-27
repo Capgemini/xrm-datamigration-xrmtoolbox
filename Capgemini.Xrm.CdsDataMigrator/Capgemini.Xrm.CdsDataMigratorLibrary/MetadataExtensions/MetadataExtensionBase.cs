@@ -190,23 +190,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
             }
         }
 
-        public void UpdateAttributeMetadataCheckBoxes(string predicate, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
-        {
-            if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
-            {
-                foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
-                {
-                    item.Checked |= attr.Equals(predicate, StringComparison.InvariantCulture);
-                }
-            }
-        }
+        //public void UpdateAttributeMetadataCheckBoxes(string predicate, ListViewItem item, Dictionary<string, HashSet<string>> inputEntityRelationships, string inputEntityLogicalName)
+        //{
+        //    if (inputEntityRelationships.ContainsKey(inputEntityLogicalName))
+        //    {
+        //        foreach (string attr in inputEntityRelationships[inputEntityLogicalName])
+        //        {
+        //            item.Checked |= attr.Equals(predicate, StringComparison.InvariantCulture);
+        //        }
+        //    }
+        //}
 
-        protected static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
-        {
-            item.SubItems.Add(relationship.IntersectEntityName);
-            item.SubItems.Add(relationship.Entity2LogicalName);
-            item.SubItems.Add(relationship.Entity2IntersectAttribute);
-            sourceAttributesList.Add(item);
-        }
+        //protected static void AddRelationship(ManyToManyRelationshipMetadata relationship, ListViewItem item, List<ListViewItem> sourceAttributesList)
+        //{
+        //    item.SubItems.Add(relationship.IntersectEntityName);
+        //    item.SubItems.Add(relationship.Entity2LogicalName);
+        //    item.SubItems.Add(relationship.Entity2IntersectAttribute);
+        //    sourceAttributesList.Add(item);
+        //}
     }
 }

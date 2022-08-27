@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using System.ComponentModel;
 using Capgemini.Xrm.DataMigration.Config;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -115,9 +117,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 try
                 {
                     var crmSchema = CrmSchemaConfiguration.ReadFromFile(schemaFilePath);
-                    var controller = new EntityMetadataExtension();
-                    View.ShowInformationPanel("Loading entities...", 340, 150);
-                    controller.StoreEntityData(crmSchema.Entities?.ToArray(), inputEntityAttributes, inputEntityRelationships);
+                      View.ShowInformationPanel("Loading entities...", 340, 150);
+                    crmSchema.Entities?.StoreEntityData(inputEntityAttributes, inputEntityRelationships);
                     ClearAllListViews();
                     await PopulateEntities(working);
 
@@ -150,8 +151,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             await PopulateAttributes(inputEntityLogicalName, serviceParameters);
 
             await PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, serviceParameters);
-            var enityExtension = new EntityMetadataExtension();
-            enityExtension.AddSelectedEntities(View.SelectedEntities.Count, inputEntityLogicalName, inputSelectedEntity);
+             AddSelectedEntities(View.SelectedEntities.Count, inputEntityLogicalName, inputSelectedEntity);
+        }
+
+        public void AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
+        {
+            if (selectedItemsCount > 0 &&
+                !(
+                    string.IsNullOrEmpty(inputEntityLogicalName) &&
+                    inputSelectedEntity.Contains(inputEntityLogicalName)
+                  )
+                )
+            {
+                inputSelectedEntity.Add(inputEntityLogicalName);
+            }
         }
 
         public void ManageWorkingState(bool working)
@@ -174,12 +187,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
                 await Task.Run(() =>
                 {
-                    var attributeController = new AttributeMetadataExtension();
+                    //var attributeController = new AttributeMetadataExtension();
                     try
                     {
                         var unmarkedattributes = settings[organisationId.ToString()][entityLogicalName].UnmarkedAttributes;
-                        var attributes = attributeController.GetAttributeList(entityLogicalName, View.ShowSystemAttributes, serviceParameters);
-                        result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, ParameterBag.EntityAttributes);
+                        var attributes = serviceParameters.GetAttributeList(entityLogicalName, View.ShowSystemAttributes);
+                        result = attributes.ProcessAllAttributeMetadata(unmarkedattributes,  entityLogicalName, ParameterBag.EntityAttributes);
 
                     }
                     catch (Exception ex)
@@ -187,9 +200,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         error = ex;
                     }
                 });
-                var controller = new ListViewExtension();
+
                 var e = new RunWorkerCompletedEventArgs(result, error, false);
-                controller.OnPopulateCompletedAction(e, notificationService, null, View.EntityAttributeList, View.ShowSystemAttributes);
+                View.EntityAttributeList.OnPopulateCompletedAction(e, notificationService, null,  View.ShowSystemAttributes);
                 ManageWorkingState(false);
             }
         }
@@ -203,12 +216,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 List<ListViewItem> result = null;
 
                 await Task.Run(() =>
-                {
-                    var controller = new RelationshipMetadataExtension();
-
+                {                   
                     try
                     {
-                        result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
+                        result = migratorParameters.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
                     }
                     catch (Exception ex)
                     {
@@ -217,8 +228,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 });
 
                 var e = new RunWorkerCompletedEventArgs(result, error, false);
-                var listViewExtension = new ListViewExtension();
-                listViewExtension.OnPopulateCompletedAction(e, notificationService, null, View.EntityRelationshipList, View.ShowSystemAttributes);
+                
+                View.EntityRelationshipList.OnPopulateCompletedAction(e, notificationService, null,  View.ShowSystemAttributes);
                 ManageWorkingState(false);
             }
         }
@@ -254,15 +265,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             var indexNumber = e.Input.Index;
             var logicalName = View.EntityRelationshipList.Items[indexNumber].SubItems[1].Text;
-            var relatonshipExtension = new RelationshipMetadataExtension();
-
+            
             if (ParameterBag.EntityRelationships.ContainsKey(entityLogicalName))
             {
-                relatonshipExtension.StoreRelationshipIfKeyExists(logicalName, e.Input, entityLogicalName, ParameterBag.EntityRelationships);
+                CollectionHelpers.StoreRelationshipIfKeyExists(logicalName, e.Input, entityLogicalName, ParameterBag.EntityRelationships);
             }
             else
             {
-                relatonshipExtension.StoreRelationshipIfRequiresKey(logicalName, e.Input, entityLogicalName, ParameterBag.EntityRelationships);
+                CollectionHelpers.StoreRelationshipIfRequiresKey(logicalName, e.Input, entityLogicalName, ParameterBag.EntityRelationships);
             }
         }
 
@@ -275,17 +285,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
                 var systemAttributes = View.ShowSystemAttributes;
                 List<TreeNode> entityList = new List<TreeNode>();
-                var entityMetadataExtender = new EntityMetadataExtension();
-                Exception exception = null;
-
+                 
                 await Task.Run(() =>
                     {
                         var serviceParameters = new ServiceParameters(organizationService, metadataService, notificationService, exceptionService);
 
-                        entityList = entityMetadataExtender.RetrieveSourceEntitiesList(systemAttributes, ParameterBag.CachedMetadata, ParameterBag.EntityAttributes, serviceParameters);
+                        entityList = serviceParameters.RetrieveSourceEntitiesList(systemAttributes, ParameterBag.CachedMetadata, ParameterBag.EntityAttributes   );
                     });
 
-                entityMetadataExtender.PopulateEntitiesListView(entityList, exception, null, View.EntityList, notificationService);
+                View.EntityList.PopulateEntitiesListView(entityList, null, notificationService);
                 ManageWorkingState(false);
             }
         }
@@ -300,7 +308,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
                 View.ShowInformationPanel($"Saving schema file {e.Input} ...");
 
-                schemaExtension.SaveSchema(serviceParameters, 
+                schemaExtension.SaveSchema(serviceParameters,
                                             ParameterBag.CheckedEntity,
                                             ParameterBag.EntityRelationships,
                                             ParameterBag.EntityAttributes,
@@ -324,8 +332,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)
         {
             var entityitem = View.EntityList.SelectedNode;
-            var enityExtension = new EntityMetadataExtension();
-            var logicalName = enityExtension.GetEntityLogicalName(entityitem);
+            //var enityExtension = new EntityMetadataExtension();
+            var logicalName = entityitem.GetEntityLogicalName();
             await HandleListViewEntitiesSelectedIndexChanged(ParameterBag.EntityRelationships, logicalName, ParameterBag.SelectedEntity);
         }
 
@@ -364,10 +372,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private void HandleSortRelationshipList(object sender, MigratorEventArgs<int> e)
         {
-            if (e.Input != View.EntityRelationshipList.Columns.Count)// 3)
+            if (e.Input != View.EntityRelationshipList.Columns.Count) 
             {
-                var controller = new ListViewExtension();
-                controller.SetListViewSorting(View.EntityRelationshipList, e.Input, organisationId.ToString(), settings);
+                View.EntityRelationshipList.SetListViewSorting(e.Input, organisationId.ToString(), settings);
             }
         }
 
@@ -375,8 +382,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             if (e.Input != View.EntityAttributeList.Columns.Count)
             {
-                var listViewExtension = new ListViewExtension();
-                listViewExtension.SetListViewSorting(View.EntityAttributeList, e.Input, organisationId.ToString(), settings);
+                View.EntityAttributeList.SetListViewSorting( e.Input, organisationId.ToString(), settings);
             }
         }
 

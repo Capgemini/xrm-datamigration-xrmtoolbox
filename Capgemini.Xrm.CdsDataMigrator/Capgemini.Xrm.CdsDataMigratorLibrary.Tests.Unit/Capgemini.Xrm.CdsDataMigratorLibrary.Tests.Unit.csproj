@@ -225,6 +225,11 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
+    <Compile Include="Extensions\CrmEntityExtensionsTests.cs" />
+    <Compile Include="Extensions\ListViewItemExtensionsTests.cs" />
+    <Compile Include="Extensions\TreeNodeExtensionsTests.cs" />
+    <Compile Include="Extensions\TreeViewExtensionsTests.cs" />
+    <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
     <Compile Include="MetadataExtensions\AttributeMetadataExtensionTests.cs" />
     <Compile Include="MetadataExtensions\ConfigurationExtensionTests.cs" />
     <Compile Include="MetadataExtensions\MetadataExtensionBaseTests.cs" />

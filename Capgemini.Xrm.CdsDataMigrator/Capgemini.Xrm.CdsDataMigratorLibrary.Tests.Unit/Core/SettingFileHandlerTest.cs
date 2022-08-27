@@ -12,7 +12,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
         [TestMethod]
         public void GetConfigData()
         {
-            SettingFileHandler.GetConfigData<ListViewExtension>(out Settings actual);
+            SettingFileHandler.GetConfigData<ServiceParameters>(out Settings actual);
 
             actual.Should().NotBeNull();
         }

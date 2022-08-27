@@ -210,8 +210,13 @@
     <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
+    <Compile Include="Extensions\CrmEntityExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\FormControlExtensions.cs" />
+    <Compile Include="Extensions\ListViewItemExtensions.cs" />
+    <Compile Include="Extensions\TreeNodeExtensions.cs" />
+    <Compile Include="Extensions\TreeViewExtensions.cs" />
+    <Compile Include="Extensions\XrmMetadataExtensions.cs" />
     <Compile Include="Forms\ExportFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,6 +229,7 @@
     <Compile Include="Forms\FilterEditor.Designer.cs">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CollectionHelpers.cs" />
     <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>

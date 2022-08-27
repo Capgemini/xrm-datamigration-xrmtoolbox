@@ -18,6 +18,8 @@ using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using System.Threading.Tasks;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 {
@@ -77,9 +79,23 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             await PopulateAttributes(inputEntityLogicalName, listViewSelectedItem, serviceParameters);
 
             await PopulateRelationship(inputEntityLogicalName, inputEntityRelationships, listViewSelectedItem, serviceParameters);
-            var controller = new EntityMetadataExtension();
-            controller.AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
+            AddSelectedEntities(selectedItems.Count, inputEntityLogicalName, inputSelectedEntity);
         }
+
+        public void AddSelectedEntities(int selectedItemsCount, string inputEntityLogicalName, HashSet<string> inputSelectedEntity)
+        {
+            if (selectedItemsCount > 0 &&
+                !(
+                    string.IsNullOrEmpty(inputEntityLogicalName) &&
+                    inputSelectedEntity.Contains(inputEntityLogicalName)
+                  )
+                )
+            {
+                inputSelectedEntity.Add(inputEntityLogicalName);
+            }
+        }
+
+
         public async Task PopulateRelationship(string entityLogicalName, Dictionary<string, HashSet<string>> inputEntityRelationships, ListViewItem listViewSelectedItem, ServiceParameters migratorParameters)
         {
             if (!workingstate)
@@ -93,20 +109,18 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     await Task.Run(() =>
                     {
-                        var controller = new RelationshipMetadataExtension();
-
                         try
                         {
-                            result = controller.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships, migratorParameters);
+                            result = migratorParameters.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
                         }
                         catch (Exception ex)
                         {
                             error = ex;
                         }
                     });
-                    var listController = new ListViewExtension();
+
                     var e = new RunWorkerCompletedEventArgs(result, error, false);
-                    listController.OnPopulateCompletedAction(e, NotificationService, this, lvRelationship, cbShowSystemAttributes.Checked);
+                    lvRelationship.OnPopulateCompletedAction(e, NotificationService, this, cbShowSystemAttributes.Checked);
                     ManageWorkingState(false);
                 }
             }
@@ -119,8 +133,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                 try
                 {
                     var crmSchema = CrmSchemaConfiguration.ReadFromFile(schemaFilePath);
-                    var controller = new EntityMetadataExtension();
-                    controller.StoreEntityData(crmSchema.Entities?.ToArray(), inputEntityAttributes, inputEntityRelationships);
+                    crmSchema.Entities?.StoreEntityData(inputEntityAttributes, inputEntityRelationships);
                     ClearAllListViews();
                     PopulateEntities(working);
                 }
@@ -199,8 +212,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var migratorParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
 
             var entityitem = lvEntities.SelectedItems.Count > 0 ? lvEntities.SelectedItems[0] : null;
-            var controller = new EntityMetadataExtension();
-            entityLogicalName = controller.GetEntityLogicalName(entityitem);
+
+            entityLogicalName = entityitem.GetEntityLogicalName();
             await HandleListViewEntitiesSelectedIndexChanged(entityRelationships, entityLogicalName, selectedEntity, lvEntities.SelectedItems, migratorParameters);
         }
 
@@ -219,25 +232,135 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     await Task.Run(() =>
                     {
-                        var attributeController = new AttributeMetadataExtension();
                         try
                         {
                             var unmarkedattributes = Settings[organisationId.ToString()][this.entityLogicalName].UnmarkedAttributes;
-                            var attributes = attributeController.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked, serviceParameters);
-                            result = attributeController.ProcessAllAttributeMetadata(unmarkedattributes, attributes, entityLogicalName, entityAttributes);
+                            var attributes = serviceParameters.GetAttributeList(entityLogicalName, cbShowSystemAttributes.Checked);
+                            result = attributes.ProcessAllAttributeMetadata(unmarkedattributes, entityLogicalName, entityAttributes);
                         }
                         catch (Exception ex)
                         {
                             error = ex;
                         }
                     });
-                    var controller = new ListViewExtension();
+
                     var e = new RunWorkerCompletedEventArgs(result, error, false);
-                    controller.OnPopulateCompletedAction(e, NotificationService, this, lvAttributes, cbShowSystemAttributes.Checked);
+                    lvAttributes.OnPopulateCompletedAction(e, NotificationService, this, cbShowSystemAttributes.Checked);
                     ManageWorkingState(false);
                 }
             }
         }
+
+
+        public void HandleMappingControlItemClick(INotificationService notificationService, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
+        {
+            if (listViewItemIsSelected)
+            {
+                if (!string.IsNullOrEmpty(inputEntityLogicalName))
+                {
+                    if (inputMapping.ContainsKey(inputEntityLogicalName))
+                    {
+                        MappingIfContainsKey(inputEntityLogicalName, inputMapping, inputMapper, parentForm);
+                    }
+                    else
+                    {
+                        MappingIfKeyDoesNotExist(inputEntityLogicalName, inputMapping, inputMapper, parentForm);
+                    }
+                }
+            }
+            else
+            {
+                notificationService.DisplayFeedback("Entity is not selected");
+            }
+        }
+
+        public void MappingIfKeyDoesNotExist(string inputEntityLogicalName, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
+        {
+            var mappingReference = new List<Item<EntityReference, EntityReference>>();
+            using (var mappingDialog = new MappingList(mappingReference)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            })
+            {
+                if (parentForm != null)
+                {
+                    mappingDialog.ShowDialog(parentForm);
+                }
+
+                var mapList = mappingDialog.GetMappingList(inputEntityLogicalName);
+                var guidMapList = mappingDialog.GetGuidMappingList();
+
+                if (mapList.Count > 0)
+                {
+                    inputMapping.Add(inputEntityLogicalName, mapList);
+                    inputMapper.Add(inputEntityLogicalName, guidMapList);
+                }
+            }
+        }
+
+        public void MappingIfContainsKey(string inputEntityLogicalName, Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper, Form parentForm)
+        {
+            using (var mappingDialog = new MappingList(inputMapping[inputEntityLogicalName])
+            {
+                StartPosition = FormStartPosition.CenterParent
+            })
+            {
+                if (parentForm != null)
+                {
+                    mappingDialog.ShowDialog(parentForm);
+                }
+
+                var mapList = mappingDialog.GetMappingList(inputEntityLogicalName);
+                var guidMapList = mappingDialog.GetGuidMappingList();
+
+                if (mapList.Count == 0)
+                {
+                    inputMapping.Remove(inputEntityLogicalName);
+                    inputMapper.Remove(inputEntityLogicalName);
+                }
+                else
+                {
+                    inputMapping[inputEntityLogicalName] = mapList;
+                    inputMapper[inputEntityLogicalName] = guidMapList;
+                }
+            }
+        }
+
+        public void ProcessFilterQuery(INotificationService notificationService, Form parentForm, string inputEntityLogicalName, bool listViewItemIsSelected, Dictionary<string, string> inputFilterQuery, FilterEditor filterDialog)
+        {
+            if (listViewItemIsSelected)
+            {
+                if (parentForm != null)
+                {
+                    filterDialog.ShowDialog(parentForm);
+                }
+
+                if (inputFilterQuery.ContainsKey(inputEntityLogicalName))
+                {
+                    if (string.IsNullOrWhiteSpace(filterDialog.QueryString))
+                    {
+                        inputFilterQuery.Remove(inputEntityLogicalName);
+                    }
+                    else
+                    {
+                        inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(filterDialog.QueryString))
+                    {
+                        inputFilterQuery[inputEntityLogicalName] = filterDialog.QueryString;
+                    }
+                }
+            }
+            else
+            {
+                notificationService.DisplayFeedback("Entity list is empty");
+            }
+        }
+
+
 
         private void PopulateEntities(bool working)
         {
@@ -253,14 +376,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
                     bwFill.DoWork += (sender, e) =>
                     {
                         var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
-                        var controller = new EntityMetadataExtension();
-                        e.Result = controller.RetrieveSourceEntitiesListToBeDeleted(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes, serviceParameters);
+                        //var controller = new EntityMetadataExtension();
+                        e.Result = serviceParameters.RetrieveSourceEntitiesListToBeDeleted(cbShowSystemAttributes.Checked, cachedMetadata, entityAttributes);
                     };
                     bwFill.RunWorkerCompleted += (sender, e) =>
                     {
                         informationPanel.Dispose();
-                        var controller = new EntityMetadataExtension();
-                        controller.PopulateEntitiesListView(e.Result as List<ListViewItem>, e.Error, this, lvEntities, NotificationService);
+                        var list = e.Result as List<ListViewItem>;
+                        list.PopulateEntitiesListView(e.Error, this, lvEntities, NotificationService);
                         ManageWorkingState(false);
                     };
                     bwFill.RunWorkerAsync();
@@ -276,8 +399,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void TabStripButtonMappingsClick(object sender, EventArgs e)
         {
-            var controller = new ListViewExtension();
-            controller.HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
+            HandleMappingControlItemClick(NotificationService, entityLogicalName, lvEntities.SelectedItems.Count > 0, mapping, mapper, ParentForm);
         }
 
         private void TabStripFiltersClick(object sender, EventArgs e)
@@ -285,8 +407,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var currentFilter = filterQuery.ContainsKey(entityLogicalName) ? filterQuery[entityLogicalName] : null;
             using (var filterDialog = new FilterEditor(currentFilter, FormStartPosition.CenterParent))
             {
-                var controller = new ListViewExtension();
-                controller.ProcessFilterQuery(NotificationService, ParentForm, entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, filterDialog);
+                ProcessFilterQuery(NotificationService, ParentForm, entityLogicalName, lvEntities.SelectedItems.Count > 0, filterQuery, filterDialog);
             }
         }
 
@@ -300,15 +421,13 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             var columnNumber = e.Column;
             if (columnNumber != 3)
             {
-                var controller = new ListViewExtension();
-                controller.SetListViewSorting(lvAttributes, e.Column, organisationId.ToString(), Settings);
+                lvAttributes.SetListViewSorting(e.Column, organisationId.ToString(), Settings);
             }
         }
 
         private void ListViewEntitiesColumnClick(object sender, ColumnClickEventArgs e)
         {
-            var controller = new ListViewExtension();
-            controller.SetListViewSorting(lvEntities, e.Column, organisationId.ToString(), Settings);
+            lvEntities.SetListViewSorting(e.Column, organisationId.ToString(), Settings);
         }
 
         private void CheckListAllEntitiesCheckedChanged(object sender, EventArgs e)
@@ -389,15 +508,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var indexNumber = e.Index;
             var logicalName = lvRelationship.Items[indexNumber].SubItems[1].Text;
-            var controller = new RelationshipMetadataExtension();
 
             if (entityRelationships.ContainsKey(entityLogicalName))
             {
-                controller.StoreRelationshipIfKeyExists(logicalName, e, entityLogicalName, entityRelationships);
+                CollectionHelpers.StoreRelationshipIfKeyExists(logicalName, e, entityLogicalName, entityRelationships);
             }
             else
             {
-                controller.StoreRelationshipIfRequiresKey(logicalName, e, entityLogicalName, entityRelationships);
+                CollectionHelpers.StoreRelationshipIfRequiresKey(logicalName, e, entityLogicalName, entityRelationships);
             }
         }
 
@@ -500,8 +618,8 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
 
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
-            var entityController = new EntityMetadataExtension();
-            entityController.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
+            var metadataExtensionBase = new MetadataExtensionBase();
+            metadataExtensionBase.CollectCrmEntityFields(checkedEntity, crmSchemaConfiguration, entityRelationships, entityAttributes, attributeMapping, serviceParameters);
 
             var schemaController = new SchemaExtension();
             schemaController.GenerateXmlFile(tbSchemaPath.Text, crmSchemaConfiguration);
@@ -512,8 +630,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             var serviceParameters = new ServiceParameters(OrganizationService, MetadataService, NotificationService, ExceptionService);
 
-            var controller = new ListViewExtension();
-            controller.OpenMappingForm(serviceParameters, ParentForm, cachedMetadata, lookupMaping, entityLogicalName);
+            serviceParameters.OpenMappingForm(ParentForm, cachedMetadata, lookupMaping, entityLogicalName);
 
             tsbtMappings.ForeColor = Settings[organisationId.ToString()].Mappings.Count == 0 ? Color.Black : Color.Blue;
             Settings[organisationId.ToString()].Mappings.Clear();
