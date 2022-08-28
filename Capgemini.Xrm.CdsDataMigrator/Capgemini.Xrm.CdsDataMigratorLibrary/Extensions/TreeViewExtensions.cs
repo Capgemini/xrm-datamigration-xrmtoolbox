@@ -10,7 +10,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
 {
     public static class TreeViewExtensions
     {
-        public static void PopulateEntitiesListView(this TreeView treeView, List<TreeNode> items, IWin32Window owner, INotificationService notificationService)
+        public static void PopulateEntitiesTreeView(this TreeView treeView, List<TreeNode> items, IWin32Window owner, INotificationService notificationService)
         {
             if (items != null && items.Count > 0)
             {

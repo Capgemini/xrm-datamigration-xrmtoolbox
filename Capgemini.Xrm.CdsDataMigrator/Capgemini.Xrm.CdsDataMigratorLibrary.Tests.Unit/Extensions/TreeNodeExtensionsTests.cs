@@ -15,7 +15,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
         private EntityMetadata entity;
 
-
         [TestInitialize]
         public void Setup()
         {
@@ -102,7 +101,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             item.ToolTipText.Should().NotContain("Logical Entity");
         }
 
-
         [TestMethod]
         public void GetEntityLogicalNameNullTreeNode()
         {
@@ -113,5 +111,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
             actual.Should().BeNull();
         }
 
+        [TestMethod]
+        public void GetEntityLogicalName()
+        {
+            var logicalName = "Case";
+            var entityMetadata = InstantiateEntityMetaData(logicalName);
+            var entityitem = new System.Windows.Forms.TreeNode(logicalName)
+            {
+                Tag = entityMetadata
+            };
+
+            var actual = entityitem.GetEntityLogicalName();
+
+            actual.Should().Be(logicalName);
+        }
     }
 }

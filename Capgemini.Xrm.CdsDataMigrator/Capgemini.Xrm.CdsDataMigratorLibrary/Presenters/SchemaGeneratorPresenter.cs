@@ -344,7 +344,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         entityList = serviceParameters.RetrieveSourceEntitiesList(systemAttributes, ParameterBag.CachedMetadata, ParameterBag.EntityAttributes);
                     });
 
-                View.EntityList.PopulateEntitiesListView(entityList, null, notificationService);
+                View.EntityList.PopulateEntitiesTreeView(entityList, null, notificationService);
                 ManageWorkingState(false);
             }
         }

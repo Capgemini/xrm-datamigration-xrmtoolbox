@@ -1,13 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 {
@@ -21,72 +17,41 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
         }
 
         [TestMethod]
-        public void PopulateEntitiesListViewWhenThereIsAnException()
+        public void PopulateEntitiesListViewWithMoreThanZeroNodes()
         {
-            var items = new List<System.Windows.Forms.ListViewItem>
+            var items = new List<System.Windows.Forms.TreeNode>
             {
-                new System.Windows.Forms.ListViewItem("Item1"),
-                new System.Windows.Forms.ListViewItem("Item2")
+                new System.Windows.Forms.TreeNode("Item1"),
+                new System.Windows.Forms.TreeNode("Item2")
             };
-            Exception exception = new Exception();
 
-            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-            NotificationServiceMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                               .Verifiable();
-            using (var listView = new System.Windows.Forms.ListView())
+            using (var treeView = new System.Windows.Forms.TreeView())
             {
-                FluentActions.Invoking(() => items.PopulateEntitiesListView(exception, null, listView, NotificationServiceMock.Object))
-                        .Should()
-                        .NotThrow();
-            }
+                FluentActions.Invoking(() => treeView.PopulateEntitiesTreeView(items, null, NotificationServiceMock.Object))
+                            .Should()
+                            .NotThrow();
 
-            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
-            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
+                treeView.Nodes.Count.Should().Be(items.Count);
+                NotificationServiceMock.Verify(a => a.DisplayWarningFeedback(It.IsAny<IWin32Window>(), "The system does not contain any entities"), Times.Never);
+            }
         }
 
         [TestMethod]
-        public void PopulateEntitiesListViewWhenThereIsNoException()
+        public void PopulateEntitiesListViewWithMoreZeroNodes()
         {
-            var items = new List<System.Windows.Forms.ListViewItem>();
-            Exception exception = null;
+            var items = new List<System.Windows.Forms.TreeNode>();
 
-            NotificationServiceMock.Setup(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-            using (var listView = new System.Windows.Forms.ListView())
+            NotificationServiceMock.Setup(a => a.DisplayWarningFeedback(It.IsAny<IWin32Window>(), "The system does not contain any entities"));
+
+            using (var treeView = new System.Windows.Forms.TreeView())
             {
-                FluentActions.Invoking(() => items.PopulateEntitiesListView(exception, null, listView, NotificationServiceMock.Object))
-                        .Should()
-                        .NotThrow();
+                FluentActions.Invoking(() => treeView.PopulateEntitiesTreeView(items, null, NotificationServiceMock.Object))
+                            .Should()
+                            .NotThrow();
+
+                treeView.Nodes.Count.Should().Be(0);
+                NotificationServiceMock.Verify(a => a.DisplayWarningFeedback(It.IsAny<IWin32Window>(), "The system does not contain any entities"), Times.Once);
             }
-
-            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Once);
         }
-
-        [TestMethod]
-        public void PopulateEntitiesListViewWhenThereAreListItems()
-        {
-            var items = new List<System.Windows.Forms.ListViewItem>
-            {
-                new System.Windows.Forms.ListViewItem("Item1"),
-                new System.Windows.Forms.ListViewItem("Item2")
-            };
-            Exception exception = null;
-
-            NotificationServiceMock.Setup(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()))
-                                .Verifiable();
-
-            using (var listView = new System.Windows.Forms.ListView())
-            {
-                FluentActions.Invoking(() => items.PopulateEntitiesListView(exception, null, listView, NotificationServiceMock.Object))
-                        .Should()
-                        .NotThrow();
-            }
-
-            NotificationServiceMock.Verify(x => x.DisplayErrorFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-            NotificationServiceMock.Verify(x => x.DisplayWarningFeedback(It.IsAny<System.Windows.Forms.IWin32Window>(), It.IsAny<string>()), Times.Never);
-        }
-
     }
 }

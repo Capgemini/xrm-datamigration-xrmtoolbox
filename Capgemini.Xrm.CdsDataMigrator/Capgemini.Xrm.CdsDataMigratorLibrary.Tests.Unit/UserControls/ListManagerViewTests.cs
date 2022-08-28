@@ -20,6 +20,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
             {
                 systemUnderTest.ListView.Items.Count.Should().Be(0);
             }
-        } 
+        }
+
+        [TestMethod]
+        public void SetDisplayedItemsName()
+        {
+            var displayName = "Test value";
+
+            using (var systemUnderTest = new ListManagerView())
+            {
+                systemUnderTest.DisplayedItemsName = displayName;
+
+                systemUnderTest.Should().Be(displayName);
+            }
+        }
     }
 }
