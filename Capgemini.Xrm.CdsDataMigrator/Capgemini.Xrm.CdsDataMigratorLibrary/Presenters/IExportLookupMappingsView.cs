@@ -19,7 +19,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnRefFieldChanged;
 
 
-        List<EntityMetadata> EntityList { set; }
+        IEnumerable<string> EntityList { get; set; }
         AttributeMetadata[] RefFieldLookups { set; }
         AttributeMetadata[] MapFieldLookups { set; }
         DataGridView LookupMappings { get; set; }

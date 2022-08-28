@@ -16,6 +16,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     {
         public readonly IExportLookupMappingsView view;
 
+
         public ExportLookupMappingsFormPresenter(IExportLookupMappingsView view)
         {
             this.view = view;
@@ -42,9 +43,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Close();
                 return;
             }
-
-            List<EntityMetadata> entities = MetaDataService.RetrieveEntities(OrganizationService);
-            view.EntityList = entities;
+            if (new List<string>(view.EntityList).Count == 0)
+            {
+                var entities = MetaDataService.RetrieveEntities(OrganizationService);
+                view.EntityList = entities.Select(x => x.LogicalName).OrderBy(n => n).ToList();
+            }  
         }
 
         public void OnEntityColumnChanged(object sender, EventArgs e)

@@ -28,12 +28,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #region data mappings
 
-        List<EntityMetadata> IExportLookupMappingsView.EntityList
+        IEnumerable<string> IExportLookupMappingsView.EntityList
         {
+            get => clEntity.Items.Cast<string>();
             set
             {
                 clEntity.Items.Clear();
-                clEntity.Items.AddRange(value.Select(x => x.LogicalName).OrderBy(n => n).ToArray());
+                clEntity.Items.AddRange(value.ToArray());
             }
         }
 
