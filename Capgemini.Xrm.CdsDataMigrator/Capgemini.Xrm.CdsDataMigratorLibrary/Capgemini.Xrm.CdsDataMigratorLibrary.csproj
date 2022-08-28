@@ -250,7 +250,7 @@
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Models\ConfigurationExtension.cs" />
+    <Compile Include="Helpers\ConfigurationHelpers.cs" />
     <Compile Include="Models\DataMigrationSettings.cs" />
     <Compile Include="Models\DeserializationSettings.cs" />
     <Compile Include="Models\ExportConfigSettings.cs" />

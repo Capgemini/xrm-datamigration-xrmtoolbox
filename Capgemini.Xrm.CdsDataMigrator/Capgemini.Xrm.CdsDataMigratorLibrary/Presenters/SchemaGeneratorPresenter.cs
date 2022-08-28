@@ -287,6 +287,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
         }
 
+        public async void LoadSchemaEventHandler(object sender, MigratorEventArgs<string> e)
+        {
+            await LoadSchemaFile(e.Input, workingstate, notificationService, ParameterBag.EntityAttributes, ParameterBag.EntityRelationships);
+        }
+
         private void HandleEntitySelected(object sender, MigratorEventArgs<TreeNode> e)
         {
             var entity = e.Input.Tag as EntityMetadata;
@@ -368,11 +373,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 notificationService.DisplayFeedback($"Please specify the Schema File to save to!");
             }
-        }
-
-        private async void LoadSchemaEventHandler(object sender, MigratorEventArgs<string> e)
-        {
-            await LoadSchemaFile(e.Input, workingstate, notificationService, ParameterBag.EntityAttributes, ParameterBag.EntityRelationships);
         }
 
         private async void ShowSystemEntitiesChanged(object sender, System.EventArgs e)

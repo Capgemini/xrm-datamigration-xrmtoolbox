@@ -326,25 +326,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         [TestMethod]
         public void HandleListViewEntitiesSelectedIndexChanged()
         {
-            var inputEntityLogicalName = "account_contact";
+            var entityLogicalName = "account_contact";
             var inputSelectedEntity = new HashSet<string>();
 
-            FluentActions.Awaiting(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(
-                inputEntityRelationships,
-                inputEntityLogicalName,
-                inputSelectedEntity)
-                    )
-                    .Should()
-                    .NotThrow();
+            var selectedEntities = new List<EntityMetadata> { InstantiateEntityMetaData(entityLogicalName) };
+
+            view.SetupGet(a => a.SelectedEntities).Returns(selectedEntities);
+
+            FluentActions.Awaiting(() =>
+                                systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(
+                                                inputEntityRelationships,
+                                                entityLogicalName,
+                                                inputSelectedEntity)
+                                    )
+                        .Should()
+                        .NotThrow();
+
+            view.VerifyGet(a => a.SelectedEntities);
         }
 
         [TestMethod]
         public void ManageWorkingStateTrue()
         {
-            FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(true)
-                )
-                .Should()
-                .NotThrow();
+            FluentActions.Invoking(() => systemUnderTest.ManageWorkingState(true))
+                        .Should()
+                        .NotThrow();
         }
 
         [TestMethod]
@@ -378,11 +384,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
                                                               It.IsAny<IExceptionService>()))
                            .Returns(entityResultList);
 
-            using (var entityList = new System.Windows.Forms.TreeView())
+            using (var entityList = new TreeView())
             {
-                using (var entityAttributeList = new System.Windows.Forms.ListView())
+                using (var entityAttributeList = new ListView())
                 {
-                    using (var entityRelationshipList = new System.Windows.Forms.ListView())
+                    using (var entityRelationshipList = new ListView())
                     {
                         view.SetupGet(a => a.EntityList).Returns(entityList);
                         view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
@@ -486,7 +492,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 
             NotificationServiceMock.Setup(a => a.DisplayErrorFeedback(It.IsAny<IWin32Window>(), It.IsAny<string>()));
 
-            using (var entityRelationshipList = new System.Windows.Forms.ListView())
+            using (var entityRelationshipList = new ListView())
             {
                 view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
 
@@ -584,7 +590,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         {
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Unchecked, CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -600,7 +606,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
 
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Checked, CheckState.Unchecked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -615,7 +621,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         {
             var entityLogicalName = "contact";
             var attributeLogicalName = "contactid";
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Unchecked, CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -630,7 +636,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             var attributeSet = new HashSet<string>();
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Unchecked, CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -648,7 +654,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             var attributeSet = new HashSet<string>() { attributeLogicalName };
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Unchecked, CheckState.Checked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -666,7 +672,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             var attributeSet = new HashSet<string>();
             inputEntityAttributes.Add(entityLogicalName, attributeSet);
 
-            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+            var itemCheckEventArgs = new ItemCheckEventArgs(0, CheckState.Checked, CheckState.Unchecked);
 
             FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
                          .Should()
@@ -674,6 +680,27 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 
             inputEntityAttributes.Count.Should().Be(1);
             inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void LoadSchemaEventHandler()
+        {
+            string entityLogicalName = "case";
+            string schemaFilePath = "TestData\\testschemafile.xml";
+            var entityResultList = new List<EntityMetadata> { };
+            MetadataServiceMock.Setup(a => a.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                           .Returns(entityResultList);
+
+            var selectedEntities = new List<EntityMetadata> { InstantiateEntityMetaData(entityLogicalName) };
+
+            view.SetupGet(a => a.SelectedEntities).Returns(selectedEntities);
+            view.Setup(a => a.ShowInformationPanel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+
+            var e = new MigratorEventArgs<string>(schemaFilePath);
+
+            FluentActions.Invoking(() => systemUnderTest.LoadSchemaEventHandler(this, e))
+                        .Should()
+                        .NotThrow();
         }
     }
 }

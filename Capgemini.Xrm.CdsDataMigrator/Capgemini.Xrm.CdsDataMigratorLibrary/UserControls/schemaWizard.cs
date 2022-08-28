@@ -557,7 +557,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbImportConfig.Text))
                     {
-                        var controller = new ConfigurationExtension();
+                        var controller = new ConfigurationHelpers();
                         controller.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
                     }
                 }
@@ -580,7 +580,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
                     if (File.Exists(tbExportConfig.Text))
                     {
-                        var controller = new ConfigurationExtension();
+                        var controller = new ConfigurationHelpers();
                         controller.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
                     }
                 }
@@ -589,19 +589,19 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarSaveMappingsClick(object sender, EventArgs e)
         {
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.GenerateImportConfigFile(NotificationService, tbImportConfig, mapper);
         }
 
         private void ToolBarSaveFiltersClick(object sender, EventArgs e)
         {
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
         }
 
         private void ToolBarLoadMappingsFileClick(object sender, EventArgs e)
         {
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.LoadImportConfigFile(NotificationService, tbImportConfig, mapper, mapping);
         }
 
@@ -612,7 +612,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
 
         private void ToolBarLoadFiltersFileClick(object sender, EventArgs e)
         {
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.LoadExportConfigFile(NotificationService, tbExportConfig, filterQuery, lookupMaping);
         }
 
@@ -628,14 +628,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         {
             LoadSchemaFile(schemaPath.Text, inputWorkingstate, feedbackManager, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
 
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.LoadExportConfigFile(feedbackManager, exportConfig, collectionParameters.FilterQuery, collectionParameters.LookupMaping);
             controller.LoadImportConfigFile(feedbackManager, importConfig, collectionParameters.Mapper, collectionParameters.Mapping);
         }
 
         private void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            var controller = new ConfigurationExtension();
+            var controller = new ConfigurationHelpers();
             controller.GenerateImportConfigFile(NotificationService, tbImportConfig, mapper);
             controller.GenerateExportConfigFile(tbExportConfig, tbSchemaPath, filterQuery, lookupMaping, NotificationService);
 

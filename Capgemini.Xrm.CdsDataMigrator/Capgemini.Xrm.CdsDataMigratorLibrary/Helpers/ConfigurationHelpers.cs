@@ -10,9 +10,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
 {
-    public class ConfigurationExtension
+    public class ConfigurationHelpers
     {
         public void DataConversion(Dictionary<string, List<Item<EntityReference, EntityReference>>> inputMapping, Dictionary<string, Dictionary<Guid, Guid>> inputMapper)
         {

@@ -230,7 +230,9 @@
     <Compile Include="Extensions\TreeNodeExtensionsTests.cs" />
     <Compile Include="Extensions\TreeViewExtensionsTests.cs" />
     <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
-    <Compile Include="Model\ConfigurationExtensionTests.cs" />
+    <Compile Include="Helpers\CollectionHelpersTests.cs" />
+    <Compile Include="Models\MigratorEventArgsTests.cs" />
+    <Compile Include="Helpers\ConfigurationHelpersTests.cs" />
     <Compile Include="Model\SchemaExtensionTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
