@@ -1,11 +1,13 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using NuGet;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -145,9 +147,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     config.CrmMigrationToolSchemaFilters.Add(filter.Key, filter.Value);
                 }
             }
-            //Dictionary<string, Dictionary<string, List<string>>> lookupMappings = GetMappingsInCorrectDataType();
-            //config.LookupMapping.Clear();
-            //config.LookupMapping.AddRange(lookupMappings);
+            Dictionary<string, Dictionary<string, List<string>>> lookupMappings = GetMappingsInCorrectDataType();
+            config.LookupMapping.Clear();
+            config.LookupMapping.AddRange(lookupMappings);
         }
 
         private void WriteFormInputFromConfig()
@@ -163,7 +165,89 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
         }
-        
+
+        private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
+        {
+            Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            foreach (DataGridViewRow row in view.LookupMappings)
+            {
+                if (!AreAllCellsPopulated(row))
+                    break;
+                var entity = row.Cells[0].Value.ToString();
+                var refField = row.Cells[1].Value.ToString();
+                var mapField = row.Cells[2].Value.ToString();
+                var lookupsDictionary = new Dictionary<string, List<string>>();
+                lookupMappings = GetUpdatedLookupMappings(refField, mapField, entity, lookupMappings, lookupsDictionary);
+            }
+            return lookupMappings;
+        }
+
+        private Dictionary<string, Dictionary<string, List<string>>> GetUpdatedLookupMappings(string refField, string mapField, string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings, Dictionary<string, List<string>> lookupsDictionary)
+        {
+            lookupsDictionary.Add(refField, new List<string> { mapField });
+            if (DoesEntityMappingAlreadyExist(entity, lookupMappings))
+            {
+                AddMappingsForExistingEntity(refField, mapField, entity, lookupMappings);
+            }
+            else
+            {
+                lookupMappings.Add(entity, lookupsDictionary);
+            }
+            return lookupMappings;
+        }
+
+        private void AddMappingsForExistingEntity(string refField, string mapField, string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings)
+        {
+            if (DoesRefFieldAlreadyExistWithinMapping(refField, entity, lookupMappings))
+            {   
+                if (DoesListAlreadyContainMapfield(refField, mapField, entity, lookupMappings) == true)
+                {
+                    return;
+                }
+                lookupMappings[entity][refField].Add(mapField);
+            }
+            else
+            {
+                lookupMappings[entity].Add(refField, new List<string> { mapField });
+            }
+        }
+
+        private bool DoesListAlreadyContainMapfield(string refField, string mapField, string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings)
+        {
+            if (lookupMappings[entity][refField].Contains(mapField))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool DoesRefFieldAlreadyExistWithinMapping(string refField, string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings)
+        {
+            if (lookupMappings[entity].ContainsKey(refField))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool DoesEntityMappingAlreadyExist(string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings)
+        {
+            if (lookupMappings.ContainsKey(entity))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool AreAllCellsPopulated(DataGridViewRow row)
+        {
+            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
+            {
+                return false;
+            }
+            return true;
+        }
+
         [ExcludeFromCodeCoverage]
         public void Dispose()
         {
