@@ -31,7 +31,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
             {
                 systemUnderTest.DisplayedItemsName = displayName;
 
-                systemUnderTest.Should().Be(displayName);
+                systemUnderTest.DisplayedItemsName.Should().Be(displayName);
             }
         }
     }
