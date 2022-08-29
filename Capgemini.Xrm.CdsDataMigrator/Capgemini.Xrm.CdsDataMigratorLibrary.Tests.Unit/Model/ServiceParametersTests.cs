@@ -1,24 +1,217 @@
 ﻿using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using Moq;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
 {
     [TestClass]
     public class ServiceParametersTests : TestBase
     {
+        private Dictionary<string, HashSet<string>> inputEntityRelationships;
+        private Dictionary<string, HashSet<string>> inputEntityAttributes;
+
+        
+        private ServiceParameters systemUnderTest;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            SetupServiceMocks();
+            inputEntityRelationships = new Dictionary<string, HashSet<string>>();
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
+
+            systemUnderTest = new ServiceParameters(ServiceMock.Object, MetadataServiceMock.Object, NotificationServiceMock.Object, ExceptionServicerMock.Object);
+        }
+
         [TestMethod]
         public void CanInstantiate()
         {
-            SetupServiceMocks();
-
-            var systemUndertest = new ServiceParameters(ServiceMock.Object, MetadataServiceMock.Object, NotificationServiceMock.Object, ExceptionServicerMock.Object);
-
-            systemUndertest.OrganizationService.Should().NotBeNull();
-            systemUndertest.MetadataService.Should().NotBeNull();
-            systemUndertest.NotificationService.Should().NotBeNull();
-            systemUndertest.ExceptionService.Should().NotBeNull();
+            systemUnderTest.OrganizationService.Should().NotBeNull();
+            systemUnderTest.MetadataService.Should().NotBeNull();
+            systemUnderTest.NotificationService.Should().NotBeNull();
+            systemUnderTest.ExceptionService.Should().NotBeNull();
         }
+
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListToBeDeletedShowSystemAttributesIsFalse()
+        {
+            var showSystemAttributes = false;
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+            var inputCachedMetadata = new List<EntityMetadata>();
+
+            //var serviceParameters = GenerateMigratorParameters();
+
+            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes);
+
+            actual.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListToBeDeletedShowSystemAttributesIsTrue()
+        {
+            var showSystemAttributes = true;
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+            var inputCachedMetadata = new List<EntityMetadata>();
+            //var serviceParameters = GenerateMigratorParameters();
+
+            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes );
+
+            actual.Count.Should().Be(1);
+        }
+
+
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListShowSystemAttributesIsFalse()
+        {
+            var showSystemAttributes = false;
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+            var inputCachedMetadata = new List<EntityMetadata>();
+
+            //var serviceParameters = GenerateMigratorParameters();
+
+            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes);
+
+            actual.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void RetrieveSourceEntitiesListShowSystemAttributesIsTrue()
+        {
+            var showSystemAttributes = true;
+            string entityLogicalName = "account_contact";
+            SetupMockObjects(entityLogicalName);
+            var inputCachedMetadata = new List<EntityMetadata>();
+            //var serviceParameters = GenerateMigratorParameters();
+
+            var actual = systemUnderTest.RetrieveSourceEntitiesList(showSystemAttributes, inputCachedMetadata, inputEntityAttributes);
+
+            actual.Count.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void OpenMappingForm()
+        {
+            var serviceParameters = GenerateMigratorParameters();
+
+            string entityLogicalName = "contact";
+            var inputCachedMetadata = new List<EntityMetadata>();
+            var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
+
+            FluentActions.Invoking(() => systemUnderTest.OpenMappingForm(  null, inputCachedMetadata, inputLookupMaping, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+        }
+
+
+        [TestMethod]
+        public void PopulateRelationshipActionNoManyToManyRelationships()
+        {
+            string entityLogicalName = "contact";
+            var entityMetadata = new EntityMetadata();
+
+            var migratorServiceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
+
+            actual.Count.Should().Be(0);
+
+            ServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void PopulateRelationshipAction()
+        {
+            string entityLogicalName = "account_contact";
+            var items = new List<System.Windows.Forms.ListViewItem>
+            {
+                new System.Windows.Forms.ListViewItem("Item1"),
+                new System.Windows.Forms.ListViewItem("Item2")
+            };
+
+            var entityMetadata = new EntityMetadata();
+
+            var relationship = new ManyToManyRelationshipMetadata
+            {
+                Entity1LogicalName = "account",
+                Entity1IntersectAttribute = "accountid",
+                IntersectEntityName = "account_contact",
+                Entity2LogicalName = "contact",
+                Entity2IntersectAttribute = "contactid"
+            };
+
+            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
+
+            var migratorServiceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
+
+            using (var listView = new System.Windows.Forms.ListView())
+            {
+                items.PopulateEntitiesListView(null, null, listView, NotificationServiceMock.Object);
+
+                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
+
+                actual.Count.Should().BeGreaterThan(0);
+            }
+
+            ServiceMock.VerifyAll();
+            MetadataServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetAttributeList()
+        {
+            string entityLogicalName = "contact"; 
+            var entityMetadata = new EntityMetadata();
+            bool showSystemAttributes = true;
+            var serviceParameters = GenerateMigratorParameters();
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes );
+
+            actual.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void GetAttributeListMetaDataServiceReturnsEnities()
+        {
+            string entityLogicalName = "contact"; 
+            bool showSystemAttributes = true;
+
+            var serviceParameters = GenerateMigratorParameters();
+
+            var entityMetadata = new EntityMetadata();
+            InsertAttributeList(entityMetadata, new List<string> { "contactattnoentity1" });
+
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                                .Returns(entityMetadata)
+                                .Verifiable();
+
+            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes  );
+
+            actual.Should().NotBeNull();
+        }
+
     }
 }

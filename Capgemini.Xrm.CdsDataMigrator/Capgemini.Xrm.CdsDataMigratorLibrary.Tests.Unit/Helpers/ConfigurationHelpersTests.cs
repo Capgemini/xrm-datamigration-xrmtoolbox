@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
+using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
 
-namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Controllers
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Helpers
 {
     [TestClass]
-    public class ConfigurationControllerTests : TestBase
+    public class ConfigurationHelpersTests : TestBase
     {
-        private ConfigurationController systemUnderTest;
+        private ConfigurationHelpers systemUnderTest;
 
         [TestInitialize]
         public void Setup()
         {
             SetupServiceMocks();
 
-            systemUnderTest = new ConfigurationController();
+            systemUnderTest = new ConfigurationHelpers();
         }
 
         [TestMethod]

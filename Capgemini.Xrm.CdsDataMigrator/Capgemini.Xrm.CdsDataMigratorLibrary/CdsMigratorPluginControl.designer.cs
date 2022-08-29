@@ -39,8 +39,10 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonDataExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripPluginOptionMenu = new System.Windows.Forms.ToolStrip();
+            this.tsbSchemaManager = new System.Windows.Forms.ToolStripButton();
             this.tsbShowImportPage = new System.Windows.Forms.ToolStripButton();
             this.tsbShowExportPage = new System.Windows.Forms.ToolStripButton();
+            this.sgpManageSchema = new Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.SchemaGeneratorPage();
             this.SchemaGeneratorWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.SchemaWizard();
             this.DataImportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ImportWizard();
             this.DataExportWizard = new Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.ExportWizard();
@@ -112,6 +114,7 @@
             this.toolStripPluginOptionMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripPluginOptionMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSchemaConfig,
+            this.tsbSchemaManager,
             this.toolStripSeparator1,
             this.tsbShowImportPage,
             this.toolStripButtonDataImport,
@@ -122,6 +125,18 @@
             this.toolStripPluginOptionMenu.Name = "toolStripPluginOptionMenu";
             this.toolStripPluginOptionMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.toolStripPluginOptionMenu.Size = new System.Drawing.Size(1829, 35);
+            this.toolStripPluginOptionMenu.TabIndex = 4;
+            this.toolStripPluginOptionMenu.Text = "toolStrip1";
+            // 
+            // tsbSchemaManager
+            // 
+            this.tsbSchemaManager.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.entities;
+            this.tsbSchemaManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSchemaManager.Name = "tsbSchemaManager";
+            this.tsbSchemaManager.Size = new System.Drawing.Size(219, 32);
+            this.tsbSchemaManager.Text = "Schema Config (new)";
+            this.tsbSchemaManager.Click += new System.EventHandler(this.ShowSchemaManager);
+
             this.toolStripPluginOptionMenu.TabIndex = 5;
             this.toolStripPluginOptionMenu.Text = "toolStrip1";
             // 
@@ -132,7 +147,8 @@
             this.tsbShowImportPage.Name = "tsbShowImportPage";
             this.tsbShowImportPage.Size = new System.Drawing.Size(194, 32);
             this.tsbShowImportPage.Text = "Data Import (new)";
-            this.tsbShowImportPage.Click += new System.EventHandler(this.tsbShowImportPage_Click);
+            this.tsbShowImportPage.Click += new System.EventHandler(this.ShowImportPage_Click);
+
             // 
             // tsbShowExportPage
             // 
@@ -141,7 +157,15 @@
             this.tsbShowExportPage.Name = "tsbShowExportPage";
             this.tsbShowExportPage.Size = new System.Drawing.Size(191, 32);
             this.tsbShowExportPage.Text = "Data Export (new)";
-            this.tsbShowExportPage.Click += new System.EventHandler(this.tsbShowExportPage_Click);
+            this.tsbShowExportPage.Click += new System.EventHandler(this.ShowExportPage_Click);
+            // 
+            // sgpManageSchema
+            // 
+            this.sgpManageSchema.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sgpManageSchema.Location = new System.Drawing.Point(0, 35);
+            this.sgpManageSchema.Name = "sgpManageSchema";
+            this.sgpManageSchema.Size = new System.Drawing.Size(1829, 703);
+            this.sgpManageSchema.TabIndex = 51;
             // 
             // SchemaGeneratorWizard
             // 
@@ -225,6 +249,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.sgpManageSchema);
             this.Controls.Add(this.toolStripPluginOptionMenu);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.SchemaGeneratorWizard);
@@ -261,6 +286,8 @@
         private UserControls.ExportPage exportPage1;
         private UserControls.ImportPage importPage1;
         private System.Windows.Forms.ToolStripButton tsbShowExportPage;
+        private UserControls.SchemaGeneratorPage sgpManageSchema;
+        private System.Windows.Forms.ToolStripButton tsbSchemaManager;
         private System.Windows.Forms.ToolStripButton tsbShowImportPage;
     }
 }
