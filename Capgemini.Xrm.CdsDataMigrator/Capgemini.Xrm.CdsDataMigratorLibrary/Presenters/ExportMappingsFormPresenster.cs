@@ -34,6 +34,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         [ExcludeFromCodeCoverage]
         public IExceptionService ExceptionService { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public void OnVisible(object sender, EventArgs e)
         {
 
