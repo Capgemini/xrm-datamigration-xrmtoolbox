@@ -2,6 +2,7 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -39,6 +40,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
 
                 // Assert
                 systemUnderTest.As<IExportLookupMappingsView>().LookupMappings.Should().BeEquivalentTo(value);
+
+            }
+        }
+
+        [TestMethod]
+        public void Mappings2_GetSet()
+        {
+            // Arrange
+            var value = new List<DataGridViewRow>();
+            using (var systemUnderTest = new ExportLookupMappings())
+            {
+                // Act
+                systemUnderTest.Mappings = value;
+
+                // Assert
+                systemUnderTest.Mappings.Count.Should().Be(1);
 
             }
         }

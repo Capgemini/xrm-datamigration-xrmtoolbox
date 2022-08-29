@@ -20,14 +20,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         private ExportLookupMappings exportLookupMappingsForm;
 
         private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+
+        [ExcludeFromCodeCoverage]
         public IMetadataService MetadataService
         {
             set => exportLookupMappingsFormPresenter.MetaDataService = value;
         }
+
+        [ExcludeFromCodeCoverage]
         public IOrganizationService OrganizationService
         {
             set => exportLookupMappingsFormPresenter.OrganizationService = value;
         }
+
+        [ExcludeFromCodeCoverage]
         public IExceptionService ExceptionService
         {
             set => exportLookupMappingsFormPresenter.ExceptionService = value;
@@ -137,6 +143,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => exportFilterForm.SchemaConfiguration = value;
         }
 
+        [ExcludeFromCodeCoverage]
         List<DataGridViewRow> IExportPageView.LookupMappings
         {
             get => exportLookupMappingsForm.Mappings;
