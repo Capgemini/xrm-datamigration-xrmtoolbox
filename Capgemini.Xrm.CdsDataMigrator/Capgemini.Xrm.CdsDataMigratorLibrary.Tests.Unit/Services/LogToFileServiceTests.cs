@@ -43,8 +43,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             var expectedMessage = $"- Error:{Message}";
 
-            systemUnderTest.LogLevel = LogLevel.Verbose;
-            //};
+            systemUnderTest.LogLevel = LogLevel.Verbose; 
 
             FluentActions.Invoking(() =>
             systemUnderTest.LogError(Message))

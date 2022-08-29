@@ -210,8 +210,13 @@
     <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
+    <Compile Include="Extensions\CrmEntityExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\FormControlExtensions.cs" />
+    <Compile Include="Extensions\ListViewItemExtensions.cs" />
+    <Compile Include="Extensions\TreeNodeExtensions.cs" />
+    <Compile Include="Extensions\TreeViewExtensions.cs" />
+    <Compile Include="Extensions\XrmMetadataExtensions.cs" />
     <Compile Include="Forms\ExportFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -230,6 +235,7 @@
     <Compile Include="Forms\FilterEditor.Designer.cs">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CollectionHelpers.cs" />
     <Compile Include="Forms\ImportMappingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,11 +256,9 @@
       <DependentUpon>MappingListLookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Controllers\AttributeController.cs" />
-    <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Helpers\ConfigurationHelpers.cs" />
     <Compile Include="Models\DataMigrationSettings.cs" />
     <Compile Include="Models\DeserializationSettings.cs" />
-    <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Models\ExportConfigSettings.cs" />
     <Compile Include="Models\ExportSettings.cs" />
     <Compile Include="Models\FilterEditorState.cs" />
@@ -262,11 +266,9 @@
     <Compile Include="Models\CollectionParameters.cs" />
     <Compile Include="Models\ImportConfigSettingscs.cs" />
     <Compile Include="Models\LoadAllSettings.cs" />
-    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Models\RecordCountModel.cs" />
-    <Compile Include="Controllers\RelationshipController.cs" />
     <Compile Include="Models\SaveAllSettings.cs" />
-    <Compile Include="Controllers\SchemaController.cs" />
+    <Compile Include="Models\SchemaExtension.cs" />
     <Compile Include="Models\SerializationSettings.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
     <Compile Include="CdsMigratorPluginControl.cs">
@@ -277,11 +279,14 @@
     </Compile>
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
     <Compile Include="Presenters\ExportMappingsFormPresenster.cs" />
+    <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
+    <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Presenters\IExportFilterFormView.cs" />
     <Compile Include="Presenters\IExportLookupMappingsView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />
+    <Compile Include="Presenters\ISchemaGeneratorView.cs" />
     <Compile Include="Presenters\IImportMappingsFormView.cs" />
     <Compile Include="Presenters\IImportPageView.cs" />
     <Compile Include="Presenters\ImportMappingsFormPresenter.cs" />
@@ -291,6 +296,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AbstractLogger.cs" />
     <Compile Include="Services\CrmGenericMigratorFactory.cs" />
@@ -309,12 +319,17 @@
     <Compile Include="Services\LogManagerContainer.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Controllers\ListController.cs" />
     <Compile Include="UserControls\DataverseEnvironmentSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\DataverseEnvironmentSelector.Designer.cs">
       <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EntityListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityListView.Designer.cs">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ExportPage.cs">
       <SubType>UserControl</SubType>
@@ -351,6 +366,19 @@
     </Compile>
     <Compile Include="UserControls\ImportWizard.designer.cs">
       <DependentUpon>ImportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.Designer.cs">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MigratorEventArgs.cs" />
+    <Compile Include="UserControls\SchemaGeneratorPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SchemaGeneratorPage.Designer.cs">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SchemaWizard.cs">
       <SubType>UserControl</SubType>
@@ -399,8 +427,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\DataverseEnvironmentSelector.resx">
       <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EntityListView.resx">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExportPage.resx">
       <DependentUpon>ExportPage.cs</DependentUpon>
@@ -423,6 +458,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ImportWizard.resx">
       <DependentUpon>ImportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ListManagerView.resx">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SchemaGeneratorPage.resx">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SchemaWizard.resx">
       <DependentUpon>SchemaWizard.cs</DependentUpon>

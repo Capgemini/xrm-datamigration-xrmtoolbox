@@ -23,6 +23,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
     {
         private readonly Settings settings;
 
+        private SchemaGeneratorPresenter schemaGeneratorPresenter;
+
         public CdsMigratorPluginControl()
         {
             SettingFileHandler.GetConfigData<SchemaWizard>(out settings);
@@ -44,7 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
-        public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        public override async void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
             {
@@ -57,6 +59,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     SchemaGeneratorWizard.NotificationService = new NotificationService();
                     SchemaGeneratorWizard.ExceptionService = new ExceptionService();
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
+
+                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService(), settings);
+                    await schemaGeneratorPresenter.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 
                 if (actionName == "SourceConnection" || actionName == "")
@@ -92,7 +97,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 base.UpdateConnection(newService, detail, actionName, parameter);
             }
         }
-
 
         public void ShowError(Exception error)
         {
@@ -158,12 +162,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             DataExportWizard.BringToFront();
         }
 
-        private void tsbShowExportPage_Click(object sender, EventArgs e)
+        private void ShowExportPage_Click(object sender, EventArgs e)
         {
             exportPage1.BringToFront();
         }
 
-        private void tsbShowImportPage_Click(object sender, EventArgs e)
+        private void ShowSchemaManager(object sender, EventArgs e)
+        {
+            sgpManageSchema.BringToFront();
+        }
+
+        private void ShowImportPage_Click(object sender, EventArgs e)
         {
             importPage1.BringToFront();
         }
