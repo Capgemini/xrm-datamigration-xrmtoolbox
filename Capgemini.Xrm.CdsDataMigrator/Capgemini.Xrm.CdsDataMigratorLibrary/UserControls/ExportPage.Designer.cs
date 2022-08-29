@@ -245,6 +245,7 @@
             // 
             this.gbxWriteSettings.Controls.Add(this.tlpWriteSettings);
             this.gbxWriteSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.gbxWriteSettings.Location = new System.Drawing.Point(8, 226);
             this.gbxWriteSettings.Name = "gbxWriteSettings";
             this.gbxWriteSettings.Padding = new System.Windows.Forms.Padding(10);
@@ -395,6 +396,7 @@
             this.lblSeparateFilesPerEntity.Location = new System.Drawing.Point(3, 142);
             this.lblSeparateFilesPerEntity.Name = "lblSeparateFilesPerEntity";
             this.lblSeparateFilesPerEntity.Size = new System.Drawing.Size(126, 37);
+
             this.lblSeparateFilesPerEntity.TabIndex = 10;
             this.lblSeparateFilesPerEntity.Text = "Separate files per entity?";
             this.toolTip.SetToolTip(this.lblSeparateFilesPerEntity, "Ensures that each entity type will be saved to a seperate file, otherwise there m" +
@@ -429,7 +431,9 @@
             this.tsbRun});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
+
             this.toolStrip1.Size = new System.Drawing.Size(853, 27);
+
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -438,7 +442,9 @@
             this.tsbLoad.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoad.Image")));
             this.tsbLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoad.Name = "tsbLoad";
+
             this.tsbLoad.Size = new System.Drawing.Size(57, 24);
+
             this.tsbLoad.Text = "Load";
             this.tsbLoad.Click += new System.EventHandler(this.loadButton_Click);
             // 
@@ -447,7 +453,9 @@
             this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
+
             this.tsbSave.Size = new System.Drawing.Size(55, 24);
+
             this.tsbSave.Text = "Save";
             this.tsbSave.Click += new System.EventHandler(this.saveButton_Click);
             // 
@@ -456,7 +464,9 @@
             this.tsbRun.Image = ((System.Drawing.Image)(resources.GetObject("tsbRun.Image")));
             this.tsbRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRun.Name = "tsbRun";
+
             this.tsbRun.Size = new System.Drawing.Size(52, 24);
+
             this.tsbRun.Text = "Run";
             this.tsbRun.Click += new System.EventHandler(this.runButton_Click);
             // 
@@ -472,43 +482,53 @@
             this.tlpMainLayout.Controls.Add(this.gbxFetchSettings, 0, 0);
             this.tlpMainLayout.Controls.Add(this.gbxWriteSettings, 0, 1);
             this.tlpMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.tlpMainLayout.Location = new System.Drawing.Point(0, 27);
+
             this.tlpMainLayout.Name = "tlpMainLayout";
             this.tlpMainLayout.Padding = new System.Windows.Forms.Padding(5);
             this.tlpMainLayout.RowCount = 2;
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+
             this.tlpMainLayout.Size = new System.Drawing.Size(853, 446);
+
             this.tlpMainLayout.TabIndex = 7;
             // 
             // dataverseEnvironmentSelector1
             // 
             this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Local;
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(137, 3);
             this.dataverseEnvironmentSelector1.MinimumSize = new System.Drawing.Size(0, 24);
             this.dataverseEnvironmentSelector1.Name = "dataverseEnvironmentSelector1";
             this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(677, 24);
+
             this.dataverseEnvironmentSelector1.TabIndex = 8;
             // 
             // fisSchemaFile
             // 
             this.fisSchemaFile.AutoSize = true;
             this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.fisSchemaFile.Location = new System.Drawing.Point(137, 33);
             this.fisSchemaFile.MinimumSize = new System.Drawing.Size(100, 24);
             this.fisSchemaFile.Name = "fisSchemaFile";
             this.fisSchemaFile.Size = new System.Drawing.Size(677, 24);
+
             this.fisSchemaFile.TabIndex = 5;
             this.fisSchemaFile.Value = "";
             // 
             // tcbActiveRecords
             // 
             this.tcbActiveRecords.AutoSize = true;
+
             this.tcbActiveRecords.Location = new System.Drawing.Point(137, 115);
             this.tcbActiveRecords.Name = "tcbActiveRecords";
             this.tcbActiveRecords.Padding = new System.Windows.Forms.Padding(4);
             this.tcbActiveRecords.Size = new System.Drawing.Size(52, 25);
+
             this.tcbActiveRecords.TabIndex = 10;
             this.tcbActiveRecords.Text = "Yes";
             this.tcbActiveRecords.UseVisualStyleBackColor = true;
@@ -517,20 +537,24 @@
             // 
             this.fisOutputDirectory.AutoSize = true;
             this.fisOutputDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+
             this.fisOutputDirectory.Location = new System.Drawing.Point(135, 32);
             this.fisOutputDirectory.MinimumSize = new System.Drawing.Size(100, 24);
             this.fisOutputDirectory.Name = "fisOutputDirectory";
             this.fisOutputDirectory.Size = new System.Drawing.Size(679, 24);
+
             this.fisOutputDirectory.TabIndex = 7;
             this.fisOutputDirectory.Value = "";
             // 
             // tcbOneEntityPerBatch
             // 
             this.tcbOneEntityPerBatch.AutoSize = true;
+
             this.tcbOneEntityPerBatch.Location = new System.Drawing.Point(135, 114);
             this.tcbOneEntityPerBatch.Name = "tcbOneEntityPerBatch";
             this.tcbOneEntityPerBatch.Padding = new System.Windows.Forms.Padding(4);
             this.tcbOneEntityPerBatch.Size = new System.Drawing.Size(52, 25);
+
             this.tcbOneEntityPerBatch.TabIndex = 9;
             this.tcbOneEntityPerBatch.Text = "Yes";
             this.tcbOneEntityPerBatch.UseVisualStyleBackColor = true;
@@ -542,6 +566,7 @@
             this.tcbSeparateFilesPerEntity.Name = "tcbSeparateFilesPerEntity";
             this.tcbSeparateFilesPerEntity.Padding = new System.Windows.Forms.Padding(4);
             this.tcbSeparateFilesPerEntity.Size = new System.Drawing.Size(52, 25);
+
             this.tcbSeparateFilesPerEntity.TabIndex = 11;
             this.tcbSeparateFilesPerEntity.Text = "Yes";
             this.tcbSeparateFilesPerEntity.UseVisualStyleBackColor = true;

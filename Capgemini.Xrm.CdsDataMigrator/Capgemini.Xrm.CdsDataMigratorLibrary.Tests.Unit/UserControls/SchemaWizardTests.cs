@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Controllers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
 using FluentAssertions;
@@ -15,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
     [TestClass]
     public class SchemaWizardTests : TestBase
     {
+        private Dictionary<string, HashSet<string>> inputEntityAttributes;
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private bool workingstate;
         private string entityLogicalName;
@@ -42,6 +45,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
             entityMetadata = InstantiateEntityMetaData(entityLogicalName);
             workingstate = false;
             SetupServiceMocks();
+            inputEntityAttributes = new Dictionary<string, HashSet<string>>();
             inputEntityRelationships = new Dictionary<string, HashSet<string>>();
         }
 
@@ -235,7 +239,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                               .Returns(entityMetadata)
                               .Verifiable();
 
-
             using (var listView = new System.Windows.Forms.ListView())
             {
                 var item = new System.Windows.Forms.ListViewItem { };
@@ -252,10 +255,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                     .Should()
                     .NotThrow();
                 }
-
             }
         }
-        
+
         [TestMethod]
         public void ClearMemory()
         {
@@ -436,6 +438,301 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.UserControls
                 FluentActions.Invoking(() => systemUnderTest.RadioButton4CheckedChanged(new EventArgs()))
                                  .Should()
                                  .NotThrow();
+            }
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickNoListViewItemSelected()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = false;
+            var inputMapping = new Dictionary<string, List<Item<EntityReference, EntityReference>>>();
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+                         .Should()
+                         .NotThrow();
+            }
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndMappingsDoesNotContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            var inputMapping = new Dictionary<string, List<Item<EntityReference, EntityReference>>>();
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+                         .Should()
+                         .NotThrow();
+            }
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void HandleMappingControlItemClickListViewItemSelectedIsTrueAndFilterContainsEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+
+            var entityReference = new EntityReference(inputEntityLogicalName, Guid.NewGuid());
+
+            var mappingItem = new List<Item<EntityReference, EntityReference>>
+            {
+                new Item<EntityReference, EntityReference>(entityReference, entityReference)
+            };
+
+            var inputMapping = new Dictionary<string, List<Item<EntityReference, EntityReference>>>
+            {
+                { inputEntityLogicalName, mappingItem }
+            };
+
+            var inputMapper = new Dictionary<string, Dictionary<Guid, Guid>>();
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.HandleMappingControlItemClick(NotificationServiceMock.Object, inputEntityLogicalName, listViewItemIsSelected, inputMapping, inputMapper, null))
+                         .Should()
+                         .NotThrow();
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryNoListViewItemSelected()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = false;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent))
+                {
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                             .Should()
+                             .NotThrow();
+                }
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterDoesNotContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>();
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                using (var filterDialog = new FilterEditor(null, System.Windows.Forms.FormStartPosition.CenterParent))
+                {
+                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                             .Should()
+                             .NotThrow();
+                }
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewItemSelectedIsTrueAndFilterContainEntityLogicalName()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            var inputFilterQuery = new Dictionary<string, string>
+            {
+                { inputEntityLogicalName, inputEntityLogicalName }
+            };
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            var currentfilter = inputFilterQuery[inputEntityLogicalName];
+
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
+                {
+                    filterDialog.QueryString = "< filter type =\"and\" > < condition attribute =\"sw_appointmentstatus\" operator=\"eq\" value=\"266880017\" /></ filter >";
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                             .Should()
+                             .NotThrow();
+                }
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ProcessFilterQueryListViewFilterDialogQueryStringIsEmpty()
+        {
+            string inputEntityLogicalName = "contact";
+            bool listViewItemIsSelected = true;
+            Dictionary<string, string> inputFilterQuery = new Dictionary<string, string>
+            {
+                { inputEntityLogicalName, inputEntityLogicalName }
+            };
+
+            NotificationServiceMock.Setup(x => x.DisplayFeedback(It.IsAny<string>()))
+                               .Verifiable();
+
+            var currentfilter = inputFilterQuery[inputEntityLogicalName];
+
+            using (var systemUnderTest = new MockupForSchemaWizard())
+            {
+                using (var filterDialog = new FilterEditor(currentfilter, System.Windows.Forms.FormStartPosition.CenterParent))
+                {
+                    filterDialog.QueryString = string.Empty;
+
+                    FluentActions.Invoking(() => systemUnderTest.ProcessFilterQuery(NotificationServiceMock.Object, null, inputEntityLogicalName, listViewItemIsSelected, inputFilterQuery, filterDialog))
+                             .Should()
+                             .NotThrow();
+                }
+            }
+
+            NotificationServiceMock.Verify(x => x.DisplayFeedback(It.IsAny<string>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+                inputEntityAttributes.Count.Should().Be(1);
+                inputEntityAttributes[entityLogicalName].Count.Should().Be(0);
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttributeIfRequiresKeyCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttributeIfRequiresKey(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+                inputEntityAttributes.Count.Should().Be(1);
+                inputEntityAttributes[entityLogicalName].Count.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsInputEntityAttributesDoesNotContainEntityLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .Throw<KeyNotFoundException>();
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsChecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+                inputEntityAttributes.Count.Should().Be(1);
+                inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsCheckedAndAttributeSetAlreadyContainsLogicalName()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>() { attributeLogicalName };
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Unchecked, System.Windows.Forms.CheckState.Checked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+                inputEntityAttributes.Count.Should().Be(1);
+                inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeFalse();
+            }
+        }
+
+        [TestMethod]
+        public void StoreAttriubteIfKeyExistsCurrentValueIsUnchecked()
+        {
+            var entityLogicalName = "contact";
+            var attributeLogicalName = "contactid";
+            var attributeSet = new HashSet<string>();
+            inputEntityAttributes.Add(entityLogicalName, attributeSet);
+
+            var itemCheckEventArgs = new System.Windows.Forms.ItemCheckEventArgs(0, System.Windows.Forms.CheckState.Checked, System.Windows.Forms.CheckState.Unchecked);
+
+            using (var systemUnderTest = new SchemaWizard())
+            {
+                FluentActions.Invoking(() => systemUnderTest.StoreAttriubteIfKeyExists(attributeLogicalName, itemCheckEventArgs, inputEntityAttributes, entityLogicalName))
+                         .Should()
+                         .NotThrow();
+
+                inputEntityAttributes.Count.Should().Be(1);
+                inputEntityAttributes[entityLogicalName].Contains(attributeLogicalName).Should().BeTrue();
             }
         }
     }
