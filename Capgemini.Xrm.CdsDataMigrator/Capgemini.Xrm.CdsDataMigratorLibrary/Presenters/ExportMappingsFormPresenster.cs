@@ -15,8 +15,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     public class ExportLookupMappingsFormPresenter : IDisposable
     {
         public readonly IExportLookupMappingsView view;
-
-
+        
         public ExportLookupMappingsFormPresenter(IExportLookupMappingsView view)
         {
             this.view = view;
@@ -26,10 +25,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.OnRefFieldChanged += OnRefFieldChanged;
         }
 
+        [ExcludeFromCodeCoverage]
         public IMetadataService MetaDataService { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public IOrganizationService OrganizationService { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public IExceptionService ExceptionService { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
