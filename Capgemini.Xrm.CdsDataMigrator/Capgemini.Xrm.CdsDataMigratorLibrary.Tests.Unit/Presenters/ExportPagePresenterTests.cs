@@ -263,6 +263,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns("");
@@ -278,6 +280,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldReuseLoadedFilePath()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
             mockExportView
@@ -299,6 +303,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
@@ -317,6 +323,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var mockIOrganisationService = new Mock<IOrganizationService>();
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
@@ -357,6 +365,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockWorkerHost
                 .Setup(x => x.WorkAsync(It.IsAny<WorkAsyncInfo>()))
@@ -374,6 +384,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownInsideWorkerHost()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockDataMigrationService
                 .Setup(x => x.ExportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmExporterConfig>()))
@@ -392,6 +404,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifySuccessWhenNotExceptionIsThrownInsideWorkerHost()
         {
             // Act
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
             mockWorkerHost.ExecuteWork(0);
 
@@ -589,7 +603,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var lookupsDictionary = new Dictionary<string, List<string>>();
             var entity = "Account";
             var refField = "accountid";
-            var refField2 = "accountid";
             var mapField = "accountnumber";
             var mapField2 = "accountcategorycode";
             lookupsDictionary.Add(refField, new List<string> { mapField });
