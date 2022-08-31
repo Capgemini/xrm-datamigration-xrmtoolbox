@@ -1,5 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.DataMigration.Config;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,11 +9,14 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 {
-    public partial class ImportMappingsForm : Form, IImportMappingsFormView
+    public partial class ExportLookupMappings : Form, IExportLookupMappingsView
     {
         public event EventHandler OnVisible;
+        public event EventHandler OnEntityColumnChanged;
+        public event EventHandler OnRefFieldChanged;
+        public DataGridView LookupMappings { get; set; }
 
-        public ImportMappingsForm()
+        public ExportLookupMappings()
         {
             InitializeComponent();
 
@@ -22,15 +25,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #region data mappings
 
-        public CrmSchemaConfiguration SchemaConfiguration { get; set; }
-
-        IEnumerable<string> IImportMappingsFormView.EntityList
-        {   
+        IEnumerable<string> IExportLookupMappingsView.EntityList
+        {
             get => clEntity.Items.Cast<string>();
             set
             {
                 clEntity.Items.Clear();
                 clEntity.Items.AddRange(value.ToArray());
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        AttributeMetadata[] IExportLookupMappingsView.RefFieldLookups
+        {
+            set
+            {
+                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[1] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        AttributeMetadata[] IExportLookupMappingsView.MapFieldLookups
+        {
+            set
+            {   
+                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[2] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
             }
         }
 
@@ -40,7 +59,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             {
                 List<DataGridViewRow> mappings = new List<DataGridViewRow>();
                 foreach (DataGridViewRow row in dgvMappings.Rows)
-                {  
+                {
                     mappings.Add(row);
                 }
                 return mappings;
@@ -61,7 +80,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         #region action mappings
 
         [ExcludeFromCodeCoverage]
-        DialogResult IImportMappingsFormView.ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+        DialogResult IExportLookupMappingsView.ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             return MessageBox.Show(message, caption, buttons, icon);
         }
@@ -84,17 +103,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         private void DataGridViewMappingsDefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-            var defaultValues = new object[] { clEntity.Items[0], Guid.Empty.ToString(), Guid.Empty.ToString() };
+            var defaultValues = new object[] { null, null, null };
             e.Row.SetValues(defaultValues);
         }
 
         [ExcludeFromCodeCoverage]
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            var cell = dgvMappings.CurrentCell;
-            if (cell.IsInEditMode)
+            LookupMappings = dgvMappings;
+            if (dgvMappings.CurrentCell.IsInEditMode)
             {
                 dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            if (dgvMappings.CurrentCell.ColumnIndex == 0)
+            {
+                this.OnEntityColumnChanged?.Invoke(sender, e);
+            }
+            if (dgvMappings.CurrentCell.ColumnIndex == 1)
+            {
+                this.OnRefFieldChanged?.Invoke(sender, e);
             }
         }
 
@@ -102,6 +129,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void dgvMappings_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            //Temporary solution to hide critical failure
+            e.Cancel = true;
         }
 
         #endregion

@@ -247,6 +247,7 @@
     <Compile Include="Extensions\FormControlExtensionsTests.cs" />
     <Compile Include="Extensions\MockWorkerHostExtensions.cs" />
     <Compile Include="Forms\ExportFilterFormTests.cs" />
+    <Compile Include="Forms\ExportLookupMappingsFormTests.cs" />
     <Compile Include="Forms\FilterEditorTests.cs" />
     <Compile Include="Forms\ImportMappingsFormTests.cs" />
     <Compile Include="Forms\MappingListLookupTests.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Mocks\TestSynchronizationContext.cs" />
     <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
+    <Compile Include="Presenters\ExportLookupMappingsFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
     <Compile Include="Presenters\SchemaGeneratorParameterBagTests.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenterTests.cs" />

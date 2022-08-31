@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
@@ -215,5 +216,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
             }
         }
 
+        [TestMethod]
+        public void LookupMappings_GetSet()
+        {
+            // Arrange
+            var value = new List<DataGridViewRow>();
+            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IExportPageView>().LookupMappings = value;
+
+                // Assert
+                systemUnderTest.As<IExportPageView>().LookupMappings.Count.Should().Be(1);
+            }
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,6 +17,28 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ExportPage : UserControl, IExportPageView
     {
         private ExportFilterForm exportFilterForm;
+        private ExportLookupMappings exportLookupMappingsForm;
+
+        private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+
+        [ExcludeFromCodeCoverage]
+        public IMetadataService MetadataService
+        {
+            set => exportLookupMappingsFormPresenter.MetaDataService = value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public IOrganizationService OrganizationService
+        {
+            set => exportLookupMappingsFormPresenter.OrganizationService = value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public IExceptionService ExceptionService
+        {
+            set => exportLookupMappingsFormPresenter.ExceptionService = value;
+        }
+
 
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
@@ -26,7 +50,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
 
             this.exportFilterForm = new ExportFilterForm();
+            this.exportLookupMappingsForm = new ExportLookupMappings();
             this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
+            exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -117,6 +143,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => exportFilterForm.SchemaConfiguration = value;
         }
 
+        [ExcludeFromCodeCoverage]
+        List<DataGridViewRow> IExportPageView.LookupMappings
+        {
+            get => exportLookupMappingsForm.Mappings;
+            // setter needed to load existing mappings. Still needs to be implemented
+            set => exportLookupMappingsForm.Mappings = value;
+        }
+
         #endregion
 
         #region action mappings
@@ -139,6 +173,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         #endregion
 
         #region event mappings
+
+        [ExcludeFromCodeCoverage]
+        private void btnUpdateLookupMappings_Click(object sender, EventArgs e)
+        {
+            this.exportLookupMappingsForm.ShowDialog(this);
+        }
 
         [ExcludeFromCodeCoverage]
         private void loadButton_Click(object sender, EventArgs e)

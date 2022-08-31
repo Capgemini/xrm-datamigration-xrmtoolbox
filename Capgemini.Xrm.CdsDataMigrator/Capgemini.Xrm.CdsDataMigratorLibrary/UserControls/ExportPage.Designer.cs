@@ -41,6 +41,8 @@
             this.lblActiveRecords = new System.Windows.Forms.Label();
             this.btnFetchXmlFilters = new System.Windows.Forms.Button();
             this.lblFetchXmlFilters = new System.Windows.Forms.Label();
+            this.btnUpdateLookupMappings = new System.Windows.Forms.Button();
+            this.lblUpdateLookupMappings = new System.Windows.Forms.Label();
             this.gbxWriteSettings = new System.Windows.Forms.GroupBox();
             this.tlpWriteSettings = new System.Windows.Forms.TableLayoutPanel();
             this.lblFileType = new System.Windows.Forms.Label();
@@ -113,6 +115,8 @@
             this.tlpFetchSettings.Controls.Add(this.tcbActiveRecords, 1, 4);
             this.tlpFetchSettings.Controls.Add(this.btnFetchXmlFilters, 1, 5);
             this.tlpFetchSettings.Controls.Add(this.lblFetchXmlFilters, 0, 5);
+            this.tlpFetchSettings.Controls.Add(this.btnUpdateLookupMappings, 1, 6);
+            this.tlpFetchSettings.Controls.Add(this.lblUpdateLookupMappings, 0, 6);
             this.tlpFetchSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFetchSettings.Location = new System.Drawing.Point(10, 23);
             this.tlpFetchSettings.Name = "tlpFetchSettings";
@@ -240,6 +244,29 @@
             this.lblFetchXmlFilters.Size = new System.Drawing.Size(130, 36);
             this.lblFetchXmlFilters.TabIndex = 12;
             this.lblFetchXmlFilters.Text = "FetchXml Filters";
+            //
+            // btnUpdateLookupMappings
+            // 
+            this.btnUpdateLookupMappings.AutoSize = true;
+            this.btnUpdateLookupMappings.Location = new System.Drawing.Point(136, 145);
+            this.btnUpdateLookupMappings.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUpdateLookupMappings.Name = "btnUpdateLookupMappings";
+            this.btnUpdateLookupMappings.Size = new System.Drawing.Size(45, 23);
+            this.btnUpdateLookupMappings.TabIndex = 11;
+            this.btnUpdateLookupMappings.Text = "Edit";
+            this.btnUpdateLookupMappings.UseVisualStyleBackColor = true;
+            this.btnUpdateLookupMappings.Click += new System.EventHandler(this.btnUpdateLookupMappings_Click);
+            // 
+            // lblUpdateLookupMappings
+            // 
+            this.lblUpdateLookupMappings.AutoSize = true;
+            this.lblUpdateLookupMappings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUpdateLookupMappings.Location = new System.Drawing.Point(2, 143);
+            this.lblUpdateLookupMappings.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblUpdateLookupMappings.Name = "lblUpdateLookupMappings";
+            this.lblUpdateLookupMappings.Size = new System.Drawing.Size(130, 36);
+            this.lblUpdateLookupMappings.TabIndex = 12;
+            this.lblUpdateLookupMappings.Text = "Update lookup mappings";
             // 
             // gbxWriteSettings
             // 
@@ -642,5 +669,7 @@
         private System.Windows.Forms.TextBox tbxFileNamePrefix;
         private System.Windows.Forms.Button btnFetchXmlFilters;
         private System.Windows.Forms.Label lblFetchXmlFilters;
+        private System.Windows.Forms.Button btnUpdateLookupMappings;
+        private System.Windows.Forms.Label lblUpdateLookupMappings;
     }
 }

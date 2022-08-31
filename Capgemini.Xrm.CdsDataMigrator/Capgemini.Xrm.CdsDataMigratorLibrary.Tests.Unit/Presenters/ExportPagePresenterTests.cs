@@ -8,9 +8,11 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
+using NuGet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -118,6 +120,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var configMappings = ProvideMappingsAsConfigType();
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
@@ -127,6 +131,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
             mockExportView.SetupGet(x => x.FilePrefix).Returns("Release_X_");
             mockExportView.SetupGet(x => x.CrmMigrationToolSchemaFilters).Returns(new Dictionary<string, string> { { "entity", "filters" } });
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -147,6 +152,95 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             exportConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
             exportConfig.FilePrefix.Should().Be("Release_X_");
             exportConfig.CrmMigrationToolSchemaFilters.Should().BeEquivalentTo(new Dictionary<string, string> { { "entity", "filters" } });
+            exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
+        }
+
+        [TestMethod]
+        public void SaveConfig_ShouldNotIncludeRowWithEmptyCellIntheMappings()
+        {
+            // Arrange
+            var exportConfigFilePath = @"TestData\NewExportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var newRow = GetRowWithBlankCell();
+            viewMappings.Add(newRow);
+            var configMappings = ProvideMappingsAsConfigType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(exportConfigFilePath);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
+            exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
+        }
+
+        [TestMethod]
+        public void SaveConfig_ShouldNotIncludeDuplicateRowInTheMappings()
+        {
+            // Arrange
+            var exportConfigFilePath = @"TestData\NewExportConfig.json";
+            var viewMappings = ProvideMappingsAsViewType();
+            var newRow = GetDuplicateRow();
+            viewMappings.Add(newRow);
+            var configMappings = ProvideMappingsAsConfigType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(exportConfigFilePath);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
+            exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
+        }
+
+        [TestMethod]
+        public void SaveConfig_ShouldCorrectlyAddMappingWhereEntityAlreadyExistsAndMapFieldIsDifferent()
+        {
+            // Arrange
+            var exportConfigFilePath = @"TestData\NewExportConfig.json";
+            var viewMappings = ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsViewType();
+            var configMappings = ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsConfigType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(exportConfigFilePath);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
+            exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
+        }
+        
+        [TestMethod]
+        public void SaveConfig_ShouldCorrectlyAddMappingWhereEntityAlreadyExistsAndMapFieldAlreadyExistsAndRefFieldIsDifferent()
+        {
+            // Arrange
+            var exportConfigFilePath = @"TestData\NewExportConfig.json";
+            var viewMappings = ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsViewType();
+            var configMappings = ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsConfigType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockExportView
+                .Setup(x => x.AskForFilePathToSave(null))
+                .Returns(exportConfigFilePath);
+
+            // Act
+            mockExportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.VerifyAll();
+            var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
+            exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
         }
 
         [TestMethod]
@@ -169,6 +263,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldDoNothingWhenEmptyFilePathSelected()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns("");
@@ -184,6 +280,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldReuseLoadedFilePath()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
             mockExportView
@@ -205,6 +303,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void SaveConfig_ShouldNotifyExceptionWhenAnExceptionIsThrown()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
@@ -223,6 +323,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             // Arrange
             var mockIOrganisationService = new Mock<IOrganizationService>();
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
@@ -263,6 +365,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockWorkerHost
                 .Setup(x => x.WorkAsync(It.IsAny<WorkAsyncInfo>()))
@@ -280,6 +384,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownInsideWorkerHost()
         {
             // Arrange
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
             mockDataMigrationService
                 .Setup(x => x.ExportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmExporterConfig>()))
@@ -298,6 +404,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void RunConfig_ShouldNotifySuccessWhenNotExceptionIsThrownInsideWorkerHost()
         {
             // Act
+            var viewMappings = ProvideMappingsAsViewType();
+            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockExportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
             mockWorkerHost.ExecuteWork(0);
 
@@ -394,6 +502,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.SeperateFilesPerEntity = exportConfig.OneEntityPerBatch, "Separate files per entity does not match config");
             mockExportView.VerifySet(x => x.FilePrefix = exportConfig.FilePrefix, "File prefix does not match config");
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaFilters = exportConfig.CrmMigrationToolSchemaFilters, "CrmMigrationToolSchemaFilters does not match config");
+
         }
 
         private void VerifyViewPropertiesNotSet()
@@ -408,6 +517,126 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.VerifySet(x => x.SeperateFilesPerEntity = It.IsAny<bool>(), Times.Once, "Separate files per entity was set unexpectedly");
             mockExportView.VerifySet(x => x.FilePrefix = It.IsAny<string>(), Times.Once, "File prefix was set unexpectedly");
             mockExportView.VerifySet(x => x.CrmMigrationToolSchemaFilters = It.IsAny<Dictionary<string, string>>(), "CrmMigrationToolSchemaFilters was set unexpectedly");
+        }
+
+        private static List<DataGridViewRow> ProvideMappingsAsViewType()
+        {
+            List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountnumber" });
+            mappings.Add(dataGridViewRow);
+
+            return mappings;
+        }
+
+        private static Dictionary<string, Dictionary<string, List<string>>> ProvideMappingsAsConfigType()
+        {
+            var exportConfig = new CrmExporterConfig();
+            Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var lookupsDictionary = new Dictionary<string, List<string>>();
+            var entity = "Account";
+            var refField = "accountid";
+            var mapField = "accountnumber";
+            lookupsDictionary.Add(refField, new List<string> { mapField });
+            lookupMappings.Add(entity, lookupsDictionary);
+            exportConfig.LookupMapping.AddRange(lookupMappings);
+            return exportConfig.LookupMapping;
+        }
+
+        private static List<DataGridViewRow> ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsViewType()
+        {
+            List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            DataGridViewRow dataGridViewRow2 = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountnumber" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "ownerid" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "accountcategorycode" });
+            mappings.Add(dataGridViewRow);
+            mappings.Add(dataGridViewRow2);
+            return mappings;
+        }
+
+        private static Dictionary<string, Dictionary<string, List<string>>> ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsConfigType()
+        {
+            var exportConfig = new CrmExporterConfig();
+            Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var lookupsDictionary = new Dictionary<string, List<string>>();
+            var lookupsDictionary2 = new Dictionary<string, List<string>>();
+            var entity = "Account";
+            var refField = "accountid";
+            var refField2 = "ownerid";
+            var mapField = "accountnumber";
+            var mapField2 = "accountcategorycode";
+            lookupsDictionary.Add(refField, new List<string> { mapField });
+            lookupsDictionary2.Add(refField2, new List<string> { mapField2 });
+            lookupMappings.Add(entity, lookupsDictionary);
+            lookupMappings[entity].AddRange(lookupsDictionary2);
+            exportConfig.LookupMapping.AddRange(lookupMappings);
+            return exportConfig.LookupMapping;
+        }
+
+        private static List<DataGridViewRow> ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsViewType()
+        {
+            List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            DataGridViewRow dataGridViewRow2 = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountnumber" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "accountcategorycode" });
+            mappings.Add(dataGridViewRow);
+            mappings.Add(dataGridViewRow2);
+            return mappings;
+        }
+
+        private static Dictionary<string, Dictionary<string, List<string>>> ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsConfigType()
+        {
+            var exportConfig = new CrmExporterConfig();
+            Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
+            var lookupsDictionary = new Dictionary<string, List<string>>();
+            var entity = "Account";
+            var refField = "accountid";
+            var mapField = "accountnumber";
+            var mapField2 = "accountcategorycode";
+            lookupsDictionary.Add(refField, new List<string> { mapField });
+            lookupMappings.Add(entity, lookupsDictionary);
+            lookupMappings[entity][refField].Add(mapField2);
+            exportConfig.LookupMapping.AddRange(lookupMappings);
+            return exportConfig.LookupMapping;
+        }
+
+        private static DataGridViewRow GetRowWithBlankCell()
+        {
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            return dataGridViewRow;
+        }
+
+        private static DataGridViewRow GetDuplicateRow()
+        {
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountnumber" });
+            return dataGridViewRow;
+        }
+
+        private static DataGridViewRow GetRowWithAccountEntityAndValidGuids()
+        {
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000003" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000004" });
+            return dataGridViewRow;
         }
     }
 }

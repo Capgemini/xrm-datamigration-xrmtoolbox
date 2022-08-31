@@ -223,6 +223,12 @@
     <Compile Include="Forms\ExportFilterForm.Designer.cs">
       <DependentUpon>ExportFilterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ExportLookupMappingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportLookupMappingsForm.Designer.cs">
+      <DependentUpon>ExportLookupMappingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FilterEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,11 +278,13 @@
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\ExportMappingsFormPresenster.cs" />
     <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
     <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Presenters\IExportFilterFormView.cs" />
+    <Compile Include="Presenters\IExportLookupMappingsView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />
     <Compile Include="Presenters\ISchemaGeneratorView.cs" />
     <Compile Include="Presenters\IImportMappingsFormView.cs" />

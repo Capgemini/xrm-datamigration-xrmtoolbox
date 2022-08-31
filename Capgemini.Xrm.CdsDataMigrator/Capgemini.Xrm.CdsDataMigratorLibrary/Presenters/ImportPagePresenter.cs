@@ -189,7 +189,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private bool DoesEntityMappingAlreadyExist(string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings)
         {
-
             if (mappings.ContainsKey(entity))
             {
                 return true;
