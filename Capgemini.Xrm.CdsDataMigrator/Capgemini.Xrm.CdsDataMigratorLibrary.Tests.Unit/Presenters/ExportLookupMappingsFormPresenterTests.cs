@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
@@ -18,7 +19,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
     public class ExportLookupMappingsFormPresenterTests
     {
         private Mock<IExportLookupMappingsView> mockExportView;
-        private Mock<MetadataService> metaDataService;
+        private Mock<IMetadataService> metaDataService;
         private Mock<IOrganizationService> orgService;
         private ExportLookupMappingsFormPresenter systemUnderTest;
 
@@ -27,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
             mockExportView = new Mock<IExportLookupMappingsView>();
             orgService = new Mock<IOrganizationService>();
-            metaDataService = new Mock<MetadataService>();
+            metaDataService = new Mock<IMetadataService>();
             systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object);
         }
 
@@ -38,5 +39,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                  .Should()
                  .NotThrow();
         }
+
+        [TestMethod]
+        public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
+        {
+            // Act
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+
+                // Assert
+                mockExportView.Verify(x => x.ShowMessage(
+                        "Please make sure you are connected to an organisation", "No connection madde",
+                        System.Windows.Forms.MessageBoxButtons.OK,
+                        System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                mockExportView.Verify(x => x.Close(), Times.Once);
+                mockExportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
+        }
     }
+
 }

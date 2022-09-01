@@ -131,13 +131,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             Close();
         }
 
-        [ExcludeFromCodeCoverage]
-        private void dgvMappings_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            //Temporary solution to hide critical failure
-            e.Cancel = true;
-        }
-
         #endregion
     }
 }
