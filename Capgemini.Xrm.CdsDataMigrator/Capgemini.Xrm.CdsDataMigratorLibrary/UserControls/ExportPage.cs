@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             set => exportLookupMappingsFormPresenter.ExceptionService = value;
         }
-
+        
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;

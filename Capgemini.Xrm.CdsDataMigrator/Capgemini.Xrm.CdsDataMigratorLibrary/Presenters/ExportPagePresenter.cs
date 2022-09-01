@@ -164,6 +164,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
+            List<DataGridViewRow> lookupMappings = GetMappingsInCorrectDataGridViewType();
+            view.LookupMappings.AddRange(lookupMappings); 
         }
 
         private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
@@ -246,6 +248,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return false;
             }
             return true;
+        }
+
+        private List<DataGridViewRow> GetMappingsInCorrectDataGridViewType()
+        {
+            var lookupMappings = new List<DataGridViewRow>();
+            foreach (KeyValuePair<string, Dictionary<string, List<string>>> x in config.LookupMapping)
+            {
+                var newRow = new DataGridViewRow();
+                newRow.Cells[0].Value = x.Key;
+                newRow.Cells[1].Value = x.Value.Keys.FirstOrDefault();
+                newRow.Cells[1].Value = x.Value.Values.FirstOrDefault();
+                lookupMappings.Add(newRow);
+
+            }
+            return lookupMappings;
         }
 
         [ExcludeFromCodeCoverage]
