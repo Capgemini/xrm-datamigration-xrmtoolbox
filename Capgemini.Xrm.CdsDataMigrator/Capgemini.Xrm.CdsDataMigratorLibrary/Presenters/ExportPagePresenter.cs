@@ -164,16 +164,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
-            List<DataGridViewRow> lookupMappings = GetConfigMappingsInCorrectDataGridViewType();
+            List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
             if (view.LookupMappings == null)
             {
-                view.LookupMappings = lookupMappings;
+                view.LookupMappings = mappingsFromConfig;
             }
             else
             {
                 List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
-                List<DataGridViewRow> combinedMappings = lookupMappingsInView.Concat(lookupMappings).ToList();
-                view.LookupMappings = combinedMappings;
+                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
+                view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
         }
 
