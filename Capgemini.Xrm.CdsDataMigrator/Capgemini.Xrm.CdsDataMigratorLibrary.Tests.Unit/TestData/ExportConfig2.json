@@ -1,0 +1,27 @@
+﻿{
+  "ExcludedFields": [],
+  "CrmMigrationToolSchemaPaths": [
+    ""
+  ],
+  "CrmMigrationToolSchemaFilters": {},
+  "PageSize": 999,
+  "BatchSize": 999,
+  "TopCount": 10000,
+  "OnlyActiveRecords": false,
+  "JsonFolderPath": "",
+  "OneEntityPerBatch": true,
+  "FilePrefix": "ExportedData",
+  "SeperateFilesPerEntity": true,
+  "FieldsToObfuscate": [],
+  "LookupMapping": {
+    "account": {
+      "accountid": [
+        "accountcategorycode"
+      ],
+      "createdby": [
+        "accountcategorycode",
+        "accountratingcode"
+      ]
+    }
+  }
+}

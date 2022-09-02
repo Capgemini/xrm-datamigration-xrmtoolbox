@@ -164,8 +164,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
-            List<DataGridViewRow> lookupMappings = GetMappingsInCorrectDataGridViewType();
-            view.LookupMappings = lookupMappings;
+            List<DataGridViewRow> lookupMappings = GetConfigMappingsInCorrectDataGridViewType();
+            if (view.LookupMappings == null)
+            {
+                view.LookupMappings = lookupMappings;
+            }
+            else
+            {
+                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
+                List<DataGridViewRow> combinedMappings = lookupMappingsInView.Concat(lookupMappings).ToList();
+                view.LookupMappings = combinedMappings;
+            }
         }
 
         private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
@@ -250,17 +259,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return true;
         }
 
-        private List<DataGridViewRow> GetMappingsInCorrectDataGridViewType()
+        private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
-            foreach (KeyValuePair<string, Dictionary<string, List<string>>> x in config.LookupMapping)
+            foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
             {    
-                foreach (string mapField in x.Value.Keys)
+                foreach (string mapField in entity.Value.Keys)
                 {
-                    foreach (string refField in x.Value[mapField])
+                    foreach (string refField in entity.Value[mapField])
                     {
                         var newRow = new DataGridViewRow();
-                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = x.Key });
+                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = entity.Key });
                         newRow.Cells.Add(new DataGridViewTextBoxCell { Value = mapField });
                         newRow.Cells.Add(new DataGridViewTextBoxCell { Value = refField });
                         lookupMappings.Add(newRow);
@@ -268,6 +277,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }     
             }
             return lookupMappings;
+        }
+
+        private List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
+        {
+            var filteredViewLookupMappings = new List<DataGridViewRow>();
+            foreach (DataGridViewRow viewLookupRow in viewLookupMappings)
+            {
+                if (!string.IsNullOrEmpty((string)viewLookupRow.Cells[0].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[1].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[2].Value))
+                {
+                    filteredViewLookupMappings.Add(viewLookupRow);
+                }
+            }
+            return filteredViewLookupMappings;
         }
 
         [ExcludeFromCodeCoverage]
