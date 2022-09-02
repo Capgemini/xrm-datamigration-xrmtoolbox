@@ -165,7 +165,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
             List<DataGridViewRow> lookupMappings = GetMappingsInCorrectDataGridViewType();
-            view.LookupMappings.AddRange(lookupMappings); 
+            view.LookupMappings = lookupMappings;
         }
 
         private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
@@ -254,13 +254,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             var lookupMappings = new List<DataGridViewRow>();
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> x in config.LookupMapping)
-            {
-                var newRow = new DataGridViewRow();
-                newRow.Cells[0].Value = x.Key;
-                newRow.Cells[1].Value = x.Value.Keys.FirstOrDefault();
-                newRow.Cells[1].Value = x.Value.Values.FirstOrDefault();
-                lookupMappings.Add(newRow);
-
+            {    
+                foreach (string mapField in x.Value.Keys)
+                {
+                    foreach (string refField in x.Value[mapField])
+                    {
+                        var newRow = new DataGridViewRow();
+                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = x.Key });
+                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = mapField });
+                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = refField });
+                        lookupMappings.Add(newRow);
+                    }
+                }     
             }
             return lookupMappings;
         }
