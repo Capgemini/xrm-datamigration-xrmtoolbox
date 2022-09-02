@@ -21,13 +21,40 @@
   "FilePrefix": "ExportedData",
   "SeperateFilesPerEntity": true,
   "LookupMapping": {
-    "account": {
-      "accountid": [
-        "accountcategorycode"
+    "systemuser": {
+      "businessunitid": [
+        "name"
+      ]
+    },
+    "systemuserroles": {
+      "systemuserid": [
+        "domainname"
       ],
-      "createdby": [
-        "accountcategorycode",
-        "accountratingcode"
+      "roleid": [
+        "name",
+        "businessunitid"
+      ]
+    },
+    "teammembership": {
+      "systemuserid": [
+        "domainname"
+      ],
+      "teamid": [
+        "name",
+        "businessunitid"
+      ]
+    },
+    "systemuserprofiles": {
+      "systemuserid": [
+        "domainname"
+      ],
+      "fieldsecurityprofileid": [
+        "name"
+      ]
+    },
+    "usersettings": {
+      "systemuserid": [
+        "domainname"
       ]
     }
   }
