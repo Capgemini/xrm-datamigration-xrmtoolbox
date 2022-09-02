@@ -119,7 +119,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         public void LoadConfig_ShouldSetLookupMappingsFromConfigCorrectly()
         {
             // Arrange
-            var exportConfigFilePath = @"TestData\ExportConfig2.json";
+            var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var viewMappings = ProvideMappingsAsViewTypeToMatchConfigFile();
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
