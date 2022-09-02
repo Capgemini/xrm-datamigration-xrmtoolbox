@@ -25,12 +25,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.OnRefFieldChanged += OnRefFieldChanged;
         }
 
+        [ExcludeFromCodeCoverage]
         public IMetadataService MetaDataService { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public IOrganizationService OrganizationService { get; set; }
-        
+
+        [ExcludeFromCodeCoverage]
         public IExceptionService ExceptionService { get; set; }
-        
+
         public void OnVisible(object sender, EventArgs e)
         {
 

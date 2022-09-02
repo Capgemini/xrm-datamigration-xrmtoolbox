@@ -145,7 +145,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         List<DataGridViewRow> IExportPageView.LookupMappings
         {
             get => exportLookupMappingsForm.Mappings;
-            // setter needed to load existing mappings. Still needs to be implemented
             set => exportLookupMappingsForm.Mappings = value;
         }
 

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
@@ -19,16 +20,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
     public class ExportLookupMappingsFormPresenterTests
     {
         private Mock<IExportLookupMappingsView> mockExportView;
-        private Mock<IMetadataService> metaDataService;
-        private Mock<IOrganizationService> orgService;
         private ExportLookupMappingsFormPresenter systemUnderTest;
 
         [TestInitialize]
         public void TestSetup()
         {
             mockExportView = new Mock<IExportLookupMappingsView>();
-            orgService = new Mock<IOrganizationService>();
-            metaDataService = new Mock<IMetadataService>();
             systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object);
         }
 

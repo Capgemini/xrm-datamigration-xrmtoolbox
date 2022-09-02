@@ -115,14 +115,13 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockNotifier.Verify(x => x.ShowError(thrownException));
         }
 
+        // Still to complete
         [TestMethod]
-        public void LoadConfig_ShouldSetLookupMappingsFromConfigCorrectly()
+        public void LoadConfig_ShouldSetLookupMappingsInViewCorrectly()
         {
             // Arrange
-            var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var viewMappings = ProvideMappingsAsViewTypeToMatchConfigFile();
-            var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
-            mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            var exportConfigFilePath = @"TestData\ExportConfig.json";
             mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns(exportConfigFilePath);
@@ -131,8 +130,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
             // Assert
-            //mockExportView.VerifyAll();
-            exportConfig.LookupMapping.Should().BeEquivalentTo(viewMappings);
+            mockExportView.VerifyAll();
+            //mockExportView.LookupMappings.Should().BeEquivalentTo(viewMappings);
         }
 
         [TestMethod]
@@ -663,20 +662,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         {
             List<DataGridViewRow> mappings = new List<DataGridViewRow>();
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
-            DataGridViewRow dataGridViewRow2 = new DataGridViewRow();
-            DataGridViewRow dataGridViewRow3 = new DataGridViewRow();
-            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "account" });
-            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
-            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountcategorycode" });
-            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "account" });
-            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "createdby" });
-            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "accountcategorycode" });
-            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "account" });
-            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "createdby" });
-            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "accountratingcode" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "systemuser" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "businessunitid" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "name" });
             mappings.Add(dataGridViewRow);
-            mappings.Add(dataGridViewRow2);
-            mappings.Add(dataGridViewRow3);
+
             return mappings;
         }
     }
