@@ -115,12 +115,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockNotifier.Verify(x => x.ShowError(thrownException));
         }
 
-        // Still to complete
         [TestMethod]
         public void LoadConfig_ShouldSetLookupMappingsInViewCorrectly()
         {
             // Arrange
-            var viewMappings = ProvideMappingsAsViewTypeToMatchConfigFile();
+            var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
             var exportConfigFilePath = @"TestData\ExportConfig.json";
             mockExportView
                 .Setup(x => x.AskForFilePathToOpen())
@@ -131,7 +130,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            //mockExportView.LookupMappings.Should().BeEquivalentTo(viewMappings);
+            mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
         }
 
         [TestMethod]
@@ -658,7 +657,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             return dataGridViewRow;
         }
 
-        private static List<DataGridViewRow> ProvideMappingsAsViewTypeToMatchConfigFile()
+        private static List<DataGridViewRow> GetMappingsAsViewTypeToMatchConfigFile()
         {
             List<DataGridViewRow> mappings = new List<DataGridViewRow>();
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
