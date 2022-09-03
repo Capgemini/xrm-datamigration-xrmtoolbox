@@ -23,6 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.OnVisible += OnVisible;
             this.view.OnEntityColumnChanged += OnEntityColumnChanged;
             this.view.OnRefFieldChanged += OnRefFieldChanged;
+            this.view.LoadMappedItems += LoadMappedItems;
         }
 
         [ExcludeFromCodeCoverage]
@@ -65,6 +66,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentRow.Cells[0].Value, OrganizationService, ExceptionService);
             view.MapFieldLookups = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
         }
+
+        public void LoadMappedItems(object sender, EventArgs e)
+        {
+            // add data source etc to loaded mappings
+        }
+
 
         [ExcludeFromCodeCoverage]
         public void Dispose()

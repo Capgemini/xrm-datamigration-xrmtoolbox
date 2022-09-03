@@ -165,16 +165,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
             List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
-            if (view.LookupMappings == null)
-            {
-                view.LookupMappings = mappingsFromConfig;
-            }
-            else
-            {
-                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
-                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
-                view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
-            }
+            UpdateView(mappingsFromConfig);
         }
 
         private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
@@ -290,6 +281,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
             }
             return filteredViewLookupMappings;
+        }
+
+        private void UpdateView(List<DataGridViewRow> mappingsFromConfig)
+        {
+            if (view.LookupMappings == null)
+            {
+                view.LookupMappings = mappingsFromConfig;
+            }
+            else
+            {
+                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
+                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
+                view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
+            }
         }
 
         [ExcludeFromCodeCoverage]

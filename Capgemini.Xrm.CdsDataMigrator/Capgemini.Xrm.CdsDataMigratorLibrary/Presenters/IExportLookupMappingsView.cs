@@ -17,6 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnVisible;
         event EventHandler OnEntityColumnChanged;
         event EventHandler OnRefFieldChanged;
+        event EventHandler LoadMappedItems;
 
 
         IEnumerable<string> EntityList { get; set; }

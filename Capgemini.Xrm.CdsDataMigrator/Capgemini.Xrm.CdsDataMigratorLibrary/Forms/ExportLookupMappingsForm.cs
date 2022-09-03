@@ -14,6 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         public event EventHandler OnVisible;
         public event EventHandler OnEntityColumnChanged;
         public event EventHandler OnRefFieldChanged;
+        public event EventHandler LoadMappedItems;
         public DataGridView LookupMappings { get; set; }
 
         public ExportLookupMappings()
@@ -123,6 +124,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             {
                 this.OnRefFieldChanged?.Invoke(sender, e);
             }
+        }
+
+        private void MappingListLoad(object sender, EventArgs e)
+        {
+            dgvMappings.Rows.Clear();
+            dgvMappings.Refresh();
+            this.LoadMappedItems?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]
