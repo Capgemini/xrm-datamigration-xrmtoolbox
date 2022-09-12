@@ -46,33 +46,47 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Close();
                 return;
             }
-            if (new List<string>(view.EntityList).Count == 0)
+            if (new List<string>(view.EntityListDataSource).Count == 0)
             {
                 var entities = MetaDataService.RetrieveEntities(OrganizationService);
-                view.EntityList = entities.Select(x => x.LogicalName).OrderBy(n => n).ToList();
+                view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n).ToList();
             }  
         }
 
         public void OnEntityColumnChanged(object sender, EventArgs e)
         {
-            view.LookupMappings.Rows[view.LookupMappings.CurrentCell.RowIndex].Cells[1].Value = null;
-            view.LookupMappings.Rows[view.LookupMappings.CurrentCell.RowIndex].Cells[2].Value = null;
-            var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentCell.Value, OrganizationService, ExceptionService);
-            view.RefFieldLookups = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
+            if (OrganizationService == null)
+            {
+                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                view.Close();
+                return;
+            }
+            view.MappingCells = null;
+            var entityMeta = MetaDataService.RetrieveEntities(view.CurrentCell, OrganizationService, ExceptionService);
+            view.RefFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
         }
 
         public void OnRefFieldChanged(object sender, EventArgs e)
         {
-            var entityMeta = MetaDataService.RetrieveEntities((string)view.LookupMappings.CurrentRow.Cells[0].Value, OrganizationService, ExceptionService);
-            view.MapFieldLookups = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
+            if (OrganizationService == null)
+            {
+                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                view.Close();
+                return;
+            }
+            var entityMeta = MetaDataService.RetrieveEntities(view.FirstCellInRow, OrganizationService, ExceptionService);
+            view.MapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
         }
 
         public void LoadMappedItems(object sender, EventArgs e)
         {
             // add data source etc to loaded mappings
         }
-
-
+        
         [ExcludeFromCodeCoverage]
         public void Dispose()
         {

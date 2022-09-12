@@ -19,11 +19,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnRefFieldChanged;
         event EventHandler LoadMappedItems;
 
-
-        IEnumerable<string> EntityList { get; set; }
-        AttributeMetadata[] RefFieldLookups { set; }
-        AttributeMetadata[] MapFieldLookups { set; }
-        DataGridView LookupMappings { get; set; }
+        string FirstCellInRow {  get; set; }
+        List<string> MappingCells { get; set; }
+        IEnumerable<string> EntityListDataSource { get; set; }
+        AttributeMetadata[] RefFieldDataSource { set; }
+        AttributeMetadata[] MapFieldDataSource { set; }
+        String CurrentCell { get; set; }
 
         void Close();
         DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);

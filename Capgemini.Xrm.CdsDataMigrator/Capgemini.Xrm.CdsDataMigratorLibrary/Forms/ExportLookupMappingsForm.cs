@@ -15,7 +15,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         public event EventHandler OnEntityColumnChanged;
         public event EventHandler OnRefFieldChanged;
         public event EventHandler LoadMappedItems;
-        public DataGridView LookupMappings { get; set; }
+        [ExcludeFromCodeCoverage]
+        public String CurrentCell { get; set; }
+        public string FirstCellInRow { get; set; }
 
         public ExportLookupMappings()
         {
@@ -26,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #region data mappings
 
-        IEnumerable<string> IExportLookupMappingsView.EntityList
+        IEnumerable<string> IExportLookupMappingsView.EntityListDataSource
         {
             get => clEntity.Items.Cast<string>();
             set
@@ -37,7 +39,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.RefFieldLookups
+        AttributeMetadata[] IExportLookupMappingsView.RefFieldDataSource
         {
             set
             {
@@ -46,11 +48,30 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.MapFieldLookups
+        AttributeMetadata[] IExportLookupMappingsView.MapFieldDataSource
         {
             set
             {   
                 (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[2] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        List<string> IExportLookupMappingsView.MappingCells
+        {
+            get
+            {
+                List<string> MappingCells = new List<string>
+                {
+                    (string)dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value,
+                    (string)dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value
+                };
+                return MappingCells;
+            }
+            set
+            {
+                dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value = value;
+                dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = value;
             }
         }
 
@@ -111,7 +132,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
-            LookupMappings = dgvMappings;
+            CurrentCell = (string)dgvMappings.CurrentCell.Value;
             if (dgvMappings.CurrentCell.IsInEditMode)
             {
                 dgvMappings.CommitEdit(DataGridViewDataErrorContexts.Commit);
@@ -122,6 +143,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
             if (dgvMappings.CurrentCell.ColumnIndex == 1)
             {
+                this.FirstCellInRow = (string)dgvMappings.CurrentRow.Cells[0].Value;
                 this.OnRefFieldChanged?.Invoke(sender, e);
             }
         }

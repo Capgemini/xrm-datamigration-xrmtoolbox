@@ -1,23 +1,17 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using XrmToolBox.Extensibility;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ExportLookupMappingsFormPresenterTests
+    public class ExportLookupMappingsFormPresenterTests : TestBase
     {
         private Mock<IExportLookupMappingsView> mockExportView;
         private ExportLookupMappingsFormPresenter systemUnderTest;
@@ -27,6 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
             mockExportView = new Mock<IExportLookupMappingsView>();
             systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object);
+            SetupServiceMocks();
         }
 
         [TestMethod]
@@ -49,7 +44,66 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                         System.Windows.Forms.MessageBoxButtons.OK,
                         System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
                 mockExportView.Verify(x => x.Close(), Times.Once);
-                mockExportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
+                mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnVisible()
+        {
+            using (var systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object))
+            {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+
+                mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public void OnMapFieldChanged()
+        {
+            using (var systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object))
+            {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+                systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
+                mockExportView
+                    .SetupGet(x => x.MappingCells)
+                    .Returns(new List<string> { null, null});
+                mockExportView
+                    .SetupGet(x => x.CurrentCell)
+                    .Returns("account");
+
+                mockExportView.Raise(x => x.OnEntityColumnChanged += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.RefFieldDataSource = It.IsAny<AttributeMetadata[]>(), Times.Once);
+            }
+        }
+
+        [TestMethod]
+        public void OnRefFieldChanged()
+        {
+            using (var systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object))
+            {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+                systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
+                mockExportView
+                    .SetupGet(x => x.FirstCellInRow)
+                    .Returns("account");
+
+                mockExportView.Raise(x => x.OnRefFieldChanged += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.MapFieldDataSource = It.IsAny<AttributeMetadata []>(), Times.Once);
+            }
         }
     }
 

@@ -20,26 +20,26 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
             using (var systemUnderTest = new ExportLookupMappings())
             {
                 // Act
-                systemUnderTest.As<IExportLookupMappingsView>().EntityList = value;
+                systemUnderTest.As<IExportLookupMappingsView>().EntityListDataSource = value;
 
                 // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().EntityList.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IExportLookupMappingsView>().EntityListDataSource.Should().BeEquivalentTo(value);
 
             }
         }
 
         [TestMethod]
-        public void Mappings_GetSet()
+        public void FirstCellInRow_GetSet()
         {
             // Arrange
-            var value = new DataGridView();
+            var value = new List<string>();
             using (var systemUnderTest = new ExportLookupMappings())
             {
                 // Act
-                systemUnderTest.As<IExportLookupMappingsView>().LookupMappings = value;
+                systemUnderTest.As<IExportLookupMappingsView>().MappingCells = value;
 
                 // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().LookupMappings.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IExportLookupMappingsView>().MappingCells.Should().BeEquivalentTo(value);
 
             }
         }
