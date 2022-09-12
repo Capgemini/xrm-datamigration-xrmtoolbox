@@ -32,14 +32,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void FirstCellInRow_GetSet()
         {
             // Arrange
-            var value = new List<string>();
+            var value = "account";
             using (var systemUnderTest = new ExportLookupMappings())
             {
                 // Act
-                systemUnderTest.As<IExportLookupMappingsView>().MappingCells = value;
+                systemUnderTest.As<IExportLookupMappingsView>().FirstCellInRow = value;
 
                 // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().MappingCells.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IExportLookupMappingsView>().FirstCellInRow.Should().BeEquivalentTo(value);
 
             }
         }
