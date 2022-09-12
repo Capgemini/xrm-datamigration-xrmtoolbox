@@ -36,14 +36,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         public IExceptionService ExceptionService { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
-        {
-
+        {   
             if (OrganizationService == null)
             {
-                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                view.Close();
+                ShowErrorMessage();
                 return;
             }
             if (new List<string>(view.EntityListDataSource).Count == 0)
@@ -57,10 +53,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             if (OrganizationService == null)
             {
-                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                view.Close();
+                ShowErrorMessage();
                 return;
             }
             view.MappingCells = null;
@@ -72,10 +65,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             if (OrganizationService == null)
             {
-                view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                view.Close();
+                ShowErrorMessage();
                 return;
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.FirstCellInRow, OrganizationService, ExceptionService);
@@ -85,6 +75,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         public void LoadMappedItems(object sender, EventArgs e)
         {
             // add data source etc to loaded mappings
+        }
+
+        private void ShowErrorMessage()
+        {
+            view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
+            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            view.Close();
         }
         
         [ExcludeFromCodeCoverage]

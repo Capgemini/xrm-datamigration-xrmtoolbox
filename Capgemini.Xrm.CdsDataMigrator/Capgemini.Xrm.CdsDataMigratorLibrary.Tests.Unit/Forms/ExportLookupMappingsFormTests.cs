@@ -45,7 +45,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         }
 
         [TestMethod]
-        public void Mappings2_GetSet()
+        public void Mappings_GetSet()
         {
             // Arrange
             var value = new List<DataGridViewRow>();
