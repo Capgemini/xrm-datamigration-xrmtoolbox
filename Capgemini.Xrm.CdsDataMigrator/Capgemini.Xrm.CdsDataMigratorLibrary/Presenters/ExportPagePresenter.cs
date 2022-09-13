@@ -260,9 +260,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     foreach (string refField in entity.Value[mapField])
                     {
                         var newRow = new DataGridViewRow();
-                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = entity.Key });
-                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = mapField });
-                        newRow.Cells.Add(new DataGridViewTextBoxCell { Value = refField });
+                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = new List<string> { "account", "contact" } });
+                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = mapField, DataSource = new List<string> { "accountid", "createdby" } });
+                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = refField, DataSource = new List<string> { "accountcategorycode", "accountratingcode" } });
                         lookupMappings.Add(newRow);
                     }
                 }     

@@ -130,7 +130,6 @@
             this.Controls.Add(this.btnClose);
             this.Name = "MappingListLookup";
             this.Text = "Mappings";
-            this.Load += new System.EventHandler(this.MappingListLoad);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMappings)).EndInit();

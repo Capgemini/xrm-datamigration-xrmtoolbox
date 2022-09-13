@@ -17,14 +17,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnVisible;
         event EventHandler OnEntityColumnChanged;
         event EventHandler OnRefFieldChanged;
-        event EventHandler LoadMappedItems;
 
-        string FirstCellInRow {  get; set; }
+        string FirstCellInRow { get; set; }
         List<string> MappingCells { get; set; }
         IEnumerable<string> EntityListDataSource { get; set; }
         AttributeMetadata[] RefFieldDataSource { set; }
         AttributeMetadata[] MapFieldDataSource { set; }
-        String CurrentCell { get; set; }
+        string CurrentCell { get; set; }
 
         void Close();
         DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);

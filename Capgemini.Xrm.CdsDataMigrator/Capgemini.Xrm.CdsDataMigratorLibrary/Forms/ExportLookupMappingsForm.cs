@@ -14,7 +14,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         public event EventHandler OnVisible;
         public event EventHandler OnEntityColumnChanged;
         public event EventHandler OnRefFieldChanged;
-        public event EventHandler LoadMappedItems;
         [ExcludeFromCodeCoverage]
         public String CurrentCell { get; set; }
         public string FirstCellInRow { get; set; }
@@ -86,7 +85,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
                 }
                 return mappings;
             }
-            // setter needed to load existing mappings. Still needs to be implemented
             set
             {
                 dgvMappings.Rows.Clear();
@@ -97,11 +95,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
         }
 
-        #endregion
+#endregion
 
-        #region action mappings
+#region action mappings
 
-        [ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage]
         DialogResult IExportLookupMappingsView.ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             return MessageBox.Show(message, caption, buttons, icon);
@@ -146,13 +144,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
                 this.FirstCellInRow = (string)dgvMappings.CurrentRow.Cells[0].Value;
                 this.OnRefFieldChanged?.Invoke(sender, e);
             }
-        }
-
-        private void MappingListLoad(object sender, EventArgs e)
-        {
-            dgvMappings.Rows.Clear();
-            dgvMappings.Refresh();
-            this.LoadMappedItems?.Invoke(sender, e);
         }
 
         [ExcludeFromCodeCoverage]

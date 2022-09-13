@@ -23,7 +23,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.OnVisible += OnVisible;
             this.view.OnEntityColumnChanged += OnEntityColumnChanged;
             this.view.OnRefFieldChanged += OnRefFieldChanged;
-            this.view.LoadMappedItems += LoadMappedItems;
         }
 
         [ExcludeFromCodeCoverage]
@@ -42,11 +41,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 ShowErrorMessage();
                 return;
             }
+            var entities = MetaDataService.RetrieveEntities(OrganizationService);
             if (new List<string>(view.EntityListDataSource).Count == 0)
             {
-                var entities = MetaDataService.RetrieveEntities(OrganizationService);
                 view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n).ToList();
-            }  
+            }
         }
 
         public void OnEntityColumnChanged(object sender, EventArgs e)
@@ -70,11 +69,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.FirstCellInRow, OrganizationService, ExceptionService);
             view.MapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
-        }
-
-        public void LoadMappedItems(object sender, EventArgs e)
-        {
-            // add data source etc to loaded mappings
         }
 
         private void ShowErrorMessage()
