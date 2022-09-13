@@ -145,6 +145,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
                 attributesField.SetValue(entityMetadata, attributes.ToArray());
                 mockExportView
+                    .Setup(x => x.LookupMappings)
+                    .Returns(ProvideMappingsAsViewType());
+                mockExportView
                     .Setup(x => x.AskForFilePathToOpen())
                     .Returns(exportConfigFilePath);
                 MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
