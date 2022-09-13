@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
@@ -7,11 +8,13 @@ using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using NuGet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -117,19 +120,48 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         [TestMethod]
         public void LoadConfig_ShouldSetLookupMappingsInViewCorrectly()
         {
-            // Arrange
-            var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
-            var exportConfigFilePath = @"TestData\ExportConfig.json";
-            mockExportView
-                .Setup(x => x.AskForFilePathToOpen())
-                .Returns(exportConfigFilePath);
+            using (var systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object))
+            {
+                // Arrange
+                var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
+                var exportConfigFilePath = @"TestData\ExportConfig.json";
+                systemUnderTest.organisationService = ServiceMock.Object;
+                systemUnderTest.metaDataService = MetadataServiceMock.Object;
+                systemUnderTest.exceptionService = ExceptionServicerMock.Object;
+                var entityMetaDataList = new List<EntityMetadata>()
+                {
+                    new EntityMetadata { LogicalName = "account" }
+                };
+                var selectedValue = "contactattnoattributes1";
+                var attributeMetaDataItem = new UniqueIdentifierAttributeMetadata
+                {
+                    LogicalName = selectedValue
+                };
+                var attributes = new List<AttributeMetadata>
+                {
+                attributeMetaDataItem
+                };
+                var entityMetadata = new EntityMetadata();
+                var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+                attributesField.SetValue(entityMetadata, attributes.ToArray());
+                mockExportView
+                    .Setup(x => x.AskForFilePathToOpen())
+                    .Returns(exportConfigFilePath);
+                MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                    .Returns(entityMetaDataList)
+                    .Verifiable();
+                MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                    .Returns(entityMetadata)
+                    .Verifiable();
 
-            // Act
-            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+                // Act
+                mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
-            // Assert
-            mockExportView.VerifyAll();
-            mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
+                // Assert
+                mockExportView.VerifyAll();
+                mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
+            }
+
         }
 
         [TestMethod]

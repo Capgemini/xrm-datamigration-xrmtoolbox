@@ -23,9 +23,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
-        private readonly IOrganizationService organisationService;
-        private readonly IMetadataService metaDataService;
-        private readonly IExceptionService exceptionService;
+        public IOrganizationService organisationService;
+        public IMetadataService metaDataService;
+        public IExceptionService exceptionService;
 
         private CrmExporterConfig config;
         private string configFilePath;
