@@ -34,14 +34,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.Settings = settings;
             SchemaGeneratorWizard.BringToFront();
-
-            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
-            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-            this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this);
-            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this);
-            this.exportPage1.MetadataService = new MetadataService();
-            this.exportPage1.ExceptionService = new ExceptionService();
-
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -53,7 +45,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
                     this.exportPage1.OrganizationService = detail.ServiceClient;
-                    
+                    var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+                    var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+                    var metaDataService = new MetadataService();
+                    var exceptionService = new ExceptionService();
+                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this);
+                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService);
+                    this.exportPage1.MetadataService = new MetadataService();
+                    this.exportPage1.ExceptionService = new ExceptionService();
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();

@@ -1,6 +1,10 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Microsoft.Rest;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using NuGet;
 using System;
 using System.Collections.Generic;
@@ -19,16 +23,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
+        private readonly IOrganizationService organisationService;
+        private readonly IMetadataService metaDataService;
+        private readonly IExceptionService exceptionService;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IExceptionService exceptionService)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
             this.notifier = notifier;
+            this.organisationService = organizationService;
+            this.metaDataService = metaDataService;
+            this.exceptionService = exceptionService;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -253,21 +263,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
+            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
             {    
                 foreach (string mapField in entity.Value.Keys)
                 {
                     foreach (string refField in entity.Value[mapField])
                     {
-                        var newRow = new DataGridViewRow();
-                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = new List<string> { "account", "contact" } });
-                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = mapField, DataSource = new List<string> { "accountid", "createdby" } });
-                        newRow.Cells.Add(new DataGridViewComboBoxCell { Value = refField, DataSource = new List<string> { "accountcategorycode", "accountratingcode" } });
+                        var newRow = AddCellsToDataGridViewRow(entity, entitiesDataSource, mapField, refField);
                         lookupMappings.Add(newRow);
                     }
                 }     
             }
             return lookupMappings;
+        }
+
+        private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<string, List<string>>> entity, List<EntityMetadata> entitiesDataSource, string mapField, string refField)
+        {
+            var entityMeta = metaDataService.RetrieveEntities(entity.Key, organisationService, exceptionService);
+            var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray().Select(x => x.LogicalName).ToArray();
+            var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray().Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            var newRow = new DataGridViewRow();
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = mapField, DataSource = mapFieldDataSource });
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = refField, DataSource = refFieldDataSource });
+            return newRow;
         }
 
         private List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
