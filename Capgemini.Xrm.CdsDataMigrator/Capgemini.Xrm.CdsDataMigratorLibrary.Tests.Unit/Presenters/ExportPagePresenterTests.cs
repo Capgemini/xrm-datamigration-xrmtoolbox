@@ -19,23 +19,22 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ExportPagePresenterTests
+    public class ExportPagePresenterTests : TestBase
     {
         private Mock<IExportPageView> mockExportView;
         private Mock<IWorkerHost> mockWorkerHost;
-        private Mock<IDataMigrationService> mockDataMigrationService;
         private Mock<INotifier> mockNotifier;
         private ExportPagePresenter systemUnderTest;
 
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             mockExportView = new Mock<IExportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
-            mockDataMigrationService = new Mock<IDataMigrationService>();
             mockNotifier = new Mock<INotifier>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object, mockNotifier.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object);
         }
 
         [TestMethod]
@@ -364,8 +363,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Assert
             mockExportView.VerifyAll();
             workInfo.Message.Should().Be("Exporting data...");
-            mockDataMigrationService.Verify(x => x.ExportData(mockIOrganisationService.Object, CdsDataMigratorLibrary.Enums.DataFormat.Json, It.IsAny<CrmExporterConfig>()));
-            var exportConfig = mockDataMigrationService.Invocations[0].Arguments[2].As<CrmExporterConfig>();
+            DataMigrationServiceMock.Verify(x => x.ExportData(mockIOrganisationService.Object, CdsDataMigratorLibrary.Enums.DataFormat.Json, It.IsAny<CrmExporterConfig>()));
+            var exportConfig = DataMigrationServiceMock.Invocations[0].Arguments[2].As<CrmExporterConfig>();
             exportConfig.PageSize.Should().Be(1000);
             exportConfig.BatchSize.Should().Be(2000);
             exportConfig.TopCount.Should().Be(3000);
@@ -405,7 +404,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var viewMappings = ProvideMappingsAsViewType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
-            mockDataMigrationService
+            DataMigrationServiceMock
                 .Setup(x => x.ExportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmExporterConfig>()))
                 .Throws(thrownException);
 
