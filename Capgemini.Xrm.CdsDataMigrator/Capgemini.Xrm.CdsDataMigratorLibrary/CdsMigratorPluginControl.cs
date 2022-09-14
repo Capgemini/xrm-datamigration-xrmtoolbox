@@ -49,7 +49,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
-                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this);
+                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService);
                     this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService);
                     this.exportPage1.MetadataService = new MetadataService();
                     this.exportPage1.ExceptionService = new ExceptionService();

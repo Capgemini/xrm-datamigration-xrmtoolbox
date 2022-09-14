@@ -90,7 +90,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         List<DataGridViewRow> IImportPageView.Mappings
         {
             get => importMappingsForm.Mappings;
-            // setter needed to load existing mappings. Still needs to be implemented
             set => importMappingsForm.Mappings = value;
         }
 

@@ -9,6 +9,8 @@ using XrmToolBox.Extensibility.Interfaces;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using NuGet;
+using Microsoft.Xrm.Sdk;
+using System.Linq;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -18,16 +20,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
-        
+        public IOrganizationService organisationService;
+        public IMetadataService metaDataService;
+
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
             this.notifier = notifier;
+            this.organisationService = organizationService;
+            this.metaDataService = metaDataService;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -142,6 +148,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
+            if (config.MigrationConfig == null)
+            {
+                return;
+            }
+            List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
+            UpdateView(mappingsFromConfig);
         }
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetMappingsInCorrectDataType()
@@ -203,6 +215,53 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return false;
             }
             return true;
+        }
+
+        private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
+        {
+            var lookupMappings = new List<DataGridViewRow>();
+            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
+            foreach (KeyValuePair<string, Dictionary<Guid, Guid>> entity in config.MigrationConfig.Mappings)
+            {
+                foreach (Guid guidToMap in entity.Value.Keys)
+                {
+                    var newRow = new DataGridViewRow();
+                    newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
+                    newRow.Cells.Add(new DataGridViewTextBoxCell());
+                    newRow.Cells[1].Value = guidToMap.ToString();
+                    newRow.Cells.Add(new DataGridViewTextBoxCell());
+                    newRow.Cells[2].Value = entity.Value[guidToMap].ToString();
+                    lookupMappings.Add(newRow);
+                }
+            }
+            return lookupMappings;
+        }
+
+        private void UpdateView(List<DataGridViewRow> mappingsFromConfig)
+        {
+            if (view.Mappings == null)
+            {
+                view.Mappings = mappingsFromConfig;
+            }
+            else
+            {
+                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
+                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
+                view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
+            }
+        }
+
+        private List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
+        {
+            var filteredViewLookupMappings = new List<DataGridViewRow>();
+            foreach (DataGridViewRow viewLookupRow in viewLookupMappings)
+            {
+                if (!string.IsNullOrEmpty((string)viewLookupRow.Cells[0].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[1].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[2].Value))
+                {
+                    filteredViewLookupMappings.Add(viewLookupRow);
+                }
+            }
+            return filteredViewLookupMappings;
         }
 
         [ExcludeFromCodeCoverage]
