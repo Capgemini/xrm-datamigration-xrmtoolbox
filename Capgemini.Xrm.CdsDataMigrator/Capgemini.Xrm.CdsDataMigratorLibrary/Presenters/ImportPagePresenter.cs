@@ -162,7 +162,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (!AreAllCellsPopulated(row))
+                if (!Helpers.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var sourceId = Guid.Parse((string)row.Cells[1].Value);
@@ -208,15 +208,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             return false;
         }
-    
-        private static bool AreAllCellsPopulated(DataGridViewRow row)
-        {
-            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
-            {
-                return false;
-            }
-            return true;
-        }
 
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
@@ -252,23 +243,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
+                List<DataGridViewRow> lookupMappingsInView = Helpers.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
-        }
-
-        private List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
-        {
-            var filteredViewLookupMappings = new List<DataGridViewRow>();
-            foreach (DataGridViewRow viewLookupRow in viewLookupMappings)
-            {
-                if (!string.IsNullOrEmpty((string)viewLookupRow.Cells[0].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[1].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[2].Value))
-                {
-                    filteredViewLookupMappings.Add(viewLookupRow);
-                }
-            }
-            return filteredViewLookupMappings;
         }
 
         [ExcludeFromCodeCoverage]

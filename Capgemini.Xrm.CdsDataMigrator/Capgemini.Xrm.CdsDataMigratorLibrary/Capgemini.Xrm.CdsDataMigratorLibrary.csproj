@@ -279,6 +279,7 @@
     </Compile>
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
     <Compile Include="Presenters\ExportMappingsFormPresenster.cs" />
+    <Compile Include="Presenters\Helpers.cs" />
     <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />

@@ -183,7 +183,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (DataGridViewRow row in view.LookupMappings)
             {
-                if (!AreAllCellsPopulated(row))
+                if (!Helpers.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var refField = row.Cells[1].Value.ToString();
@@ -251,15 +251,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return false;
         }
 
-        private static bool AreAllCellsPopulated(DataGridViewRow row)
-        {
-            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
-            {
-                return false;
-            }
-            return true;
-        }
-
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
@@ -290,19 +281,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return newRow;
         }
 
-        private List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
-        {
-            var filteredViewLookupMappings = new List<DataGridViewRow>();
-            foreach (DataGridViewRow viewLookupRow in viewLookupMappings)
-            {
-                if (!string.IsNullOrEmpty((string)viewLookupRow.Cells[0].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[1].Value) && !string.IsNullOrEmpty((string)viewLookupRow.Cells[2].Value))
-                {
-                    filteredViewLookupMappings.Add(viewLookupRow);
-                }
-            }
-            return filteredViewLookupMappings;
-        }
-
         private void UpdateView(List<DataGridViewRow> mappingsFromConfig)
         {
             if (view.LookupMappings == null)
@@ -311,7 +289,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                List<DataGridViewRow> lookupMappingsInView = GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
+                List<DataGridViewRow> lookupMappingsInView = Helpers.GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
