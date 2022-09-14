@@ -126,10 +126,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             // Arrange
             var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
             var exportConfigFilePath = @"TestData\ExportConfig.json";
-            systemUnderTest.organisationService = ServiceMock.Object;
-            systemUnderTest.metaDataService = MetadataServiceMock.Object;
-            systemUnderTest.exceptionService = ExceptionServicerMock.Object;
-            systemUnderTest.staticPresenterHelpersWrapper = mockStaticPresenterHelpersWrapper.Object;
             var entityMetaDataList = new List<EntityMetadata>()
                 {
                     new EntityMetadata { LogicalName = "account" }

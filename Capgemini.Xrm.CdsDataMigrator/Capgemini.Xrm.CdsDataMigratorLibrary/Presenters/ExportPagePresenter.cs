@@ -24,10 +24,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
-        public IOrganizationService organisationService;
-        public IMetadataService metaDataService;
-        public IExceptionService exceptionService;
-        public IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper;
+        private IOrganizationService organisationService;
+        private IMetadataService metaDataService;
+        private IExceptionService exceptionService;
+        private IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper;
 
         private CrmExporterConfig config;
         private string configFilePath;
@@ -275,8 +275,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<string, List<string>>> entity, List<EntityMetadata> entitiesDataSource, string mapField, string refField)
         {
             var entityMeta = metaDataService.RetrieveEntities(entity.Key, organisationService, exceptionService);
-            var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray().Select(x => x.LogicalName).ToArray();
-            var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray().Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).Select(x => x.LogicalName).ToArray();
+            var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).Select(x => x.LogicalName).OrderBy(n => n).ToArray();
             var newRow = new DataGridViewRow();
             newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
             newRow.Cells.Add(new DataGridViewComboBoxCell { Value = mapField, DataSource = mapFieldDataSource });

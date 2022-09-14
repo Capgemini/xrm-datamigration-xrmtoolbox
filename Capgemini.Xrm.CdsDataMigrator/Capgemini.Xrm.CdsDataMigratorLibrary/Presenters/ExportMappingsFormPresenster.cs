@@ -55,7 +55,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             view.MappingCells = null;
             var entityMeta = MetaDataService.RetrieveEntities(view.CurrentCell, OrganizationService, ExceptionService);
-            view.RefFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
+            view.SetRefFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
         }
 
         public void OnRefFieldChanged(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 return;
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.FirstCellInRow, OrganizationService, ExceptionService);
-            view.MapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
+            view.SetMapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
         }
 
         private void ShowErrorMessage()

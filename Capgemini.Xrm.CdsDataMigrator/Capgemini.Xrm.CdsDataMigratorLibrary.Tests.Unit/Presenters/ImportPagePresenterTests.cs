@@ -58,9 +58,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
             var importConfigFilePath = @"TestData\ImportConfig.json";
             var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
-            systemUnderTest.organisationService = ServiceMock.Object;
-            systemUnderTest.metaDataService = MetadataServiceMock.Object;
-            systemUnderTest.staticPresenterHelpersWrapper = mockStaticPresenterHelpersWrapper.Object;
             List<DataGridViewRow> mappingsAsViewType = ProvideMappingsAsViewType();
             var entityMetaDataList = new List<EntityMetadata>()
                 {

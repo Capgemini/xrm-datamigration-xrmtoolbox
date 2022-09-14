@@ -15,7 +15,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var rowWithBlankCell = GetRowWithoutBlankCell();
             var allCellsArePopulated = PresenterHelpers.AreAllCellsPopulated(rowWithBlankCell);
 
-            Assert.AreEqual(allCellsArePopulated, true);
+            Assert.AreEqual(true, allCellsArePopulated);
         }
 
 
@@ -25,7 +25,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var rowWithBlankCell = GetRowWithBlankCell();
             var allCellsArePopulated = PresenterHelpers.AreAllCellsPopulated(rowWithBlankCell);
 
-            Assert.AreEqual(allCellsArePopulated, false);
+            Assert.AreEqual(false, allCellsArePopulated);
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             lookUpMappings.Add(rowWithoutBlankCell);
             lookUpMappings.Add(rowWithBlankCell);
             var updatedLookupMappings = PresenterHelpers.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
-            Assert.AreEqual(updatedLookupMappings.Count, 1);  
+            Assert.AreEqual(1, updatedLookupMappings.Count);  
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             lookUpMappings.Add(rowWithoutBlankCell);
             lookUpMappings.Add(anotherRowWithoutBlankCell);
             var updatedLookupMappings = PresenterHelpers.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
-            Assert.AreEqual(updatedLookupMappings.Count, 2);
+            Assert.AreEqual(2, updatedLookupMappings.Count);
         }
 
         private static DataGridViewRow GetRowWithoutBlankCell()

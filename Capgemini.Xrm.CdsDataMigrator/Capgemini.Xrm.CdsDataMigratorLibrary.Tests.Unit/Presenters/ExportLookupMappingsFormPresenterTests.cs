@@ -82,7 +82,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                     .Returns("account");
 
                 mockExportView.Raise(x => x.OnEntityColumnChanged += null, EventArgs.Empty);
-                mockExportView.VerifySet(x => x.RefFieldDataSource = It.IsAny<AttributeMetadata[]>(), Times.Once);
+                mockExportView.VerifySet(x => x.SetRefFieldDataSource = It.IsAny<AttributeMetadata[]>(), Times.Once);
             }
         }
 
@@ -102,7 +102,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                     .Returns("account");
 
                 mockExportView.Raise(x => x.OnRefFieldChanged += null, EventArgs.Empty);
-                mockExportView.VerifySet(x => x.MapFieldDataSource = It.IsAny<AttributeMetadata []>(), Times.Once);
+                mockExportView.VerifySet(x => x.SetMapFieldDataSource = It.IsAny<AttributeMetadata []>(), Times.Once);
             }
         }
     }

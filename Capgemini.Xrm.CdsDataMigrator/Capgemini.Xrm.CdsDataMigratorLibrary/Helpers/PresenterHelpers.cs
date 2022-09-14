@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
 {
-    public class PresenterHelpers
+    public static class PresenterHelpers
     {
         public static bool AreAllCellsPopulated(DataGridViewRow row)
         {

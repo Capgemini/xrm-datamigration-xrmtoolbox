@@ -38,7 +38,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.RefFieldDataSource
+        AttributeMetadata[] IExportLookupMappingsView.SetRefFieldDataSource
         {
             set
             {
@@ -47,7 +47,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.MapFieldDataSource
+        AttributeMetadata[] IExportLookupMappingsView.SetMapFieldDataSource
         {
             set
             {   

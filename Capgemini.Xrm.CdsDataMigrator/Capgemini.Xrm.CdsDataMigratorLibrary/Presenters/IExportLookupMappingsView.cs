@@ -21,8 +21,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         string FirstCellInRow { get; set; }
         List<string> MappingCells { get; set; }
         IEnumerable<string> EntityListDataSource { get; set; }
-        AttributeMetadata[] RefFieldDataSource { set; }
-        AttributeMetadata[] MapFieldDataSource { set; }
+        AttributeMetadata[] SetRefFieldDataSource { set; }
+        AttributeMetadata[] SetMapFieldDataSource { set; }
         string CurrentCell { get; set; }
 
         void Close();
