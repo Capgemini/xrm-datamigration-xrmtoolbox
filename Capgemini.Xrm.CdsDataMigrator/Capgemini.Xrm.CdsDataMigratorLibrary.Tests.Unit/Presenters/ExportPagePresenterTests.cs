@@ -120,8 +120,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         [TestMethod]
         public void LoadConfig_ShouldSetLookupMappingsInViewCorrectly()
         {
-            using (var systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object))
-            {
                 // Arrange
                 var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
                 var exportConfigFilePath = @"TestData\ExportConfig.json";
@@ -163,8 +161,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
                 // Assert
                 mockExportView.VerifyAll();
                 mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
-            }
-
         }
 
         [TestMethod]
