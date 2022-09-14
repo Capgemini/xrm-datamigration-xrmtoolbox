@@ -8,6 +8,7 @@ using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using NuGet;
 using System;
@@ -51,8 +52,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void LoadConfig_ShouldSetConfigPropertiesWhenValidFilePathSelected()
         {
             // Arrange
+            var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
             var importConfigFilePath = @"TestData\ImportConfig.json";
-            var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath); ;
+            var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
+            systemUnderTest.organisationService = ServiceMock.Object;
+            systemUnderTest.metaDataService = MetadataServiceMock.Object;
+            var entityMetaDataList = new List<EntityMetadata>()
+                {
+                    new EntityMetadata { LogicalName = "account" }
+                };
+            mockImportView
+                .Setup(x => x.Mappings)
+                .Returns(ProvideMappingsAsViewType());
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                .Returns(entityMetaDataList)
+                .Verifiable();
             mockImportView
                 .Setup(x => x.AskForFilePathToOpen())
                 .Returns(importConfigFilePath);
@@ -524,6 +538,28 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000003" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000004" });
             return dataGridViewRow;
+        }
+
+        private static List<DataGridViewRow> GetMappingsAsViewTypeToMatchConfigFile()
+        {
+            List<DataGridViewRow> mappings = new List<DataGridViewRow>();
+            DataGridViewRow dataGridViewRow = new DataGridViewRow();
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "Account" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000003" });
+            dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000004" });
+            DataGridViewRow dataGridViewRow2 = new DataGridViewRow();
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "App Action" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000004" });
+            dataGridViewRow2.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000005" });
+            DataGridViewRow dataGridViewRow3 = new DataGridViewRow();
+            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "AAD User" });
+            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000006" });
+            dataGridViewRow3.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000007" });
+            mappings.Add(dataGridViewRow);
+            mappings.Add(dataGridViewRow2);
+            mappings.Add(dataGridViewRow3);
+
+            return mappings;
         }
     }  
 }
