@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
+namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
 {
-    public class Helpers
+    public class PresenterHelpers
     {
         public static bool AreAllCellsPopulated(DataGridViewRow row)
         {

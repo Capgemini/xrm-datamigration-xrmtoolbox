@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using System.Diagnostics.CodeAnalysis;
@@ -23,11 +24,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly INotifier notifier;
         public IOrganizationService organisationService;
         public IMetadataService metaDataService;
+        public IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper;
 
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper)
         {
             this.view = view;
             this.workerHost = workerHost;
@@ -35,6 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.notifier = notifier;
             this.organisationService = organizationService;
             this.metaDataService = metaDataService;
+            this.staticPresenterHelpersWrapper = staticPresenterHelpersWrapper;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -162,7 +165,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (!Helpers.AreAllCellsPopulated(row))
+                if (!staticPresenterHelpersWrapper.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var sourceId = Guid.Parse((string)row.Cells[1].Value);
@@ -243,7 +246,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                List<DataGridViewRow> lookupMappingsInView = Helpers.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
+                List<DataGridViewRow> lookupMappingsInView = staticPresenterHelpersWrapper.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }

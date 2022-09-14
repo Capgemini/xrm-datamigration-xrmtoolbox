@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Rest;
@@ -26,11 +27,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         public IOrganizationService organisationService;
         public IMetadataService metaDataService;
         public IExceptionService exceptionService;
+        public IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IExceptionService exceptionService)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IExceptionService exceptionService, IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper)
         {
             this.view = view;
             this.workerHost = workerHost;
@@ -39,6 +41,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.organisationService = organizationService;
             this.metaDataService = metaDataService;
             this.exceptionService = exceptionService;
+            this.staticPresenterHelpersWrapper = staticPresenterHelpersWrapper;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -183,7 +186,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (DataGridViewRow row in view.LookupMappings)
             {
-                if (!Helpers.AreAllCellsPopulated(row))
+                if (!staticPresenterHelpersWrapper.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var refField = row.Cells[1].Value.ToString();
@@ -289,7 +292,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                List<DataGridViewRow> lookupMappingsInView = Helpers.GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
+                List<DataGridViewRow> lookupMappingsInView = staticPresenterHelpersWrapper.GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }

@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
@@ -25,6 +26,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         private Mock<IImportPageView> mockImportView;
         private Mock<IWorkerHost> mockWorkerHost;
         private Mock<INotifier> mockNotifier;
+        private Mock<IStaticPresenterHelpersWrapper> mockStaticPresenterHelpersWrapper;
         private ImportPagePresenter systemUnderTest;
 
         [TestInitialize]
@@ -34,8 +36,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView = new Mock<IImportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
             mockNotifier = new Mock<INotifier>();
+            mockStaticPresenterHelpersWrapper = new Mock<IStaticPresenterHelpersWrapper>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, mockStaticPresenterHelpersWrapper.Object);
         }
 
         [TestMethod]
@@ -57,13 +60,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
             systemUnderTest.organisationService = ServiceMock.Object;
             systemUnderTest.metaDataService = MetadataServiceMock.Object;
+            systemUnderTest.staticPresenterHelpersWrapper = mockStaticPresenterHelpersWrapper.Object;
+            List<DataGridViewRow> mappingsAsViewType = ProvideMappingsAsViewType();
             var entityMetaDataList = new List<EntityMetadata>()
                 {
                     new EntityMetadata { LogicalName = "account" }
                 };
+            mockStaticPresenterHelpersWrapper
+                .Setup(x => x.AreAllCellsPopulated(new DataGridViewRow()))
+                .Returns(true);
+            mockStaticPresenterHelpersWrapper
+                .Setup(x => x.GetMappingsFromViewWithEmptyRowsRemoved(new List<DataGridViewRow>()))
+                .Returns(mappingsAsViewType);
             mockImportView
                 .Setup(x => x.Mappings)
-                .Returns(ProvideMappingsAsViewType());
+                .Returns(mappingsAsViewType);
             MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
                 .Returns(entityMetaDataList)
                 .Verifiable();
@@ -135,6 +146,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var importConfigFilePath = @"TestData\NewImportConfig.json";
             var viewMappings = ProvideMappingsAsViewType();
             var configMappings = ProvideMappingsAsConfigType();
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
 
             mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
@@ -168,6 +182,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             viewMappings.Add(newRow);
             var configMappings = ProvideMappingsAsConfigType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.SetupSequence(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Returns(false);
             mockImportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(importConfigFilePath);
@@ -191,6 +208,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             viewMappings.Add(newRow);
             var configMappings = ProvideMappingsAsConfigType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockImportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(importConfigFilePath);
@@ -214,6 +234,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             viewMappings.Add(newRow);
             var configMappings = ProvideTwoMappingsForSameEntityAsConfigType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockImportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(importConfigFilePath);
@@ -307,6 +330,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var mockIOrganisationService = new Mock<IOrganizationService>();
             var viewMappings = ProvideMappingsAsViewType();
             var configMappings = ProvideMappingsAsConfigType();
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
 
             mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
             mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);

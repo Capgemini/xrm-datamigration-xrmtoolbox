@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
@@ -27,6 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         private Mock<IExportPageView> mockExportView;
         private Mock<IWorkerHost> mockWorkerHost;
         private Mock<INotifier> mockNotifier;
+        private Mock<IStaticPresenterHelpersWrapper> mockStaticPresenterHelpersWrapper;
         private ExportPagePresenter systemUnderTest;
 
         [TestInitialize]
@@ -36,8 +38,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockExportView = new Mock<IExportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
             mockNotifier = new Mock<INotifier>();
+            mockStaticPresenterHelpersWrapper = new Mock<IStaticPresenterHelpersWrapper>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object, mockStaticPresenterHelpersWrapper.Object);
         }
 
         [TestMethod]
@@ -120,47 +123,48 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
         [TestMethod]
         public void LoadConfig_ShouldSetLookupMappingsInViewCorrectly()
         {
-                // Arrange
-                var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
-                var exportConfigFilePath = @"TestData\ExportConfig.json";
-                systemUnderTest.organisationService = ServiceMock.Object;
-                systemUnderTest.metaDataService = MetadataServiceMock.Object;
-                systemUnderTest.exceptionService = ExceptionServicerMock.Object;
-                var entityMetaDataList = new List<EntityMetadata>()
+            // Arrange
+            var viewMappings = GetMappingsAsViewTypeToMatchConfigFile();
+            var exportConfigFilePath = @"TestData\ExportConfig.json";
+            systemUnderTest.organisationService = ServiceMock.Object;
+            systemUnderTest.metaDataService = MetadataServiceMock.Object;
+            systemUnderTest.exceptionService = ExceptionServicerMock.Object;
+            systemUnderTest.staticPresenterHelpersWrapper = mockStaticPresenterHelpersWrapper.Object;
+            var entityMetaDataList = new List<EntityMetadata>()
                 {
                     new EntityMetadata { LogicalName = "account" }
                 };
-                var selectedValue = "contactattnoattributes1";
-                var attributeMetaDataItem = new UniqueIdentifierAttributeMetadata
-                {
-                    LogicalName = selectedValue
-                };
-                var attributes = new List<AttributeMetadata>
-                {
-                attributeMetaDataItem
-                };
-                var entityMetadata = new EntityMetadata();
-                var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
-                attributesField.SetValue(entityMetadata, attributes.ToArray());
-                mockExportView
-                    .Setup(x => x.LookupMappings)
-                    .Returns(ProvideMappingsAsViewType());
-                mockExportView
-                    .Setup(x => x.AskForFilePathToOpen())
-                    .Returns(exportConfigFilePath);
-                MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
-                    .Returns(entityMetaDataList)
-                    .Verifiable();
-                MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
-                    .Returns(entityMetadata)
-                    .Verifiable();
+            var selectedValue = "contactattnoattributes1";
+            var attributeMetaDataItem = new UniqueIdentifierAttributeMetadata
+            {
+                LogicalName = selectedValue
+            };
+            var attributes = new List<AttributeMetadata>
+            {
+            attributeMetaDataItem
+            };
+            var entityMetadata = new EntityMetadata();
+            var attributesField = entityMetadata.GetType().GetRuntimeFields().First(a => a.Name == "_attributes");
+            attributesField.SetValue(entityMetadata, attributes.ToArray());
+            mockExportView
+                .Setup(x => x.LookupMappings)
+                .Returns(ProvideMappingsAsViewType());
+            mockExportView
+                .Setup(x => x.AskForFilePathToOpen())
+                .Returns(exportConfigFilePath);
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<IOrganizationService>()))
+                .Returns(entityMetaDataList)
+                .Verifiable();
+            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
+                .Returns(entityMetadata)
+                .Verifiable();
 
-                // Act
-                mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
+            // Act
+            mockExportView.Raise(x => x.LoadConfigClicked += null, EventArgs.Empty);
 
-                // Assert
-                mockExportView.VerifyAll();
-                mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
+            // Assert
+            mockExportView.VerifyAll();
+            mockExportView.SetupSet(m => m.LookupMappings = viewMappings).Verifiable();
         }
 
         [TestMethod]
@@ -170,6 +174,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var exportConfigFilePath = @"TestData\NewExportConfig.json";
             var viewMappings = ProvideMappingsAsViewType();
             var configMappings = ProvideMappingsAsConfigType();
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockExportView.SetupGet(x => x.PageSize).Returns(1000);
             mockExportView.SetupGet(x => x.BatchSize).Returns(2000);
             mockExportView.SetupGet(x => x.TopCount).Returns(3000);
@@ -213,6 +220,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             viewMappings.Add(newRow);
             var configMappings = ProvideMappingsAsConfigType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.SetupSequence(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(false)
+                .Returns(true);
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -236,6 +246,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             viewMappings.Add(newRow);
             var configMappings = ProvideMappingsAsConfigType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -257,6 +270,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var viewMappings = ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsViewType();
             var configMappings = ProvideTwoMappingsForSameEntityAndDifferentRefFieldAsConfigType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
@@ -278,6 +294,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var viewMappings = ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsViewType();
             var configMappings = ProvideTwoMappingsForSameEntityAndSameRefFieldAndDifferentMapFieldAsConfigType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
+            mockStaticPresenterHelpersWrapper.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
