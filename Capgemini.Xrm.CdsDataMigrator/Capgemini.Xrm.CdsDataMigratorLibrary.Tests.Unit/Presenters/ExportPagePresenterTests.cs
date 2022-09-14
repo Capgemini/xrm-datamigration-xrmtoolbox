@@ -221,8 +221,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var configMappings = ProvideMappingsAsConfigType();
             mockExportView.SetupGet(x => x.LookupMappings).Returns(viewMappings);
             mockStaticPresenterHelpersWrapper.SetupSequence(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
-                .Returns(false)
-                .Returns(true);
+                .Returns(true)
+                .Returns(false);
             mockExportView
                 .Setup(x => x.AskForFilePathToSave(null))
                 .Returns(exportConfigFilePath);
