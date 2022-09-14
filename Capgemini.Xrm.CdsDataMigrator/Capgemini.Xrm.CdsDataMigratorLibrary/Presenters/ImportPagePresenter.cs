@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using NuGet;
 using Microsoft.Xrm.Sdk;
 using System.Linq;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -225,16 +226,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 foreach (Guid guidToMap in entity.Value.Keys)
                 {
-                    var newRow = new DataGridViewRow();
-                    newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
-                    newRow.Cells.Add(new DataGridViewTextBoxCell());
-                    newRow.Cells[1].Value = guidToMap.ToString();
-                    newRow.Cells.Add(new DataGridViewTextBoxCell());
-                    newRow.Cells[2].Value = entity.Value[guidToMap].ToString();
+                    var newRow = AddCellsToDataGridViewRow(entity, entitiesDataSource, guidToMap);
                     lookupMappings.Add(newRow);
                 }
             }
             return lookupMappings;
+        }
+
+        private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<Guid, Guid>> entity, List<EntityMetadata> entitiesDataSource, Guid guidToMap)
+        {
+            var newRow = new DataGridViewRow();
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
+            newRow.Cells.Add(new DataGridViewTextBoxCell());
+            newRow.Cells[1].Value = guidToMap.ToString();
+            newRow.Cells.Add(new DataGridViewTextBoxCell());
+            newRow.Cells[2].Value = entity.Value[guidToMap].ToString();
+            return newRow;
         }
 
         private void UpdateView(List<DataGridViewRow> mappingsFromConfig)

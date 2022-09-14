@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
@@ -18,23 +19,22 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ImportPresenterTests
+    public class ImportPresenterTests : TestBase
     {
         private Mock<IImportPageView> mockImportView;
         private Mock<IWorkerHost> mockWorkerHost;
-        private Mock<IDataMigrationService> mockDataMigrationService;
         private Mock<INotifier> mockNotifier;
         private ImportPagePresenter systemUnderTest;
 
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             mockImportView = new Mock<IImportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
-            mockDataMigrationService = new Mock<IDataMigrationService>();
             mockNotifier = new Mock<INotifier>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, mockDataMigrationService.Object, mockNotifier.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object);
         }
 
         [TestMethod]
@@ -311,9 +311,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Assert
             mockImportView.VerifyAll();
             workInfo.Message.Should().Be("Importing data...");
-            mockDataMigrationService.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()));
+            DataMigrationServiceMock.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()));
 
-            var importConfig = mockDataMigrationService.Invocations[0].Arguments[3].As<CrmImportConfig>();
+            var importConfig = DataMigrationServiceMock.Invocations[0].Arguments[3].As<CrmImportConfig>();
 
             importConfig.SaveBatchSize.Should().Be(1000);
             importConfig.IgnoreStatuses.Should().Be(true);
@@ -348,7 +348,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             var viewMappings = ProvideMappingsAsViewType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
             var thrownException = new Exception("Test exception");
-            mockDataMigrationService
+            DataMigrationServiceMock
                 .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()))
                 .Throws(thrownException);
 
