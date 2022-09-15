@@ -36,10 +36,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
             using (var systemUnderTest = new ExportLookupMappings())
             {
                 // Act
-                systemUnderTest.As<IExportLookupMappingsView>().FirstCellInRow = value;
+                systemUnderTest.As<IExportLookupMappingsView>().CurrentRowEntityName = value;
 
                 // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().FirstCellInRow.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IExportLookupMappingsView>().CurrentRowEntityName.Should().BeEquivalentTo(value);
 
             }
         }

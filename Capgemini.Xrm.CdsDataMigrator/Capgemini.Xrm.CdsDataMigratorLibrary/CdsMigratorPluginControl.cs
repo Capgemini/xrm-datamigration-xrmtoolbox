@@ -50,11 +50,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
-                    var staticPresenterHelpersWrapper = new StaticPresenterHelpersWrapper();
-                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, staticPresenterHelpersWrapper);
-                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService, staticPresenterHelpersWrapper);
-                    this.exportPage1.MetadataService = new MetadataService();
-                    this.exportPage1.ExceptionService = new ExceptionService();
+                    var viewHelpers = new ViewHelpers();
+                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, viewHelpers);
+                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    this.exportPage1.MetadataService = metaDataService;
+                    this.exportPage1.ExceptionService = exceptionService;
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();

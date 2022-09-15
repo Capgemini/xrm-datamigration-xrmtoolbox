@@ -39,10 +39,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 ShowErrorMessage();
                 return;
             }
-            var entities = MetaDataService.RetrieveEntities(OrganizationService);
             if (new List<string>(view.EntityListDataSource).Count == 0)
             {
-                view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n).ToList();
+                var entities = MetaDataService.RetrieveEntities(OrganizationService);
+                view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 ShowErrorMessage();
                 return;
             }
-            var entityMeta = MetaDataService.RetrieveEntities(view.FirstCellInRow, OrganizationService, ExceptionService);
+            var entityMeta = MetaDataService.RetrieveEntities(view.CurrentRowEntityName, OrganizationService, ExceptionService);
             view.SetMapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
         }
 

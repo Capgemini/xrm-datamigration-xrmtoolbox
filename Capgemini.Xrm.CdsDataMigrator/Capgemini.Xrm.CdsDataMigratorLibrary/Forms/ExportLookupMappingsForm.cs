@@ -15,8 +15,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         public event EventHandler OnEntityColumnChanged;
         public event EventHandler OnRefFieldChanged;
         [ExcludeFromCodeCoverage]
-        public String CurrentCell { get; set; }
-        public string FirstCellInRow { get; set; }
+        public string CurrentCell { get; set; }
+        public string CurrentRowEntityName { get; set; }
 
         public ExportLookupMappings()
         {
@@ -57,16 +57,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         [ExcludeFromCodeCoverage]
         List<string> IExportLookupMappingsView.MappingCells
-        {
-            get
-            {
-                List<string> MappingCells = new List<string>
-                {
-                    (string)dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value,
-                    (string)dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value
-                };
-                return MappingCells;
-            }
+        {   
             set
             {
                 dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value = value;
@@ -141,7 +132,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
             if (dgvMappings.CurrentCell.ColumnIndex == 1)
             {
-                this.FirstCellInRow = (string)dgvMappings.CurrentRow.Cells[0].Value;
+                this.CurrentRowEntityName = (string)dgvMappings.CurrentRow.Cells[0].Value;
                 this.OnRefFieldChanged?.Invoke(sender, e);
             }
         }

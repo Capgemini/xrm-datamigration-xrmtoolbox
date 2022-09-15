@@ -231,7 +231,7 @@
     <Compile Include="Extensions\TreeViewExtensionsTests.cs" />
     <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
     <Compile Include="Helpers\CollectionHelpersTests.cs" />
-    <Compile Include="Helpers\PresenterHelpersTests.cs" />
+    <Compile Include="Helpers\ViewHelpersTests.cs" />
     <Compile Include="Models\MigratorEventArgsTests.cs" />
     <Compile Include="Helpers\ConfigurationHelpersTests.cs" />
     <Compile Include="Model\SchemaExtensionTests.cs" />
@@ -318,7 +318,6 @@
     <None Include="TestData\ExportConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestData\NewExportConfig.json" />
     <None Include="TestData\ImportConfig2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -24,12 +24,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly INotifier notifier;
         private readonly IOrganizationService organisationService;
         private readonly IMetadataService metaDataService;
-        private readonly IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper;
+        private readonly IViewHelpers viewHelpers;
 
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IStaticPresenterHelpersWrapper staticPresenterHelpersWrapper)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
@@ -37,7 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.notifier = notifier;
             this.organisationService = organizationService;
             this.metaDataService = metaDataService;
-            this.staticPresenterHelpersWrapper = staticPresenterHelpersWrapper;
+            this.viewHelpers = viewHelpers;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -152,12 +152,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
-            if (config.MigrationConfig == null)
+            if (config.MigrationConfig != null)
             {
-                return;
+                List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
+                UpdateView(mappingsFromConfig);
             }
-            List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
-            UpdateView(mappingsFromConfig);
         }
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetMappingsInCorrectDataType()
@@ -165,7 +164,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (!staticPresenterHelpersWrapper.AreAllCellsPopulated(row))
+                if (!viewHelpers.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var sourceId = Guid.Parse((string)row.Cells[1].Value);
@@ -246,7 +245,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             else
             {
-                List<DataGridViewRow> lookupMappingsInView = staticPresenterHelpersWrapper.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
+                List<DataGridViewRow> lookupMappingsInView = viewHelpers.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }

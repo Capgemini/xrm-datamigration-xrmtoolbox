@@ -125,6 +125,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
             EntityRepositoryService = new Mock<IEntityRepositoryService>();
-    }
+        }
     }
 }

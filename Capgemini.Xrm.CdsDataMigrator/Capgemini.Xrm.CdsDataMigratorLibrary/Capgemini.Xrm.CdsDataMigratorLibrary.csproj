@@ -242,8 +242,7 @@
     <Compile Include="Forms\ImportMappingsForm.Designer.cs">
       <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\IStaticPresenterHelpersWrapper.cs" />
-    <Compile Include="Helpers\StaticPresenterHelpersWrapper.cs" />
+    <Compile Include="Helpers\IViewHelpers.cs" />
     <Compile Include="Models\ListBoxItem.cs" />
     <Compile Include="Forms\MappingList.cs">
       <SubType>Form</SubType>
@@ -280,8 +279,8 @@
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
-    <Compile Include="Presenters\ExportMappingsFormPresenster.cs" />
-    <Compile Include="Helpers\PresenterHelpers.cs" />
+    <Compile Include="Presenters\ExportMappingsFormPresenter.cs" />
+    <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />

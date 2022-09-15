@@ -7,13 +7,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
 {
     [TestClass]
-    public class PresenterHelpersTests
+    public class ViewHelpersTests
     {
+
+        private IViewHelpers systemUnderTest;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            systemUnderTest = new ViewHelpers();
+        }
+
         [TestMethod]
         public void AreAllCellsPopulated_RowWithoutEmptyCellShouldReturnTrue()
         {
             var rowWithBlankCell = GetRowWithoutBlankCell();
-            var allCellsArePopulated = PresenterHelpers.AreAllCellsPopulated(rowWithBlankCell);
+            var allCellsArePopulated = systemUnderTest.AreAllCellsPopulated(rowWithBlankCell);
 
             Assert.AreEqual(true, allCellsArePopulated);
         }
@@ -23,7 +32,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
         public void AreAllCellsPopulated_RowWithEmptyCellShouldReturnFalse()
         {
             var rowWithBlankCell = GetRowWithBlankCell();
-            var allCellsArePopulated = PresenterHelpers.AreAllCellsPopulated(rowWithBlankCell);
+            var allCellsArePopulated = systemUnderTest.AreAllCellsPopulated(rowWithBlankCell);
 
             Assert.AreEqual(false, allCellsArePopulated);
         }
@@ -36,7 +45,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var rowWithBlankCell = GetRowWithBlankCell();
             lookUpMappings.Add(rowWithoutBlankCell);
             lookUpMappings.Add(rowWithBlankCell);
-            var updatedLookupMappings = PresenterHelpers.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
+            var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
             Assert.AreEqual(1, updatedLookupMappings.Count);  
         }
 
@@ -48,7 +57,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var anotherRowWithoutBlankCell = GetRowWithoutBlankCell();
             lookUpMappings.Add(rowWithoutBlankCell);
             lookUpMappings.Add(anotherRowWithoutBlankCell);
-            var updatedLookupMappings = PresenterHelpers.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
+            var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
             Assert.AreEqual(2, updatedLookupMappings.Count);
         }
 

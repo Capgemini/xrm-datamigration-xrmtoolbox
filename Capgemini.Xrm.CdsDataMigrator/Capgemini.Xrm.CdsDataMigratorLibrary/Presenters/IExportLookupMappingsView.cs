@@ -18,8 +18,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnEntityColumnChanged;
         event EventHandler OnRefFieldChanged;
 
-        string FirstCellInRow { get; set; }
-        List<string> MappingCells { get; set; }
+        string CurrentRowEntityName { get; set; }
+        List<string> MappingCells { set; }
         IEnumerable<string> EntityListDataSource { get; set; }
         AttributeMetadata[] SetRefFieldDataSource { set; }
         AttributeMetadata[] SetMapFieldDataSource { set; }
