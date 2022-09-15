@@ -524,7 +524,7 @@
             // 
             // dataverseEnvironmentSelector1
             // 
-            this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Local;
+            this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Global;
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
 
             this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(137, 3);

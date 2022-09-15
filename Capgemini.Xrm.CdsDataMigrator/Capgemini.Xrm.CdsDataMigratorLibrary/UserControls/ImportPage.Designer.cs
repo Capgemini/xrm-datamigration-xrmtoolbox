@@ -22,6 +22,7 @@
 
         #region Component Designer generated code
 
+
         /// <summary> 
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
@@ -482,7 +483,7 @@
             // 
             // dataverseEnvironmentSelector1
             // 
-            this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Local;
+            this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Global;
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(212, 5);
             this.dataverseEnvironmentSelector1.Margin = new System.Windows.Forms.Padding(5);
