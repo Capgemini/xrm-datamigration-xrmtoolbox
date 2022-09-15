@@ -1,34 +1,31 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Model;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ExportLookupMappingsFormPresenterTests
+    public class ExportLookupMappingsFormPresenterTests : TestBase
     {
         private Mock<IExportLookupMappingsView> mockExportView;
-        private Mock<MetadataService> metaDataService;
-        private Mock<IOrganizationService> orgService;
         private ExportLookupMappingsFormPresenter systemUnderTest;
 
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             mockExportView = new Mock<IExportLookupMappingsView>();
-            orgService = new Mock<IOrganizationService>();
-            metaDataService = new Mock<MetadataService>();
             systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object);
+            systemUnderTest.OrganizationService = ServiceMock.Object;
+            systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+            systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
+            
         }
 
         [TestMethod]
@@ -38,5 +35,65 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                  .Should()
                  .NotThrow();
         }
+
+        [TestMethod]
+        public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
+        {
+            // Act
+            systemUnderTest.OrganizationService = null;
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+
+            // Assert
+            mockExportView.Verify(x => x.ShowMessage(
+                    "Please make sure you are connected to an organisation", "No connection madde",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information), Times.Once);
+            mockExportView.Verify(x => x.Close(), Times.Once);
+            mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Never);
+        }
+
+        [TestMethod]
+        public void OnVisible()
+        {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+
+                mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
+        }
+
+        [TestMethod]
+        public void OnMapFieldChanged()
+        {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+                mockExportView
+                    .SetupGet(x => x.CurrentCell)
+                    .Returns("account");
+
+                mockExportView.Raise(x => x.OnEntityColumnChanged += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.SetRefFieldDataSource = It.IsAny<AttributeMetadata[]>(), Times.Once);
+        }
+
+        [TestMethod]
+        public void OnRefFieldChanged()
+        {
+                string entityLogicalName = "account";
+                SetupMockObjects(entityLogicalName);
+
+                systemUnderTest.OrganizationService = ServiceMock.Object;
+                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
+                systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
+                mockExportView
+                    .SetupGet(x => x.CurrentRowEntityName)
+                    .Returns("account");
+
+                mockExportView.Raise(x => x.OnRefFieldChanged += null, EventArgs.Empty);
+                mockExportView.VerifySet(x => x.SetMapFieldDataSource = It.IsAny<AttributeMetadata []>(), Times.Once);
+        }
     }
+
 }

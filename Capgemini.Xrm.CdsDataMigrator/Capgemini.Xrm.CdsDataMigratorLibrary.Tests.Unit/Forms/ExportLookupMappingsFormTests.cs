@@ -20,32 +20,32 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
             using (var systemUnderTest = new ExportLookupMappings())
             {
                 // Act
-                systemUnderTest.As<IExportLookupMappingsView>().EntityList = value;
+                systemUnderTest.As<IExportLookupMappingsView>().EntityListDataSource = value;
 
                 // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().EntityList.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IExportLookupMappingsView>().EntityListDataSource.Should().BeEquivalentTo(value);
+
+            }
+        }
+
+        [TestMethod]
+        public void FirstCellInRow_GetSet()
+        {
+            // Arrange
+            var value = "account";
+            using (var systemUnderTest = new ExportLookupMappings())
+            {
+                // Act
+                systemUnderTest.As<IExportLookupMappingsView>().CurrentRowEntityName = value;
+
+                // Assert
+                systemUnderTest.As<IExportLookupMappingsView>().CurrentRowEntityName.Should().BeEquivalentTo(value);
 
             }
         }
 
         [TestMethod]
         public void Mappings_GetSet()
-        {
-            // Arrange
-            var value = new DataGridView();
-            using (var systemUnderTest = new ExportLookupMappings())
-            {
-                // Act
-                systemUnderTest.As<IExportLookupMappingsView>().LookupMappings = value;
-
-                // Assert
-                systemUnderTest.As<IExportLookupMappingsView>().LookupMappings.Should().BeEquivalentTo(value);
-
-            }
-        }
-
-        [TestMethod]
-        public void Mappings2_GetSet()
         {
             // Arrange
             var value = new List<DataGridViewRow>();

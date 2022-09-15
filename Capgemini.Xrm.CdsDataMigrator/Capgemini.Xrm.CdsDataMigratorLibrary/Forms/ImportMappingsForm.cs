@@ -45,7 +45,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
                 }
                 return mappings;
             }
-            // setter needed to load existing mappings. Still needs to be implemented
             set
             {
                 dgvMappings.Rows.Clear();

@@ -125,7 +125,7 @@
             this.toolStripPluginOptionMenu.Name = "toolStripPluginOptionMenu";
             this.toolStripPluginOptionMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.toolStripPluginOptionMenu.Size = new System.Drawing.Size(1829, 35);
-            this.toolStripPluginOptionMenu.TabIndex = 4;
+            this.toolStripPluginOptionMenu.TabIndex = 5;
             this.toolStripPluginOptionMenu.Text = "toolStrip1";
             // 
             // tsbSchemaManager
@@ -136,9 +136,6 @@
             this.tsbSchemaManager.Size = new System.Drawing.Size(219, 32);
             this.tsbSchemaManager.Text = "Schema Config (new)";
             this.tsbSchemaManager.Click += new System.EventHandler(this.ShowSchemaManager);
-
-            this.toolStripPluginOptionMenu.TabIndex = 5;
-            this.toolStripPluginOptionMenu.Text = "toolStrip1";
             // 
             // tsbShowImportPage
             // 
@@ -148,7 +145,6 @@
             this.tsbShowImportPage.Size = new System.Drawing.Size(194, 32);
             this.tsbShowImportPage.Text = "Data Import (new)";
             this.tsbShowImportPage.Click += new System.EventHandler(this.ShowImportPage_Click);
-
             // 
             // tsbShowExportPage
             // 
@@ -161,9 +157,13 @@
             // 
             // sgpManageSchema
             // 
+            this.sgpManageSchema.CurrentConnection = "";
             this.sgpManageSchema.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sgpManageSchema.EntityMetadataList = null;
+            this.sgpManageSchema.EntityRelationships = null;
             this.sgpManageSchema.Location = new System.Drawing.Point(0, 35);
             this.sgpManageSchema.Name = "sgpManageSchema";
+            this.sgpManageSchema.ShowSystemAttributes = false;
             this.sgpManageSchema.Size = new System.Drawing.Size(1829, 703);
             this.sgpManageSchema.TabIndex = 51;
             // 

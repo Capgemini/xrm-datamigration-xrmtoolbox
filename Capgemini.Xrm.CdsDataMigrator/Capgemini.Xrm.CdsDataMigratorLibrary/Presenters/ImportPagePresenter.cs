@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using System.Diagnostics.CodeAnalysis;
@@ -9,6 +10,9 @@ using XrmToolBox.Extensibility.Interfaces;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using NuGet;
+using Microsoft.Xrm.Sdk;
+using System.Linq;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -18,16 +22,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
-        
+        private readonly IOrganizationService organisationService;
+        private readonly IMetadataService metaDataService;
+        private readonly IViewHelpers viewHelpers;
+
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
             this.notifier = notifier;
+            this.organisationService = organizationService;
+            this.metaDataService = metaDataService;
+            this.viewHelpers = viewHelpers;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -142,6 +152,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.IgnoreStatuses = config.IgnoreStatuses;
             view.IgnoreSystemFields = config.IgnoreSystemFields;
             view.JsonFolderPath = config.JsonFolderPath;
+            if (config.MigrationConfig != null)
+            {
+                List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
+                UpdateView(mappingsFromConfig);
+            }
         }
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetMappingsInCorrectDataType()
@@ -149,7 +164,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<Guid, Guid>> mappings = new Dictionary<string, Dictionary<Guid, Guid>>();
             foreach (DataGridViewRow row in view.Mappings)
             {
-                if (!AreAllCellsPopulated(row))
+                if (!viewHelpers.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var sourceId = Guid.Parse((string)row.Cells[1].Value);
@@ -195,14 +210,45 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             return false;
         }
-    
-        private static bool AreAllCellsPopulated(DataGridViewRow row)
+
+        private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
-            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
+            var lookupMappings = new List<DataGridViewRow>();
+            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
+            foreach (KeyValuePair<string, Dictionary<Guid, Guid>> entity in config.MigrationConfig.Mappings)
             {
-                return false;
+                foreach (Guid guidToMap in entity.Value.Keys)
+                {
+                    var newRow = AddCellsToDataGridViewRow(entity, entitiesDataSource, guidToMap);
+                    lookupMappings.Add(newRow);
+                }
             }
-            return true;
+            return lookupMappings;
+        }
+
+        private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<Guid, Guid>> entity, List<EntityMetadata> entitiesDataSource, Guid guidToMap)
+        {
+            var newRow = new DataGridViewRow();
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
+            newRow.Cells.Add(new DataGridViewTextBoxCell());
+            newRow.Cells[1].Value = guidToMap.ToString();
+            newRow.Cells.Add(new DataGridViewTextBoxCell());
+            newRow.Cells[2].Value = entity.Value[guidToMap].ToString();
+            return newRow;
+        }
+
+        private void UpdateView(List<DataGridViewRow> mappingsFromConfig)
+        {
+            if (view.Mappings == null)
+            {
+                view.Mappings = mappingsFromConfig;
+            }
+            else
+            {
+                List<DataGridViewRow> lookupMappingsInView = viewHelpers.GetMappingsFromViewWithEmptyRowsRemoved(view.Mappings);
+                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
+                view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
+            }
         }
 
         [ExcludeFromCodeCoverage]

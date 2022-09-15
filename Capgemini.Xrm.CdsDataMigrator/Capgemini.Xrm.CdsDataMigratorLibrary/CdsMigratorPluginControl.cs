@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
@@ -34,14 +35,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.Settings = settings;
             SchemaGeneratorWizard.BringToFront();
-
-            var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
-            var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-            this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this);
-            this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this);
-            this.exportPage1.MetadataService = new MetadataService();
-            this.exportPage1.ExceptionService = new ExceptionService();
-
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -53,7 +46,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
                     this.exportPage1.OrganizationService = detail.ServiceClient;
-                    
+                    var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+                    var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+                    var metaDataService = new MetadataService();
+                    var exceptionService = new ExceptionService();
+                    var viewHelpers = new ViewHelpers();
+                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, viewHelpers);
+                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    this.exportPage1.MetadataService = metaDataService;
+                    this.exportPage1.ExceptionService = exceptionService;
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();

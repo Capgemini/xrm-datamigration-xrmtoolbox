@@ -52,6 +52,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls.Tests
             }
         }
 
+        [Ignore]
         [TestMethod]
         public void WizardValidationExportConfig()
         {

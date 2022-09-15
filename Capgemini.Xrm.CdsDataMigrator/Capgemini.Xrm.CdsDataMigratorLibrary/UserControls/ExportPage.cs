@@ -5,12 +5,10 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
-using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
@@ -38,8 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             set => exportLookupMappingsFormPresenter.ExceptionService = value;
         }
-
-
+        
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -142,12 +139,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             get => exportFilterForm.SchemaConfiguration;
             set => exportFilterForm.SchemaConfiguration = value;
         }
-
-        [ExcludeFromCodeCoverage]
+        
         List<DataGridViewRow> IExportPageView.LookupMappings
         {
             get => exportLookupMappingsForm.Mappings;
-            // setter needed to load existing mappings. Still needs to be implemented
             set => exportLookupMappingsForm.Mappings = value;
         }
 

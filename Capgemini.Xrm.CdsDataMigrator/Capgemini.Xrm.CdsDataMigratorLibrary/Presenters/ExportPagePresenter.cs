@@ -1,6 +1,11 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Microsoft.Rest;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using NuGet;
 using System;
 using System.Collections.Generic;
@@ -19,16 +24,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
         private readonly INotifier notifier;
+        private readonly IOrganizationService organisationService;
+        private readonly IMetadataService metaDataService;
+        private readonly IExceptionService exceptionService;
+        private readonly IViewHelpers viewHelpers;
 
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IExceptionService exceptionService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
             this.notifier = notifier;
+            this.organisationService = organizationService;
+            this.metaDataService = metaDataService;
+            this.exceptionService = exceptionService;
+            this.viewHelpers = viewHelpers;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -164,6 +177,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.SeperateFilesPerEntity = config.SeperateFilesPerEntity;
             view.FilePrefix = config.FilePrefix;
             view.CrmMigrationToolSchemaFilters = new Dictionary<string, string>(config.CrmMigrationToolSchemaFilters);
+            List<DataGridViewRow> mappingsFromConfig = GetConfigMappingsInCorrectDataGridViewType();
+            UpdateViewWithConfigMappings(mappingsFromConfig);
         }
 
         private Dictionary<string, Dictionary<string, List<string>>> GetMappingsInCorrectDataType()
@@ -171,7 +186,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             Dictionary<string, Dictionary<string, List<string>>> lookupMappings = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (DataGridViewRow row in view.LookupMappings)
             {
-                if (!AreAllCellsPopulated(row))
+                if (!viewHelpers.AreAllCellsPopulated(row))
                     break;
                 var entity = row.Cells[0].Value.ToString();
                 var refField = row.Cells[1].Value.ToString();
@@ -239,13 +254,48 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             return false;
         }
 
-        private static bool AreAllCellsPopulated(DataGridViewRow row)
+        private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
-            if (string.IsNullOrEmpty((string)row.Cells[0].Value) || string.IsNullOrEmpty((string)row.Cells[1].Value) || string.IsNullOrEmpty((string)row.Cells[2].Value))
-            {
-                return false;
+            var lookupMappings = new List<DataGridViewRow>();
+            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
+            foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
+            {    
+                foreach (string mapField in entity.Value.Keys)
+                {
+                    foreach (string refField in entity.Value[mapField])
+                    {
+                        var newRow = AddCellsToDataGridViewRow(entity, entitiesDataSource, mapField, refField);
+                        lookupMappings.Add(newRow);
+                    }
+                }     
             }
-            return true;
+            return lookupMappings;
+        }
+
+        private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<string, List<string>>> entity, List<EntityMetadata> entitiesDataSource, string mapField, string refField)
+        {
+            var entityMeta = metaDataService.RetrieveEntities(entity.Key, organisationService, exceptionService);
+            var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).Select(x => x.LogicalName).ToArray();
+            var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+            var newRow = new DataGridViewRow();
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = entity.Key, DataSource = entitiesDataSource.Select(x => x.LogicalName).OrderBy(n => n).ToList() });
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = mapField, DataSource = mapFieldDataSource });
+            newRow.Cells.Add(new DataGridViewComboBoxCell { Value = refField, DataSource = refFieldDataSource });
+            return newRow;
+        }
+
+        private void UpdateViewWithConfigMappings(List<DataGridViewRow> mappingsFromConfig)
+        {
+            if (view.LookupMappings == null)
+            {
+                view.LookupMappings = mappingsFromConfig;
+            }
+            else
+            {
+                List<DataGridViewRow> lookupMappingsInView = viewHelpers.GetMappingsFromViewWithEmptyRowsRemoved(view.LookupMappings);
+                List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
+                view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
+            }
         }
 
         [ExcludeFromCodeCoverage]
