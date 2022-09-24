@@ -99,32 +99,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             }
         }
 
-        public void ShowError(Exception error)
-        {
-            string message = error.Message + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
-            string caption = "Oops, an error occured";
-
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-            // TODO: Replace with `FindPluginControlBase().ShowErrorDialog(error)` when we update XrmToolBox.
-            // https://www.xrmtoolbox.com/documentation/for-developers/plugincontrolbase-base-class/#error
-
-            if (result == DialogResult.Yes)
-            {
-                Process.Start(LogFilePath);
-            }
-        }
-
-        public void ShowSuccess(string message)
-        {
-            string caption = "Success" + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-                Process.Start(LogFilePath);
-            }
-        }
-
         private void OnActionCompleted(object sender, EventArgs e)
         {
             SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(100, $"Completed!"));
