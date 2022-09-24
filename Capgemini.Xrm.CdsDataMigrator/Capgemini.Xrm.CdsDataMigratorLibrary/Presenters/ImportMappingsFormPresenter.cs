@@ -1,6 +1,8 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Model;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,6 +13,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     public class ImportMappingsFormPresenter : IDisposable
     {
         public readonly IImportMappingsFormView view;
+
+        [ExcludeFromCodeCoverage]
+        public IMetadataService MetaDataService { get; set; }
+
+        [ExcludeFromCodeCoverage]
+        public IOrganizationService OrganizationService { get; set; }
 
         public ImportMappingsFormPresenter(IImportMappingsFormView view)
         {

@@ -2,6 +2,7 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -22,6 +23,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public event EventHandler RunConfigClicked;
         public event EventHandler SchemaConfigPathChanged;
 
+        [ExcludeFromCodeCoverage]
+        public IMetadataService MetadataService
+        {
+            set => importLookupMappingsFormPresenter.MetaDataService = value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public IOrganizationService OrganizationService
+        {
+            set => importLookupMappingsFormPresenter.OrganizationService = value;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public IViewHelpers ViewHelpers
+        {
+            set => importLookupMappingsFormPresenter.ViewHelpers = value;
+        }
+
         public ImportPage()
         {
             InitializeComponent();
@@ -29,11 +48,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             this.importMappingsForm = new ImportMappingsForm();
             this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(this.importMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
-        }
-        [ExcludeFromCodeCoverage]
-        public IViewHelpers ViewHelpers
-        {
-            set => importLookupMappingsFormPresenter.ViewHelpers = value;
         }
 
         #region input mapping
