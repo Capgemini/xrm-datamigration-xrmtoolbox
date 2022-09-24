@@ -63,7 +63,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {   
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(ex.Message, "Error");
             }
         }
 
@@ -82,7 +82,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch(Exception ex)
             {
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(ex.Message, "Error");
             }
         }
 
@@ -100,11 +100,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            viewHelpers.ShowMessage(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ShowMessage(e.Error.Message, "Error");
                         }
                         else
                         {
-                            viewHelpers.ShowMessage("Data export is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ShowMessage("Data export is complete.", "Success");
                         }
                     }
                 });
@@ -293,6 +293,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 List<DataGridViewRow> mappingsLoadedFromConfigPlusAnyManuallyAdded = lookupMappingsInView.Concat(mappingsFromConfig).ToList();
                 view.LookupMappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
+        }
+
+        private DialogResult ShowMessage(string message, string caption)
+        {
+            return viewHelpers.ShowMessage(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         [ExcludeFromCodeCoverage]

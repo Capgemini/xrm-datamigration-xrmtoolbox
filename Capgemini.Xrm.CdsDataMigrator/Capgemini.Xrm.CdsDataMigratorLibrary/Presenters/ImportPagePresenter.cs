@@ -60,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(ex.Message, "Error");
             }
         }
 
@@ -79,7 +79,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(ex.Message, "Error");
             }
         }
 
@@ -98,18 +98,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            viewHelpers.ShowMessage(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ShowMessage(e.Error.Message, "Error");
                         }
                         else
                         {
-                            viewHelpers.ShowMessage("Data import is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            ShowMessage("Data import is complete.", "Success");
                         }
                     }
                 });
             }
             catch (Exception ex)
             {
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ShowMessage(ex.Message, "Error");
             }
         }
           
@@ -248,6 +248,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
         }
+
+        private DialogResult ShowMessage(string message, string caption)
+        {
+            return viewHelpers.ShowMessage(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
 
         [ExcludeFromCodeCoverage]
         private void SchemaConfigPathChanged(object sender, EventArgs args)
