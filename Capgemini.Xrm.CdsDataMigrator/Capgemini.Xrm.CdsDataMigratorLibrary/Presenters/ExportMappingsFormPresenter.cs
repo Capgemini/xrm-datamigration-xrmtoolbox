@@ -67,6 +67,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             if (OrganizationService == null)
             {
                 ShowErrorMessage();
+                view.Close();
                 return;
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.CurrentRowEntityName, OrganizationService, ExceptionService);

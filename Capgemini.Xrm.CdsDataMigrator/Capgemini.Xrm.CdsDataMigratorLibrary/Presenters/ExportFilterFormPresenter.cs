@@ -32,6 +32,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Information);
 
+                view.Close();
+
                 return;
             }
 

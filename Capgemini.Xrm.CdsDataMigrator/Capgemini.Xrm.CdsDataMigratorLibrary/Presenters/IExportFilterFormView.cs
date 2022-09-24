@@ -18,5 +18,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnVisible;
         event EventHandler OnEntitySelected;
         event EventHandler OnFilterTextChanged;
+
+        void Close();
     }
 }
