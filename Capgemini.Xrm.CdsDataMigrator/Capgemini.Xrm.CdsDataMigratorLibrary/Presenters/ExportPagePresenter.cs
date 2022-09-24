@@ -62,7 +62,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 WriteFormInputFromConfig();
             }
             catch (Exception ex)
-            {   
+            {
                 ShowMessage(ex.Message, "Error");
             }
         }

@@ -45,8 +45,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             set
             {
-                exportLookupMappingsFormPresenter.ViewHelpers = value;
-                exportFilterFormPresenter.ViewHelpers = value;
+                exportLookupMappingsFormPresenter.ViewHelpers = exportFilterFormPresenter.ViewHelpers = value;
             }
         }
 
