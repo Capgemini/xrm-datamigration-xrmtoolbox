@@ -87,6 +87,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             Close();
         }
 
+        public static implicit operator ExportFilterForm(ExportFilterFormPresenter v)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

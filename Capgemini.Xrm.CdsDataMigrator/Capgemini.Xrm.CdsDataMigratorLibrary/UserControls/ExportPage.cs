@@ -42,7 +42,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         [ExcludeFromCodeCoverage]
         public IViewHelpers ViewHelpers
         {
-            set => exportLookupMappingsFormPresenter.ViewHelpers = exportFilterFormPresenter.ViewHelpers = value;
+            set
+            {
+                exportLookupMappingsFormPresenter.ViewHelpers = value;
+                exportFilterFormPresenter.ViewHelpers = value;
+            }
         }
 
         public event EventHandler LoadConfigClicked;

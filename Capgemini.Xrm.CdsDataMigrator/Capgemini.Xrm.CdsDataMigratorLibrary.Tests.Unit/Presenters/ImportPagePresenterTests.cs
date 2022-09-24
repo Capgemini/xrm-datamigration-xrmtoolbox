@@ -25,7 +25,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
     {
         private Mock<IImportPageView> mockImportView;
         private Mock<IWorkerHost> mockWorkerHost;
-        private Mock<INotifier> mockNotifier;
         private Mock<IViewHelpers> mockViewHelpers;
         private ImportPagePresenter systemUnderTest;
 
@@ -35,10 +34,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             SetupServiceMocks();
             mockImportView = new Mock<IImportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
-            mockNotifier = new Mock<INotifier>();
             mockViewHelpers = new Mock<IViewHelpers>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object);
         }
 
         [TestMethod]
@@ -133,7 +131,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]
@@ -317,7 +318,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]
@@ -375,7 +379,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]
@@ -395,7 +402,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]
@@ -411,7 +421,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockImportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowSuccess("Data import is complete."));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Data import is complete.",
+                "Success",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]

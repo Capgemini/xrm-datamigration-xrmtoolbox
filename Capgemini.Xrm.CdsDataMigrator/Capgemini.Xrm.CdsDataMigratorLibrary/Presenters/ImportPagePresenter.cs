@@ -115,8 +115,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         else
                         {
                             viewHelpers.ShowMessage(
-                            e.Error.Message,
                             "Data import is complete.",
+                            "Success",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
                         }

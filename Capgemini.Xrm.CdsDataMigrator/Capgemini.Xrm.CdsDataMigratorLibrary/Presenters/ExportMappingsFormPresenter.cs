@@ -67,7 +67,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             if (OrganizationService == null)
             {
                 ShowErrorMessage();
-                view.Close();
                 return;
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.CurrentRowEntityName, OrganizationService, ExceptionService);
@@ -76,6 +75,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private void ShowErrorMessage()
         {
+            view.Close();
             ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made",
             MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

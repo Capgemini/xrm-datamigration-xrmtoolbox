@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +26,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             systemUnderTest.OrganizationService = ServiceMock.Object;
             systemUnderTest.MetaDataService = MetadataServiceMock.Object;
             systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
-            
+            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
         }
 
         [TestMethod]
@@ -44,8 +45,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            mockExportView.Verify(x => x.ShowMessage(
-                    "Please make sure you are connected to an organisation", "No connection madde",
+            ViewHelpersMock.Verify(x => x.ShowMessage(
+                    "Please make sure you are connected to an organisation", "No connection made",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
@@ -57,10 +58,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
                 string entityLogicalName = "account";
                 SetupMockObjects(entityLogicalName);
-
-                systemUnderTest.OrganizationService = ServiceMock.Object;
-                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
-
                 mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
                 mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
         }
@@ -83,10 +80,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
                 string entityLogicalName = "account";
                 SetupMockObjects(entityLogicalName);
-
-                systemUnderTest.OrganizationService = ServiceMock.Object;
-                systemUnderTest.MetaDataService = MetadataServiceMock.Object;
-                systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
                 mockExportView
                     .SetupGet(x => x.CurrentRowEntityName)
                     .Returns("account");

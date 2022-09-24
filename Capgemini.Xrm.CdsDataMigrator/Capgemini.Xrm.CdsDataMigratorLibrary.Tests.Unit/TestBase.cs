@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
@@ -19,6 +20,8 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
         protected Mock<INotificationService> NotificationServiceMock { get; set; }
 
         protected Mock<IExceptionService> ExceptionServicerMock { get; set; }
+
+        protected Mock<IViewHelpers> ViewHelpersMock { get; set; }
 
         protected Mock<ILogManagerContainer> LogManagerContainerMock { get; set; }
 
@@ -121,6 +124,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             MetadataServiceMock = new Mock<IMetadataService>();
             NotificationServiceMock = new Mock<INotificationService>();
             ExceptionServicerMock = new Mock<IExceptionService>();
+            ViewHelpersMock = new Mock<IViewHelpers>();
             LogManagerContainerMock = new Mock<ILogManagerContainer>();
             LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
