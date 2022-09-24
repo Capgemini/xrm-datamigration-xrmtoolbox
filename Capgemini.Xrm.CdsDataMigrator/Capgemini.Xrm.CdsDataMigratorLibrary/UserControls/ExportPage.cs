@@ -15,6 +15,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ExportPage : UserControl, IExportPageView
     {
+        public ExportPagePresenter exportPagePresenter;
         private ExportFilterForm exportFilterForm;
         private ExportLookupMappings exportLookupMappingsForm;
 
@@ -60,7 +61,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             this.exportFilterForm = new ExportFilterForm();
             this.exportLookupMappingsForm = new ExportLookupMappings();
-            this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
+            this.exportFilterFormPresenter = new ExportFilterFormPresenter(this.exportFilterForm);
             exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }

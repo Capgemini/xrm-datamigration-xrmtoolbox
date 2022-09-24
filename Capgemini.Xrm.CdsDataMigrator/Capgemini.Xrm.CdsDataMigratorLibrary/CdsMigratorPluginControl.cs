@@ -51,8 +51,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
                     var viewHelpers = new ViewHelpers();
-                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
-                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    this.importPage1.importPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
+                    this.exportPage1.exportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
                     this.exportPage1.MetadataService = metaDataService;
                     this.exportPage1.ExceptionService = exceptionService;
                     this.exportPage1.ViewHelpers = viewHelpers;

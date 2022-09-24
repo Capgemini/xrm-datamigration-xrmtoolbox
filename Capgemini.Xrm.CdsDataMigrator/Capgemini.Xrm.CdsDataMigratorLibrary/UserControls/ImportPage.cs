@@ -13,6 +13,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ImportPage : UserControl, IImportPageView
     {
+        public ImportPagePresenter importPagePresenter;
         private ImportMappingsForm importMappingsForm;
         private ImportMappingsFormPresenter importLookupMappingsFormPresenter;
 
@@ -26,7 +27,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
 
             this.importMappingsForm = new ImportMappingsForm();
-            this.importMappingsForm.Tag = new ImportMappingsFormPresenter(this.importMappingsForm);
+            this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(this.importMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
         [ExcludeFromCodeCoverage]
