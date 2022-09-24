@@ -9,6 +9,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
@@ -23,118 +24,44 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         {
             SetupServiceMocks();
             mockImportView = new Mock<IImportMappingsFormView>();
-
             systemUnderTest = new ImportMappingsFormPresenter(mockImportView.Object);
+            systemUnderTest.OrganizationService = ServiceMock.Object;
+            systemUnderTest.MetaDataService = MetadataServiceMock.Object;
             systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
         }
 
         [TestMethod]
-        public void OnVisible_ShouldShowMessageAndCloseWhenNullSchemaProvided()
+        public void ImportLookupMappingsFormInstantiation()
         {
-            // Arrange
-            mockImportView
-                .SetupGet(x => x.SchemaConfiguration)
-                .Returns(() => null);
-
+            FluentActions.Invoking(() => new ImportMappingsFormPresenter(mockImportView.Object))
+                 .Should()
+                 .NotThrow();
+        }
+        
+        [TestMethod]
+        public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
+        {
             // Act
+            systemUnderTest.OrganizationService = null;
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
             ViewHelpersMock.Verify(x => x.ShowMessage(
-                    "Please specify a schema file with atleast one entity defined.",
-                    "No entities available",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    "Please make sure you are connected to an organisation", "No connection made",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information), Times.Once);
             mockImportView.Verify(x => x.Close(), Times.Once);
-            mockImportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
+            mockImportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Never);
         }
 
         [TestMethod]
-        public void OnVisible_ShouldShowMessageAndCloseWhenEmptySchemaProvided()
+        public void OnVisible()
         {
-            // Arrange
-            mockImportView
-                .SetupGet(x => x.SchemaConfiguration)
-                .Returns(() => new CrmSchemaConfiguration());
-
-            // Act
+            string entityLogicalName = "account";
+            SetupMockObjects(entityLogicalName);
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
-
-            // Assert
-            ViewHelpersMock.Verify(x => x.ShowMessage(
-                    "Please specify a schema file with atleast one entity defined.",
-                    "No entities available",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
-            mockImportView.Verify(x => x.Close(), Times.Once);
-            mockImportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
+            mockImportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
         }
 
-        [TestMethod]
-        public void OnVisible_ShouldPopulateEntityListAndSelectedEntityWhenSchemaProvidedContainsEntities()
-        {
-            // Arrange
-            var schema = new CrmSchemaConfiguration();
-            schema.Entities.Add(new CrmEntity
-            {
-                Name = "entity"
-
-            });
-
-            mockImportView
-                .Setup(x => x.SchemaConfiguration)
-                .Returns(schema);
-            mockImportView
-                .SetupGet(x => x.EntityList)
-                .Returns(schema.Entities.Select(x => x.Name).OrderBy(n => n));
-
-            // Act
-            mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
-
-            // Assert
-            mockImportView.Object.EntityList.Count().Should().Be(1);
-            mockImportView.VerifySet(x => x.EntityList = It.Is<IEnumerable<string>>(a => a.First() == schema.Entities.FirstOrDefault().Name), Times.Once);
-        }
-
-        [TestMethod]
-        public void OnVisible_ShouldRemoveEntityListWhenNoLongerPresentInTheSchema()
-        {
-            // Arrange
-            var entity = new CrmEntity
-            {
-                Name = "entity1"
-            };
-            var schemaOld = new CrmSchemaConfiguration();
-            schemaOld.Entities.Add(entity);
-            mockImportView.SetupGet(x => x.SchemaConfiguration).Returns(schemaOld);
-            mockImportView
-                .SetupGet(x => x.EntityList)
-                .Returns(schemaOld.Entities.Select(x => x.Name).OrderBy(n => n));
-
-            mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty); // Loads old schema entities
-
-            var schemaNew = new CrmSchemaConfiguration();
-            schemaNew.Entities.Add(new CrmEntity
-            {
-                Name = "entity2"
-            });
-
-            mockImportView
-                .SetupGet(x => x.SchemaConfiguration)
-                .Returns(schemaNew);
-            mockImportView
-                .SetupGet(x => x.EntityList)
-                .Returns(schemaNew.Entities.Select(x => x.Name).OrderBy(n => n));
-
-            // Act
-            mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
-
-            // Assert
-            mockImportView.Object.EntityList.Count().Should().Be(1);
-            mockImportView.VerifySet(
-               x => x.EntityList = It.Is<IEnumerable<string>>(a =>
-                   a.First() == schemaNew.Entities.FirstOrDefault().Name),
-               Times.Once);
-        }
     }
 }

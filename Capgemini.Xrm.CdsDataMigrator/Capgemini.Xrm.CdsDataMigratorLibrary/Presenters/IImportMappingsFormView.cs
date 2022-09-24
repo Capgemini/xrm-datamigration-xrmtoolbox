@@ -15,7 +15,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         CrmSchemaConfiguration SchemaConfiguration { get; }
         event EventHandler OnVisible; 
 
-        IEnumerable<string> EntityList { get; set; }
+        IEnumerable<string> EntityListDataSource { get; set; }
         List<DataGridViewRow> Mappings { get; set; }
 
         void Close();

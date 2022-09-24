@@ -18,10 +18,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
             using (var systemUnderTest = new ImportMappingsForm())
             {
                 // Act
-                systemUnderTest.As<IImportMappingsFormView>().EntityList = value;
+                systemUnderTest.As<IImportMappingsFormView>().EntityListDataSource = value;
 
                 // Assert
-                systemUnderTest.As<IImportMappingsFormView>().EntityList.Should().BeEquivalentTo(value);
+                systemUnderTest.As<IImportMappingsFormView>().EntityListDataSource.Should().BeEquivalentTo(value);
 
             }
         }
