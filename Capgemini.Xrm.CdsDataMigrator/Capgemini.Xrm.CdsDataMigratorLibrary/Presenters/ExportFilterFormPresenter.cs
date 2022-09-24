@@ -4,6 +4,7 @@ using Capgemini.Xrm.DataMigration.Model;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -27,11 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             if (view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
             {
                 view.Close();
-                ViewHelpers.ShowMessage(
-                    "Please specify a schema file with atleast one entity defined.",
-                    "No entities available",
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information);
+                ViewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
