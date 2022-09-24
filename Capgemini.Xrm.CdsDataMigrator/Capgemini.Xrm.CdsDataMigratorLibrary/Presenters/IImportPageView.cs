@@ -20,7 +20,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         string AskForFilePathToOpen();
         string AskForFilePathToSave(string existingFileName = "");
-        DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
 
         DataFormat DataFormat { get; set; }
         IOrganizationService Service { get; }

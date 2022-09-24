@@ -55,6 +55,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
                     this.exportPage1.MetadataService = metaDataService;
                     this.exportPage1.ExceptionService = exceptionService;
+                    this.exportPage1.ViewHelpers = viewHelpers;
+                    this.importPage1.ViewHelpers = viewHelpers;
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();

@@ -1,4 +1,5 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Model;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -18,18 +19,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.OnEntitySelected += OnEntitySelected;
             this.view.OnFilterTextChanged += UpdateFilterForEntity;
         }
+        [ExcludeFromCodeCoverage]
+        public IViewHelpers ViewHelpers { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
         {
             if (view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
             {
-                view.ShowMessage(
+                ViewHelpers.ShowMessage(
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Information);
 
-                view.Close();
                 return;
             }
 

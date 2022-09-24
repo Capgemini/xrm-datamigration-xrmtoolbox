@@ -18,8 +18,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         event EventHandler OnVisible;
         event EventHandler OnEntitySelected;
         event EventHandler OnFilterTextChanged;
-
-        void Close();
-        DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
     }
 }

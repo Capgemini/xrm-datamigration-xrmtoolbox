@@ -17,9 +17,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         IEnumerable<string> EntityList { get; set; }
         List<DataGridViewRow> Mappings { get; set; }
-
-        void Close();
-        DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
-        
     }
 }
