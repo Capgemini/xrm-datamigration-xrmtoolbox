@@ -20,7 +20,7 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
     [ExcludeFromCodeCoverage]
-    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger, INotifier
+    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
 
@@ -51,8 +51,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
                     var viewHelpers = new ViewHelpers();
-                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, viewHelpers);
-                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
+                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
                     this.exportPage1.MetadataService = metaDataService;
                     this.exportPage1.ExceptionService = exceptionService;
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;

@@ -165,6 +165,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             return saveFileDialog.FileName;
         }
 
+        [ExcludeFromCodeCoverage]
+        DialogResult IExportPageView.ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            return MessageBox.Show(message, caption, buttons, icon);
+        }
+
         #endregion
 
         #region event mappings
