@@ -118,7 +118,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockViewHelpers.Verify(x => x.ShowMessage(
                 "Test exception", "Error",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Information), Times.Once);
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -382,7 +382,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockViewHelpers.Verify(x => x.ShowMessage(
                 "Test exception", "Error",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Information), Times.Once);
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -447,7 +447,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockViewHelpers.Verify(x => x.ShowMessage(
                 "Test exception", "Error",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Information), Times.Once);
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -470,7 +470,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockViewHelpers.Verify(x => x.ShowMessage(
                 "Test exception", "Error",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Information), Times.Once);
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]

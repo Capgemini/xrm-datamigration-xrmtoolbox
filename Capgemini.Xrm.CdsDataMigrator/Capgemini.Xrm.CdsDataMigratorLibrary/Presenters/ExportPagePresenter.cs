@@ -104,7 +104,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         }
                         else
                         {
-                            viewHelpers.ShowMessage(e.Error.Message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            viewHelpers.ShowMessage("Data export is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 });
