@@ -41,8 +41,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             {
                 var entities = MetaDataService.RetrieveEntities(OrganizationService);
                 view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n);
-            }
         }
+    }
 
         private void ShowErrorMessage()
         {
