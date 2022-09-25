@@ -61,6 +61,14 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             Assert.AreEqual(2, updatedLookupMappings.Count);
         }
 
+        [TestMethod]
+        public void ShowMessageShouldNotThrow()
+        {
+            FluentActions.Invoking(() => systemUnderTest.ShowMessage("test error message", "error caption", MessageBoxButtons.OK, MessageBoxIcon.Error))
+                 .Should()
+                 .NotThrow();
+        }
+        
         private static DataGridViewRow GetRowWithoutBlankCell()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();

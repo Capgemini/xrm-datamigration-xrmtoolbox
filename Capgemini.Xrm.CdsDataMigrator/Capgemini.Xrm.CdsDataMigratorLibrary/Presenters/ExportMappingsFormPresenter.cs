@@ -76,7 +76,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private void ShowErrorMessage()
         {
             view.Close();
-            ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         
         [ExcludeFromCodeCoverage]
