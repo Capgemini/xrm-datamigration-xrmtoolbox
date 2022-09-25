@@ -60,14 +60,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
             Assert.AreEqual(2, updatedLookupMappings.Count);
         }
-
-        [TestMethod]
-        public void ShowMessageShouldNotThrow()
-        {
-            FluentActions.Invoking(() => systemUnderTest.ShowMessage("test error message", "error caption", MessageBoxButtons.OK, MessageBoxIcon.Error))
-                 .Should()
-                 .NotThrow();
-        }
         
         private static DataGridViewRow GetRowWithoutBlankCell()
         {
@@ -86,8 +78,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
             return dataGridViewRow;
         }
-
-
-
     }
 }

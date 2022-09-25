@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
@@ -30,6 +31,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
             return filteredViewLookupMappings;
         }
 
+        [ExcludeFromCodeCoverage]
         public DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             return MessageBox.Show(message, caption, buttons, icon);
