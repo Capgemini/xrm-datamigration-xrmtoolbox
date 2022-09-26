@@ -15,7 +15,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ExportPage : UserControl, IExportPageView
     {
-        public ExportPagePresenter exportPagePresenter;
         private ExportFilterForm exportFilterForm;
         private ExportLookupMappings exportLookupMappingsForm;
 
