@@ -86,16 +86,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
         }
 
-#endregion
-
-#region action mappings
-
-[ExcludeFromCodeCoverage]
-        DialogResult IExportLookupMappingsView.ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-        {
-            return MessageBox.Show(message, caption, buttons, icon);
-        }
-
         #endregion
 
         #region event mappings

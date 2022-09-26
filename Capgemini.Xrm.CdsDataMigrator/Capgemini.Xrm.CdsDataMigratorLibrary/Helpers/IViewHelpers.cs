@@ -7,5 +7,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
     {
         bool AreAllCellsPopulated(DataGridViewRow row);
         List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings);
+        DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
     }
 }

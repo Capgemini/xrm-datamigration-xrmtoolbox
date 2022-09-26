@@ -26,7 +26,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         string CurrentCell { get; set; }
 
         void Close();
-        DialogResult ShowMessage(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
-
     }
 }

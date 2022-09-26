@@ -21,7 +21,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IImportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
-        private readonly INotifier notifier;
         private readonly IOrganizationService organisationService;
         private readonly IMetadataService metaDataService;
         private readonly IViewHelpers viewHelpers;
@@ -29,12 +28,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, INotifier notifier, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
-            this.notifier = notifier;
             this.organisationService = organizationService;
             this.metaDataService = metaDataService;
             this.viewHelpers = viewHelpers;
@@ -62,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                notifier.ShowError(ex);
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -81,7 +79,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                notifier.ShowError(ex);
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -100,18 +98,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            notifier.ShowError(e.Error);
+                            viewHelpers.ShowMessage(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            notifier.ShowSuccess("Data import is complete.");
+                            viewHelpers.ShowMessage("Data import is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 });
             }
             catch (Exception ex)
             {
-                notifier.ShowError(ex);
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
           
@@ -250,7 +248,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
         }
-
+        
         [ExcludeFromCodeCoverage]
         private void SchemaConfigPathChanged(object sender, EventArgs args)
         {

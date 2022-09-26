@@ -27,7 +27,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
     {
         private Mock<IExportPageView> mockExportView;
         private Mock<IWorkerHost> mockWorkerHost;
-        private Mock<INotifier> mockNotifier;
         private Mock<IViewHelpers> mockViewHelpers;
         private ExportPagePresenter systemUnderTest;
 
@@ -37,10 +36,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             SetupServiceMocks();
             mockExportView = new Mock<IExportPageView>();
             mockWorkerHost = new Mock<IWorkerHost>();
-            mockNotifier = new Mock<INotifier>();
             mockViewHelpers = new Mock<IViewHelpers>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, mockNotifier.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object, mockViewHelpers.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object, mockViewHelpers.Object);
         }
 
         [TestMethod]
@@ -117,7 +115,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -378,7 +379,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -440,7 +444,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -460,7 +467,10 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowError(thrownException));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Test exception", "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error), Times.Once);
         }
 
         [TestMethod]
@@ -474,7 +484,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifyAll();
-            mockNotifier.Verify(x => x.ShowSuccess("Data export is complete."));
+            mockViewHelpers.Verify(x => x.ShowMessage(
+                "Data export is complete.",
+                "Success",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information), Times.Once);
         }
 
         [TestMethod]

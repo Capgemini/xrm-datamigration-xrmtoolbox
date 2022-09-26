@@ -1,4 +1,6 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ExportFilterFormPresenterTests
+    public class ExportFilterFormPresenterTests : TestBase
     {
         private Mock<IExportFilterFormView> mockExportView;
         private ExportFilterFormPresenter systemUnderTest;
@@ -22,9 +24,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             mockExportView = new Mock<IExportFilterFormView>();
 
             systemUnderTest = new ExportFilterFormPresenter(mockExportView.Object);
+            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
         }
 
         [TestMethod]
@@ -39,11 +43,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            mockExportView.Verify(x => x.ShowMessage(
+            ViewHelpersMock.Verify(x => x.ShowMessage(
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
             mockExportView.VerifySet(x => x.EntityList = It.IsAny<IEnumerable<ListBoxItem<CrmEntity>>>(), Times.Never);
             mockExportView.VerifySet(x => x.SelectedEntity = It.IsAny<CrmEntity>(), Times.Never);
@@ -61,11 +65,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            mockExportView.Verify(x => x.ShowMessage(
+            ViewHelpersMock.Verify(x => x.ShowMessage(
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
             mockExportView.VerifySet(x => x.EntityList = It.IsAny<IEnumerable<ListBoxItem<CrmEntity>>>(), Times.Never);
             mockExportView.VerifySet(x => x.SelectedEntity = It.IsAny<CrmEntity>(), Times.Never);

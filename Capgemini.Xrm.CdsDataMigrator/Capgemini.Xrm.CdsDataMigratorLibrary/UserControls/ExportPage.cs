@@ -1,6 +1,7 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
@@ -18,6 +19,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         private ExportLookupMappings exportLookupMappingsForm;
 
         private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+        private ExportFilterFormPresenter exportFilterFormPresenter;
 
         [ExcludeFromCodeCoverage]
         public IMetadataService MetadataService
@@ -36,7 +38,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             set => exportLookupMappingsFormPresenter.ExceptionService = value;
         }
-        
+
+        [ExcludeFromCodeCoverage]
+        public IViewHelpers ViewHelpers
+        {
+            set
+            {
+                exportLookupMappingsFormPresenter.ViewHelpers = value;
+                exportFilterFormPresenter.ViewHelpers = value;
+            }
+        }
+
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -48,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             this.exportFilterForm = new ExportFilterForm();
             this.exportLookupMappingsForm = new ExportLookupMappings();
-            this.exportFilterForm.Tag = new ExportFilterFormPresenter(this.exportFilterForm);
+            this.exportFilterFormPresenter = new ExportFilterFormPresenter(this.exportFilterForm);
             exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -164,7 +176,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             saveFileDialog.ShowDialog();
             return saveFileDialog.FileName;
         }
-
+        
         #endregion
 
         #region event mappings

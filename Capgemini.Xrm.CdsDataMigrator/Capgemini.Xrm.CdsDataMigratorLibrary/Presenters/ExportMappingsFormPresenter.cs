@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -31,6 +32,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         [ExcludeFromCodeCoverage]
         public IExceptionService ExceptionService { get; set; }
+
+        [ExcludeFromCodeCoverage]
+        public IViewHelpers ViewHelpers { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
         {   
@@ -71,10 +75,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private void ShowErrorMessage()
         {
-            view.ShowMessage("Please make sure you are connected to an organisation", "No connection madde",
-            MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             view.Close();
+            ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         
         [ExcludeFromCodeCoverage]

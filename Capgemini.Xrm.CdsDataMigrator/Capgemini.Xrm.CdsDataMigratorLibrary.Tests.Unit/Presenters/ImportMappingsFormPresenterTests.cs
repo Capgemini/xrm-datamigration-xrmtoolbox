@@ -1,4 +1,6 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
 using FluentAssertions;
@@ -11,7 +13,7 @@ using System.Linq;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
     [TestClass]
-    public class ImportMappingsFormPresenterTests
+    public class ImportMappingsFormPresenterTests : TestBase
     {
         private Mock<IImportMappingsFormView> mockImportView;
         private ImportMappingsFormPresenter systemUnderTest;
@@ -19,9 +21,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             mockImportView = new Mock<IImportMappingsFormView>();
 
             systemUnderTest = new ImportMappingsFormPresenter(mockImportView.Object);
+            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
         }
 
         [TestMethod]
@@ -36,11 +40,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            mockImportView.Verify(x => x.ShowMessage(
+            ViewHelpersMock.Verify(x => x.ShowMessage(
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockImportView.Verify(x => x.Close(), Times.Once);
             mockImportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
         }
@@ -57,11 +61,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            mockImportView.Verify(x => x.ShowMessage(
+            ViewHelpersMock.Verify(x => x.ShowMessage(
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockImportView.Verify(x => x.Close(), Times.Once);
             mockImportView.VerifySet(x => x.EntityList = It.IsAny<List<string>>(), Times.Never);
         }

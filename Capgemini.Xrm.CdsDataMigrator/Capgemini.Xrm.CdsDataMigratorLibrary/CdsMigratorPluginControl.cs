@@ -20,10 +20,11 @@ using XrmToolBox.Extensibility.Interfaces;
 namespace Capgemini.Xrm.CdsDataMigratorLibrary
 {
     [ExcludeFromCodeCoverage]
-    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger, INotifier
+    public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
-
+        private ImportPagePresenter ImportPagePresenter;
+        private ExportPagePresenter ExportPagePresenter;
         private SchemaGeneratorPresenter schemaGeneratorPresenter;
 
         public CdsMigratorPluginControl()
@@ -51,10 +52,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
                     var viewHelpers = new ViewHelpers();
-                    this.importPage1.Tag = new ImportPagePresenter(this.importPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, viewHelpers);
-                    this.exportPage1.Tag = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, this, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    ImportPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
+                    ExportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
                     this.exportPage1.MetadataService = metaDataService;
                     this.exportPage1.ExceptionService = exceptionService;
+                    this.exportPage1.ViewHelpers = viewHelpers;
+                    this.importPage1.ViewHelpers = viewHelpers;
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();
@@ -96,32 +99,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             if (actionName == "")
             {
                 base.UpdateConnection(newService, detail, actionName, parameter);
-            }
-        }
-
-        public void ShowError(Exception error)
-        {
-            string message = error.Message + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
-            string caption = "Oops, an error occured";
-
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-            // TODO: Replace with `FindPluginControlBase().ShowErrorDialog(error)` when we update XrmToolBox.
-            // https://www.xrmtoolbox.com/documentation/for-developers/plugincontrolbase-base-class/#error
-
-            if (result == DialogResult.Yes)
-            {
-                Process.Start(LogFilePath);
-            }
-        }
-
-        public void ShowSuccess(string message)
-        {
-            string caption = "Success" + Environment.NewLine + Environment.NewLine + "Would you like to open the full log file?";
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-                Process.Start(LogFilePath);
             }
         }
 

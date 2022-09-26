@@ -1,5 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
@@ -13,6 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ImportPage : UserControl, IImportPageView
     {
         private ImportMappingsForm importMappingsForm;
+        private ImportMappingsFormPresenter importLookupMappingsFormPresenter;
 
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
@@ -24,8 +26,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
 
             this.importMappingsForm = new ImportMappingsForm();
-            this.importMappingsForm.Tag = new ImportMappingsFormPresenter(this.importMappingsForm);
+            this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(this.importMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
+        }
+        [ExcludeFromCodeCoverage]
+        public IViewHelpers ViewHelpers
+        {
+            set => importLookupMappingsFormPresenter.ViewHelpers = value;
         }
 
         #region input mapping
@@ -47,8 +54,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             get => tcbIgnoreSystemFields.Checked;
             set => tcbIgnoreSystemFields.Checked = value;
         }
-
-        // file being imported from
+        
         string IImportPageView.JsonFolderPath
         {
             get => fisJsonFolderPath.Value;
