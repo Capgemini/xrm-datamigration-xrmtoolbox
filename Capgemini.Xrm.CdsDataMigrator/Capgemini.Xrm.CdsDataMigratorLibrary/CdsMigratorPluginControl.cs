@@ -46,7 +46,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             {
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
-                    this.exportPage1.OrganizationService = detail.ServiceClient;
                     var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
                     var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
                     var metaDataService = new MetadataService();
@@ -54,10 +53,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var viewHelpers = new ViewHelpers();
                     ImportPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
                     ExportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
-                    this.exportPage1.MetadataService = metaDataService;
-                    this.exportPage1.ExceptionService = exceptionService;
-                    this.exportPage1.ViewHelpers = viewHelpers;
-                    this.importPage1.ViewHelpers = viewHelpers;
+                    this.importPage1.SetServices(metaDataService, detail.ServiceClient, viewHelpers);
+                    this.exportPage1.SetServices(metaDataService, detail.ServiceClient, exceptionService, viewHelpers);
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
                     SchemaGeneratorWizard.MetadataService = new MetadataService();
                     SchemaGeneratorWizard.NotificationService = new NotificationService();

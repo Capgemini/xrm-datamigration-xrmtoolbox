@@ -20,35 +20,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
         private ExportFilterFormPresenter exportFilterFormPresenter;
-
-        [ExcludeFromCodeCoverage]
-        public IMetadataService MetadataService
-        {
-            set => exportLookupMappingsFormPresenter.MetaDataService = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public IOrganizationService OrganizationService
-        {
-            set => exportLookupMappingsFormPresenter.OrganizationService = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public IExceptionService ExceptionService
-        {
-            set => exportLookupMappingsFormPresenter.ExceptionService = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public IViewHelpers ViewHelpers
-        {
-            set
-            {
-                exportLookupMappingsFormPresenter.ViewHelpers = value;
-                exportFilterFormPresenter.ViewHelpers = value;
-            }
-        }
-
+        
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -176,7 +148,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             saveFileDialog.ShowDialog();
             return saveFileDialog.FileName;
         }
-        
+
+        [ExcludeFromCodeCoverage]
+        public void SetServices(IMetadataService metaDataService, IOrganizationService organizationService, IExceptionService exceptionService, IViewHelpers viewHelpers)
+        {
+            exportLookupMappingsFormPresenter.MetaDataService = metaDataService;
+            exportLookupMappingsFormPresenter.OrganizationService = organizationService;
+            exportLookupMappingsFormPresenter.ExceptionService = exceptionService;
+            exportLookupMappingsFormPresenter.ViewHelpers = viewHelpers;
+            exportFilterFormPresenter.ViewHelpers = viewHelpers;
+        }
+
         #endregion
 
         #region event mappings

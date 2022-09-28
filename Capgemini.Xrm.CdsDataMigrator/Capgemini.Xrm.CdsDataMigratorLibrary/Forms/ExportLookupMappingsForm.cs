@@ -88,6 +88,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #endregion
 
+
         #region event mappings
 
         [ExcludeFromCodeCoverage]

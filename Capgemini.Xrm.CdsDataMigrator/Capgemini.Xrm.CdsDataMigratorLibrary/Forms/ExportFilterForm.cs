@@ -54,7 +54,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         #endregion
-        
+
         #region event mappings
 
         protected override void OnVisibleChanged(EventArgs e)

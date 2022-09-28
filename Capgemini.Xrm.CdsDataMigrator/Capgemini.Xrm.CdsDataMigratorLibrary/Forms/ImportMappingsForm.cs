@@ -24,8 +24,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         public CrmSchemaConfiguration SchemaConfiguration { get; set; }
 
-        IEnumerable<string> IImportMappingsFormView.EntityList
-        {   
+        IEnumerable<string> IImportMappingsFormView.EntityListDataSource
+        {
             get => clEntity.Items.Cast<string>();
             set
             {
@@ -40,7 +40,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             {
                 List<DataGridViewRow> mappings = new List<DataGridViewRow>();
                 foreach (DataGridViewRow row in dgvMappings.Rows)
-                {  
+                {
                     mappings.Add(row);
                 }
                 return mappings;
@@ -56,7 +56,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         #endregion
-        
+
         #region event mappings
 
         [ExcludeFromCodeCoverage]
