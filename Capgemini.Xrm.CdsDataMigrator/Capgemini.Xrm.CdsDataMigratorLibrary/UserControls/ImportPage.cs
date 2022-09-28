@@ -21,25 +21,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
-        public event EventHandler SchemaConfigPathChanged;
-
-        [ExcludeFromCodeCoverage]
-        public IMetadataService MetadataService
-        {
-            set => importLookupMappingsFormPresenter.MetaDataService = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public IOrganizationService OrganizationService
-        {
-            set => importLookupMappingsFormPresenter.OrganizationService = value;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public IViewHelpers ViewHelpers
-        {
-            set => importLookupMappingsFormPresenter.ViewHelpers = value;
-        }
+        public event EventHandler SchemaConfigPathChanged;  
 
         public ImportPage()
         {
@@ -131,6 +113,24 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             saveFileDialog.FileName = existingFileName;
             saveFileDialog.ShowDialog();
             return saveFileDialog.FileName;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetMetadataService(IMetadataService metaDataService)
+        {
+            importLookupMappingsFormPresenter.MetaDataService = metaDataService;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetOrganizationService(IOrganizationService organizationService)
+        {
+            importLookupMappingsFormPresenter.OrganizationService = organizationService;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetViewHelpers(IViewHelpers viewHelpers)
+        {
+            importLookupMappingsFormPresenter.ViewHelpers = viewHelpers;
         }
 
         #endregion
