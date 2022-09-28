@@ -10,7 +10,6 @@ using XrmToolBox.Extensibility.Interfaces;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using NuGet;
-using Microsoft.Xrm.Sdk;
 using System.Linq;
 using Microsoft.Xrm.Sdk.Metadata;
 
@@ -21,19 +20,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IImportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
-        private readonly IOrganizationService organisationService;
         private readonly IMetadataService metaDataService;
         private readonly IViewHelpers viewHelpers;
 
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
-            this.organisationService = organizationService;
             this.metaDataService = metaDataService;
             this.viewHelpers = viewHelpers;
 
@@ -212,7 +209,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
-            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
+            var entitiesDataSource = metaDataService.RetrieveEntities(view.Service);
             foreach (KeyValuePair<string, Dictionary<Guid, Guid>> entity in config.MigrationConfig.Mappings)
             {
                 foreach (Guid guidToMap in entity.Value.Keys)

@@ -3,7 +3,6 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using NuGet;
 using System;
@@ -22,7 +21,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IExportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
-        private readonly IOrganizationService organisationService;
         private readonly IMetadataService metaDataService;
         private readonly IExceptionService exceptionService;
         private readonly IViewHelpers viewHelpers;
@@ -30,12 +28,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private CrmExporterConfig config;
         private string configFilePath;
 
-        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IOrganizationService organizationService, IMetadataService metaDataService, IExceptionService exceptionService, IViewHelpers viewHelpers)
+        public ExportPagePresenter(IExportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IMetadataService metaDataService, IExceptionService exceptionService, IViewHelpers viewHelpers)
         {
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
-            this.organisationService = organizationService;
             this.metaDataService = metaDataService;
             this.exceptionService = exceptionService;
             this.viewHelpers = viewHelpers;
@@ -254,7 +251,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
-            var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
+            var entitiesDataSource = metaDataService.RetrieveEntities(view.Service);
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
             {    
                 foreach (string mapField in entity.Value.Keys)
@@ -271,7 +268,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<string, List<string>>> entity, List<EntityMetadata> entitiesDataSource, string mapField, string refField)
         {
-            var entityMeta = metaDataService.RetrieveEntities(entity.Key, organisationService, exceptionService);
+            var entityMeta = metaDataService.RetrieveEntities(entity.Key, view.Service, exceptionService);
             var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).Select(x => x.LogicalName).ToArray();
             var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).Select(x => x.LogicalName).OrderBy(n => n).ToArray();
             var newRow = new DataGridViewRow();

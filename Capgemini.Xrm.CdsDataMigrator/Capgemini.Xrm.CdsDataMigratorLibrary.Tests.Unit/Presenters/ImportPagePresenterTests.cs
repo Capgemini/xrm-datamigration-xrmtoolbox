@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockWorkerHost = new Mock<IWorkerHost>();
             mockViewHelpers = new Mock<IViewHelpers>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object);
         }
 
         [TestMethod]

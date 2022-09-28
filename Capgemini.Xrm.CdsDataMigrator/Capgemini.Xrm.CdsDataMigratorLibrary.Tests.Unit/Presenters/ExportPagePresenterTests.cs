@@ -2,7 +2,6 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
@@ -38,7 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             mockWorkerHost = new Mock<IWorkerHost>();
             mockViewHelpers = new Mock<IViewHelpers>();
 
-            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object, mockViewHelpers.Object);
+            systemUnderTest = new ExportPagePresenter(mockExportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, MetadataServiceMock.Object, ExceptionServicerMock.Object, mockViewHelpers.Object);
         }
 
         [TestMethod]
