@@ -150,26 +150,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         }
 
         [ExcludeFromCodeCoverage]
-        public void SetMetadataService(IMetadataService metaDataService)
+        public void SetServices(IMetadataService metaDataService, IOrganizationService organizationService, IExceptionService exceptionService, IViewHelpers viewHelpers)
         {
             exportLookupMappingsFormPresenter.MetaDataService = metaDataService;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void SetOrganizationService(IOrganizationService organizationService)
-        {
             exportLookupMappingsFormPresenter.OrganizationService = organizationService;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void SetExceptionService(IExceptionService exceptionService)
-        {
             exportLookupMappingsFormPresenter.ExceptionService = exceptionService;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void SetViewHelpers(IViewHelpers viewHelpers)
-        {
             exportLookupMappingsFormPresenter.ViewHelpers = viewHelpers;
             exportFilterFormPresenter.ViewHelpers = viewHelpers;
         }

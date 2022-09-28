@@ -43,7 +43,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 ShowErrorMessage();
                 return;
             }
-            if (new List<string>(view.EntityListDataSource).Count == 0)
+            if (!view.EntityListDataSource.Any())
             {
                 var entities = MetaDataService.RetrieveEntities(OrganizationService);
                 view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n);
