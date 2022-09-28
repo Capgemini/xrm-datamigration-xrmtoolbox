@@ -1,14 +1,10 @@
 ﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.DataMigration.Config;
-using Capgemini.Xrm.DataMigration.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
@@ -52,7 +48,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
-        public void OnVisible()
+        public void OnVisible_ShouldPopulateEntityListAndSelectedEntity()
         {
             string entityLogicalName = "account";
             SetupMockObjects(entityLogicalName);
