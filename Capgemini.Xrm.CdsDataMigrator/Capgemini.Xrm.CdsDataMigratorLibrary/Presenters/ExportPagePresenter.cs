@@ -63,7 +63,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message, "Error");
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch(Exception ex)
             {
-                ShowMessage(ex.Message, "Error");
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -100,18 +100,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            ShowMessage(e.Error.Message, "Error");
+                            viewHelpers.ShowMessage(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            ShowMessage("Data export is complete.", "Success");
+                            viewHelpers.ShowMessage("Data export is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 });
             }
             catch (Exception ex)
             {
-                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

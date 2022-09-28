@@ -23,7 +23,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
     public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
-
+        private ImportPagePresenter ImportPagePresenter;
+        private ExportPagePresenter ExportPagePresenter;
         private SchemaGeneratorPresenter schemaGeneratorPresenter;
 
         public CdsMigratorPluginControl()
@@ -52,8 +53,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                     var metaDataService = new MetadataService();
                     var exceptionService = new ExceptionService();
                     var viewHelpers = new ViewHelpers();
-                    this.importPage1.importPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
-                    this.exportPage1.exportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                    ImportPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers);
+                    ExportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
                     this.importPage1.MetadataService = metaDataService;
                     this.exportPage1.MetadataService = metaDataService;
                     this.exportPage1.ExceptionService = exceptionService;

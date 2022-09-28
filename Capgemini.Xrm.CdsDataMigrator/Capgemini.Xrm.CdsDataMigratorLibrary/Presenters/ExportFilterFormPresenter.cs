@@ -28,7 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             if (view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
             {
                 view.Close();
-                ViewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ViewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

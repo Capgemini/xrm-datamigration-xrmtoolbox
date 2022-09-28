@@ -86,11 +86,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
         }
 
-#endregion
-
-#region action mappings
-
         #endregion
+
 
         #region event mappings
 

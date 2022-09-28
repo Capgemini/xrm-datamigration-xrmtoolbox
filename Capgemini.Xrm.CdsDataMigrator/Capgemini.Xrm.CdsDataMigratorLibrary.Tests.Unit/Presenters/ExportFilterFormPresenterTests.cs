@@ -47,7 +47,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
             mockExportView.VerifySet(x => x.EntityList = It.IsAny<IEnumerable<ListBoxItem<CrmEntity>>>(), Times.Never);
             mockExportView.VerifySet(x => x.SelectedEntity = It.IsAny<CrmEntity>(), Times.Never);
@@ -69,7 +69,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                     "Please specify a schema file with atleast one entity defined.",
                     "No entities available",
                     System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Information), Times.Once);
+                    System.Windows.Forms.MessageBoxIcon.Error), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
             mockExportView.VerifySet(x => x.EntityList = It.IsAny<IEnumerable<ListBoxItem<CrmEntity>>>(), Times.Never);
             mockExportView.VerifySet(x => x.SelectedEntity = It.IsAny<CrmEntity>(), Times.Never);

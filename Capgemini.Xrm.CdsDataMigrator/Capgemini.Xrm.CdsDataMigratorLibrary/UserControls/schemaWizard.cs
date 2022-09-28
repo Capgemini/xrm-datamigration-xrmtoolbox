@@ -155,7 +155,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
         public void ClearMemory()
         {
             ClearInternalMemory();
-            ClearUIMemory();
         }
 
         public void ManageWorkingState(bool working)
@@ -197,13 +196,6 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBoxPlugin
             selectedEntity.Clear();
             checkedRelationship.Clear();
             mapping.Clear();
-        }
-
-        private void ClearUIMemory()
-        {
-            tbSchemaPath.Clear();
-            tbImportConfig.Clear();
-            tbExportConfig.Clear();
         }
 
         private async void ListViewEntitiesSelectedIndexChanged(object sender, EventArgs e)

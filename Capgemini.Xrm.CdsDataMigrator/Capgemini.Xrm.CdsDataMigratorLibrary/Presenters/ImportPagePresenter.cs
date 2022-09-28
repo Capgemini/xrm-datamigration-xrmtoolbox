@@ -60,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message, "Error");
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message, "Error");
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -98,18 +98,18 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                     {
                         if (e.Error != null)
                         {
-                            ShowMessage(e.Error.Message, "Error");
+                            viewHelpers.ShowMessage(e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         else
                         {
-                            ShowMessage("Data import is complete.", "Success");
+                            viewHelpers.ShowMessage("Data import is complete.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 });
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message, "Error");
+                viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
           
@@ -253,8 +253,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             return viewHelpers.ShowMessage(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-
+        
         [ExcludeFromCodeCoverage]
         private void SchemaConfigPathChanged(object sender, EventArgs args)
         {

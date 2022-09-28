@@ -48,7 +48,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             ViewHelpersMock.Verify(x => x.ShowMessage(
                     "Please make sure you are connected to an organisation", "No connection made",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information), Times.Once);
+                    MessageBoxIcon.Error), Times.Once);
             mockExportView.Verify(x => x.Close(), Times.Once);
             mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Never);
         }

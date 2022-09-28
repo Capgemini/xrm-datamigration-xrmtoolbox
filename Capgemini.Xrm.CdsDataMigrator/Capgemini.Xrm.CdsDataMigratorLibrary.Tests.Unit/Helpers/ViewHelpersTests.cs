@@ -60,7 +60,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
             Assert.AreEqual(2, updatedLookupMappings.Count);
         }
-
+        
         private static DataGridViewRow GetRowWithoutBlankCell()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();
@@ -78,8 +78,5 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "accountid" });
             return dataGridViewRow;
         }
-
-
-
     }
 }
