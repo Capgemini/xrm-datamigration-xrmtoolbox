@@ -14,7 +14,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ImportPage : UserControl, IImportPageView
     {
-        public ImportPagePresenter importPagePresenter;
         private ImportMappingsForm importMappingsForm;
         private ImportMappingsFormPresenter importLookupMappingsFormPresenter;
 
