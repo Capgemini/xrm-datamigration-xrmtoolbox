@@ -49,11 +49,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(this.importMappingsForm);
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
-        [ExcludeFromCodeCoverage]
-        public IViewHelpers ViewHelpers
-        {
-            set => importLookupMappingsFormPresenter.ViewHelpers = value;
-        }
 
         #region input mapping
 

@@ -46,10 +46,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert
-            ViewHelpersMock.Verify(x => x.ShowMessage(
-                    "Please make sure you are connected to an organisation", "No connection made",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information), Times.Once);
+            ViewHelpersMock.Verify(x => x.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Error), Times.Once);
             mockImportView.Verify(x => x.Close(), Times.Once);
             mockImportView.VerifySet(x => x.EntityListDataSource = It.IsAny<List<string>>(), Times.Never);
         }
@@ -62,6 +59,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
             mockImportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
         }
-
     }
 }
