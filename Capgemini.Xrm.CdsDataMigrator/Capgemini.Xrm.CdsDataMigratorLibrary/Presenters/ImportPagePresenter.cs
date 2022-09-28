@@ -248,11 +248,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
         }
-
-        private DialogResult ShowMessage(string message, string caption)
-        {
-            return viewHelpers.ShowMessage(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
         
         [ExcludeFromCodeCoverage]
         private void SchemaConfigPathChanged(object sender, EventArgs args)

@@ -1,7 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.Model;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
@@ -34,23 +32,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             if (OrganizationService == null)
             {
-                ViewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 view.Close();
+                ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             if (new List<string>(view.EntityListDataSource).Count == 0)
             {
                 var entities = MetaDataService.RetrieveEntities(OrganizationService);
                 view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n);
+            }
         }
-    }
-
-        private void ShowErrorMessage()
-        {
-            view.Close();
-            ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+        
         [ExcludeFromCodeCoverage]
         public void Dispose()
         {
