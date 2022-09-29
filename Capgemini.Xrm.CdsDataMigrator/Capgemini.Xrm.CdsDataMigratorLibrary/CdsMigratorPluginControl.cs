@@ -1,7 +1,7 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+﻿using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
@@ -9,10 +9,8 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -23,14 +21,45 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
     public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
-        private ImportPagePresenter ImportPagePresenter;
-        private ExportPagePresenter ExportPagePresenter;
+        
+        private readonly ILogger Logger;
+        private readonly IDataMigrationService DataMigrationService;
+        private readonly IMetadataService MetadataService;
+        private readonly IExceptionService ExceptionService;
+        private readonly INotificationService NotificationService;
+        private readonly IViewHelpers ViewHelpers;
+
+        private readonly ImportPagePresenter ImportPagePresenter;
+        private readonly ExportPagePresenter ExportPagePresenter;
         private SchemaGeneratorPresenter schemaGeneratorPresenter;
 
         public CdsMigratorPluginControl()
         {
             SettingFileHandler.GetConfigData<SchemaWizard>(out settings);
+
+            this.Logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+            this.DataMigrationService = new DataMigrationService(this.Logger, new CrmGenericMigratorFactory());
+            this.MetadataService = new MetadataService();
+            this.ExceptionService = new ExceptionService();
+            this.NotificationService = new NotificationService();
+            this.ViewHelpers = new ViewHelpers();
+
             InitializeComponent();
+            
+            this.ImportPagePresenter = new ImportPagePresenter(
+                this.importPage1, 
+                this, 
+                this.DataMigrationService, 
+                this.MetadataService, 
+                this.ViewHelpers);
+            this.ExportPagePresenter = new ExportPagePresenter(
+                this.exportPage1, 
+                this, 
+                this.DataMigrationService, 
+                this.MetadataService, 
+                this.ExceptionService, 
+                ViewHelpers);
+
             DataImportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             DataExportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
             SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
@@ -46,22 +75,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             {
                 if (actionName == "SchemaConnection" || actionName == "")
                 {
-                    var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
-                    var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
-                    var metaDataService = new MetadataService();
-                    var exceptionService = new ExceptionService();
-                    var viewHelpers = new ViewHelpers();
-                    ImportPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, metaDataService, viewHelpers);
-                    ExportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, metaDataService, exceptionService, viewHelpers);
-                    this.importPage1.SetServices(metaDataService, detail.ServiceClient, viewHelpers);
-                    this.exportPage1.SetServices(metaDataService, detail.ServiceClient, exceptionService, viewHelpers);
                     SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
-                    SchemaGeneratorWizard.MetadataService = new MetadataService();
-                    SchemaGeneratorWizard.NotificationService = new NotificationService();
-                    SchemaGeneratorWizard.ExceptionService = new ExceptionService();
+                    SchemaGeneratorWizard.MetadataService = this.MetadataService;
+                    SchemaGeneratorWizard.NotificationService = this.NotificationService;
+                    SchemaGeneratorWizard.ExceptionService = this.ExceptionService;
                     SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
 
-                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService(), settings);
+                    schemaGeneratorPresenter = new SchemaGeneratorPresenter(
+                        sgpManageSchema, 
+                        detail.ServiceClient, 
+                        this.MetadataService,
+                        this.NotificationService,
+                        this.ExceptionService,
+                        settings);
+                        
                     await schemaGeneratorPresenter.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
                 }
 

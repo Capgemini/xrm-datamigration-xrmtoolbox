@@ -23,6 +23,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IMetadataService metaDataService;
         private readonly IViewHelpers viewHelpers;
 
+        private readonly ImportMappingsFormPresenter importLookupMappingsFormPresenter;
+
         private CrmImportConfig config;
         private string configFilePath;
 
@@ -38,6 +40,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.SaveConfigClicked += SaveConfig;
             this.view.RunConfigClicked += RunConfig;
             this.view.SchemaConfigPathChanged += SchemaConfigPathChanged;
+
+            this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(
+                this.view.ImportMappingsForm, 
+                this.metaDataService, 
+                this.viewHelpers,
+                () => this.view.Service);
 
             this.config = new CrmImportConfig();
             WriteFormInputFromConfig();

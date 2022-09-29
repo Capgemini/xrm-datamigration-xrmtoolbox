@@ -1,8 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -15,8 +13,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     public partial class ImportPage : UserControl, IImportPageView
     {
         private ImportMappingsForm importMappingsForm;
-        private ImportMappingsFormPresenter importLookupMappingsFormPresenter;
-
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -27,7 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             InitializeComponent();
 
             this.importMappingsForm = new ImportMappingsForm();
-            this.importLookupMappingsFormPresenter = new ImportMappingsFormPresenter(this.importMappingsForm);
+            
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -97,6 +93,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #endregion
 
+        #region child views
+
+        IImportMappingsFormView IImportPageView.ImportMappingsForm
+        {
+            get => importMappingsForm;
+        }
+
+        #endregion
+
         #region action mappings
 
         [ExcludeFromCodeCoverage]
@@ -112,14 +117,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             saveFileDialog.FileName = existingFileName;
             saveFileDialog.ShowDialog();
             return saveFileDialog.FileName;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void SetServices(IMetadataService metaDataService, IOrganizationService organizationService, IViewHelpers viewHelpers)
-        {
-            importLookupMappingsFormPresenter.MetaDataService = metaDataService;
-            importLookupMappingsFormPresenter.OrganizationService = organizationService;
-            importLookupMappingsFormPresenter.ViewHelpers = viewHelpers;
         }
 
         #endregion

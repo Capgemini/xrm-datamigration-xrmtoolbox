@@ -3,6 +3,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using System;
@@ -16,23 +17,33 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
     {
         private Mock<IExportLookupMappingsView> mockExportView;
         private ExportLookupMappingsFormPresenter systemUnderTest;
+        private Mock<Func<IOrganizationService>> mockOrganizationServiceGetter;
 
         [TestInitialize]
         public void TestSetup()
         {
             SetupServiceMocks();
             mockExportView = new Mock<IExportLookupMappingsView>();
-            systemUnderTest = new ExportLookupMappingsFormPresenter(mockExportView.Object);
-            systemUnderTest.OrganizationService = ServiceMock.Object;
-            systemUnderTest.MetaDataService = MetadataServiceMock.Object;
-            systemUnderTest.ExceptionService = ExceptionServicerMock.Object;
-            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
+            mockOrganizationServiceGetter = new Mock<Func<IOrganizationService>>();
+            mockOrganizationServiceGetter.SetReturnsDefault(ServiceMock.Object);
+
+            systemUnderTest = new ExportLookupMappingsFormPresenter(
+                mockExportView.Object, 
+                MetadataServiceMock.Object,
+                ExceptionServicerMock.Object,
+                ViewHelpersMock.Object,
+                mockOrganizationServiceGetter.Object);
         }
 
         [TestMethod]
         public void ExportLookupMappingsFormInstantiation()
         {
-            FluentActions.Invoking(() => new ExportLookupMappingsFormPresenter(mockExportView.Object))
+            FluentActions.Invoking(() => new ExportLookupMappingsFormPresenter(
+                mockExportView.Object,
+                MetadataServiceMock.Object,
+                ExceptionServicerMock.Object,
+                ViewHelpersMock.Object,
+                mockOrganizationServiceGetter.Object))
                  .Should()
                  .NotThrow();
         }
@@ -41,8 +52,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
         {
             // Act
-            systemUnderTest.OrganizationService = null;
             mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+            mockOrganizationServiceGetter.SetReturnsDefault(null as IOrganizationService);
 
             // Assert
             ViewHelpersMock.Verify(x => x.ShowMessage(

@@ -10,25 +10,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public class ExportFilterFormPresenter : IDisposable
     {
-        public readonly IExportFilterFormView view;
+        private readonly IExportFilterFormView view;
+        private readonly IViewHelpers viewHelpers;
 
-        public ExportFilterFormPresenter(IExportFilterFormView view)
+        public ExportFilterFormPresenter(IExportFilterFormView view, IViewHelpers viewHelpers)
         {
             this.view = view;
+            this.viewHelpers = viewHelpers;
 
             this.view.OnVisible += OnVisible;
             this.view.OnEntitySelected += OnEntitySelected;
             this.view.OnFilterTextChanged += UpdateFilterForEntity;
         }
-        [ExcludeFromCodeCoverage]
-        public IViewHelpers ViewHelpers { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
         {
             if (view.SchemaConfiguration == null || !view.SchemaConfiguration.Entities.Any())
             {
                 view.Close();
-                ViewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                viewHelpers.ShowMessage("Please specify a schema file with atleast one entity defined.", "No entities available", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -27,8 +27,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             SetupServiceMocks();
             mockExportView = new Mock<IExportFilterFormView>();
 
-            systemUnderTest = new ExportFilterFormPresenter(mockExportView.Object);
-            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
+            systemUnderTest = new ExportFilterFormPresenter(mockExportView.Object, ViewHelpersMock.Object);
         }
 
         [TestMethod]

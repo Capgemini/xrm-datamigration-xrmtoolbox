@@ -1,9 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -17,9 +14,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
     {
         private ExportFilterForm exportFilterForm;
         private ExportLookupMappings exportLookupMappingsForm;
-
-        private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
-        private ExportFilterFormPresenter exportFilterFormPresenter;
         
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
@@ -32,8 +26,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
             this.exportFilterForm = new ExportFilterForm();
             this.exportLookupMappingsForm = new ExportLookupMappings();
-            this.exportFilterFormPresenter = new ExportFilterFormPresenter(this.exportFilterForm);
-            exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(this.exportLookupMappingsForm);
+            
             this.fisSchemaFile.OnChange += (object sender, EventArgs ee) => SchemaConfigPathChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -132,6 +125,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #endregion
 
+        #region child views
+
+        IExportFilterFormView IExportPageView.ExportFilterForm
+        {
+            get => exportFilterForm;
+        }
+
+        IExportLookupMappingsView IExportPageView.ExportLookupMappingsForm
+        {
+            get => exportLookupMappingsForm;
+        }
+
+        #endregion
+
         #region action mappings
 
         [ExcludeFromCodeCoverage]
@@ -147,16 +154,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             saveFileDialog.FileName = existingFileName;
             saveFileDialog.ShowDialog();
             return saveFileDialog.FileName;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void SetServices(IMetadataService metaDataService, IOrganizationService organizationService, IExceptionService exceptionService, IViewHelpers viewHelpers)
-        {
-            exportLookupMappingsFormPresenter.MetaDataService = metaDataService;
-            exportLookupMappingsFormPresenter.OrganizationService = organizationService;
-            exportLookupMappingsFormPresenter.ExceptionService = exceptionService;
-            exportLookupMappingsFormPresenter.ViewHelpers = viewHelpers;
-            exportFilterFormPresenter.ViewHelpers = viewHelpers;
         }
 
         #endregion

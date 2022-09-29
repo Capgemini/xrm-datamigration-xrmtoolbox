@@ -21,9 +21,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IExportPageView view;
         private readonly IWorkerHost workerHost;
         private readonly IDataMigrationService dataMigrationService;
-        private readonly IMetadataService metaDataService;
+        private readonly IMetadataService metadataService;
         private readonly IExceptionService exceptionService;
         private readonly IViewHelpers viewHelpers;
+
+        private readonly ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+        private readonly ExportFilterFormPresenter exportFilterFormPresenter;
 
         private CrmExporterConfig config;
         private string configFilePath;
@@ -33,7 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view = view;
             this.workerHost = workerHost;
             this.dataMigrationService = dataMigrationService;
-            this.metaDataService = metaDataService;
+            this.metadataService = metaDataService;
             this.exceptionService = exceptionService;
             this.viewHelpers = viewHelpers;
 
@@ -41,6 +44,17 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.SaveConfigClicked += SaveConfig;
             this.view.RunConfigClicked += RunConfig;
             this.view.SchemaConfigPathChanged += SchemaConfigPathChanged;
+
+            this.exportFilterFormPresenter = new ExportFilterFormPresenter(
+                this.view.ExportFilterForm,
+                this.viewHelpers);
+
+            this.exportLookupMappingsFormPresenter = new ExportLookupMappingsFormPresenter(
+                this.view.ExportLookupMappingsForm,
+                this.metadataService,
+                this.exceptionService,
+                this.viewHelpers,
+                () => this.view.Service);
 
             this.config = new CrmExporterConfig();
             WriteFormInputFromConfig();
@@ -251,7 +265,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private List<DataGridViewRow> GetConfigMappingsInCorrectDataGridViewType()
         {
             var lookupMappings = new List<DataGridViewRow>();
-            var entitiesDataSource = metaDataService.RetrieveEntities(view.Service);
+            var entitiesDataSource = metadataService.RetrieveEntities(view.Service);
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
             {    
                 foreach (string mapField in entity.Value.Keys)
@@ -268,7 +282,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private DataGridViewRow AddCellsToDataGridViewRow(KeyValuePair<string, Dictionary<string, List<string>>> entity, List<EntityMetadata> entitiesDataSource, string mapField, string refField)
         {
-            var entityMeta = metaDataService.RetrieveEntities(entity.Key, view.Service, exceptionService);
+            var entityMeta = metadataService.RetrieveEntities(entity.Key, view.Service, exceptionService);
             var mapFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).Select(x => x.LogicalName).ToArray();
             var refFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).Select(x => x.LogicalName).OrderBy(n => n).ToArray();
             var newRow = new DataGridViewRow();

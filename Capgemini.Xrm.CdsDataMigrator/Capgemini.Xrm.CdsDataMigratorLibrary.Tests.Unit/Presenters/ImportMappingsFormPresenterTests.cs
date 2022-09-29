@@ -2,6 +2,7 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -14,22 +15,31 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
     {
         private Mock<IImportMappingsFormView> mockImportView;
         private ImportMappingsFormPresenter systemUnderTest;
+        private Mock<Func<IOrganizationService>> mockOrganizationServiceGetter;
 
         [TestInitialize]
         public void TestSetup()
         {
             SetupServiceMocks();
             mockImportView = new Mock<IImportMappingsFormView>();
-            systemUnderTest = new ImportMappingsFormPresenter(mockImportView.Object);
-            systemUnderTest.OrganizationService = ServiceMock.Object;
-            systemUnderTest.MetaDataService = MetadataServiceMock.Object;
-            systemUnderTest.ViewHelpers = ViewHelpersMock.Object;
+            mockOrganizationServiceGetter = new Mock<Func<IOrganizationService>>();
+            mockOrganizationServiceGetter.SetReturnsDefault(ServiceMock.Object);
+
+            systemUnderTest = new ImportMappingsFormPresenter(
+                mockImportView.Object,
+                MetadataServiceMock.Object,
+                ViewHelpersMock.Object,
+                mockOrganizationServiceGetter.Object);
         }
 
         [TestMethod]
         public void ImportLookupMappingsFormPresenterInstantiation()
         {
-            FluentActions.Invoking(() => new ImportMappingsFormPresenter(mockImportView.Object))
+            FluentActions.Invoking(() => new ImportMappingsFormPresenter(
+                mockImportView.Object,
+                MetadataServiceMock.Object,
+                ViewHelpersMock.Object,
+                mockOrganizationServiceGetter.Object))
                  .Should()
                  .NotThrow();
         }
@@ -38,7 +48,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
         {
             // Act
-            systemUnderTest.OrganizationService = null;
+            mockOrganizationServiceGetter.SetReturnsDefault(null as IOrganizationService);
             mockImportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
 
             // Assert

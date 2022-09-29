@@ -9,21 +9,22 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
     public interface IImportPageView
     {
+        string CrmMigrationToolSchemaPath { get; set; }
+        CrmSchemaConfiguration SchemaConfiguration { get; set; }
+        IOrganizationService Service { get; }
+        
         int SaveBatchSize { get; set; }
         bool IgnoreStatuses { get; set; }
         bool IgnoreSystemFields { get; set; }
         string JsonFolderPath { get; set; }
-
-        CrmSchemaConfiguration SchemaConfiguration { get; set; }
         List<DataGridViewRow> Mappings { get; set; }
-        string CrmMigrationToolSchemaPath { get; set; }
+        DataFormat DataFormat { get; set; }
 
         string AskForFilePathToOpen();
         string AskForFilePathToSave(string existingFileName = "");
 
-        DataFormat DataFormat { get; set; }
-        IOrganizationService Service { get; }
-        
+        IImportMappingsFormView ImportMappingsForm { get; }
+
         event EventHandler LoadConfigClicked;
         event EventHandler SaveConfigClicked;
         event EventHandler RunConfigClicked;
