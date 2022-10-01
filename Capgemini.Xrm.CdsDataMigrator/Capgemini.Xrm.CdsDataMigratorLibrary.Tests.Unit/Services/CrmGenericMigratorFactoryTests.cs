@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Capgemini.DataMigration.Core;
@@ -82,6 +83,53 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             FluentActions.Invoking(() => systemUnderTest.GetCrmDataMigrator(DataFormat.Unknown, logger, entityRepo, exportConfig, cancellationToken, schema))
                 .Should()
                 .Throw<NotSupportedException>();
+        }
+
+        [TestMethod]
+        public void RequestJsonMigratorv2()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var entityRepoMock = new Mock<IEntityRepository>();
+            entityRepoMock.SetupGet(x => x.GetEntityMetadataCache).Returns(new Mock<IEntityMetadataCache>().Object);
+            var entityRepoMockList = new Mock<List<IEntityRepository>>();
+            entityRepoMockList.Object.Add(entityRepoMock.Object);
+            var importConfig = new CrmImportConfig()
+            {
+                IgnoreStatuses = true,
+                IgnoreSystemFields = true,
+                SaveBatchSize = 1000,
+                JsonFolderPath = "TestData"
+            };
+            var cancellationToken = CancellationToken.None;
+            var schema = new CrmSchemaConfiguration();
+
+            var migrator = systemUnderTest.GetCrmImportDataMigrator(DataFormat.Csv, logger, entityRepoMock.Object, importConfig, cancellationToken, schema);
+
+            migrator.Should().BeOfType<CrmFileDataImporterCsv>();
+        }
+
+        [TestMethod]
+        public void RequestCSVMigrator2()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var entityRepoMock = new Mock<IEntityRepository>();
+            entityRepoMock.SetupGet(x => x.GetEntityMetadataCache).Returns(new Mock<IEntityMetadataCache>().Object);
+            var entityRepoMockList = new Mock<List<IEntityRepository>>();
+            entityRepoMockList.Object.Add(entityRepoMock.Object);
+            var importConfig = new CrmImportConfig()
+            {
+                IgnoreStatuses = true,
+                IgnoreSystemFields = true,
+                SaveBatchSize = 1000,
+                JsonFolderPath = "TestData"
+            };
+            var cancellationToken = CancellationToken.None;
+            var schema = new CrmSchemaConfiguration();
+            schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
+
+            var migrator = systemUnderTest.GetCrmImportDataMigrator(DataFormat.Csv, logger, entityRepoMockList.Object, importConfig, cancellationToken, schema);
+
+            migrator.Should().BeOfType<CrmFileDataImporterCsv>();
         }
     }
 }
