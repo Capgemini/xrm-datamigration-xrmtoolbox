@@ -27,21 +27,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             }
         }
 
-        public IGenericCrmDataMigrator GetCrmImportDataMigrator(DataFormat dataFormat, ILogger logger, List<IEntityRepository> repos, CrmImportConfig importConfig, CancellationToken token, CrmSchemaConfiguration schema)
-        {
-            switch (dataFormat)
-            {
-                case DataFormat.Json:
-                    return new CrmFileDataImporter(logger, repos, importConfig, token);
-
-                case DataFormat.Csv:
-                    return new CrmFileDataImporterCsv(logger, repos, importConfig, schema, token);
-
-                default:
-                    throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
-            }
-        }
-
         public IGenericCrmDataMigrator GetCrmImportDataMigrator(DataFormat dataFormat, ILogger logger, IEntityRepository repo, CrmImportConfig importConfig, CancellationToken token, CrmSchemaConfiguration schema)
         {
             switch (dataFormat)
@@ -51,6 +36,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
                 case DataFormat.Csv:
                     return new CrmFileDataImporterCsv(logger, repo, importConfig, schema, token);
+
+                default:
+                    throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
+            }
+        }
+
+        public IGenericCrmDataMigrator GetCrmImportDataMigrator(DataFormat dataFormat, ILogger logger, List<IEntityRepository> repos, CrmImportConfig importConfig, CancellationToken token, CrmSchemaConfiguration schema)
+        {
+            switch (dataFormat)
+            {
+                case DataFormat.Json:
+                    return new CrmFileDataImporter(logger, repos, importConfig, token);
+
+                case DataFormat.Csv:
+                    return new CrmFileDataImporterCsv(logger, repos, importConfig, schema, token);
 
                 default:
                     throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
