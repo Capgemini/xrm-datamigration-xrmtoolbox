@@ -135,6 +135,23 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
         }
 
         [TestMethod]
+        public void MaxThreads_GetSet()
+        {
+            //Arrange
+            var maxThreads = 2;
+            var value = maxThreads;
+            using (var systemUnderTest = new ImportPage() { Parent = new PluginControlBase() })
+            {
+                // Act
+                systemUnderTest.As<IImportPageView>().maxThreads = value;
+
+                // Assert
+                systemUnderTest.As<IImportPageView>().maxThreads.Should().Be(value);
+            }
+        }
+
+
+        [TestMethod]
         public void Mappings_GetSet()
         {
             // Arrange
