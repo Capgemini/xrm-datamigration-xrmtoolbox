@@ -36,7 +36,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockWorkerHost = new Mock<IWorkerHost>();
             mockViewHelpers = new Mock<IViewHelpers>();
 
-            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object);
+            systemUnderTest = new ImportPagePresenter(mockImportView.Object, mockWorkerHost.Object, DataMigrationServiceMock.Object, ServiceMock.Object, MetadataServiceMock.Object, mockViewHelpers.Object, EntityRepositoryServiceMock.Object);
         }
 
         [TestMethod]
@@ -342,6 +342,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.DataFormat).Returns(Enums.DataFormat.Json);
             mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockImportView.SetupGet(x => x.maxThreads).Returns(1);
 
             // Act
             mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
@@ -352,7 +353,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Assert
             mockImportView.VerifyAll();
             workInfo.Message.Should().Be("Importing data...");
-            DataMigrationServiceMock.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()));
+            DataMigrationServiceMock.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 1, EntityRepositoryServiceMock.Object));
 
             var importConfig = DataMigrationServiceMock.Invocations[0].Arguments[3].As<CrmImportConfig>();
 
@@ -391,9 +392,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Arrange
             var viewMappings = ProvideMappingsAsViewType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockImportView.SetupGet(x => x.maxThreads).Returns(2);
             var thrownException = new Exception("Test exception");
             DataMigrationServiceMock
-                .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>()))
+                .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 2, EntityRepositoryServiceMock.Object))
                 .Throws(thrownException);
 
             // Act

@@ -13,7 +13,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         void CancelDataExport();
 
-        void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config);
+        void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config, decimal maxThreads, IEntityRepositoryService entityRepositoryService);
 
         void CancelDataImport();
     }

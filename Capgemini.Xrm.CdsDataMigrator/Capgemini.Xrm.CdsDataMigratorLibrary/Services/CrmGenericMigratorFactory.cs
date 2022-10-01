@@ -5,6 +5,7 @@ using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Capgemini.Xrm.DataMigration.Engine;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
@@ -35,6 +36,21 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
                 case DataFormat.Csv:
                     return new CrmFileDataImporterCsv(logger, repo, importConfig, schema, token);
+
+                default:
+                    throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");
+            }
+        }
+
+        public IGenericCrmDataMigrator GetCrmImportDataMigrator(DataFormat dataFormat, ILogger logger, List<IEntityRepository> repos, CrmImportConfig importConfig, CancellationToken token, CrmSchemaConfiguration schema)
+        {
+            switch (dataFormat)
+            {
+                case DataFormat.Json:
+                    return new CrmFileDataImporter(logger, repos, importConfig, token);
+
+                case DataFormat.Csv:
+                    return new CrmFileDataImporterCsv(logger, repos, importConfig, schema, token);
 
                 default:
                     throw new NotSupportedException($"Data format: '{dataFormat}' is not supported.");

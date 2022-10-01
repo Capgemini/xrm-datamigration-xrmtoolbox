@@ -29,7 +29,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 
         protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
 
-        protected Mock<IEntityRepositoryService> EntityRepositoryService { get; set; }
+        protected Mock<IEntityRepositoryService> EntityRepositoryServiceMock { get; set; }
 
         protected static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
@@ -128,7 +128,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             LogManagerContainerMock = new Mock<ILogManagerContainer>();
             LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
-            EntityRepositoryService = new Mock<IEntityRepositoryService>();
+            EntityRepositoryServiceMock = new Mock<IEntityRepositoryService>();
         }
     }
 }
