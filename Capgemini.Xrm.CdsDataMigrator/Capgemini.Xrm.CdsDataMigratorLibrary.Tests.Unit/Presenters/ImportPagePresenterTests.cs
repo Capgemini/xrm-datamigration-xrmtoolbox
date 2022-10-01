@@ -365,6 +365,46 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         }
 
         [TestMethod]
+        public void RunConfig_ShouldImport()
+        {
+            // Arrange
+            var mockIOrganisationService = new Mock<IOrganizationService>();
+            var viewMappings = ProvideMappingsAsViewType();
+            var configMappings = ProvideMappingsAsConfigType();
+            mockViewHelpers.Setup(x => x.AreAllCellsPopulated(It.IsAny<DataGridViewRow>()))
+                .Returns(true)
+                .Verifiable();
+
+            mockImportView.SetupGet(x => x.SaveBatchSize).Returns(1000);
+            mockImportView.SetupGet(x => x.IgnoreStatuses).Returns(true);
+            mockImportView.SetupGet(x => x.IgnoreSystemFields).Returns(true);
+            mockImportView.SetupGet(x => x.JsonFolderPath).Returns(@"C:\\Some\Path\To\A\Folder");
+            mockImportView.SetupGet(x => x.DataFormat).Returns(Enums.DataFormat.Json);
+            mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
+            mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
+            mockImportView.SetupGet(x => x.maxThreads).Returns(1);
+
+            // Act
+            mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
+
+            var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
+            workInfo.Work(null, null);
+
+            // Assert
+            mockImportView.VerifyAll();
+            workInfo.Message.Should().Be("Importing data...");
+            DataMigrationServiceMock.Verify(x => x.ImportData(mockIOrganisationService.Object, Enums.DataFormat.Json, It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 1, EntityRepositoryServiceMock.Object));
+
+            var importConfig = DataMigrationServiceMock.Invocations[0].Arguments[3].As<CrmImportConfig>();
+
+            importConfig.SaveBatchSize.Should().Be(1000);
+            importConfig.IgnoreStatuses.Should().Be(true);
+            importConfig.IgnoreSystemFields.Should().Be(true);
+            importConfig.JsonFolderPath.Should().Be(@"C:\\Some\Path\To\A\Folder");
+            importConfig.MigrationConfig.Should().BeEquivalentTo(configMappings);
+        }
+
+        [TestMethod]
         public void RunConfig_ShouldNotifyExceptionWhenAnExceptionIsThrownOutsideWorkerHost()
         {
             // Arrange

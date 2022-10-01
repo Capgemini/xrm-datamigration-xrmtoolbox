@@ -122,9 +122,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
                     threadCount--;
                     repos.Add(entityRepositoryService.InstantiateEntityRepository(true));
                 }
-
-                //var fileExporter = new CrmFileDataImporter(logger, repos, config, tokenSource.Token);
-                //fileExporter.MigrateData();
+                
                 var multiThreadimporter = migratorFactory.GetCrmImportDataMigrator(format, logger, repos, config, tokenSource.Token, schema);
                 multiThreadimporter.MigrateData();
                 return;

@@ -30,7 +30,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
         protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
 
         protected Mock<IEntityRepositoryService> EntityRepositoryServiceMock { get; set; }
-
+        
         protected static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
             var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
