@@ -5,6 +5,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.Core;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
@@ -30,7 +31,9 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
         protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
 
         protected Mock<IEntityRepositoryService> EntityRepositoryServiceMock { get; set; }
-        
+
+        protected Mock<IEntityRepository> EntityRepositoryMock { get; set; }
+
         protected static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
             var manyToManyRelationshipMetadataList = new List<ManyToManyRelationshipMetadata>
@@ -129,6 +132,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
             EntityRepositoryServiceMock = new Mock<IEntityRepositoryService>();
+            EntityRepositoryMock = new Mock<IEntityRepository>();
         }
     }
 }
