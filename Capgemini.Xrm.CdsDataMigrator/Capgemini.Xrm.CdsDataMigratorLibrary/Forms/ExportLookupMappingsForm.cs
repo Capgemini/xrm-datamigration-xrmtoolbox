@@ -56,6 +56,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         [ExcludeFromCodeCoverage]
+        string IExportLookupMappingsView.SetMapFieldValue
+        {
+            set
+            {
+                dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = value;
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
         List<string> IExportLookupMappingsView.MappingCells
         {   
             set
@@ -87,8 +96,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         }
 
         #endregion
-
-
+        
         #region event mappings
 
         [ExcludeFromCodeCoverage]
