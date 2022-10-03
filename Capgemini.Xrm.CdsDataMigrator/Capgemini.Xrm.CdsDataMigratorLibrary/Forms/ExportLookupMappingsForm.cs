@@ -18,7 +18,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         public string CurrentCell { get; set; }
         public string CurrentRowEntityName { get; set; }
-        
+
         public ExportLookupMappings()
         {
             InitializeComponent();
