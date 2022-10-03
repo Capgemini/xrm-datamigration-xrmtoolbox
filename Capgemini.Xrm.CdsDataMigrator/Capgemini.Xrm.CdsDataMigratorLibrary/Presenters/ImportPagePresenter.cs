@@ -95,7 +95,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 workerHost.WorkAsync(new WorkAsyncInfo
                 {
                     Message = "Importing data...",
-                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, schema, config, view.maxThreads, entityRepositoryService),
+                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, schema, config, view.MaxThreads, entityRepositoryService),
                     PostWorkCallBack = (e) =>
                     {
                         if (e.Error != null)
