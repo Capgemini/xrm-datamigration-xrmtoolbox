@@ -71,6 +71,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             }
             var entityMeta = MetaDataService.RetrieveEntities(view.CurrentRowEntityName, OrganizationService, ExceptionService);
             view.SetMapFieldDataSource = entityMeta.Attributes.OrderBy(p => p.LogicalName).ToArray();
+            view.SetMapFieldToNull();
         }
 
         private void ShowErrorMessage()

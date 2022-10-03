@@ -11,6 +11,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 {
     public partial class ExportLookupMappings : Form, IExportLookupMappingsView
     {
+        private bool CurrentCellIsUpdated;
         public event EventHandler OnVisible;
         public event EventHandler OnEntityColumnChanged;
         public event EventHandler OnRefFieldChanged;
@@ -88,6 +89,16 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
 
         #endregion
 
+        #region action mappings
+
+        [ExcludeFromCodeCoverage]
+        public void SetMapFieldToNull()
+        {
+            dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = null;
+        }
+
+        #endregion
+
 
         #region event mappings
 
@@ -112,6 +123,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
+            CurrentCellIsUpdated = false;
             CurrentCell = (string)dgvMappings.CurrentCell.Value;
             if (dgvMappings.CurrentCell.IsInEditMode)
             {
@@ -120,11 +132,15 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             if (dgvMappings.CurrentCell.ColumnIndex == 0)
             {
                 this.OnEntityColumnChanged?.Invoke(sender, e);
+                dgvMappings.CurrentCell = dgvMappings.CurrentRow.Cells[1];
+                CurrentCellIsUpdated = true;
             }
-            if (dgvMappings.CurrentCell.ColumnIndex == 1)
+            if (dgvMappings.CurrentCell.ColumnIndex == 1 && !CurrentCellIsUpdated)
             {
                 this.CurrentRowEntityName = (string)dgvMappings.CurrentRow.Cells[0].Value;
                 this.OnRefFieldChanged?.Invoke(sender, e);
+                dgvMappings.CurrentCell = dgvMappings.CurrentRow.Cells[2];
+                CurrentCellIsUpdated = true;
             }
         }
 
