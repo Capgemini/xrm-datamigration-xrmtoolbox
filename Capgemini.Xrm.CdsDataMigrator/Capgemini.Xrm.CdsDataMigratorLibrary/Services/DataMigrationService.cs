@@ -3,10 +3,13 @@ using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Config;
+using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
+using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -104,15 +107,32 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             config.BatchSize = exportSettings.BatchSize;
         }
 
-        public void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config)
+        public void ImportData(IOrganizationService service, DataFormat format, CrmSchemaConfiguration schema, CrmImportConfig config, decimal maxThreads, IEntityRepositoryService entityRepositoryService)
         {
             tokenSource = new CancellationTokenSource();
 
+            if (maxThreads > 1)
+            {
+                logger.LogInfo($"Starting MultiThreaded Processing, using {maxThreads} threads");
+                var repos = new List<IEntityRepository>();
+                decimal threadCount = maxThreads;
+
+                while (threadCount > 0)
+                {
+                    threadCount--;
+                    repos.Add(entityRepositoryService.InstantiateEntityRepository(true));
+                }
+                
+                var multiThreadimporter = migratorFactory.GetCrmImportDataMigrator(format, logger, repos, config, tokenSource.Token, schema);
+                multiThreadimporter.MigrateData();
+                return;
+            }
+
             var repo = new EntityRepository(service, new ServiceRetryExecutor());
 
-            var importer = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
+            var singleThreadimporter = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
-            importer.MigrateData();
+            singleThreadimporter.MigrateData();
             return;
         }
 

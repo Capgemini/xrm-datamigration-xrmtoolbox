@@ -18,7 +18,7 @@ using Moq;
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
     [TestClass]
-    public class DataMigrationServiceTests
+    public class DataMigrationServiceTests : TestBase
     {
         private Mock<ILogger> loggerMock;
         private Mock<ICrmGenericMigratorFactory> migratorFactoryMock;
@@ -28,6 +28,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         [TestInitialize]
         public void TestSetup()
         {
+            SetupServiceMocks();
             loggerMock = new Mock<ILogger>();
             migratorFactoryMock = new Mock<ICrmGenericMigratorFactory>();
 
@@ -298,6 +299,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var mockOrganisationService = new Mock<IOrganizationService>();
             var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
             var MockCrmSchemaConfig = new Mock<CrmSchemaConfiguration>();
+            var maxThreads = 1;
 
             migratorFactoryMock.Setup(x => x.GetCrmImportDataMigrator(
                         DataFormat.Json,
@@ -309,7 +311,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                     .Returns(mockGenericCrmDataMigrator.Object)
                     .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Json, MockCrmSchemaConfig.Object, importConfig))
+            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Json, MockCrmSchemaConfig.Object, importConfig, maxThreads, EntityRepositoryServiceMock.Object))
                         .Should()
                         .NotThrow();
 
@@ -332,6 +334,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var mockOrganisationService = new Mock<IOrganizationService>();
             var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
             var MockCrmSchemaConfig = new Mock<CrmSchemaConfiguration>();
+            var maxThreads = 1;
 
             migratorFactoryMock.Setup(x => x.GetCrmImportDataMigrator(
                         DataFormat.Csv,
@@ -343,7 +346,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                     .Returns(mockGenericCrmDataMigrator.Object)
                     .Verifiable();
 
-            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Csv, MockCrmSchemaConfig.Object, importConfig))
+            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Csv, MockCrmSchemaConfig.Object, importConfig, maxThreads, EntityRepositoryServiceMock.Object))
                         .Should()
                         .NotThrow();
 
@@ -351,6 +354,76 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
                 DataFormat.Csv,
                 loggerMock.Object,
                 It.IsAny<EntityRepository>(),
+                importConfig,
+                It.IsAny<CancellationToken>(),
+                It.IsAny<CrmSchemaConfiguration>()),
+                Times.Once);
+
+            mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
+        }
+
+        [TestMethod]
+        public void ImportDataAsJsonWhenMaxThreadsGreaterThanOne()
+        {
+            var importConfig = new CrmImportConfig();
+            var mockOrganisationService = new Mock<IOrganizationService>();
+            var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
+            var MockCrmSchemaConfig = new Mock<CrmSchemaConfiguration>();
+            var maxThreads = 2;
+
+            migratorFactoryMock.Setup(x => x.GetCrmImportDataMigrator(
+                        DataFormat.Json,
+                        loggerMock.Object,
+                        It.IsAny<List<IEntityRepository>>(),
+                        importConfig,
+                        It.IsAny<CancellationToken>(),
+                        MockCrmSchemaConfig.Object))
+                    .Returns(mockGenericCrmDataMigrator.Object)
+                    .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Json, MockCrmSchemaConfig.Object, importConfig, maxThreads, EntityRepositoryServiceMock.Object))
+                        .Should()
+                        .NotThrow();
+
+            migratorFactoryMock.Verify(x => x.GetCrmImportDataMigrator(
+                DataFormat.Json,
+                loggerMock.Object,
+                It.IsAny<List<IEntityRepository>>(),
+                importConfig,
+                It.IsAny<CancellationToken>(),
+                It.IsAny<CrmSchemaConfiguration>()),
+                Times.Once);
+
+            mockGenericCrmDataMigrator.Verify(x => x.MigrateData(), Times.Once);
+        }
+
+        [TestMethod]
+        public void ImportDataAsCsvWhenMaxThreadsGreaterThanOne()
+        {
+            var importConfig = new CrmImportConfig();
+            var mockOrganisationService = new Mock<IOrganizationService>();
+            var mockGenericCrmDataMigrator = new Mock<IGenericCrmDataMigrator>();
+            var MockCrmSchemaConfig = new Mock<CrmSchemaConfiguration>();
+            var maxThreads = 3;
+
+            migratorFactoryMock.Setup(x => x.GetCrmImportDataMigrator(
+                        DataFormat.Csv,
+                        loggerMock.Object,
+                        It.IsAny<List<IEntityRepository>>(),
+                        importConfig,
+                        It.IsAny<CancellationToken>(),
+                        MockCrmSchemaConfig.Object))
+                    .Returns(mockGenericCrmDataMigrator.Object)
+                    .Verifiable();
+
+            FluentActions.Invoking(() => systemUnderTest.ImportData(mockOrganisationService.Object, DataFormat.Csv, MockCrmSchemaConfig.Object, importConfig, maxThreads, EntityRepositoryServiceMock.Object))
+                        .Should()
+                        .NotThrow();
+
+            migratorFactoryMock.Verify(x => x.GetCrmImportDataMigrator(
+                DataFormat.Csv,
+                loggerMock.Object,
+                It.IsAny<List<IEntityRepository>>(),
                 importConfig,
                 It.IsAny<CancellationToken>(),
                 It.IsAny<CrmSchemaConfiguration>()),

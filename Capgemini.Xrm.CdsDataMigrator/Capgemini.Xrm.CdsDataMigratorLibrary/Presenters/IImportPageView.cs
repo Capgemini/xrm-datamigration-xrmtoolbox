@@ -13,6 +13,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         bool IgnoreStatuses { get; set; }
         bool IgnoreSystemFields { get; set; }
         string JsonFolderPath { get; set; }
+        decimal MaxThreads { get; set; }
 
         CrmSchemaConfiguration SchemaConfiguration { get; set; }
         List<DataGridViewRow> Mappings { get; set; }

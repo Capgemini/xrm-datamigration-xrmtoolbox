@@ -24,11 +24,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private readonly IOrganizationService organisationService;
         private readonly IMetadataService metaDataService;
         private readonly IViewHelpers viewHelpers;
+        private readonly IEntityRepositoryService entityRepositoryService;
 
         private CrmImportConfig config;
         private string configFilePath;
 
-        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers)
+        public ImportPagePresenter(IImportPageView view, IWorkerHost workerHost, IDataMigrationService dataMigrationService, IOrganizationService organizationService, IMetadataService metaDataService, IViewHelpers viewHelpers, IEntityRepositoryService entityRepositoryService)
         {
             this.view = view;
             this.workerHost = workerHost;
@@ -36,6 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.organisationService = organizationService;
             this.metaDataService = metaDataService;
             this.viewHelpers = viewHelpers;
+            this.entityRepositoryService = entityRepositoryService;
 
             this.view.LoadConfigClicked += LoadConfig;
             this.view.SaveConfigClicked += SaveConfig;
@@ -93,7 +95,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 workerHost.WorkAsync(new WorkAsyncInfo
                 {
                     Message = "Importing data...",
-                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, schema, config),
+                    Work = (bw, e) => dataMigrationService.ImportData(view.Service, view.DataFormat, schema, config, view.MaxThreads, entityRepositoryService),
                     PostWorkCallBack = (e) =>
                     {
                         if (e.Error != null)

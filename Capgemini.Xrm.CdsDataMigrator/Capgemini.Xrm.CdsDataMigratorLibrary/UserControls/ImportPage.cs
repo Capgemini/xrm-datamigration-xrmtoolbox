@@ -83,6 +83,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => fisSchemaFile.Value = value;
         }
 
+        decimal IImportPageView.MaxThreads
+        {
+            get => nbxTopCount.Value;
+            set => nbxTopCount.Value = value;
+        }
+
+
         CrmSchemaConfiguration IImportPageView.SchemaConfiguration
         {
             get => importMappingsForm.SchemaConfiguration;
