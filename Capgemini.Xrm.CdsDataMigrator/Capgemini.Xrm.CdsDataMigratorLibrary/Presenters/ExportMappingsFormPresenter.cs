@@ -57,9 +57,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 ShowErrorMessage();
                 return;
             }
-            view.MappingCells = null;
-            var entityMeta = MetaDataService.RetrieveEntities(view.CurrentCell, OrganizationService, ExceptionService);
-            view.SetRefFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
+                view.MappingCells = null;
+                var entityMeta = MetaDataService.RetrieveEntities(view.CurrentCell, OrganizationService, ExceptionService);
+                view.SetRefFieldDataSource = entityMeta.Attributes.Where(a => a.AttributeType == AttributeTypeCode.Lookup || a.AttributeType == AttributeTypeCode.Owner || a.AttributeType == AttributeTypeCode.Uniqueidentifier).OrderBy(p => p.LogicalName).ToArray();
         }
 
         public void OnRefFieldChanged(object sender, EventArgs e)

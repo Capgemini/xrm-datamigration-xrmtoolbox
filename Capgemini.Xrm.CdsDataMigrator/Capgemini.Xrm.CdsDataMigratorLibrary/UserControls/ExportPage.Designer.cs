@@ -222,7 +222,7 @@
             0,
             0});
             this.nbxPageSize.Name = "nbxPageSize";
-            this.nbxPageSize.Size = new System.Drawing.Size(200, 22);
+            this.nbxPageSize.Size = new System.Drawing.Size(250, 22);
             this.nbxPageSize.TabIndex = 3;
             this.nbxPageSize.Value = new decimal(new int[] {
             1,
@@ -240,7 +240,7 @@
             0,
             0});
             this.nbxTopCount.Name = "nbxTopCount";
-            this.nbxTopCount.Size = new System.Drawing.Size(200, 22);
+            this.nbxTopCount.Size = new System.Drawing.Size(250, 22);
             this.nbxTopCount.TabIndex = 4;
             // 
             // lblActiveRecords
@@ -293,7 +293,7 @@
             this.btnUpdateLookupMappings.Location = new System.Drawing.Point(220, 205);
             this.btnUpdateLookupMappings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnUpdateLookupMappings.Name = "btnUpdateLookupMappings";
-            this.btnUpdateLookupMappings.Size = new System.Drawing.Size(80, 32);
+            this.btnUpdateLookupMappings.Size = new System.Drawing.Size(80, 27);
             this.btnUpdateLookupMappings.TabIndex = 11;
             this.btnUpdateLookupMappings.Text = "Edit";
             this.btnUpdateLookupMappings.UseVisualStyleBackColor = true;

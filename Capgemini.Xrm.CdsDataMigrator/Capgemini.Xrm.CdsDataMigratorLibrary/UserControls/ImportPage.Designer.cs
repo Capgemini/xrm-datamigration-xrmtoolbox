@@ -87,7 +87,7 @@
             this.gbxFetchSettings.Margin = new System.Windows.Forms.Padding(4);
             this.gbxFetchSettings.Name = "gbxFetchSettings";
             this.gbxFetchSettings.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.gbxFetchSettings.Size = new System.Drawing.Size(1658, 361);
+            this.gbxFetchSettings.Size = new System.Drawing.Size(1322, 292);
             this.gbxFetchSettings.TabIndex = 0;
             this.gbxFetchSettings.TabStop = false;
             this.gbxFetchSettings.Text = "Fetch settings (from file)";
@@ -121,18 +121,18 @@
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tlpFetchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tlpFetchSettings.Size = new System.Drawing.Size(1632, 322);
+            this.tlpFetchSettings.Size = new System.Drawing.Size(1296, 253);
             this.tlpFetchSettings.TabIndex = 0;
             // 
             // fisSchemaFile
             // 
             this.fisSchemaFile.AutoSize = true;
             this.fisSchemaFile.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fisSchemaFile.Location = new System.Drawing.Point(273, 81);
+            this.fisSchemaFile.Location = new System.Drawing.Point(219, 81);
             this.fisSchemaFile.Margin = new System.Windows.Forms.Padding(5);
             this.fisSchemaFile.MinimumSize = new System.Drawing.Size(133, 30);
             this.fisSchemaFile.Name = "fisSchemaFile";
-            this.fisSchemaFile.Size = new System.Drawing.Size(1354, 30);
+            this.fisSchemaFile.Size = new System.Drawing.Size(1073, 30);
             this.fisSchemaFile.TabIndex = 13;
             this.fisSchemaFile.Value = "";
             // 
@@ -143,7 +143,7 @@
             this.lblJsonFolderPath.Location = new System.Drawing.Point(4, 0);
             this.lblJsonFolderPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblJsonFolderPath.Name = "lblJsonFolderPath";
-            this.lblJsonFolderPath.Size = new System.Drawing.Size(260, 40);
+            this.lblJsonFolderPath.Size = new System.Drawing.Size(205, 40);
             this.lblJsonFolderPath.TabIndex = 1;
             this.lblJsonFolderPath.Text = "Source data Directory";
             this.toolTip.SetToolTip(this.lblJsonFolderPath, "The directory where the data files will be stored.");
@@ -152,11 +152,11 @@
             // 
             this.fisJsonFolderPath.AutoSize = true;
             this.fisJsonFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fisJsonFolderPath.Location = new System.Drawing.Point(273, 5);
+            this.fisJsonFolderPath.Location = new System.Drawing.Point(219, 5);
             this.fisJsonFolderPath.Margin = new System.Windows.Forms.Padding(5);
             this.fisJsonFolderPath.MinimumSize = new System.Drawing.Size(133, 30);
             this.fisJsonFolderPath.Name = "fisJsonFolderPath";
-            this.fisJsonFolderPath.Size = new System.Drawing.Size(1354, 30);
+            this.fisJsonFolderPath.Size = new System.Drawing.Size(1073, 30);
             this.fisJsonFolderPath.TabIndex = 7;
             this.fisJsonFolderPath.Value = "";
             // 
@@ -167,7 +167,7 @@
             this.lblFileType.Location = new System.Drawing.Point(4, 40);
             this.lblFileType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFileType.Name = "lblFileType";
-            this.lblFileType.Size = new System.Drawing.Size(260, 36);
+            this.lblFileType.Size = new System.Drawing.Size(205, 36);
             this.lblFileType.TabIndex = 0;
             this.lblFileType.Text = "File Type";
             this.toolTip.SetToolTip(this.lblFileType, "The type of file the data will be stored in.");
@@ -178,10 +178,10 @@
             this.fplFileTypes.Controls.Add(this.rbnDataFormatJson);
             this.fplFileTypes.Controls.Add(this.rbnDataFormatCsv);
             this.fplFileTypes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fplFileTypes.Location = new System.Drawing.Point(272, 44);
+            this.fplFileTypes.Location = new System.Drawing.Point(217, 44);
             this.fplFileTypes.Margin = new System.Windows.Forms.Padding(4);
             this.fplFileTypes.Name = "fplFileTypes";
-            this.fplFileTypes.Size = new System.Drawing.Size(1356, 28);
+            this.fplFileTypes.Size = new System.Drawing.Size(1075, 28);
             this.fplFileTypes.TabIndex = 3;
             // 
             // rbnDataFormatJson
@@ -217,17 +217,17 @@
             this.lblGuidMappings.Location = new System.Drawing.Point(4, 116);
             this.lblGuidMappings.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblGuidMappings.Name = "lblGuidMappings";
-            this.lblGuidMappings.Size = new System.Drawing.Size(260, 41);
+            this.lblGuidMappings.Size = new System.Drawing.Size(205, 35);
             this.lblGuidMappings.TabIndex = 12;
             this.lblGuidMappings.Text = "GUID Mappings";
             // 
             // btnGuidMappings
             // 
             this.btnGuidMappings.AutoSize = true;
-            this.btnGuidMappings.Location = new System.Drawing.Point(272, 120);
+            this.btnGuidMappings.Location = new System.Drawing.Point(217, 120);
             this.btnGuidMappings.Margin = new System.Windows.Forms.Padding(4);
             this.btnGuidMappings.Name = "btnGuidMappings";
-            this.btnGuidMappings.Size = new System.Drawing.Size(64, 33);
+            this.btnGuidMappings.Size = new System.Drawing.Size(80, 27);
             this.btnGuidMappings.TabIndex = 11;
             this.btnGuidMappings.Text = "Edit";
             this.btnGuidMappings.UseVisualStyleBackColor = true;
@@ -240,7 +240,7 @@
             this.lblSchema.Location = new System.Drawing.Point(4, 76);
             this.lblSchema.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSchema.Name = "lblSchema";
-            this.lblSchema.Size = new System.Drawing.Size(260, 40);
+            this.lblSchema.Size = new System.Drawing.Size(205, 40);
             this.lblSchema.TabIndex = 9;
             this.lblSchema.Text = "Schema File (required for CSV)";
             // 
@@ -251,7 +251,7 @@
             this.lblEnvironment.Location = new System.Drawing.Point(4, 0);
             this.lblEnvironment.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEnvironment.Name = "lblEnvironment";
-            this.lblEnvironment.Size = new System.Drawing.Size(256, 30);
+            this.lblEnvironment.Size = new System.Drawing.Size(202, 30);
             this.lblEnvironment.TabIndex = 7;
             this.lblEnvironment.Text = "Environment";
             this.toolTip.SetToolTip(this.lblEnvironment, "The Dataverse environment you want to export data from.");
@@ -270,7 +270,7 @@
             this.lblSaveBatchSize.Location = new System.Drawing.Point(4, 30);
             this.lblSaveBatchSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSaveBatchSize.Name = "lblSaveBatchSize";
-            this.lblSaveBatchSize.Size = new System.Drawing.Size(256, 30);
+            this.lblSaveBatchSize.Size = new System.Drawing.Size(202, 30);
             this.lblSaveBatchSize.TabIndex = 1;
             this.lblSaveBatchSize.Text = "Save Page Size";
             this.toolTip.SetToolTip(this.lblSaveBatchSize, "The number of records to Import in each request.");
@@ -282,14 +282,14 @@
             this.lblTopCount.Location = new System.Drawing.Point(4, 60);
             this.lblTopCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTopCount.Name = "lblTopCount";
-            this.lblTopCount.Size = new System.Drawing.Size(256, 26);
+            this.lblTopCount.Size = new System.Drawing.Size(202, 26);
             this.lblTopCount.TabIndex = 2;
             this.lblTopCount.Text = "Max Threads";
             this.toolTip.SetToolTip(this.lblTopCount, "The maxium number of records to Import. ");
             // 
             // nbxSaveBatchSize
             // 
-            this.nbxSaveBatchSize.Location = new System.Drawing.Point(268, 34);
+            this.nbxSaveBatchSize.Location = new System.Drawing.Point(214, 34);
             this.nbxSaveBatchSize.Margin = new System.Windows.Forms.Padding(4);
             this.nbxSaveBatchSize.Maximum = new decimal(new int[] {
             5000,
@@ -312,7 +312,7 @@
             // 
             // nbxTopCount
             // 
-            this.nbxTopCount.Location = new System.Drawing.Point(267, 62);
+            this.nbxTopCount.Location = new System.Drawing.Point(213, 62);
             this.nbxTopCount.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nbxTopCount.Name = "nbxTopCount";
             this.nbxTopCount.Size = new System.Drawing.Size(129, 22);
@@ -330,7 +330,7 @@
             this.lblIgnoreStatuses.Location = new System.Drawing.Point(4, 124);
             this.lblIgnoreStatuses.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblIgnoreStatuses.Name = "lblIgnoreStatuses";
-            this.lblIgnoreStatuses.Size = new System.Drawing.Size(256, 38);
+            this.lblIgnoreStatuses.Size = new System.Drawing.Size(202, 38);
             this.lblIgnoreStatuses.TabIndex = 9;
             this.lblIgnoreStatuses.Text = "Ignore Record Status";
             // 
@@ -341,7 +341,7 @@
             this.lblIgnoreSystemFields.Location = new System.Drawing.Point(4, 86);
             this.lblIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblIgnoreSystemFields.Name = "lblIgnoreSystemFields";
-            this.lblIgnoreSystemFields.Size = new System.Drawing.Size(256, 38);
+            this.lblIgnoreSystemFields.Size = new System.Drawing.Size(202, 38);
             this.lblIgnoreSystemFields.TabIndex = 9;
             this.lblIgnoreSystemFields.Text = "Ignore System Fields";
             this.toolTip.SetToolTip(this.lblIgnoreSystemFields, "Restricts the Import based on records status.");
@@ -350,11 +350,11 @@
             // 
             this.gbxWriteSettings.Controls.Add(this.tlpWriteSettings);
             this.gbxWriteSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbxWriteSettings.Location = new System.Drawing.Point(11, 379);
+            this.gbxWriteSettings.Location = new System.Drawing.Point(11, 310);
             this.gbxWriteSettings.Margin = new System.Windows.Forms.Padding(4);
             this.gbxWriteSettings.Name = "gbxWriteSettings";
             this.gbxWriteSettings.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.gbxWriteSettings.Size = new System.Drawing.Size(1658, 361);
+            this.gbxWriteSettings.Size = new System.Drawing.Size(1322, 292);
             this.gbxWriteSettings.TabIndex = 1;
             this.gbxWriteSettings.TabStop = false;
             this.gbxWriteSettings.Text = "Write settings (to Dataverse)";
@@ -388,24 +388,24 @@
             this.tlpWriteSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWriteSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWriteSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpWriteSettings.Size = new System.Drawing.Size(1632, 322);
+            this.tlpWriteSettings.Size = new System.Drawing.Size(1296, 253);
             this.tlpWriteSettings.TabIndex = 0;
             // 
             // dataverseEnvironmentSelector1
             // 
             this.dataverseEnvironmentSelector1.ConnectionUpdatedScope = Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.DataverseEnvironmentSelector.Scope.Global;
             this.dataverseEnvironmentSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(269, 5);
+            this.dataverseEnvironmentSelector1.Location = new System.Drawing.Point(215, 5);
             this.dataverseEnvironmentSelector1.Margin = new System.Windows.Forms.Padding(5);
             this.dataverseEnvironmentSelector1.MinimumSize = new System.Drawing.Size(0, 20);
             this.dataverseEnvironmentSelector1.Name = "dataverseEnvironmentSelector1";
-            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(1358, 20);
+            this.dataverseEnvironmentSelector1.Size = new System.Drawing.Size(1076, 20);
             this.dataverseEnvironmentSelector1.TabIndex = 8;
             // 
             // tcbIgnoreSystemFields
             // 
             this.tcbIgnoreSystemFields.AutoSize = true;
-            this.tcbIgnoreSystemFields.Location = new System.Drawing.Point(268, 90);
+            this.tcbIgnoreSystemFields.Location = new System.Drawing.Point(214, 90);
             this.tcbIgnoreSystemFields.Margin = new System.Windows.Forms.Padding(4);
             this.tcbIgnoreSystemFields.Name = "tcbIgnoreSystemFields";
             this.tcbIgnoreSystemFields.Padding = new System.Windows.Forms.Padding(5);
@@ -417,7 +417,7 @@
             // tcbIgnoreStatuses
             // 
             this.tcbIgnoreStatuses.AutoSize = true;
-            this.tcbIgnoreStatuses.Location = new System.Drawing.Point(268, 128);
+            this.tcbIgnoreStatuses.Location = new System.Drawing.Point(214, 128);
             this.tcbIgnoreStatuses.Margin = new System.Windows.Forms.Padding(4);
             this.tcbIgnoreStatuses.Name = "tcbIgnoreStatuses";
             this.tcbIgnoreStatuses.Padding = new System.Windows.Forms.Padding(5);
@@ -442,7 +442,7 @@
             this.tsbRun});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1680, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(1344, 27);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -451,7 +451,7 @@
             this.tsbLoad.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoad.Image")));
             this.tsbLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoad.Name = "tsbLoad";
-            this.tsbLoad.Size = new System.Drawing.Size(66, 36);
+            this.tsbLoad.Size = new System.Drawing.Size(66, 24);
             this.tsbLoad.Text = "Load";
             this.tsbLoad.Click += new System.EventHandler(this.loadButton_Click);
             // 
@@ -490,14 +490,14 @@
             this.tlpMainLayout.Controls.Add(this.gbxFetchSettings, 0, 0);
             this.tlpMainLayout.Controls.Add(this.gbxWriteSettings, 0, 1);
             this.tlpMainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMainLayout.Location = new System.Drawing.Point(0, 49);
+            this.tlpMainLayout.Location = new System.Drawing.Point(0, 27);
             this.tlpMainLayout.Margin = new System.Windows.Forms.Padding(4);
             this.tlpMainLayout.Name = "tlpMainLayout";
             this.tlpMainLayout.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.tlpMainLayout.RowCount = 2;
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpMainLayout.Size = new System.Drawing.Size(1680, 750);
+            this.tlpMainLayout.Size = new System.Drawing.Size(1344, 612);
             this.tlpMainLayout.TabIndex = 7;
             // 
             // ImportPage
