@@ -83,7 +83,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             set => fisSchemaFile.Value = value;
         }
 
-        decimal IImportPageView.maxThreads
+        decimal IImportPageView.MaxThreads
         {
             get => nbxTopCount.Value;
             set => nbxTopCount.Value = value;

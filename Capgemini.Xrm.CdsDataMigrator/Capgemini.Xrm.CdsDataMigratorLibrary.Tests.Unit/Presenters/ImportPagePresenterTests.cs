@@ -342,7 +342,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.DataFormat).Returns(Enums.DataFormat.Json);
             mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
-            mockImportView.SetupGet(x => x.maxThreads).Returns(1);
+            mockImportView.SetupGet(x => x.MaxThreads).Returns(1);
 
             // Act
             mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
@@ -382,7 +382,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.DataFormat).Returns(Enums.DataFormat.Json);
             mockImportView.SetupGet(x => x.Service).Returns(mockIOrganisationService.Object);
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
-            mockImportView.SetupGet(x => x.maxThreads).Returns(1);
+            mockImportView.SetupGet(x => x.MaxThreads).Returns(1);
 
             // Act
             mockImportView.Raise(x => x.RunConfigClicked += null, EventArgs.Empty);
@@ -432,7 +432,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             // Arrange
             var viewMappings = ProvideMappingsAsViewType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
-            mockImportView.SetupGet(x => x.maxThreads).Returns(2);
+            mockImportView.SetupGet(x => x.MaxThreads).Returns(2);
             var thrownException = new Exception("Test exception");
             DataMigrationServiceMock
                 .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 2, EntityRepositoryServiceMock.Object))
