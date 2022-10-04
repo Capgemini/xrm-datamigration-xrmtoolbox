@@ -5,7 +5,6 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using Capgemini.Xrm.DataMigration.Engine;
 using Capgemini.Xrm.DataMigration.Repositories;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -20,7 +19,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
         private readonly ILogger logger;
         private readonly ICrmGenericMigratorFactory migratorFactory;
         private CrmExporterConfig exportConfig;
-        private CrmImportConfig importConfig;
         private CancellationTokenSource tokenSource;
 
         public DataMigrationService(ILogger logger, ICrmGenericMigratorFactory migratorFactory)
@@ -133,7 +131,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
             var singleThreadimporter = migratorFactory.GetCrmImportDataMigrator(format, logger, repo, config, tokenSource.Token, schema);
 
             singleThreadimporter.MigrateData();
-            return;
         }
 
         public void CancelDataImport()
