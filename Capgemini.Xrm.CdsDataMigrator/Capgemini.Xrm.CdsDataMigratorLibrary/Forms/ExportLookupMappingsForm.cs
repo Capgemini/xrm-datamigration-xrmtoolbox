@@ -38,34 +38,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.SetRefFieldDataSource
-        {
-            set
-            {
-                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[1] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        AttributeMetadata[] IExportLookupMappingsView.SetMapFieldDataSource
-        {
-            set
-            {   
-                (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[2] as DataGridViewComboBoxCell).DataSource = value.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        List<string> IExportLookupMappingsView.MappingCells
-        {   
-            set
-            {
-                dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value = value;
-                dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = value;
-            }
-        }
-
         public List<DataGridViewRow> Mappings
         {
             get
@@ -94,6 +66,25 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
         [ExcludeFromCodeCoverage]
         public void SetMapFieldToNull()
         {
+            dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = null;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetRefFieldDataSource(AttributeMetadata[] refFieldAttributes)
+        {
+            (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[1] as DataGridViewComboBoxCell).DataSource = refFieldAttributes.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetMapFieldDataSource(AttributeMetadata[] mapFieldAttributes)
+        {
+            (dgvMappings.Rows[dgvMappings.CurrentRow.Index].Cells[2] as DataGridViewComboBoxCell).DataSource = mapFieldAttributes.Select(x => x.LogicalName).OrderBy(n => n).ToArray();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void SetBothMappingFieldsToNull()
+        {
+            dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[1].Value = null;
             dgvMappings.Rows[dgvMappings.CurrentCell.RowIndex].Cells[2].Value = null;
         }
 

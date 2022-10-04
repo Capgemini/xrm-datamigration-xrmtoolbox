@@ -12,6 +12,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     {
         //TODO: List<string> ExcludedFields { get; set; }
         //TODO: string FetchXMLFolderPath { get; set; }
+        //TODO: List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
         string CrmMigrationToolSchemaPath { get; set; }
         Dictionary<string, string> CrmMigrationToolSchemaFilters { get; set; }
         CrmSchemaConfiguration SchemaConfiguration { get; set; }
@@ -24,8 +25,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         string FilePrefix { get; set; }
         bool SeperateFilesPerEntity { get; set; }
         List<DataGridViewRow> LookupMappings { get; set; }
-        //TODO: List<EntityToBeObfuscated> FieldsToObfuscate { get; set; }
-        //TODO: Dictionary<string, Dictionary<string, List<string>>> LookupMapping { get; set; }
         DataFormat DataFormat { get; set; }
         IOrganizationService Service { get; }
 

@@ -1,7 +1,6 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
@@ -9,10 +8,8 @@ using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
-using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;

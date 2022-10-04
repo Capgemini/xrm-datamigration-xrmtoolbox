@@ -56,36 +56,36 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         [TestMethod]
         public void OnVisible()
         {
-                string entityLogicalName = "account";
-                SetupMockObjects(entityLogicalName);
-                mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
-                mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
+            string entityLogicalName = "account";
+            SetupMockObjects(entityLogicalName);
+            mockExportView.Raise(x => x.OnVisible += null, EventArgs.Empty);
+            mockExportView.VerifySet(x => x.EntityListDataSource = It.IsAny<IEnumerable<string>>(), Times.Once);
         }
 
         [TestMethod]
         public void OnMapFieldChanged()
         {
-                string entityLogicalName = "account";
-                SetupMockObjects(entityLogicalName);
-                mockExportView
-                    .SetupGet(x => x.CurrentCell)
-                    .Returns("account");
+            string entityLogicalName = "account";
+            SetupMockObjects(entityLogicalName);
+            mockExportView
+                .SetupGet(x => x.CurrentCell)
+                .Returns("account");
 
-                mockExportView.Raise(x => x.OnEntityColumnChanged += null, EventArgs.Empty);
-                mockExportView.VerifySet(x => x.SetRefFieldDataSource = It.IsAny<AttributeMetadata[]>(), Times.Once);
+            mockExportView.Raise(x => x.OnEntityColumnChanged += null, EventArgs.Empty);
+            mockExportView.Verify(x => x.SetRefFieldDataSource(It.IsAny<AttributeMetadata[]>()), Times.Once);
         }
 
         [TestMethod]
         public void OnRefFieldChanged()
         {
-                string entityLogicalName = "account";
-                SetupMockObjects(entityLogicalName);
-                mockExportView
-                    .SetupGet(x => x.CurrentRowEntityName)
-                    .Returns("account");
+            string entityLogicalName = "account";
+            SetupMockObjects(entityLogicalName);
+            mockExportView
+                .SetupGet(x => x.CurrentRowEntityName)
+                .Returns("account");
 
-                mockExportView.Raise(x => x.OnRefFieldChanged += null, EventArgs.Empty);
-                mockExportView.VerifySet(x => x.SetMapFieldDataSource = It.IsAny<AttributeMetadata []>(), Times.Once);
+            mockExportView.Raise(x => x.OnRefFieldChanged += null, EventArgs.Empty);
+            mockExportView.Verify(x => x.SetMapFieldDataSource(It.IsAny<AttributeMetadata[]>()), Times.Once);
         }
     }
 

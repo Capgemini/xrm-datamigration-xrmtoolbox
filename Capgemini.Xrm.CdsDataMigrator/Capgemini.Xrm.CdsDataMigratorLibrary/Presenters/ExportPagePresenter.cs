@@ -212,7 +212,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         {
             if (DoesRefFieldAlreadyExistWithinMapping(refField, entity, lookupMappings))
             {   
-                if (DoesListAlreadyContainMapfield(refField, mapField, entity, lookupMappings) == true)
+                if (DoesListAlreadyContainMapfield(refField, mapField, entity, lookupMappings))
                 {
                     return;
                 }
