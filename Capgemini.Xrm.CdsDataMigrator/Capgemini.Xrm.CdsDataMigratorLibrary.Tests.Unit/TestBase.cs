@@ -26,8 +26,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 
         protected Mock<ILogManagerContainer> LogManagerContainerMock { get; set; }
 
-        protected Mock<ILogManager> LogConfigMock { get; set; }
-
         protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
 
         protected Mock<IEntityRepositoryService> EntityRepositoryServiceMock { get; set; }
@@ -129,7 +127,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             ExceptionServicerMock = new Mock<IExceptionService>();
             ViewHelpersMock = new Mock<IViewHelpers>();
             LogManagerContainerMock = new Mock<ILogManagerContainer>();
-            LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
             EntityRepositoryServiceMock = new Mock<IEntityRepositoryService>();
             EntityRepositoryMock = new Mock<IEntityRepository>();
