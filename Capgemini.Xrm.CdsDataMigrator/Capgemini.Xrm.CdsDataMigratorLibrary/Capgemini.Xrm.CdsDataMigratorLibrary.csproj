@@ -207,8 +207,6 @@
     <Compile Include="Exceptions\IExceptionService.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
     <Compile Include="Extensions\CrmEntityExtensions.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\FormControlExtensions.cs" />
     <Compile Include="Extensions\ListViewItemExtensions.cs" />
     <Compile Include="Extensions\TreeNodeExtensions.cs" />
     <Compile Include="Extensions\TreeViewExtensions.cs" />
@@ -234,7 +232,6 @@
     </Compile>
     <Compile Include="Helpers\IViewHelpers.cs" />
     <Compile Include="Models\ListBoxItem.cs" />
-    <Compile Include="Models\ExportSettings.cs" />
     <Compile Include="Models\SchemaExtension.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
     <Compile Include="CdsMigratorPluginControl.cs">
@@ -249,7 +246,6 @@
     <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
     <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
     <Compile Include="Presenters\ExportPagePresenter.cs" />
-    <Compile Include="Presenters\ExportPresenter.cs" />
     <Compile Include="Presenters\IExportFilterFormView.cs" />
     <Compile Include="Presenters\IExportLookupMappingsView.cs" />
     <Compile Include="Presenters\IExportPageView.cs" />

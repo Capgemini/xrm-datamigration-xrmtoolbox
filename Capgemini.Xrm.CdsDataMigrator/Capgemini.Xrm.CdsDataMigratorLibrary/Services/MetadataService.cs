@@ -50,7 +50,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 
         public EntityMetadata RetrieveEntities(string logicalName, IOrganizationService orgService, IExceptionService dataMigratorExceptionHelper)
         {
-            orgService.ThrowArgumentNullExceptionIfNull(nameof(orgService));
+            if (orgService == null)
+            {
+                throw new ArgumentNullException(nameof(orgService));
+            }
 
             try
             {

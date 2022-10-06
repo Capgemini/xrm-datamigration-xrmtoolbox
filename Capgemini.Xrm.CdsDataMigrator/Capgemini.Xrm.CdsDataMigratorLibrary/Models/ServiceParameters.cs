@@ -63,40 +63,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
             return sourceEntitiesList;
         }
 
-        public List<ListViewItem> RetrieveSourceEntitiesListToBeDeleted(bool showSystemAttributes, List<EntityMetadata> inputCachedMetadata, Dictionary<string, HashSet<string>> inputEntityAttributes)
-        {
-            var sourceList = MetadataService.RetrieveEntities(OrganizationService);
-
-            if (!showSystemAttributes)
-            {
-                sourceList = sourceList.Where(p => !p.IsLogicalEntity.Value && !p.IsIntersect.Value).ToList();
-            }
-
-            if (sourceList != null)
-            {
-                inputCachedMetadata.Clear();
-                inputCachedMetadata.AddRange(sourceList.OrderBy(p => p.IsLogicalEntity.Value).ThenBy(p => p.IsIntersect.Value).ThenByDescending(p => p.IsCustomEntity.Value).ThenBy(p => p.LogicalName).ToList());
-            }
-
-            var sourceEntitiesList = new List<ListViewItem>();
-
-            foreach (EntityMetadata entity in inputCachedMetadata)
-            {
-                var name = entity.DisplayName.UserLocalizedLabel == null ? string.Empty : entity.DisplayName.UserLocalizedLabel.Label;
-                var item = new ListViewItem(name)
-                {
-                    Tag = entity
-                };
-                item.SubItems.Add(entity.LogicalName);
-                item.IsInvalidForCustomization(entity);
-                item.Checked |= inputEntityAttributes.ContainsKey(entity.LogicalName);
-
-                sourceEntitiesList.Add(item);
-            }
-
-            return sourceEntitiesList;
-        }
-
         public List<AttributeMetadata> GetAttributeList(string entityLogicalName, bool showSystemAttributes)
         {
             var entitymeta = MetadataService.RetrieveEntities(entityLogicalName, OrganizationService, ExceptionService);

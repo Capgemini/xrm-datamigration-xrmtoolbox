@@ -12,59 +12,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions
 {
     public static class ListViewItemExtensions
     {
-        public static void IsInvalidForCustomization(this ListViewItem item, EntityMetadata entity)
-        {
-            if (entity != null)
-            {
-                if (entity.IsCustomEntity != null && entity.IsCustomEntity.Value)
-                {
-                    item.ForeColor = Color.DarkGreen;
-                }
-
-                if (entity.IsIntersect != null && entity.IsIntersect.Value)
-                {
-                    item.ForeColor = Color.Red;
-                    item.ToolTipText = "Intersect Entity, ";
-                }
-
-                if (entity.IsLogicalEntity != null && entity.IsLogicalEntity.Value)
-                {
-                    item.ForeColor = Color.Red;
-                    item.ToolTipText = "Logical Entity";
-                }
-            }
-        }
-
-        public static string GetEntityLogicalName(this ListViewItem entityitem)
-        {
-            string logicalName = null;
-            if (entityitem != null && entityitem.Tag != null)
-            {
-                var entity = (EntityMetadata)entityitem.Tag;
-                logicalName = entity.LogicalName;
-            }
-            return logicalName;
-        }
-
-        public static void PopulateEntitiesListView(this List<ListViewItem> items, Exception exception, IWin32Window owner, ListView listView, INotificationService notificationService)
-        {
-            if (exception != null)
-            {
-                notificationService.DisplayErrorFeedback(owner, $"An error occured: {exception.Message}");
-            }
-            else
-            {
-                if (items != null && items.Count > 0)
-                {
-                    listView.Items.AddRange(items.ToArray());
-                }
-                else
-                {
-                    notificationService.DisplayWarningFeedback(owner, "The system does not contain any entities");
-                }
-            }
-        }
-
         public static void SetListViewSorting(this ListView listview, int column, string inputOrganisationId, Core.Settings settings)
         {
             var setting = settings[inputOrganisationId].Sortcolumns.FirstOrDefault(s => s.Key == listview.Name);
