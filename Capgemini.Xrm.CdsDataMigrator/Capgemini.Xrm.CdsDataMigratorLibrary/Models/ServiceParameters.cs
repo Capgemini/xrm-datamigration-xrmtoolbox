@@ -97,22 +97,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Models
             return sourceEntitiesList;
         }
 
-        public void OpenMappingForm(IWin32Window owner, List<EntityMetadata> inputCachedMetadata, Dictionary<string, Dictionary<string, List<string>>> inputLookupMaping, string inputEntityLogicalName)
-        {
-            using (var mappingDialog = new MappingListLookup(inputLookupMaping, OrganizationService, inputCachedMetadata, inputEntityLogicalName, MetadataService, ExceptionService)
-            {
-                StartPosition = FormStartPosition.CenterParent
-            })
-            {
-                if (owner != null)
-                {
-                    mappingDialog.ShowDialog(owner);
-                }
-
-                mappingDialog.RefreshMappingList();
-            }
-        }
-
         public List<AttributeMetadata> GetAttributeList(string entityLogicalName, bool showSystemAttributes)
         {
             var entitymeta = MetadataService.RetrieveEntities(entityLogicalName, OrganizationService, ExceptionService);
