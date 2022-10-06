@@ -38,38 +38,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
             systemUnderTest.ExceptionService.Should().NotBeNull();
         }
 
-
-        [TestMethod]
-        public void RetrieveSourceEntitiesListToBeDeletedShowSystemAttributesIsFalse()
-        {
-            var showSystemAttributes = false;
-            string entityLogicalName = "account_contact";
-            SetupMockObjects(entityLogicalName);
-            var inputCachedMetadata = new List<EntityMetadata>();
-
-            //var serviceParameters = GenerateMigratorParameters();
-
-            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes);
-
-            actual.Count.Should().Be(1);
-        }
-
-        [TestMethod]
-        public void RetrieveSourceEntitiesListToBeDeletedShowSystemAttributesIsTrue()
-        {
-            var showSystemAttributes = true;
-            string entityLogicalName = "account_contact";
-            SetupMockObjects(entityLogicalName);
-            var inputCachedMetadata = new List<EntityMetadata>();
-            //var serviceParameters = GenerateMigratorParameters();
-
-            var actual = systemUnderTest.RetrieveSourceEntitiesListToBeDeleted(showSystemAttributes, inputCachedMetadata, inputEntityAttributes );
-
-            actual.Count.Should().Be(1);
-        }
-
-
-
         [TestMethod]
         public void RetrieveSourceEntitiesListShowSystemAttributesIsFalse()
         {
@@ -100,21 +68,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
         }
 
         [TestMethod]
-        public void OpenMappingForm()
-        {
-            var serviceParameters = GenerateMigratorParameters();
-
-            string entityLogicalName = "contact";
-            var inputCachedMetadata = new List<EntityMetadata>();
-            var inputLookupMaping = new Dictionary<string, Dictionary<string, List<string>>>();
-
-            FluentActions.Invoking(() => systemUnderTest.OpenMappingForm(  null, inputCachedMetadata, inputLookupMaping, entityLogicalName))
-                         .Should()
-                         .NotThrow();
-        }
-
-
-        [TestMethod]
         public void PopulateRelationshipActionNoManyToManyRelationships()
         {
             string entityLogicalName = "contact";
@@ -129,48 +82,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
             var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
 
             actual.Count.Should().Be(0);
-
-            ServiceMock.VerifyAll();
-            MetadataServiceMock.VerifyAll();
-        }
-
-        [TestMethod]
-        public void PopulateRelationshipAction()
-        {
-            string entityLogicalName = "account_contact";
-            var items = new List<System.Windows.Forms.ListViewItem>
-            {
-                new System.Windows.Forms.ListViewItem("Item1"),
-                new System.Windows.Forms.ListViewItem("Item2")
-            };
-
-            var entityMetadata = new EntityMetadata();
-
-            var relationship = new ManyToManyRelationshipMetadata
-            {
-                Entity1LogicalName = "account",
-                Entity1IntersectAttribute = "accountid",
-                IntersectEntityName = "account_contact",
-                Entity2LogicalName = "contact",
-                Entity2IntersectAttribute = "contactid"
-            };
-
-            InsertManyToManyRelationshipMetadata(entityMetadata, relationship);
-
-            var migratorServiceParameters = GenerateMigratorParameters();
-
-            MetadataServiceMock.Setup(x => x.RetrieveEntities(It.IsAny<string>(), It.IsAny<IOrganizationService>(), It.IsAny<IExceptionService>()))
-                .Returns(entityMetadata)
-                .Verifiable();
-
-            using (var listView = new System.Windows.Forms.ListView())
-            {
-                items.PopulateEntitiesListView(null, null, listView, NotificationServiceMock.Object);
-
-                var actual = systemUnderTest.PopulateRelationshipAction(entityLogicalName, inputEntityRelationships);
-
-                actual.Count.Should().BeGreaterThan(0);
-            }
 
             ServiceMock.VerifyAll();
             MetadataServiceMock.VerifyAll();

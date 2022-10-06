@@ -12,20 +12,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Exceptions
     {
         private OrganizationalServiceException systemUnderTest;
 
-        [TestInitialize]
-        public void Setup()
-        {
-            systemUnderTest = new OrganizationalServiceException();
-        }
-
-        [TestMethod]
-        public void OrganizationalServiceExceptionDefaultConstructor()
-        {
-            FluentActions.Invoking(() => systemUnderTest = new OrganizationalServiceException())
-                 .Should()
-                 .NotThrow();
-        }
-
         [TestMethod]
         public void OrganizationalServiceExceptionConstructWithMessageParameter()
         {
@@ -39,19 +25,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Exceptions
         }
 
         [TestMethod]
-        public void OrganizationalServiceExceptionnWithMessageAndInnerException()
-        {
-            var message = "Test message";
-
-            FluentActions.Invoking(() => systemUnderTest = new OrganizationalServiceException(message, new Exception()))
-                 .Should()
-                 .NotThrow();
-
-            Assert.AreEqual(message, systemUnderTest.Message);
-            Assert.IsNotNull(systemUnderTest.InnerException);
-        }
-
-        [TestMethod]
         public void OrganizationalServiceExceptionSerialization()
         {
             var message = "Test message";
@@ -61,21 +34,6 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Exceptions
             var actual = SerializeToBytes(exception);
 
             actual.Length.Should().BeGreaterThan(0);
-        }
-
-        [TestMethod]
-        public void OrganizationalServiceExceptionDeserialization()
-        {
-            var message = "Test message";
-
-            var exception = new OrganizationalServiceException(message);
-            var bytes = SerializeToBytes(exception);
-            bytes.Length.Should().BeGreaterThan(0);
-
-            var actual = DeserializeFromBytes(bytes);
-
-            actual.Message.Should().Be(message);
-            actual.InnerException.Should().BeNull();
         }
 
         private static byte[] SerializeToBytes(OrganizationalServiceException e)
