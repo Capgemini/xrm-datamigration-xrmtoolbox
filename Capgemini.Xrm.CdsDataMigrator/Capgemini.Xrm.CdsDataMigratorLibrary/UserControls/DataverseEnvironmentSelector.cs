@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using static XrmToolBox.Extensibility.PluginControlBase;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
+    [ExcludeFromCodeCoverage]
     public partial class DataverseEnvironmentSelector : UserControl
     {
         private PluginControlBase xrmToolBoxControl;

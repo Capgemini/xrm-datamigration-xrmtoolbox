@@ -6,9 +6,12 @@ using System.Windows.Forms;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Microsoft.Win32;
 using XrmToolBox.Extensibility;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
+    // TODO: could this be tested in part like the other pages? 
+    [ExcludeFromCodeCoverage]
     public partial class SchemaGeneratorPage : UserControl, ISchemaGeneratorView
     {
         private List<EntityMetadata> entityMetadataList;
