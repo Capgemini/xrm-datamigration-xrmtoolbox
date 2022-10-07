@@ -7,9 +7,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 {
@@ -178,21 +176,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Controllers
 
                 schemaConfiguration.Entities.Clear();
                 schemaConfiguration.Entities.AddRange(crmEntityList);
-            }
-        }
-
-        public void SchemaFolderPathAction(INotificationService notificationService, TextBox schemaPathTextBox, bool inputWorkingstate, CollectionParameters collectionParameters, DialogResult dialogResult, SaveFileDialog fileDialog,
-    Action<string, bool, INotificationService, Dictionary<string, HashSet<string>>, Dictionary<string, HashSet<string>>> loadSchemaFile
-    )
-        {
-            if (dialogResult == DialogResult.OK)
-            {
-                schemaPathTextBox.Text = fileDialog.FileName.ToString(CultureInfo.InvariantCulture);
-
-                if (File.Exists(schemaPathTextBox.Text))
-                {
-                    loadSchemaFile(schemaPathTextBox.Text, inputWorkingstate, notificationService, collectionParameters.EntityAttributes, collectionParameters.EntityRelationships);
-                }
             }
         }
 

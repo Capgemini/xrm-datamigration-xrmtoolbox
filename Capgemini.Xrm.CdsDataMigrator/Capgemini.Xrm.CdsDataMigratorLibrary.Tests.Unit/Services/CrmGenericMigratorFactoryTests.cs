@@ -48,7 +48,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var cancellationToken = CancellationToken.None;
             var schema = new CrmSchemaConfiguration();
 
-            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Json, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmExportDataMigrator(DataFormat.Json, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
 
             migrator.Should().BeOfType<CrmFileDataExporter>();
         }
@@ -67,7 +67,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var schema = new CrmSchemaConfiguration();
             schema.Entities.AddRange(new DataMigration.Model.CrmEntity[] { new DataMigration.Model.CrmEntity { } });
 
-            var migrator = systemUnderTest.GetCrmDataMigrator(DataFormat.Csv, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
+            var migrator = systemUnderTest.GetCrmExportDataMigrator(DataFormat.Csv, logger, entityRepoMock.Object, exportConfig, cancellationToken, schema);
 
             migrator.Should().BeOfType<CrmFileDataExporterCsv>();
         }
@@ -81,7 +81,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
             var cancellationToken = CancellationToken.None;
             var schema = new CrmSchemaConfiguration();
 
-            FluentActions.Invoking(() => systemUnderTest.GetCrmDataMigrator(DataFormat.Unknown, logger, entityRepo, exportConfig, cancellationToken, schema))
+            FluentActions.Invoking(() => systemUnderTest.GetCrmExportDataMigrator(DataFormat.Unknown, logger, entityRepo, exportConfig, cancellationToken, schema))
                 .Should()
                 .Throw<NotSupportedException>();
         }

@@ -14,15 +14,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions
             : base(message)
         {
         }
-
-        public OrganizationalServiceException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
-        protected OrganizationalServiceException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
 }

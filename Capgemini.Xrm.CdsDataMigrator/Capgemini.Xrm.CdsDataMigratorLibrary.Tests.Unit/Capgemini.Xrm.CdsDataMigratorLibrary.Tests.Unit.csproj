@@ -232,40 +232,20 @@
     <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
     <Compile Include="Helpers\CollectionHelpersTests.cs" />
     <Compile Include="Helpers\ViewHelpersTests.cs" />
-    <Compile Include="Models\MigratorEventArgsTests.cs" />
-    <Compile Include="Helpers\ConfigurationHelpersTests.cs" />
-    <Compile Include="Model\SchemaExtensionTests.cs" />
+    <Compile Include="Model\MigratorEventArgsTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
     <Compile Include="Core\OrganisationsTests.cs" />
-    <Compile Include="Core\RecordCounterProcessorTests.cs" />
     <Compile Include="Core\SettingFileHandlerTest.cs" />
     <Compile Include="Core\SettingsTests.cs" />
-    <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
-    <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
-    <Compile Include="Extensions\FormControlExtensionsTests.cs" />
     <Compile Include="Extensions\MockWorkerHostExtensions.cs" />
     <Compile Include="Forms\ExportFilterFormTests.cs" />
     <Compile Include="Forms\ExportLookupMappingsFormTests.cs" />
-    <Compile Include="Forms\FilterEditorTests.cs" />
     <Compile Include="Forms\ImportMappingsFormTests.cs" />
-    <Compile Include="Forms\MappingListLookupTests.cs" />
-    <Compile Include="Forms\MappingListTests.cs" />
-    <Compile Include="Helpers\ValidationHelpersTests.cs" />
     <Compile Include="CdsMigratorPluginControlTests.cs" />
-    <Compile Include="Mocks\MockupForExportWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Mocks\MockupForImportWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Mocks\MockupForSchemaWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Mocks\TestSynchronizationContext.cs" />
-    <Compile Include="Model\CollectionParametersTests.cs" />
     <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportLookupMappingsFormPresenterTests.cs" />
     <Compile Include="Presenters\ExportPagePresenterTests.cs" />
@@ -274,19 +254,7 @@
     <Compile Include="Presenters\ImportMappingsFormPresenterTests.cs" />
     <Compile Include="Presenters\ImportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
-    <Compile Include="Services\LogToTextboxServiceTests.cs" />
-    <Compile Include="Model\DataMigrationSettingsTests.cs" />
-    <Compile Include="Model\DeserializationSettingsTests.cs" />
-    <Compile Include="Model\ExportConfigSettingsTests.cs" />
-    <Compile Include="Model\ExportSettingsTests.cs" />
-    <Compile Include="Model\FilterSettingsTests.cs" />
-    <Compile Include="Model\ImportConfigSettingscsTests.cs" />
-    <Compile Include="Model\LoadAllSettingsTests.cs" />
-    <Compile Include="Model\RecordCountModelTests.cs" />
-    <Compile Include="Model\SaveAllSettingsTests.cs" />
-    <Compile Include="Model\SerializationSettingsTests.cs" />
     <Compile Include="Model\ServiceParametersTests.cs" />
-    <Compile Include="Presenters\ExportPresenterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CrmGenericMigratorFactoryTests.cs" />
     <Compile Include="Services\DataMigrationServiceTests.cs" />
@@ -295,21 +263,14 @@
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="UserControls\ExportPageTests.cs" />
-    <Compile Include="UserControls\ExportWizardTests.cs" />
     <Compile Include="UserControls\ImportPageTests.cs" />
-    <Compile Include="UserControls\ImportWizardTests.cs" />
-    <Compile Include="Mocks\MockupForWizardButtons.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Mocks\MockEntityListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\ListManagerViewTests.cs" />
     <Compile Include="UserControls\SchemaGeneratorPageTests.cs" />
-    <Compile Include="UserControls\SchemaWizardTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
     <Compile Include="UserControls\EntityListViewTests.cs" />
-    <Compile Include="UserControls\WizardButtonsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

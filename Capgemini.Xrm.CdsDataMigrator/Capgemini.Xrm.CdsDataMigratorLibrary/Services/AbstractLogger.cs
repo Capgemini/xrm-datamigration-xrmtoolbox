@@ -1,13 +1,10 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+﻿using Capgemini.DataMigration.Core;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 {
-    abstract public class AbstractLoggerService : ILogManager
+    abstract public class AbstractLoggerService : ILogger
     {
         public LogLevel LogLevel { get; set; } = LogLevel.Verbose;
 

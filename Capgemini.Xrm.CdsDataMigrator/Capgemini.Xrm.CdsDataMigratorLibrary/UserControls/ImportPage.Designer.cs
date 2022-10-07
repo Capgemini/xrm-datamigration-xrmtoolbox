@@ -459,7 +459,7 @@
             // 
             // tsbSave
             // 
-            this.tsbSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbSave.Image")));
+            this.tsbSave.Image = global::Capgemini.Xrm.CdsDataMigratorLibrary.Properties.Resource.Save;
             this.tsbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSave.Name = "tsbSave";
             this.tsbSave.Size = new System.Drawing.Size(64, 24);
