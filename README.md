@@ -59,8 +59,8 @@ Click the data migrator to launch it. You will be prompted for a connection to D
 
 ![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
 
-Connect to an environment and you will be taken to the CDS Migrator landing page as shown below:
-![Data migrator landing page](images/DataMigratorLandingPage.png "Data migrator landing page")
+Connect to an environment and you will be taken to the Schema Configs page as shown below:
+![Data migrator landing page](images/InitialSchemaConfig.png "Schema Configs page")
 
 ### Data Import and Data Export Schema Generation
 The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify an export schema, please follow the steps below:
