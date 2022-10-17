@@ -110,43 +110,36 @@ For more on the data migration config settings [see](https://github.com/Capgemin
 
 ### Data Export
 Once all the schema and config files are downloaded the next step is to export the data. 
-1.	Select **Data Export** from the ribbon and select format type of JSON or CSV, then select **Next**
- ![Data Export Start](images/DataExportStart.png "Data Export Start")
+1.	Select **Data Export** from the ribbon and select format type of JSON or CSV.
 
-2.	Select the location to save the file and then click **Next**
- ![Data Export File Location](images/DataExportFileLocation.png "Data Export File Location")
+2.	Select the location to save the file.
 
 3.	Select the location of the export config file then select Next. (Optional Step)
- ![Data Export Export Config File](images/DataExportExportConfigFile.png "Data Export Export Config File")
 
-4.	Select the Target Connection String then select the location of the schema file then click **Next**
- ![Data Export Export Settings](images/DataExportExportSettings.png "Data Export Export Settings")
+4.	Select the Target Connection String then select the location of the schema file.
 
-5.	On this screen select **Execute** and the data will be exported to the specified location:
- ![Data Export Execution](images/DataExportExecution.png "Data Export Execution")
+The Data Export page should look something like this:
+ ![Run Export](images/SaveExportConfig.png "Run Export")
+
+5.	Select **Run** and the data will be exported to the specified location:
 
 6.	The Data is now extracted into a JSON file/s which you can see an example of below: 
  ![Data Export Output](images/DataExportOutput.png "Data Export Output")
 
-In this example 3 Account records have been extracted with the attributes ‘Account Name’, ‘Email Address’ & ‘Account Number’
-
+In this example 3 Account records have been extracted with the attributes ‘Account’, ‘Account Rating’ & ‘Email’
 
 ### Data Import
 To import the exported data into an environment, follow the instructions below
-1.	Select **Data Import** from the ribbon and select format type of JSON or CSV, then select **Next**
- ![Data Import Start](images/DataImportStart.png "Data Import Start")
+1.	Select **Data Import** from the ribbon and select format type of JSON or CSV.
  
-2.	Select the location where the source data is stored and select **Next**
- ![Data Import Data Source](images/DataImportDataSource.png "Data Import Data Source")
- 
-In this example accounts and contacts will be imported at the same time.
- ![Data Import Sample Data Source Files](images/DataImportSampleDataSourceFiles.png "Data Import Sample Data Source Files")
+2.	Select the location where the source data is stored.
 
-3.	The next screen requests an Import Config file (Optional Step)
- ![Data Import Import Config](images/DataImportImportConfig.png "Data Import Import Config") 
+3.  You have the option to include an Import Config file.
 
-4.	The final step is to Execute the import. The Log will show the progress of the import and notify the user if there are any issues/errors
- ![Data Import Execution](images/DataImportExecution.png "Data Import Execution")
+The Data Import page should look something like this:
+ ![Run Import](images/SaveImportConfig.png "Run Import")
+
+4.	Select **Run** and the data will be imported into D365:
 
 5.	Review the Data in D365 
  ![Imported Accounts](images/DataImportImportedAccounts.png "Imported Accounts")
