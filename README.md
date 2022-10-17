@@ -86,7 +86,7 @@ For more on the data migration config settings [see](https://github.com/Capgemin
  ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
 
 2. Add in Fetch and Write Setting (included a schema file if exporting to CSV) and save.
- ![Save Export Config file](images/SaveExportConfig "Save Export Config file")
+ ![Save Export Config file](images/SaveExportConfig.png "Save Export Config file")
 
 3.	Once the export config is generated, the export JSON file will be generated at the specified location. Below is an example of the generated file
  ![Export Config Example](images/ExportConfigExample.png "Export Config Example")
@@ -101,12 +101,12 @@ For more on the data migration config settings [see](https://github.com/Capgemin
  ![Initial Import Page](images/InitialImportPage.png "Initial Import Page")
 
 2. Add in Fetch and Write Setting and save.
- ![Save Import Config file](images/SaveImportConfig "Save Import Config file")
+ ![Save Import Config file](images/SaveImportConfig.png "Save Import Config file")
 
 3. Once the import config is generated, the import JSON file will be generated at the specified location. Below is an example of the generated file
  ![Import Config Example](images/ImportConfigExample.png "Import Config Example")
 
-**NB:** Ensure the JsonFolderPath existss
+**NB:** Ensure the JsonFolderPath exists
 
 ### Data Export
 Once all the schema and config files are downloaded the next step is to export the data. 
