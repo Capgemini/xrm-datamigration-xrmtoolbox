@@ -60,28 +60,22 @@ Click the data migrator to launch it. You will be prompted for a connection to D
 ![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
 
 Connect to an environment and you will be taken to the Schema Configs page as shown below:
-![Data migrator landing page](images/InitialSchemaConfig.png "Schema Configs page")
+![Schema Configs page](images/InitialSchemaConfig.png "Schema Configs page")
 
 ### Data Import and Data Export Schema Generation
 The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify an export schema, please follow the steps below:
 
-1.	Select **Generate/Modify Export Schema** from the Schema Config tab of the data migrator and then select **Next**
-![Generate Modify Export Schema](images/GenerateModifyExportSchema.png "Generate Modify Export Schema")
+1. If you want to generate an export schema file then select the required entities and attributes combination, (in this example we are creating a xml file for Accounts)
+![Generate Export Schema Select Entity](images/GenerateSchemaConfig.png "Generate Export Schema Select Entity")
 
-2.	Select the required entities and attributes combination, (in this example we are creating a xml file for Accounts & Contacts)
-![Generate Export Schema Select Entity](images/GenerateExportSchemaSelectEntity.png "Generate Export Schema Select Entity")
+2. Within the **Schema File Path** input, browse to a location and specify a File Name. Then select **Save**
+![Save Export Schema Schema File](images/SaveSchemaConfig.png "Save Export Schema Schema File")
 
-3.	Within the **Schema File Path** input, browse to a location and specify a File Name. Then select **Save**
-![Generate Export Schema Schema File](images/GenerateExportSchemaSchemaFile.png "Generate Export Schema Schema File")
+3. Once the export schema is generated, the export schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships
 
-4.	The next step is to **Save** the schema as shown below:
- ![Generate Export Schema Save](images/GenerateExportSchemaSave.png "Generate Export Schema Save")
+4. Below shows an example export schema file
 
-5.	Once the export schema is generated, a "Successfully created XML file" dialog will pop up and the export schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships
-
- ![Generate Export Schema Save Successful](images/GenerateExportSchemaSaveSuccessful.png "Generate Export Schema Save Successful")
-
- ![Generate Export Schema Output](images/GenerateExportSchemaOutput.png "Generate Export Schema Output")
+![Schema Config Example](images/SchemaConfigExample.png "Schema Config Example")
 
 ### Export Config File
 The CDS data migrator export user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an export configuration file, the user can have a fine grain control of the export process. When the export config is not specified then the default settings are applied. While those values are beyond the scope of this documentation, it suffices to say that the default values are expected to satisfy most data operation scenarios.
