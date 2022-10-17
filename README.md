@@ -120,9 +120,10 @@ Once all the schema and config files are downloaded the next step is to export t
 4.	Select the Target Connection String then select the location of the schema file.
 
 The Data Export page should look something like this:
- ![Run Export](images/SaveExportConfig.png "Run Export")
+ ![Run Export](images/RunExport.png "Run Export")
 
-5.	Select **Run** and the data will be exported to the specified location:
+5.	Select **Run** and the data will be exported to the specified location. You will also see a success message confirming that data export is complete:
+ ![Data Export Complete](images/ExportDataComplete.png "Data Export Complete")
 
 6.	The Data is now extracted into a JSON file which you can see an example of below: 
  ![Data Export Output](images/DataExportOutput.png "Data Export Output")
@@ -131,16 +132,20 @@ In this example 3 Account records have been extracted with the attributes ‘Acc
 
 ### Data Import
 To import the exported data into an environment, follow the instructions below
+
 1.	Select **Data Import** from the ribbon and select format type of JSON or CSV.
  
-2.	Select the location where the source data is stored.
+2.	Select the location of the source data.
 
-3.  You have the option to include an Import Config file.
+3.  Select the location of the import config file. (Optional Step)
+
+4.	Select the Target Connection String then select the location of the schema file (schema is only required for CSV).
 
 The Data Import page should look something like this:
- ![Run Import](images/SaveImportConfig.png "Run Import")
+ ![Run Import](images/RunImport.png "Run Import")
 
-4.	Select **Run** and the data will be imported into D365:
+4.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
+ ![Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
 
 5.	Review the Data in D365 
  ![Imported Accounts](images/D365Accounts.png "Imported Accounts")
