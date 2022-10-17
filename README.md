@@ -65,7 +65,7 @@ Connect to an environment and you will be taken to the Schema Configs page as sh
 ### Data Import and Export Schema Generation
 The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
 
-1. To generate a schema file, select the required entities and attributes combination, (in this example we are creating an xml file for Accounts)
+1. To generate a schema file, select the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you select more than one entity)
 ![Generate Export Schema Select Entity](images/GenerateSchemaConfig.png "Generate Export Schema Select Entity")
 
 2. Within the **Schema File Path** input, browse to a location and specify a File Name. Then select **Save**
@@ -124,7 +124,7 @@ The Data Export page should look something like this:
 
 5.	Select **Run** and the data will be exported to the specified location:
 
-6.	The Data is now extracted into a JSON file/s which you can see an example of below: 
+6.	The Data is now extracted into a JSON file which you can see an example of below: 
  ![Data Export Output](images/DataExportOutput.png "Data Export Output")
 
 In this example 3 Account records have been extracted with the attributes ‘Account Name’, ‘Email Address’ & ‘Account Number’
