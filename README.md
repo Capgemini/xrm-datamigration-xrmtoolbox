@@ -126,7 +126,7 @@ The Data Export page should look something like this:
 6.	The Data is now extracted into a JSON file/s which you can see an example of below: 
  ![Data Export Output](images/DataExportOutput.png "Data Export Output")
 
-In this example 3 Account records have been extracted with the attributes ‘Account’, ‘Account Rating’ & ‘Email’
+In this example 3 Account records have been extracted with the attributes ‘Account Name’, ‘Email Address’ & ‘Account Number’
 
 ### Data Import
 To import the exported data into an environment, follow the instructions below
@@ -142,5 +142,4 @@ The Data Import page should look something like this:
 4.	Select **Run** and the data will be imported into D365:
 
 5.	Review the Data in D365 
- ![Imported Accounts](images/DataImportImportedAccounts.png "Imported Accounts")
- ![Imported Contacts](images/DataImportImportedContacts.png "Imported Contacts")
+ ![Imported Accounts](images/D365Accounts.png "Imported Accounts")
