@@ -84,7 +84,7 @@ Below shows an example schema file:
 ### Export Config File
 The CDS data migrator export user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an export configuration file, the user can have a fine grain control of the export process. When the export config is not specified then the default settings are applied. While those values are beyond the scope of this documentation, it suffices to say that the default values are expected to satisfy most data operation scenarios.
 
-For more on the data migration config settings [see here](https://github.com/Capgemini/xrm-datamigration#Usage)
+For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
 
 1. Select **Data Export** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
@@ -93,7 +93,7 @@ For more on the data migration config settings [see here](https://github.com/Cap
 ![Load Export Config file](images/LoadExportConfig.png "Load Export Config file")
 
 3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
- ![Edited Export Config file](images/EditedExportConfig.png "Edited Export Config file")
+ ![Edited Export Config file](images/EditedExportConfigs.png "Edited Export Config file")
 
 4. To save the new or updated export config file, click on 'Save'.
  ![Save Export Configs](images/SaveExportConfigs.png "Save Export Configs")
@@ -117,7 +117,7 @@ For more on the data migration config settings [see](https://github.com/Capgemin
 ![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
 3. Add in (or edit if you have loaded an import config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
- ![Edited Import Config file](images/EditedImportConfig.png "Edited Import Config file")
+ ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
 4. To save the new or updated import config file, click on 'Save'.
  ![Save Import Configs](images/SaveImportConfigs.png "Save Import Configs")
@@ -145,6 +145,7 @@ The Data Export page should look something like this:
 ![Run Export](images/RunExport.png "Run Export")
 
 5.	Select **Run** and the data will be exported to the specified location. You will also see a success message confirming that data export is complete:
+
 ![Data Export Complete](images/ExportDataComplete.png "Data Export Complete")
 
 The Data is now extracted into a JSON file which you can see an example of below: 
@@ -167,7 +168,8 @@ The Data Import page should look something like this:
 ![Run Import](images/RunImport.png "Run Import")
 
 5.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
-! [Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
+
+![Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
 
 You will then be able to view your data in D365. 
 ![Imported Accounts](images/D365Accounts.png "Imported Accounts")
