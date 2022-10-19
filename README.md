@@ -84,7 +84,7 @@ Below shows an example schema file:
 ### Export Config File
 The CDS data migrator export user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an export configuration file, the user can have a fine grain control of the export process. When the export config is not specified then the default settings are applied. While those values are beyond the scope of this documentation, it suffices to say that the default values are expected to satisfy most data operation scenarios.
 
-For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
+For more on the data migration config settings [see here](https://github.com/Capgemini/xrm-datamigration#Usage)
 
 1. Select **Data Export** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
