@@ -142,7 +142,7 @@ Once all the schema and config files are downloaded the next step is to export t
 4.	Select the Target Connection String then select the location of the schema file.
 
 The Data Export page should look something like this:
-![Run Export](images/RunExport.png "Run Export")
+![Run Export](images/EditedExportConfigs.png "Run Export")
 
 5.	Select **Run** and the data will be exported to the specified location. You will also see a success message confirming that data export is complete:
 
@@ -165,7 +165,7 @@ To import the exported data into an environment, follow the instructions below
 4.	Select the Target Connection String then select the location of the schema file (schema is only required for CSV).
 
 The Data Import page should look something like this:
-![Run Import](images/RunImport.png "Run Import")
+![Run Import](images/EditedImportConfigs.png "Run Import")
 
 5.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
 
