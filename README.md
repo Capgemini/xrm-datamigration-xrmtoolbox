@@ -66,15 +66,15 @@ Connect to an environment and you will be taken to the Schema Configs page as sh
 The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
 
 1. Click on 'Schema Config' in the top ribbon which will bring you to the below page:
-**Empty config page**
+ ![Initial Schema Page](images/InitialExportPage.png "Initial Schema Page")
 
 2. If you have an exisiting schema, you can click on 'Load Schema' to edit that file. This will pre-select the entities, attributes and relationships that you had stored in that file. If you don't have an existing schema then you can create one from scratch.
 
 3. Select (you may also want to unselect if you are editting your loaded schema) the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you can select more than one entity)
-![Generate Export Schema Select Entity](images/GenerateSchemaConfig.png "Generate Export Schema Select Entity")
+![Select Schema Configs](images/SelectSchemaConfigs.png "Select Schema Configs")
 
 4. To save the file, click on 'Save Schema'
-![Save Export Schema Schema File](images/SaveSchemaConfig.png "Save Export Schema Schema File")
+![Save Schema File](images/SaveSchemaConfigs.png "Save Schema File")
 
 Once the schema file is generated, the schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships. You will also see a success message confirming that the schema file has been created:
 
