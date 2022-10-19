@@ -63,17 +63,24 @@ Connect to an environment and you will be taken to the Schema Configs page as sh
 ![Schema Configs page](images/InitialSchemaConfig.png "Schema Configs page")
 
 ### Data Import and Export Schema Generation
-The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
+The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
 
-1. To generate a schema file, select the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you select more than one entity)
+1. Click on 'Schema Config' in the top ribbon which will bring you to the below page:
+**Empty config page**
+
+2. If you have an exisiting schema, you can click on 'Load Schema' to edit that file. This will pre-select the entities, attributes and relationships that you had stored in that file. If you don't have an existing schema then you can create one from scratch.
+
+3. Select (you may also want to unselect if you are editting your loaded schema) the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you can select more than one entity)
 ![Generate Export Schema Select Entity](images/GenerateSchemaConfig.png "Generate Export Schema Select Entity")
 
-2. Within the **Schema File Path** input, browse to a location and specify a File Name. Then select **Save**
+4. To save the file, click on 'Save Schema'
 ![Save Export Schema Schema File](images/SaveSchemaConfig.png "Save Export Schema Schema File")
 
-3. Once the schema file is generated, the schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships
+Once the schema file is generated, the schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships. You will also see a success message confirming that the schema file has been created:
 
-4. Below shows an example export schema file
+*success message screenshot*
+
+Below shows an example schema file:
 
 ![Schema Config Example](images/SchemaConfigExample.png "Schema Config Example")
 
@@ -82,13 +89,23 @@ The CDS data migrator export user interface exposes only a subset of the availab
 
 For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
 
-1. Select **Data Export** on the ribbon which will bring you to the Export Page as shown below:
+1. Select **Data Export** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
 
-2. Add in Fetch and Write Settings (including a schema file if exporting to CSV) and save.
+2. If you have an exisiting export config file, you can click on 'Load' to edit that file. This will pre-input the configs that you had stored in that file. If you don't have an existing export config file then you can create one from scratch.
+
+3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
  ![Save Export Config file](images/SaveExportConfig.png "Save Export Config file")
 
-3. Once the export config is generated, the export JSON file will be generated at the specified location. Below is an example of the generated file
+4. To save the new or updated export config file, click on 'Save'.
+ ![Save Export Schema Schema File](images/SaveSchemaConfig.png "Save Export Schema Schema File")
+
+Once the export config is generated, the export JSON file will be generated at the specified location. You will also see a success message confirming that the export config file has been created:
+
+*success message screenshot*
+
+Below shows an example export config file:
+
  ![Export Config Example](images/ExportConfigExample.png "Export Config Example")
 
 **NB:** Ensure the JsonFolderPath exists
@@ -97,14 +114,24 @@ For more on the data migration config settings [see](https://github.com/Capgemin
 The CDS data migrator import user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an import configuration file, the user can have a fine grain control of the import process. When the import config is not specified then the default settings are applied. 
 For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
 
-1. Select **Data Import** on the ribbon which will bring you to the Import Page as shown below:
- ![Initial Import Page](images/InitialImportPage.png "Initial Import Page")
+1. Select **Data Import** from the top ribbon which will bring you to the below page:
+ ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
 
-2. Add in Fetch and Write Settings and save.
- ![Save Import Config file](images/SaveImportConfig.png "Save Import Config file")
+2. If you have an exisiting import config file, you can click on 'Load' to edit that file. This will pre-input the configs that you had stored in that file. If you don't have an existing import config file then you can create one from scratch.
 
-3. Once the import config is generated, the JSON file will be generated at the specified location. Below is an example of the generated file:
- ![Import Config Example](images/ImportConfigExample.png "Import Config Example")
+3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
+ ![Save Export Config file](images/SaveExportConfig.png "Save Export Config file")
+
+4. To save the new or updated import config file, click on 'Save'.
+ ![Save Export Schema Schema File](images/SaveSchemaConfig.png "Save Export Schema Schema File")
+
+Once the import config is generated, the import JSON file will be generated at the specified location. You will also see a success message confirming that the import config file has been created:
+
+*success message screenshot*
+
+Below shows an example import config file:
+
+ ![Export Config Example](images/ExportConfigExample.png "Export Config Example")
 
 **NB:** Ensure the JsonFolderPath exists
 
@@ -113,20 +140,20 @@ Once all the schema and config files are downloaded the next step is to export t
 
 1.	Select **Data Export** from the ribbon and select format type of JSON or CSV.
 
-2.	Select the location to save the file.
+2.	Select the location to save the data.
 
-3.	Select the location of the export config file. (Optional Step)
+3.	Load an existing config file by clicking the 'Load' button (Optional Step)
 
 4.	Select the Target Connection String then select the location of the schema file.
 
 The Data Export page should look something like this:
- ![Run Export](images/RunExport.png "Run Export")
+![Run Export](images/RunExport.png "Run Export")
 
 5.	Select **Run** and the data will be exported to the specified location. You will also see a success message confirming that data export is complete:
- ![Data Export Complete](images/ExportDataComplete.png "Data Export Complete")
+![Data Export Complete](images/ExportDataComplete.png "Data Export Complete")
 
-6.	The Data is now extracted into a JSON file which you can see an example of below: 
- ![Data Export Output](images/DataExportOutput.png "Data Export Output")
+The Data is now extracted into a JSON file which you can see an example of below: 
+![Data Export Output](images/DataExportOutput.png "Data Export Output")
 
 In this example 3 Account records have been extracted with the attributes ‘Account Name’, ‘Email Address’ & ‘Account Number’
 
@@ -137,15 +164,15 @@ To import the exported data into an environment, follow the instructions below
  
 2.	Select the location of the source data.
 
-3.  Select the location of the import config file. (Optional Step)
+3.  Load an existing config file by clicking the 'Load' button (Optional Step)
 
 4.	Select the Target Connection String then select the location of the schema file (schema is only required for CSV).
 
 The Data Import page should look something like this:
- ![Run Import](images/RunImport.png "Run Import")
+![Run Import](images/RunImport.png "Run Import")
 
-4.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
- ![Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
+5.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
+! [Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
 
-5.	Review the Data in D365 
- ![Imported Accounts](images/D365Accounts.png "Imported Accounts")
+You will then be able to view your data in D365. 
+![Imported Accounts](images/D365Accounts.png "Imported Accounts")
