@@ -65,9 +65,9 @@ Connect to an environment and you will be taken to the Schema Configs page as sh
 ### Data Import and Export Schema Generation
 The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
 
-1. Click on 'Schema Config' in the top ribbon if you are not on this page already.
+1. Select **Schema Config** from the top ribbon if you are not on this page already.
 
-2. If you have an exisiting schema, you can click on 'Load Schema' to edit that file. This will pre-select the entities, attributes and relationships that you had stored in that file. If you don't have an existing schema then you can create one from scratch.
+2. If you have an exisiting schema, you can click on 'Load Schema' to edit that file. This will pre-select the entities, attributes and relationships that you had stored in that file.
 
 3. Select (you may also want to unselect if you are editing your loaded schema) the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you can select more than one entity)
 ![Select Schema Configs](images/SelectSchemaConfigs.png "Select Schema Configs")
@@ -92,7 +92,7 @@ For more on the data migration config settings [see](https://github.com/Capgemin
 2. If you have an exisiting export config file, you can click on 'Load' to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Export Config file](images/LoadExportConfig.png "Load Export Config file")
 
-3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
+3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings and ensure you add a schema file.
  ![Edited Export Config file](images/EditedExportConfigs.png "Edited Export Config file")
 
 4. To save the new or updated export config file, click on 'Save'.
@@ -116,7 +116,7 @@ For more on the data migration config settings [see](https://github.com/Capgemin
 2. If you have an exisiting import config file, you can click on 'Load' to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
-3. Add in (or edit if you have loaded an import config file) Fetch and Write Settings (including a schema file if exporting to CSV) and save.
+3. Add in (or edit if you have loaded an import config file) Fetch and Write Settings (including a schema file if importing to CSV) and save.
  ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
 4. To save the new or updated import config file, click on 'Save'.
