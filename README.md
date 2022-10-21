@@ -128,8 +128,6 @@ Below shows an example import config file:
 
  ![Import Config Example](images/ImportConfigExample.png "Import Config Example")
 
-**NB:** Ensure the JsonFolderPath exists
-
 ### Data Export
 Once all the schema and config files are downloaded the next step is to export the data from D365.
 
