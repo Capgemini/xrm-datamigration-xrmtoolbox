@@ -109,6 +109,8 @@ Below shows an example export config file:
 ### Import Config File
 The import config file gives you additional control and features over Microsoft's Configuration Migration Tool. You can understand these options further [here](https://github.com/Capgemini/xrm-datamigration/wiki/Config).
 
+**To create or update an import config:**
+
 1. Select **Data Import** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialImportPage.png "Initial Export Page")
 
