@@ -136,7 +136,7 @@ Once all the schema and config files are saved the next step is to export the da
 
 2.	Select the location to save the data.
 
-3.	Load an existing config file by clicking the 'Load' button (Optional Step)
+3.	If you have a saved export config from [Export Config File](#export-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
 4.	Select the Target Connection String then select the location of the schema file.
 
