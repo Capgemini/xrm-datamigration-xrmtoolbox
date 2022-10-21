@@ -94,7 +94,7 @@ The export config file gives you additional control and features over Microsoft'
 2. If you have an existing export config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Export Config file](images/LoadExportConfig.png "Load Export Config file")
 
-3. Add in (or edit if you have loaded an export config file) Fetch and Write Settings and ensure you add a schema file.
+3. Adjust the fetch and write settings accordingly and ensure you add a schema file.
  ![Edited Export Config file](images/EditedExportConfigs.png "Edited Export Config file")
 
 4. To save the new or updated export config file, click on 'Save'.
