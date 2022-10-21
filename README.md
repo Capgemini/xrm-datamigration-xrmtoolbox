@@ -117,7 +117,7 @@ The import config file gives you additional control and features over Microsoft'
 2. If you have an existing import config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
-3. Add in (or edit if you have loaded an import config file) Fetch and Write Settings (including a schema file if importing to CSV) and save.
+3. Adjust the fetch and write settings accordingly, including a schema file if importing to CSV.
  ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
 4. To save the new or updated import config file, click on 'Save'.
