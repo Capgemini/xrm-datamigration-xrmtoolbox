@@ -74,7 +74,7 @@ The data migrator adheres to a predefined import export schema and the tool can 
 3. Select (you may also want to unselect if you are editing your loaded schema) the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you can select more than one entity)
 ![Select Schema Configs](images/SelectSchemaConfigs.png "Select Schema Configs")
 
-4. To save the file, click on 'Save Schema'
+4. To save the file, click on **Save Schema**.
 ![Save Schema File](images/SaveSchemaConfigs.png "Save Schema File")
 
 Your schema file will be saved at the specified location. This file will contain all selected entities and their respective selected attributes and relationships.
