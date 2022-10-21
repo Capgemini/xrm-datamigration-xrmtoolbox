@@ -138,7 +138,7 @@ Once all the schema and config files are saved the next step is to export the da
 
 3.	If you have a saved export config from [Export Config File](#export-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
-4.	Select the Target Connection String then select the location of the schema file.
+4.	Select the **Environment" if different then verify the location of the schema file.
 
 The Data Export page should look something like this:
 ![Run Export](images/EditedExportConfigs.png "Run Export")
