@@ -107,8 +107,7 @@ Below shows an example export config file:
  ![Export Config Example](images/ExportConfigExample.png "Export Config Example")
 
 ### Import Config File
-The CDS data migrator import user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an import configuration file, the user can have a fine grain control of the import process. When the import config is not specified then the default settings are applied. 
-For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
+The import config file gives you additional control and features over Microsoft's Configuration Migration Tool. You can understand these options further [here](https://github.com/Capgemini/xrm-datamigration/wiki/Config).
 
 1. Select **Data Import** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialImportPage.png "Initial Export Page")
