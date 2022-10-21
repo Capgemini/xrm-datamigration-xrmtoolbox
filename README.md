@@ -86,6 +86,8 @@ Below shows an example schema file:
 ### Export Config File
 The export config file gives you additional control and features over Microsoft's Configuration Migration Tool. You can understand these options further [here](https://github.com/Capgemini/xrm-datamigration/wiki/Config).
 
+**To create or update an export config:**
+
 1. Select **Data Export** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
 
