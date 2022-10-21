@@ -14,7 +14,7 @@
 <img src="https://capgeminiuk.visualstudio.com/Capgemini%20Reusable%20IP/_apis/build/status/NUGET%20CI%20Builds/XrmToolBox%20Plugin" alt="CI Build status"> ![Nuget](https://img.shields.io/nuget/v/Capgemini.DataMigration.XrmToolBoxPlugin)
 
 ### Introduction
-The CDS Data Migrator tool provides an easy to use interface that enables you to generate an XML schema file that can be used to export data from one CRM environment and import into another. The tool not only supports the ability to add entity attributes and many-to-many relationships to the schema, but beyond that, it supports the creation of filters and GUID mappings which are stored as .JSON file formats.
+The CDS Data Migrator tool provides an easy to use interface that enables you to generate an XML schema file that can be used to export data from one CRM environment and import into another. The tool not only supports the ability to add entity attributes and many-to-many relationships to the schema, but beyond that, it supports the creation of filters and GUID mappings which are stored as JSON file formats.
 
 #### Video Intro 
 
@@ -59,107 +59,116 @@ Click the data migrator to launch it. You will be prompted for a connection to D
 
 ![Connectionstring prompt](images/ConnectionStringPrompt.png "Connectionstring prompt")
 
-Connect to an environment and you will be taken to the CDS Migrator landing page as shown below:
-![Data migrator landing page](images/DataMigratorLandingPage.png "Data migrator landing page")
+Connect to an environment and you will be taken to the Schema Configs page as shown below:
+![Schema Configs page](images/InitialSchemaConfig.png "Schema Configs page")
 
-### Data Import and Data Export Schema Generation
-The data migrator adhere to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify an export schema, please follow the steps below:
+### Data Import and Export Schema Generation
+The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. 
 
-1.	Select **Generate/Modify Export Schema** from the Schema Config tab of the data migrator and then select **Next**
-![Generate Modify Export Schema](images/GenerateModifyExportSchema.png "Generate Modify Export Schema")
+**To generate or modify a schema, please follow the steps below:**
 
-2.	Select the required entities and attributes combination, (in this example we are creating a xml file for Accounts & Contacts)
-![Generate Export Schema Select Entity](images/GenerateExportSchemaSelectEntity.png "Generate Export Schema Select Entity")
+1. Select **Schema Config** from the top ribbon if you are not on this page already.
 
-3.	Within the **Schema File Path** input, browse to a location and specify a File Name. Then select **Save**
-![Generate Export Schema Schema File](images/GenerateExportSchemaSchemaFile.png "Generate Export Schema Schema File")
+2. If you have an existing schema, you can click on **Load Schema** to edit that file. This will pre-select the entities, attributes and relationships stored in that file.
 
-4.	The next step is to **Save** the schema as shown below:
- ![Generate Export Schema Save](images/GenerateExportSchemaSave.png "Generate Export Schema Save")
+3. Select/unselect the entities, attributes, and relationships to export/import. In this example, we are creating a schema file for Accounts although you can select multiple entities.
+![Select Schema Configs](images/SelectSchemaConfigs.png "Select Schema Configs")
 
-5.	Once the export schema is generated, a "Successfully created XML file" dialog will pop up and the export schema XML file will be generated at the specified location. This file will contain all selected entities and their respective selected attributes and relationships
+4. To save the file, click on **Save Schema**.
+![Save Schema File](images/SaveSchemaConfigs.png "Save Schema File")
 
- ![Generate Export Schema Save Successful](images/GenerateExportSchemaSaveSuccessful.png "Generate Export Schema Save Successful")
+Your schema file will be saved at the specified location. This file will contain all selected entities and their respective selected attributes and relationships.
 
- ![Generate Export Schema Output](images/GenerateExportSchemaOutput.png "Generate Export Schema Output")
+Below shows an example schema file:
+
+![Schema Config Example](images/SchemaConfigExample.png "Schema Config Example")
 
 ### Export Config File
-The CDS data migrator export user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an export configuration file, the user can have a fine grain control of the export process. When the export config is not specified then the default settings are applied. While those values are beyond the scope of this documentation, it suffices to say that the default values are expected to satisfy most data operation scenarios.
+The export config file gives you additional control and features over Microsoft's Configuration Migration Tool. You can understand these options further [here](https://github.com/Capgemini/xrm-datamigration/wiki/Config).
 
-For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
+**To create or update an export config:**
 
-1.	Select **Generate/Modify Export Config** from the Schema Config tab of the data migrator and then select **Next**
- ![Export Config Start](images/ExportConfigStart.png "Export Config Start")
+1. Select **Data Export** from the top ribbon which will bring you to the below page:
+ ![Initial Export Page](images/InitialExportPage.png "Initial Export Page")
 
-2.	Select the entities and the attributes and then in the **Export Config** browse to a location and input a File Name (in this example we are creating a xml file for Accounts & Contacts), then select **Save**
- ![Export Config Select Entity](images/ExportConfigSelectEntity.png "Export Config Select Entity")
+2. If you have an existing export config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
+![Load Export Config file](images/LoadExportConfig.png "Load Export Config file")
 
-3.	Save the Export Config
- ![Export Config Save](images/ExportConfigSave.png "Export Config Save")
+3. Adjust the fetch and write settings accordingly and ensure you add a schema file.
+ ![Edited Export Config file](images/EditedExportConfigs.png "Edited Export Config file")
 
-4.	Once the export config is generated, a "Successfully created XML file" dialog will pop up and the export JSON file will be generated at the specified location. Below is an example of the generated file
- ![Export Config Output](images/ExportConfigOutput.png "Export Config Output")
+4. To save the new or updated export config file, click on **Save**.
+ ![Save Export Configs](images/SaveExportConfigs.png "Save Export Configs")
 
-**NB:** Ensure the JsonFolderPath exists
+Your export configs file will be saved at the specified location.
+
+Below shows an example export config file:
+
+ ![Export Config Example](images/ExportConfigExample.png "Export Config Example")
 
 ### Import Config File
-The CDS data migrator import user interface exposes only a subset of the available configuration points for the data migration operation. Through the provision of an import configuration file, the user can have a fine grain control of the import process. When the import config is not specified then the default settings are applied. 
-For more on the data migration config settings [see](https://github.com/Capgemini/xrm-datamigration#Usage)
+The import config file gives you additional control and features over Microsoft's Configuration Migration Tool. You can understand these options further [here](https://github.com/Capgemini/xrm-datamigration/wiki/Config).
 
-1.	Select **Generate/Modify Import Config** from the Schema Config tab of the data migrator and then select **Next**
- ![Import Config Start](images/ImportConfigStart.png "Import Config Start")
+**To create or update an import config:**
 
-2.	Select the entities and the attributes and then in the **Import Config** browse to a location and input a File Name (in this example we are creating a xml file for Accounts and Contact), then select **Save**
- ![Import Config Specify Config File](images/ImportConfigSpecifyConfigFile.png "Import Config Specify Config File")
+1. Select **Data Import** from the top ribbon which will bring you to the below page:
+ ![Initial Export Page](images/InitialImportPage.png "Initial Export Page")
 
-3.	Save the Import Config
- ![Import Config Save](images/ImportConfigSave.png "Import Config Save")
+2. If you have an existing import config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
+![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
-4.	Once the import config is generated, a "Successfully created XML file" dialog will pop up and the export JSON file will be generated at the specified location. Below is an example of the generated file
- ![Import Config Output](images/ImportConfigOutput.png "Import Config Output")
+3. Adjust the fetch and write settings accordingly, including a schema file if importing from CSV.
+ ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
-**NB:** Ensure the JsonFolderPath exists
+4. To save the new or updated import config file, click on **Save**.
+ ![Save Import Configs](images/SaveImportConfigs.png "Save Import Configs")
+
+Your import configs file will be saved at the specified location.
+
+Below shows an example import config file:
+
+ ![Import Config Example](images/ImportConfigExample.png "Import Config Example")
 
 ### Data Export
-Once all the schema and config files are downloaded the next step is to export the data. 
-1.	Select **Data Export** from the ribbon and select format type of JSON or CSV, then select **Next**
- ![Data Export Start](images/DataExportStart.png "Data Export Start")
+Once all the schema and config files are saved the next step is to export the data from D365.
 
-2.	Select the location to save the file and then click **Next**
- ![Data Export File Location](images/DataExportFileLocation.png "Data Export File Location")
+1.	Select **Data Export** from the ribbon and select format type of JSON or CSV.
 
-3.	Select the location of the export config file then select Next. (Optional Step)
- ![Data Export Export Config File](images/DataExportExportConfigFile.png "Data Export Export Config File")
+2.	Select the location to save the data.
 
-4.	Select the Target Connection String then select the location of the schema file then click **Next**
- ![Data Export Export Settings](images/DataExportExportSettings.png "Data Export Export Settings")
+3.	If you have a saved export config from [Export Config File](#export-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
-5.	On this screen select **Execute** and the data will be exported to the specified location:
- ![Data Export Execution](images/DataExportExecution.png "Data Export Execution")
+4.	Select the **Environment** if different then verify the location of the schema file.
 
-6.	The Data is now extracted into a JSON file/s which you can see an example of below: 
- ![Data Export Output](images/DataExportOutput.png "Data Export Output")
+The Data Export page should look something like this:
+![Run Export](images/EditedExportConfigs.png "Run Export")
+
+5.	Select **Run** and the data will be exported to the specified location. You will also see a success message confirming that data export is complete:
+
+![Data Export Complete](images/ExportDataComplete.png "Data Export Complete")
+
+The Data is now extracted into a JSON file which you can see an example of below: 
+![Data Export Output](images/DataExportOutput.png "Data Export Output")
 
 In this example 3 Account records have been extracted with the attributes ‘Account Name’, ‘Email Address’ & ‘Account Number’
 
-
 ### Data Import
 To import the exported data into an environment, follow the instructions below
-1.	Select **Data Import** from the ribbon and select format type of JSON or CSV, then select **Next**
- ![Data Import Start](images/DataImportStart.png "Data Import Start")
+
+1.	Select **Data Import** from the ribbon and select format type of JSON or CSV.
  
-2.	Select the location where the source data is stored and select **Next**
- ![Data Import Data Source](images/DataImportDataSource.png "Data Import Data Source")
- 
-In this example accounts and contacts will be imported at the same time.
- ![Data Import Sample Data Source Files](images/DataImportSampleDataSourceFiles.png "Data Import Sample Data Source Files")
+2.	Select the location of the source data.
 
-3.	The next screen requests an Import Config file (Optional Step)
- ![Data Import Import Config](images/DataImportImportConfig.png "Data Import Import Config") 
+3.  If you have a saved import config from [Import Config File](#import-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
-4.	The final step is to Execute the import. The Log will show the progress of the import and notify the user if there are any issues/errors
- ![Data Import Execution](images/DataImportExecution.png "Data Import Execution")
+4.	Select the **Environment** if different then select the location of the schema file (schema is only required for CSV).
 
-5.	Review the Data in D365 
- ![Imported Accounts](images/DataImportImportedAccounts.png "Imported Accounts")
- ![Imported Contacts](images/DataImportImportedContacts.png "Imported Contacts")
+The Data Import page should look something like this:
+![Run Import](images/EditedImportConfigs.png "Run Import")
+
+5.	Select **Run** and the data will be imported into D365. You will also see a success message confirming that data import is complete:
+
+![Data Import Complete](images/ImportDataComplete.png "Data Import Complete")
+
+You will then be able to view your data in D365. 
+![Imported Accounts](images/D365Accounts.png "Imported Accounts")

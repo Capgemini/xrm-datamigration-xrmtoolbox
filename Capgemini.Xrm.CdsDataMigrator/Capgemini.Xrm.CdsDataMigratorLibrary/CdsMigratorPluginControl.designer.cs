@@ -96,7 +96,7 @@
             this.tsbSchemaManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSchemaManager.Name = "tsbSchemaManager";
             this.tsbSchemaManager.Size = new System.Drawing.Size(219, 41);
-            this.tsbSchemaManager.Text = "Schema Config (new)";
+            this.tsbSchemaManager.Text = "Schema Config";
             this.tsbSchemaManager.Click += new System.EventHandler(this.ShowSchemaManager);
             // 
             // tsbShowImportPage
@@ -105,7 +105,7 @@
             this.tsbShowImportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowImportPage.Name = "tsbShowImportPage";
             this.tsbShowImportPage.Size = new System.Drawing.Size(194, 41);
-            this.tsbShowImportPage.Text = "Data Import (new)";
+            this.tsbShowImportPage.Text = "Data Import";
             this.tsbShowImportPage.Click += new System.EventHandler(this.ShowImportPage_Click);
             // 
             // tsbShowExportPage
@@ -114,7 +114,7 @@
             this.tsbShowExportPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowExportPage.Name = "tsbShowExportPage";
             this.tsbShowExportPage.Size = new System.Drawing.Size(191, 41);
-            this.tsbShowExportPage.Text = "Data Export (new)";
+            this.tsbShowExportPage.Text = "Data Export";
             this.tsbShowExportPage.Click += new System.EventHandler(this.ShowExportPage_Click);
             // 
             // sgpManageSchema
