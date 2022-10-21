@@ -130,7 +130,7 @@ Below shows an example import config file:
  ![Import Config Example](images/ImportConfigExample.png "Import Config Example")
 
 ### Data Export
-Once all the schema and config files are downloaded the next step is to export the data from D365.
+Once all the schema and config files are saved the next step is to export the data from D365.
 
 1.	Select **Data Export** from the ribbon and select format type of JSON or CSV.
 
