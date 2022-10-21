@@ -71,7 +71,7 @@ The data migrator adheres to a predefined import export schema and the tool can 
 
 2. If you have an existing schema, you can click on **Load Schema** to edit that file. This will pre-select the entities, attributes and relationships stored in that file.
 
-3. Select (you may also want to unselect if you are editing your loaded schema) the required entities and attributes combination, (in this example we are creating an xml file for Accounts although you can select more than one entity)
+3. Select/unselect the entities, attributes, and relationships to export/import. In this example, we are creating a schema file for Accounts although you can select multiple entities.
 ![Select Schema Configs](images/SelectSchemaConfigs.png "Select Schema Configs")
 
 4. To save the file, click on **Save Schema**.
