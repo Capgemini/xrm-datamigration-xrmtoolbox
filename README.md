@@ -159,7 +159,7 @@ To import the exported data into an environment, follow the instructions below
  
 2.	Select the location of the source data.
 
-3.  Load an existing config file by clicking the 'Load' button (Optional Step)
+3.  If you have a saved import config from [Import Config File](#import-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
 4.	Select the **Environment** if different then select the location of the schema file (schema is only required for CSV).
 
