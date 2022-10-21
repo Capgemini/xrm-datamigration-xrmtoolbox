@@ -120,7 +120,7 @@ The import config file gives you additional control and features over Microsoft'
 3. Adjust the fetch and write settings accordingly, including a schema file if importing to CSV.
  ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
-4. To save the new or updated import config file, click on 'Save'.
+4. To save the new or updated import config file, click on **Save**.
  ![Save Import Configs](images/SaveImportConfigs.png "Save Import Configs")
 
 Your import configs file will be saved at the specified location.
