@@ -117,7 +117,7 @@ The import config file gives you additional control and features over Microsoft'
 2. If you have an existing import config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
-3. Adjust the fetch and write settings accordingly, including a schema file if importing to CSV.
+3. Adjust the fetch and write settings accordingly, including a schema file if importing from CSV.
  ![Edited Import Config file](images/EditedImportConfigs.png "Edited Import Config file")
 
 4. To save the new or updated import config file, click on **Save**.
@@ -138,7 +138,7 @@ Once all the schema and config files are saved the next step is to export the da
 
 3.	If you have a saved export config from [Export Config File](#export-config-file), click **Load**  to open this. Alternatively, adjust these settings now or leave the defaults.
 
-4.	Select the **Environment" if different then verify the location of the schema file.
+4.	Select the **Environment** if different then verify the location of the schema file.
 
 The Data Export page should look something like this:
 ![Run Export](images/EditedExportConfigs.png "Run Export")
