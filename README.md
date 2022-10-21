@@ -63,7 +63,9 @@ Connect to an environment and you will be taken to the Schema Configs page as sh
 ![Schema Configs page](images/InitialSchemaConfig.png "Schema Configs page")
 
 ### Data Import and Export Schema Generation
-The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. To Generate or modify a schema, please follow the steps below:
+The data migrator adheres to a predefined import export schema and the tool can be used to generate the respective schema for import and export. Note that for each of these, both the JSON and CSV formats are supported. 
+
+**To generate or modify a schema, please follow the steps below:**
 
 1. Select **Schema Config** from the top ribbon if you are not on this page already.
 
