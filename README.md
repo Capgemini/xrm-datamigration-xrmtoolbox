@@ -97,7 +97,7 @@ The export config file gives you additional control and features over Microsoft'
 3. Adjust the fetch and write settings accordingly and ensure you add a schema file.
  ![Edited Export Config file](images/EditedExportConfigs.png "Edited Export Config file")
 
-4. To save the new or updated export config file, click on 'Save'.
+4. To save the new or updated export config file, click on **Save**.
  ![Save Export Configs](images/SaveExportConfigs.png "Save Export Configs")
 
 Your export configs file will be saved at the specified location.
