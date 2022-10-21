@@ -161,7 +161,7 @@ To import the exported data into an environment, follow the instructions below
 
 3.  Load an existing config file by clicking the 'Load' button (Optional Step)
 
-4.	Select the Target Connection String then select the location of the schema file (schema is only required for CSV).
+4.	Select the **Environment** if different then select the location of the schema file (schema is only required for CSV).
 
 The Data Import page should look something like this:
 ![Run Import](images/EditedImportConfigs.png "Run Import")
