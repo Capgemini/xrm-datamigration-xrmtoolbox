@@ -114,7 +114,7 @@ The import config file gives you additional control and features over Microsoft'
 1. Select **Data Import** from the top ribbon which will bring you to the below page:
  ![Initial Export Page](images/InitialImportPage.png "Initial Export Page")
 
-2. If you have an exisiting import config file, you can click on 'Load' to edit that file. This will pre-input the configs that you had stored in that file.
+2. If you have an existing import config file, you can click on **Load** to edit that file. This will pre-input the configs that you had stored in that file.
 ![Load Import Config file](images/LoadImportConfig.png "Load Config file")
 
 3. Add in (or edit if you have loaded an import config file) Fetch and Write Settings (including a schema file if importing to CSV) and save.
