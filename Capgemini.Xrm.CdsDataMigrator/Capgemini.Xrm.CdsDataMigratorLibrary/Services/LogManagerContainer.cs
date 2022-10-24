@@ -21,7 +21,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
                 case LogLevel.Error:
                     xrmToolBoxLogManager.LogError(message);
                     break;
-
                 case LogLevel.Warning:
                     xrmToolBoxLogManager.LogWarning(message);
                     break;

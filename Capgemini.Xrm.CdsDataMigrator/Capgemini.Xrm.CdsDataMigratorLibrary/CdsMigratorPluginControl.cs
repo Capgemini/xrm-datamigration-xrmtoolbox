@@ -1,9 +1,8 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin;
-using Capgemini.Xrm.DataMigration.XrmToolBoxPlugin.UserControls;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -19,65 +18,36 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
     public partial class CdsMigratorPluginControl : PluginControlBase, IStatusBarMessenger
     {
         private readonly Settings settings;
+        private ImportPagePresenter ImportPagePresenter;
+        private ExportPagePresenter ExportPagePresenter;
+        private SchemaGeneratorPresenter schemaGeneratorPresenter;
 
         public CdsMigratorPluginControl()
         {
-            SettingFileHandler.GetConfigData<SchemaWizard>(out settings);
+            SettingFileHandler.GetConfigData<CdsMigratorPluginControl>(out settings);
             InitializeComponent();
-            DataImportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
-            DataExportWizard.OnConnectionRequested += OnConnectionRequestedHandler;
-            SchemaGeneratorWizard.OnConnectionRequested += OnConnectionRequestedHandler;
-            SchemaGeneratorWizard.Settings = settings;
-            SchemaGeneratorWizard.BringToFront();
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
-        public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        public override async void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
-            {
-                if (actionName == "SchemaConnection" || actionName == "")
-                {
-                    SchemaGeneratorWizard.OrganizationService = detail.ServiceClient;
-                    SchemaGeneratorWizard.MetadataService = new MetadataService();
-                    SchemaGeneratorWizard.NotificationService = new NotificationService();
-                    SchemaGeneratorWizard.ExceptionService = new ExceptionService();
-                    SchemaGeneratorWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
-                }
-
-                if (actionName == "SourceConnection" || actionName == "")
-                {
-                    DataExportWizard.OrganizationService = detail.ServiceClient;
-                    DataExportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
-
-                    var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ExportWizard)));
-
-                    DataExportWizard.LoggerService = new LoggerService(DataExportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
-                    DataExportWizard.MigratorFactory = new CrmGenericMigratorFactory();
-                    DataExportWizard.DataMigrationService = new DataMigrationService(DataExportWizard.LoggerService, DataExportWizard.MigratorFactory);
-                    DataExportWizard.Presenter = new ExportPresenter(DataExportWizard, DataExportWizard.LoggerService, DataExportWizard.DataMigrationService);
-                    DataExportWizard.OnActionStarted += OnActionStarted;
-                    DataExportWizard.OnActionProgressed += OnActionProgressed;
-                    DataExportWizard.OnActionCompleted += OnActionCompleted;
-                }
-
-                if (actionName == "TargetConnection" || actionName == "")
-                {
-                    var logManagerContainer = new LogManagerContainer(new LogManager(typeof(ImportWizard)));
-                    DataImportWizard.LoggerService = new LoggerService(DataImportWizard.LogDisplay, SynchronizationContext.Current, logManagerContainer);
-                    DataImportWizard.OrganizationService = detail.ServiceClient;
-                    DataImportWizard.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgFriendlyName);
-                    DataImportWizard.OnActionStarted += OnActionStarted;
-                    DataImportWizard.OnActionProgressed += OnActionProgressed;
-                    DataImportWizard.OnActionCompleted += OnActionCompleted;
-                }
-            }
-
-            if (actionName == "")
-            {
+            {   
+                var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
+                var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
+                var metaDataService = new MetadataService();
+                var exceptionService = new ExceptionService();
+                var viewHelpers = new ViewHelpers();
+                var entityRepositoryService = new EntityRepositoryService(detail.ServiceClient);
+                ImportPagePresenter = new ImportPagePresenter(this.importPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, viewHelpers, entityRepositoryService);
+                ExportPagePresenter = new ExportPagePresenter(this.exportPage1, this, dataMigrationService, detail.ServiceClient, metaDataService, exceptionService, viewHelpers);
+                this.importPage1.SetServices(metaDataService, detail.ServiceClient, viewHelpers);
+                this.exportPage1.SetServices(metaDataService, detail.ServiceClient, exceptionService, viewHelpers);
+                schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService(), settings);
+                await schemaGeneratorPresenter.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
+            }   
                 base.UpdateConnection(newService, detail, actionName, parameter);
-            }
         }
 
         private void OnActionCompleted(object sender, EventArgs e)
@@ -100,22 +70,19 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
             RaiseRequestConnectionEvent(e);
         }
 
-        private void ToolStripButtonSchemaConfigClick(object sender, EventArgs e)
+        private void ShowExportPage_Click(object sender, EventArgs e)
         {
-            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
-            SchemaGeneratorWizard.BringToFront();
+            exportPage1.BringToFront();
         }
 
-        private void ToolStripButtonDataImportClick(object sender, EventArgs e)
+        private void ShowSchemaManager(object sender, EventArgs e)
         {
-            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
-            DataImportWizard.BringToFront();
+            sgpManageSchema.BringToFront();
         }
 
-        private void ToolStripButtonDataExportClick(object sender, EventArgs e)
+        private void ShowImportPage_Click(object sender, EventArgs e)
         {
-            SendMessageToStatusBar?.Invoke(this, new StatusBarMessageEventArgs(0, ""));
-            DataExportWizard.BringToFront();
+            importPage1.BringToFront();
         }
     }
 }

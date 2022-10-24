@@ -199,56 +199,40 @@
     <Compile Include="Core\Item.cs" />
     <Compile Include="Core\ListViewItemComparer.cs" />
     <Compile Include="Core\Organisations.cs" />
-    <Compile Include="Core\RecordcounterProcessor.cs" />
     <Compile Include="Core\SettingFileHandler.cs" />
     <Compile Include="Core\Settings.cs" />
-    <Compile Include="Core\WizardMode.cs" />
-    <Compile Include="Core\WizardType.cs" />
     <Compile Include="Enums\DataFormat.cs" />
     <Compile Include="Enums\LogLevel.cs" />
     <Compile Include="Exceptions\ExceptionService.cs" />
     <Compile Include="Exceptions\IExceptionService.cs" />
-    <Compile Include="Exceptions\MappingException.cs" />
     <Compile Include="Exceptions\OrganizationalServiceException.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\FormControlExtensions.cs" />
-    <Compile Include="Forms\FilterEditor.cs">
+    <Compile Include="Extensions\CrmEntityExtensions.cs" />
+    <Compile Include="Extensions\ListViewItemExtensions.cs" />
+    <Compile Include="Extensions\TreeNodeExtensions.cs" />
+    <Compile Include="Extensions\TreeViewExtensions.cs" />
+    <Compile Include="Extensions\XrmMetadataExtensions.cs" />
+    <Compile Include="Forms\ExportFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FilterEditor.Designer.cs">
-      <DependentUpon>FilterEditor.cs</DependentUpon>
+    <Compile Include="Forms\ExportFilterForm.Designer.cs">
+      <DependentUpon>ExportFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MappingList.cs">
+    <Compile Include="Forms\ExportLookupMappingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MappingList.Designer.cs">
-      <DependentUpon>MappingList.cs</DependentUpon>
+    <Compile Include="Forms\ExportLookupMappingsForm.Designer.cs">
+      <DependentUpon>ExportLookupMappingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MappingListLookup.cs">
+    <Compile Include="Helpers\CollectionHelpers.cs" />
+    <Compile Include="Forms\ImportMappingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MappingListLookup.Designer.cs">
-      <DependentUpon>MappingListLookup.cs</DependentUpon>
+    <Compile Include="Forms\ImportMappingsForm.Designer.cs">
+      <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ValidationHelpers.cs" />
-    <Compile Include="Controllers\AttributeController.cs" />
-    <Compile Include="Controllers\ConfigurationController.cs" />
-    <Compile Include="Models\DataMigrationSettings.cs" />
-    <Compile Include="Models\DeserializationSettings.cs" />
-    <Compile Include="Controllers\EntityController.cs" />
-    <Compile Include="Models\ExportConfigSettings.cs" />
-    <Compile Include="Models\ExportSettings.cs" />
-    <Compile Include="Models\FilterEditorState.cs" />
-    <Compile Include="Models\FilterSettings.cs" />
-    <Compile Include="Models\CollectionParameters.cs" />
-    <Compile Include="Models\ImportConfigSettingscs.cs" />
-    <Compile Include="Models\LoadAllSettings.cs" />
-    <Compile Include="Controllers\ControllerBase.cs" />
-    <Compile Include="Models\RecordCountModel.cs" />
-    <Compile Include="Controllers\RelationshipController.cs" />
-    <Compile Include="Models\SaveAllSettings.cs" />
-    <Compile Include="Controllers\SchemaController.cs" />
-    <Compile Include="Models\SerializationSettings.cs" />
+    <Compile Include="Helpers\IViewHelpers.cs" />
+    <Compile Include="Models\ListBoxItem.cs" />
+    <Compile Include="Models\SchemaExtension.cs" />
     <Compile Include="Models\ServiceParameters.cs" />
     <Compile Include="CdsMigratorPluginControl.cs">
       <SubType>UserControl</SubType>
@@ -256,54 +240,96 @@
     <Compile Include="CdsMigratorPluginControl.designer.cs">
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenters\ExportPresenter.cs" />
+    <Compile Include="Presenters\ExportFilterFormPresenter.cs" />
+    <Compile Include="Presenters\ExportMappingsFormPresenter.cs" />
+    <Compile Include="Helpers\ViewHelpers.cs" />
+    <Compile Include="Presenters\SchemaGeneratorParameterBag.cs" />
+    <Compile Include="Presenters\SchemaGeneratorPresenter.cs" />
+    <Compile Include="Presenters\ExportPagePresenter.cs" />
+    <Compile Include="Presenters\IExportFilterFormView.cs" />
+    <Compile Include="Presenters\IExportLookupMappingsView.cs" />
+    <Compile Include="Presenters\IExportPageView.cs" />
+    <Compile Include="Presenters\ISchemaGeneratorView.cs" />
+    <Compile Include="Presenters\IImportMappingsFormView.cs" />
+    <Compile Include="Presenters\IImportPageView.cs" />
+    <Compile Include="Presenters\ImportMappingsFormPresenter.cs" />
+    <Compile Include="Presenters\ImportPagePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AbstractLogger.cs" />
     <Compile Include="Services\CrmGenericMigratorFactory.cs" />
     <Compile Include="Services\DataMigrationService.cs" />
     <Compile Include="Services\EntityRepositoryService.cs" />
     <Compile Include="Services\ICrmGenericMigratorFactory.cs" />
     <Compile Include="Services\IDataMigrationService.cs" />
     <Compile Include="Services\IEntityRepositoryService.cs" />
-    <Compile Include="Services\ILogManager.cs" />
     <Compile Include="Services\ILogManagerContainer.cs" />
     <Compile Include="Services\IMetadataService.cs" />
     <Compile Include="Services\INotificationService.cs" />
-    <Compile Include="Services\LoggerService.cs" />
+    <Compile Include="Services\LogToFileService.cs" />
     <Compile Include="Services\LogManagerContainer.cs" />
     <Compile Include="Services\MetadataService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Controllers\ListController.cs" />
-    <Compile Include="UserControls\ExportWizard.cs">
+    <Compile Include="UserControls\DataverseEnvironmentSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ExportWizard.designer.cs">
-      <DependentUpon>ExportWizard.cs</DependentUpon>
+    <Compile Include="UserControls\DataverseEnvironmentSelector.Designer.cs">
+      <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ImportWizard.cs">
+    <Compile Include="UserControls\EntityListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ImportWizard.designer.cs">
-      <DependentUpon>ImportWizard.cs</DependentUpon>
+    <Compile Include="UserControls\EntityListView.Designer.cs">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SchemaWizard.cs">
+    <Compile Include="UserControls\ExportPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\SchemaWizard.designer.cs">
-      <DependentUpon>SchemaWizard.cs</DependentUpon>
+    <Compile Include="UserControls\ExportPage.Designer.cs">
+      <DependentUpon>ExportPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FolderInputSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FolderInputSelector.Designer.cs">
+      <DependentUpon>FolderInputSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FileInputSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FileInputSelector.Designer.cs">
+      <DependentUpon>FileInputSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ImportPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ImportPage.Designer.cs">
+      <DependentUpon>ImportPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ListManagerView.Designer.cs">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MigratorEventArgs.cs" />
+    <Compile Include="UserControls\SchemaGeneratorPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SchemaGeneratorPage.Designer.cs">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ToggleBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UserControls\WizardButtons.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\WizardButtons.Designer.cs">
-      <DependentUpon>WizardButtons.cs</DependentUpon>
     </Compile>
     <Compile Include="Presenters\IExportView.cs" />
   </ItemGroup>
@@ -315,14 +341,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\FilterEditor.resx">
-      <DependentUpon>FilterEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ExportFilterForm.resx">
+      <DependentUpon>ExportFilterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MappingList.resx">
-      <DependentUpon>MappingList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MappingListLookup.resx">
-      <DependentUpon>MappingListLookup.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ImportMappingsForm.resx">
+      <DependentUpon>ImportMappingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CdsMigratorPluginControl.resx">
       <DependentUpon>CdsMigratorPluginControl.cs</DependentUpon>
@@ -330,25 +353,40 @@
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ExportWizard.resx">
-      <DependentUpon>ExportWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ImportWizard.resx">
-      <DependentUpon>ImportWizard.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\DataverseEnvironmentSelector.resx">
+      <DependentUpon>DataverseEnvironmentSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\SchemaWizard.resx">
-      <DependentUpon>SchemaWizard.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\EntityListView.resx">
+      <DependentUpon>EntityListView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\WizardButtons.resx">
-      <DependentUpon>WizardButtons.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\ExportPage.resx">
+      <DependentUpon>ExportPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tsbCloseThisTab.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tsbLoadAssemblies.Image1.png" />
+    <EmbeddedResource Include="UserControls\FolderInputSelector.resx">
+      <DependentUpon>FolderInputSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\FileInputSelector.resx">
+      <DependentUpon>FileInputSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ImportPage.resx">
+      <DependentUpon>ImportPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ListManagerView.resx">
+      <DependentUpon>ListManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SchemaGeneratorPage.resx">
+      <DependentUpon>SchemaGeneratorPage.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\entities.gif" />
@@ -357,13 +395,7 @@
     <None Include="Resources\export1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tsddbCompare.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\btImport.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\saveToCRMServerToolStripMenuItem.Image.png" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\SecurityCodeScan.VS2019.5.1.0\analyzers\dotnet\SecurityCodeScan.VS2019.dll" />
@@ -371,11 +403,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF $(ConfigurationName) == Debug (
+    <PostBuildEvent>
+      IF $(ConfigurationName) == Debug (
       IF NOT EXIST Plugins mkdir Plugins
       xcopy "$(TargetDir)$(TargetFileName)" "$(TargetDir)Plugins\" /Y
       xcopy "$(TargetDir)$(TargetName).pdb" "$(TargetDir)Plugins\" /Y
-      )</PostBuildEvent>
+      )
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.  

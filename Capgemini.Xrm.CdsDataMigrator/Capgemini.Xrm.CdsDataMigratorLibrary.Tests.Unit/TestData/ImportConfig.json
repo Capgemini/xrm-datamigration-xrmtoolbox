@@ -20,42 +20,31 @@
   "OneEntityPerBatch": true,
   "FilePrefix": "ExportedData",
   "SeperateFilesPerEntity": true,
-  "LookupMapping": {
-    "systemuser": {
-      "businessunitid": [
-        "name"
-      ]
-    },
-    "systemuserroles": {
-      "systemuserid": [
-        "domainname"
-      ],
-      "roleid": [
-        "name",
-        "businessunitid"
-      ]
-    },
-    "teammembership": {
-      "systemuserid": [
-        "domainname"
-      ],
-      "teamid": [
-        "name",
-        "businessunitid"
-      ]
-    },
-    "systemuserprofiles": {
-      "systemuserid": [
-        "domainname"
-      ],
-      "fieldsecurityprofileid": [
-        "name"
-      ]
-    },
-    "usersettings": {
-      "systemuserid": [
-        "domainname"
-      ]
-    }
+  "MigrationConfig": {
+    "ApplyAliasMapping": true,
+    "Mappings": {
+      "Account": {
+        "00000000-0000-0000-0000-000000000003": "00000000-0000-0000-0000-000000000004"
+      },
+      "App Action": {
+        "00000000-0000-0000-0000-000000000004": "00000000-0000-0000-0000-000000000005"
+      },
+      "AAD User": {
+        "00000000-0000-0000-0000-000000000006": "00000000-0000-0000-0000-000000000007"
+      }
+  },
+  "systemuserprofiles": {
+    "systemuserid": [
+      "domainname"
+    ],
+    "fieldsecurityprofileid": [
+      "name"
+    ]
+  },
+  "usersettings": {
+    "systemuserid": [
+      "domainname"
+    ]
   }
+}
 }

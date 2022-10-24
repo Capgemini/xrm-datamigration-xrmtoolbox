@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+using Capgemini.Xrm.DataMigration.Core;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
@@ -20,13 +22,15 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 
         protected Mock<IExceptionService> ExceptionServicerMock { get; set; }
 
-        protected Mock<ILogManagerContainer> LogManagerContainerMock { get; set; }
+        protected Mock<IViewHelpers> ViewHelpersMock { get; set; }
 
-        protected Mock<ILogManager> LogConfigMock { get; set; }
+        protected Mock<ILogManagerContainer> LogManagerContainerMock { get; set; }
 
         protected Mock<IDataMigrationService> DataMigrationServiceMock { get; set; }
 
-        protected Mock<IEntityRepositoryService> EntityRepositoryService { get; set; }
+        protected Mock<IEntityRepositoryService> EntityRepositoryServiceMock { get; set; }
+
+        protected Mock<IEntityRepository> EntityRepositoryMock { get; set; }
 
         protected static void InsertManyToManyRelationshipMetadata(EntityMetadata entityMetadata, ManyToManyRelationshipMetadata relationship)
         {
@@ -121,10 +125,11 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
             MetadataServiceMock = new Mock<IMetadataService>();
             NotificationServiceMock = new Mock<INotificationService>();
             ExceptionServicerMock = new Mock<IExceptionService>();
+            ViewHelpersMock = new Mock<IViewHelpers>();
             LogManagerContainerMock = new Mock<ILogManagerContainer>();
-            LogConfigMock = new Mock<ILogManager>();
             DataMigrationServiceMock = new Mock<IDataMigrationService>();
-            EntityRepositoryService = new Mock<IEntityRepositoryService>();
+            EntityRepositoryServiceMock = new Mock<IEntityRepositoryService>();
+            EntityRepositoryMock = new Mock<IEntityRepository>();
         }
     }
 }

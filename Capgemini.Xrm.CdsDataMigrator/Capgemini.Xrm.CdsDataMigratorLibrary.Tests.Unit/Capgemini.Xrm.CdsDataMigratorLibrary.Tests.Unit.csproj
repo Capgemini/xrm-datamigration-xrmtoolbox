@@ -77,11 +77,11 @@
     <Reference Include="FluentAssertions, Version=5.10.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.5.10.3\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2020.12.37, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2020.12.37\lib\net462\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2021.1.39, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2021.1.39\lib\net462\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2020.12.37, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2020.12.37\lib\net462\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2021.1.39, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2021.1.39\lib\net462\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.29\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -225,68 +225,52 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
-    <Compile Include="Controllers\AttributeControllerTests.cs" />
-    <Compile Include="Controllers\ConfigurationControllerTests.cs" />
-    <Compile Include="Controllers\ControllerBaseTests.cs" />
-    <Compile Include="Controllers\EntityControllerTests.cs" />
-    <Compile Include="Controllers\RelationshipControllerTests.cs" />
-    <Compile Include="Controllers\SchemaControllerTests.cs" />
+    <Compile Include="Extensions\CrmEntityExtensionsTests.cs" />
+    <Compile Include="Extensions\ListViewItemExtensionsTests.cs" />
+    <Compile Include="Extensions\TreeNodeExtensionsTests.cs" />
+    <Compile Include="Extensions\TreeViewExtensionsTests.cs" />
+    <Compile Include="Extensions\XrmMetadataExtensionsTests.cs" />
+    <Compile Include="Helpers\CollectionHelpersTests.cs" />
+    <Compile Include="Helpers\ViewHelpersTests.cs" />
+    <Compile Include="Model\MigratorEventArgsTests.cs" />
     <Compile Include="Core\AttributeTypeMappingTests.cs" />
     <Compile Include="Core\EntitySettingsTests.cs" />
     <Compile Include="Core\ListViewItemComparerTests.cs" />
     <Compile Include="Core\OrganisationsTests.cs" />
-    <Compile Include="Core\RecordCounterProcessorTests.cs" />
     <Compile Include="Core\SettingFileHandlerTest.cs" />
     <Compile Include="Core\SettingsTests.cs" />
-    <Compile Include="Exceptions\MappingExceptionTests.cs" />
     <Compile Include="Exceptions\OrganizationalServiceExceptionTests.cs" />
-    <Compile Include="Extensions\ExceptionExtensionsTests.cs" />
-    <Compile Include="Extensions\FormControlExtensionsTests.cs" />
-    <Compile Include="Forms\FilterEditorTests.cs" />
-    <Compile Include="Forms\MappingListLookupTests.cs" />
-    <Compile Include="Forms\MappingListTests.cs" />
-    <Compile Include="Helpers\ValidationHelpersTests.cs" />
+    <Compile Include="Extensions\MockWorkerHostExtensions.cs" />
+    <Compile Include="Forms\ExportFilterFormTests.cs" />
+    <Compile Include="Forms\ExportLookupMappingsFormTests.cs" />
+    <Compile Include="Forms\ImportMappingsFormTests.cs" />
     <Compile Include="CdsMigratorPluginControlTests.cs" />
-    <Compile Include="Mocks\MockupForExportWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Mocks\MockupForImportWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Mocks\MockupForSchemaWizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Mocks\TestSynchronizationContext.cs" />
-    <Compile Include="Model\CollectionParametersTests.cs" />
+    <Compile Include="Presenters\ExportFilterFormPresenterTests.cs" />
+    <Compile Include="Presenters\ExportLookupMappingsFormPresenterTests.cs" />
+    <Compile Include="Presenters\ExportPagePresenterTests.cs" />
+    <Compile Include="Presenters\SchemaGeneratorParameterBagTests.cs" />
+    <Compile Include="Presenters\SchemaGeneratorPresenterTests.cs" />
+    <Compile Include="Presenters\ImportMappingsFormPresenterTests.cs" />
+    <Compile Include="Presenters\ImportPagePresenterTests.cs" />
     <Compile Include="Services\LogManagerContainerTests.cs" />
-    <Compile Include="Services\LoggerServiceTests.cs" />
-    <Compile Include="Model\DataMigrationSettingsTests.cs" />
-    <Compile Include="Model\DeserializationSettingsTests.cs" />
-    <Compile Include="Model\ExportConfigSettingsTests.cs" />
-    <Compile Include="Model\ExportSettingsTests.cs" />
-    <Compile Include="Model\FilterSettingsTests.cs" />
-    <Compile Include="Model\ImportConfigSettingscsTests.cs" />
-    <Compile Include="Model\LoadAllSettingsTests.cs" />
-    <Compile Include="Model\RecordCountModelTests.cs" />
-    <Compile Include="Model\SaveAllSettingsTests.cs" />
-    <Compile Include="Model\SerializationSettingsTests.cs" />
     <Compile Include="Model\ServiceParametersTests.cs" />
-    <Compile Include="Presenters\ExportPresenterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CrmGenericMigratorFactoryTests.cs" />
     <Compile Include="Services\DataMigrationServiceTests.cs" />
     <Compile Include="Services\EntityRepositoryServiceTests.cs" />
+    <Compile Include="Services\LogToFileServiceTests.cs" />
     <Compile Include="Services\MetadataServiceTests.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="Controllers\ListControllerTests.cs" />
-    <Compile Include="UserControls\ExportWizardTests.cs" />
-    <Compile Include="UserControls\ImportWizardTests.cs" />
-    <Compile Include="Mocks\MockupForWizardButtons.cs">
+    <Compile Include="UserControls\ExportPageTests.cs" />
+    <Compile Include="UserControls\ImportPageTests.cs" />
+    <Compile Include="Mocks\MockEntityListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\SchemaWizardTests.cs" />
+    <Compile Include="UserControls\ListManagerViewTests.cs" />
+    <Compile Include="UserControls\SchemaGeneratorPageTests.cs" />
     <Compile Include="UserControls\ToggleCheckBoxTests.cs" />
-    <Compile Include="UserControls\WizardButtonsTests.cs" />
+    <Compile Include="UserControls\EntityListViewTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
