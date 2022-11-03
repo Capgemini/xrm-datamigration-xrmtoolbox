@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
-    <AssemblyName>Capgemini.Xrm.DataMigration.XrmToolBox</AssemblyName>
+    <AssemblyName>Capgemini.Xrm.CdsDataMigrator</AssemblyName>
     <TargetFramework>net462</TargetFramework>
     <AssemblyTitle>Capgemini.Xrm.CdsDataMigrator</AssemblyTitle>
     <Product>Capgemini.Xrm.CdsDataMigrator</Product>
@@ -124,5 +124,7 @@
       <Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
     </Delete>
     <Message Text="Files deleted: @(FilesDeleted)" />
+
+    <Copy SourceFiles="$(OutDir)Plugins\$(AssemblyName).dll" DestinationFolder="$(WorkingDirectory)" />
   </Target>
 </Project>
