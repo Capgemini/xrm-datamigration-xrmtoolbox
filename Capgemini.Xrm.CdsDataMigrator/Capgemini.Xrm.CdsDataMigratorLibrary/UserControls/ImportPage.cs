@@ -133,17 +133,6 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         #region event mappings
 
-        [ExcludeFromCodeCoverage]
-        private void Button3Click(object sender, EventArgs e)
-        {
-            var fd = openFileDialog.ShowDialog();
-
-            if (fd == DialogResult.OK)
-            {
-                tbImportSchema.Text = openFileDialog.FileName;
-            }
-        }
-
         public void RadioButtonCheckedChanged(object sender, EventArgs e)
         {
             rbnDataFormatCsv.Checked = !rbnDataFormatJson.Checked;

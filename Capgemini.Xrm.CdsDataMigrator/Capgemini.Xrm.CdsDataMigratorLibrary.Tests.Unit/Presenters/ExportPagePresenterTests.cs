@@ -12,6 +12,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
 using NuGet;
+using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;

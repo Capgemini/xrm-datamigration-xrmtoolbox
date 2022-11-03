@@ -13,6 +13,7 @@ using NuGet;
 using Microsoft.Xrm.Sdk;
 using System.Linq;
 using Microsoft.Xrm.Sdk.Metadata;
+using NuGet.Packaging;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {

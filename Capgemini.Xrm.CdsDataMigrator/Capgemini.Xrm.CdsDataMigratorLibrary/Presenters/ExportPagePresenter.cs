@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using NuGet.Packaging;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
