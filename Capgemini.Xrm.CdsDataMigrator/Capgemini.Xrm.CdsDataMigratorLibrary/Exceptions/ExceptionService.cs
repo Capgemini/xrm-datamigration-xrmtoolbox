@@ -1,5 +1,5 @@
-﻿using System;
-using McTools.Xrm.Connection;
+﻿using McTools.Xrm.Connection;
+using System;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions
 {

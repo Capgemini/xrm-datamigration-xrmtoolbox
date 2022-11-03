@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using Microsoft.Xrm.Sdk.Metadata;
-using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using System.Reflection;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests

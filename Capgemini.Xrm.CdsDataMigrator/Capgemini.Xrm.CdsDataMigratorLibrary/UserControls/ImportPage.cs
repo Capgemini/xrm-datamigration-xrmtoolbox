@@ -14,13 +14,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ImportPage : UserControl, IImportPageView
     {
-        private ImportMappingsForm importMappingsForm;
-        private ImportMappingsFormPresenter importLookupMappingsFormPresenter;
+        private readonly ImportMappingsForm importMappingsForm;
+        private readonly ImportMappingsFormPresenter importLookupMappingsFormPresenter;
 
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
-        public event EventHandler SchemaConfigPathChanged;  
+        public event EventHandler SchemaConfigPathChanged;
 
         public ImportPage()
         {
@@ -50,13 +50,13 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             get => tcbIgnoreSystemFields.Checked;
             set => tcbIgnoreSystemFields.Checked = value;
         }
-        
+
         string IImportPageView.JsonFolderPath
         {
             get => fisJsonFolderPath.Value;
             set => fisJsonFolderPath.Value = value;
         }
-        
+
         DataFormat IImportPageView.DataFormat
         {
             get
@@ -166,7 +166,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
         {
             this.RunConfigClicked?.Invoke(sender, e);
         }
-        
+
         #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿using Capgemini.DataMigration.Resiliency;
-using Capgemini.DataMigration.Resiliency.Polly;
+﻿using Capgemini.DataMigration.Resiliency.Polly;
 using Capgemini.Xrm.DataMigration.Core;
 using Capgemini.Xrm.DataMigration.Repositories;
 using Microsoft.Xrm.Sdk;

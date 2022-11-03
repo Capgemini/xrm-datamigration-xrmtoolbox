@@ -1,9 +1,9 @@
-﻿using System;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Moq;
+using System;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
 {

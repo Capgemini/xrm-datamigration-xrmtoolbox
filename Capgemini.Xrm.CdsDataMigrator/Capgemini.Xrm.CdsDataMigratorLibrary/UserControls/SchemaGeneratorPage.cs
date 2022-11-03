@@ -1,12 +1,11 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
-using Microsoft.Win32;
-using XrmToolBox.Extensibility;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {

@@ -14,11 +14,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Forms
     public partial class ExportFilterForm : Form, IExportFilterFormView
     {
 
-    public event EventHandler OnVisible;
-    public event EventHandler OnEntitySelected;
-    public event EventHandler OnFilterTextChanged;
+        public event EventHandler OnVisible;
+        public event EventHandler OnEntitySelected;
+        public event EventHandler OnFilterTextChanged;
 
-    public ExportFilterForm()
+        public ExportFilterForm()
         {
             InitializeComponent();
 

@@ -2,7 +2,6 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
@@ -11,7 +10,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
-using NuGet;
 using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
@@ -159,7 +157,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns(importConfigFilePath);
 
             // Act
-            mockImportView.Raise(x => x.SaveConfigClicked +=null, EventArgs.Empty);
+            mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             // Assert
             mockImportView.VerifyAll();
@@ -260,7 +258,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                 .Returns("a-random-non-existent-file");
 
             // Act
-            mockImportView.Raise(x => x.SaveConfigClicked +=null, EventArgs.Empty);
+            mockImportView.Raise(x => x.SaveConfigClicked += null, EventArgs.Empty);
 
             //Assert
             mockImportView.VerifyAll();
@@ -287,7 +285,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
         public void SaveConfig_ShouldReuseLoadedFilePath()
         {
             // Arrange
-            var importConfigFilePath  = @"TestData\NewImportConfig.json";
+            var importConfigFilePath = @"TestData\NewImportConfig.json";
             var importConfig = CrmImportConfig.GetConfiguration(importConfigFilePath);
             var viewMappings = ProvideMappingsAsViewType();
             mockImportView.SetupGet(x => x.Mappings).Returns(viewMappings);
@@ -350,7 +348,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             var workInfo = mockWorkerHost.Invocations[0].Arguments[0].As<WorkAsyncInfo>();
             workInfo.Work(null, null);
-            
+
             // Assert
             mockImportView.VerifyAll();
             workInfo.Message.Should().Be("Importing data...");
@@ -436,7 +434,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             mockImportView.SetupGet(x => x.MaxThreads).Returns(2);
             var thrownException = new Exception("Test exception");
             DataMigrationServiceMock
-                .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny< CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 2, EntityRepositoryServiceMock.Object))
+                .Setup(x => x.ImportData(It.IsAny<IOrganizationService>(), It.IsAny<DataFormat>(), It.IsAny<CrmSchemaConfiguration>(), It.IsAny<CrmImportConfig>(), 2, EntityRepositoryServiceMock.Object))
                 .Throws(thrownException);
 
             // Act
@@ -558,7 +556,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000001" });
             dataGridViewRow.Cells.Add(new DataGridViewTextBoxCell { Value = "00000000-0000-0000-0000-000000000002" });
             mappings.Add(dataGridViewRow);
-            
+
             return mappings;
         }
 
@@ -641,5 +639,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             return mappings;
         }
-    }  
+    }
 }
