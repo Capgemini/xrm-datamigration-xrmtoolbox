@@ -127,11 +127,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\stylecop.json">
-      <Link>stylecop.json</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Update="Forms\FilterEditor.resx">
       <DependentUpon>FilterEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,24 +153,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tsbCloseThisTab.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tsbLoadAssemblies.Image1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\entities.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\export1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tsddbCompare.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\btImport.Image.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\saveToCRMServerToolStripMenuItem.Image.png" />
   </ItemGroup>
 </Project>

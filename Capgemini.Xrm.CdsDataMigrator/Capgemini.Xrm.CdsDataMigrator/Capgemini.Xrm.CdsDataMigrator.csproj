@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
-    <AssemblyName>Capgemini.Xrm.CdsDataMigrator</AssemblyName>
     <TargetFramework>net462</TargetFramework>
+    <AssemblyName>Capgemini.Xrm.CdsDataMigrator</AssemblyName>
     <AssemblyTitle>Capgemini.Xrm.CdsDataMigrator</AssemblyTitle>
     <Product>Capgemini.Xrm.CdsDataMigrator</Product>
+    <Company>Capgemini</Company>
     <Description>
       The CDS Data Migrator tool provides an easy to use interface that enables you to generate an XML schema file that can be used to export data from one Dataverse environment and import into another. The tool not only supports the ability to add entity attributes and many-to-many relationships to the schema, but beyond that, it supports the creation of filters and GUID mappings which are stored as JSON file formats.
       Its key features include:
@@ -18,14 +19,16 @@
     </Description>
     <Copyright>Capgemini Copyright © 2022</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <Authors>Capgemini</Authors>
-    <PackageIconUrl>https://icon.com</PackageIconUrl>
-    <PackageId>Capgemini.DataMigration.XrmToolBoxPlugin</PackageId>
-    <PackageProjectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</PackageProjectUrl>
-    <PackageTags>XrmToolBox Plugins</PackageTags>
-    <BuildOutputTargetFolder>Plugins</BuildOutputTargetFolder>
     <IncludeSymbols>true</IncludeSymbols>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Capgemini.DataMigration.XrmToolBoxPlugin</PackageId>
+    <PackageTags>XrmToolBox Plugins</PackageTags>
+    <Authors>Capgemini</Authors>
+    <PackageProjectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
