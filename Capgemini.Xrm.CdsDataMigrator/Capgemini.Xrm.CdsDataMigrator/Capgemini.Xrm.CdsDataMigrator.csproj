@@ -16,13 +16,15 @@
       6) Apply Filters included in the export / import process,
       7) Ability to migrate Calendars.
     </Description>
-    <Copyright>Capgemini Copyright © 2021</Copyright>
+    <Copyright>Capgemini Copyright © 2022</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <Authors>Capgemini</Authors>
     <PackageIconUrl>https://icon.com</PackageIconUrl>
     <PackageId>Capgemini.DataMigration.XrmToolBoxPlugin</PackageId>
     <PackageProjectUrl>https://github.com/Capgemini/xrm-datamigration-xrmtoolbox</PackageProjectUrl>
     <PackageTags>XrmToolBox Plugins</PackageTags>
+    <BuildOutputTargetFolder>Plugins</BuildOutputTargetFolder>
+    <IncludeSymbols>true</IncludeSymbols>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -113,6 +115,7 @@
     <ILRepack OutputType="$(OutputType)" MainAssembly="$(AssemblyName).dll" OutputAssembly="$(AssemblyName).dll" InputAssemblies="@(InputAssemblies)" InternalizeExcludeAssemblies="@(InternalizeExcludeAssemblies)" WorkingDirectory="$(WorkingDirectory)" />
 
     <Copy SourceFiles="$(WorkingDirectory)\$(AssemblyName).dll" DestinationFolder="$(OutDir)Plugins" />
+    <Copy SourceFiles="$(WorkingDirectory)\$(AssemblyName).pdb" DestinationFolder="$(OutDir)Plugins" />
 
     <ItemGroup>
       <FilesToDelete Include="$(WorkingDirectory)\*.dll" />
@@ -126,5 +129,6 @@
     <Message Text="Files deleted: @(FilesDeleted)" />
 
     <Copy SourceFiles="$(OutDir)Plugins\$(AssemblyName).dll" DestinationFolder="$(WorkingDirectory)" />
+    <Copy SourceFiles="$(OutDir)Plugins\$(AssemblyName).pdb" DestinationFolder="$(WorkingDirectory)" />
   </Target>
 </Project>
