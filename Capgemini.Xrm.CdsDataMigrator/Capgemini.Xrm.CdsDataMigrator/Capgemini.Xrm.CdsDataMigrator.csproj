@@ -20,6 +20,7 @@
     <Copyright>Capgemini Copyright © 2022</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IncludeSymbols>true</IncludeSymbols>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Capgemini.DataMigration.XrmToolBoxPlugin</PackageId>
