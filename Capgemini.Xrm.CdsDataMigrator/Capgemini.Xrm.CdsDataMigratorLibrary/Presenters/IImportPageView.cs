@@ -24,7 +24,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         DataFormat DataFormat { get; set; }
         IOrganizationService Service { get; }
-        
+
         event EventHandler LoadConfigClicked;
         event EventHandler SaveConfigClicked;
         event EventHandler RunConfigClicked;

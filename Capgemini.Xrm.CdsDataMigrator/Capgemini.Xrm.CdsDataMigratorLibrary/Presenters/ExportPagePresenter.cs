@@ -1,11 +1,11 @@
 ﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
-using NuGet;
+using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -80,7 +80,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 }
                 config.SaveConfiguration(configFilePath);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -120,7 +120,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             this.view.SchemaConfiguration = GetSchemaConfiguration();
         }
 
-        private  CrmSchemaConfiguration GetSchemaConfiguration()
+        private CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
             {
@@ -211,7 +211,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         private void AddMappingsForExistingEntity(string refField, string mapField, string entity, Dictionary<string, Dictionary<string, List<string>>> lookupMappings)
         {
             if (DoesRefFieldAlreadyExistWithinMapping(refField, entity, lookupMappings))
-            {   
+            {
                 if (DoesListAlreadyContainMapfield(refField, mapField, entity, lookupMappings))
                 {
                     return;
@@ -256,7 +256,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             var lookupMappings = new List<DataGridViewRow>();
             var entitiesDataSource = metaDataService.RetrieveEntities(organisationService);
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> entity in config.LookupMapping)
-            {    
+            {
                 foreach (string mapField in entity.Value.Keys)
                 {
                     foreach (string refField in entity.Value[mapField])
@@ -264,7 +264,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                         var newRow = AddCellsToDataGridViewRow(entity, entitiesDataSource, mapField, refField);
                         lookupMappings.Add(newRow);
                     }
-                }     
+                }
             }
             return lookupMappings;
         }

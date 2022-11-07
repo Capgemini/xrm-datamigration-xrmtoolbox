@@ -2,7 +2,6 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Forms;
@@ -42,7 +41,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.EntityListDataSource = entities.Select(x => x.LogicalName).OrderBy(n => n);
             }
         }
-        
+
         [ExcludeFromCodeCoverage]
         public void Dispose()
         {

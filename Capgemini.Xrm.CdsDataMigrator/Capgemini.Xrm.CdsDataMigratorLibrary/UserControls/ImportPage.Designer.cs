@@ -542,7 +542,6 @@
         private System.Windows.Forms.FlowLayoutPanel fplFileTypes;
         private System.Windows.Forms.RadioButton rbnDataFormatJson;
         private System.Windows.Forms.RadioButton rbnDataFormatCsv;
-        private System.Windows.Forms.TextBox tbImportSchema;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbLoad;
         private System.Windows.Forms.ToolStripButton tsbSave;

@@ -29,9 +29,9 @@ jobs:
         displayName: Output SemVer
 
       - task: NuGetToolInstaller@0
-        displayName: 'Use NuGet 4.4.1'
+        displayName: 'Use NuGet'
         inputs:
-          versionSpec: 4.4.1
+          versionSpec: 5.2
 
       - task: NuGetCommand@2
         displayName: 'NuGet restore'
@@ -94,7 +94,7 @@ jobs:
         displayName: Pack NuGet package
         inputs:
           command: pack
-          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.nuspec            
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj            
           packDestination: '$(Build.ArtifactStagingDirectory)/out'
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2

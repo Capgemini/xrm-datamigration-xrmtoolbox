@@ -2,7 +2,6 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Extensions;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
@@ -11,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
-using NuGet;
+using NuGet.Packaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -282,7 +281,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Presenters
             var exportConfig = CrmExporterConfig.GetConfiguration(exportConfigFilePath);
             exportConfig.LookupMapping.Should().BeEquivalentTo(configMappings);
         }
-        
+
         [TestMethod]
         public void SaveConfig_ShouldCorrectlyAddMappingWhereEntityAlreadyExistsAndMapFieldAlreadyExistsAndRefFieldIsDifferent()
         {

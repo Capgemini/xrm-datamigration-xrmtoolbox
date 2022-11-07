@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
