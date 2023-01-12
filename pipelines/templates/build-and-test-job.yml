@@ -99,6 +99,7 @@ jobs:
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2
           includesymbols: false
+          nobuild: true
           buildProperties: Configuration=$(buildConfiguration)
           packDirectory: $(Build.ArtifactStagingDirectory)/out
 
