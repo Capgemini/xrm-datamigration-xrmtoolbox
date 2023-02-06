@@ -90,7 +90,7 @@ jobs:
           packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj
           modifyOutputPath: true 
           versioningScheme: byEnvVar
-          versionEnvVar: GitVersion.NuGetVersionV2
+          versionEnvVar: GitVersion.AssemblySemFileVer
           includesymbols: false
           nobuild: true
           buildProperties: Configuration=$(buildConfiguration)
