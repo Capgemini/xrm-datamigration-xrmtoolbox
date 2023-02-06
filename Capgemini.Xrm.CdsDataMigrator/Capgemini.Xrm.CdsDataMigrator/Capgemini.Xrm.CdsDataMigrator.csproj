@@ -14,6 +14,7 @@
       7) Ability to migrate Calendars.
     </Description>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IncludeSymbols>true</IncludeSymbols>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
