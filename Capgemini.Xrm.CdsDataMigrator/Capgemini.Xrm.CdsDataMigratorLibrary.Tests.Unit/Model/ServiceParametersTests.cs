@@ -1,11 +1,12 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
-using System.Collections.Generic;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
 {
@@ -15,7 +16,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
         private Dictionary<string, HashSet<string>> inputEntityRelationships;
         private Dictionary<string, HashSet<string>> inputEntityAttributes;
 
-
+        
         private ServiceParameters systemUnderTest;
 
         [TestInitialize]
@@ -89,7 +90,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
         [TestMethod]
         public void GetAttributeList()
         {
-            string entityLogicalName = "contact";
+            string entityLogicalName = "contact"; 
             var entityMetadata = new EntityMetadata();
             bool showSystemAttributes = true;
             var serviceParameters = GenerateMigratorParameters();
@@ -98,7 +99,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes);
+            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes );
 
             actual.Should().BeNull();
         }
@@ -106,7 +107,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
         [TestMethod]
         public void GetAttributeListMetaDataServiceReturnsEnities()
         {
-            string entityLogicalName = "contact";
+            string entityLogicalName = "contact"; 
             bool showSystemAttributes = true;
 
             var serviceParameters = GenerateMigratorParameters();
@@ -118,7 +119,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Model
                                 .Returns(entityMetadata)
                                 .Verifiable();
 
-            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes);
+            var actual = systemUnderTest.GetAttributeList(entityLogicalName, showSystemAttributes  );
 
             actual.Should().NotBeNull();
         }

@@ -33,7 +33,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
                  .Should()
                  .NotThrow();
         }
-
+        
         [TestMethod]
         public void OnVisible_ShouldShowMessageAndCloseWhenNullOrgServiceProvided()
         {

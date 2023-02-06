@@ -1,4 +1,5 @@
 ﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using Capgemini.Xrm.DataMigration.Config;
@@ -9,6 +10,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 {
@@ -98,10 +101,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Presenters
 
             // Assert
             mockExportView.VerifySet(
-                x => x.EntityList = It.Is<IEnumerable<ListBoxItem<CrmEntity>>>(a =>
+                x => x.EntityList = It.Is<IEnumerable<ListBoxItem<CrmEntity>>>(a => 
                     a.Count() == 1 &&
                     a.First().DisplayName == "Entity" &&
-                    a.First().Item == schema.Entities.FirstOrDefault()),
+                    a.First().Item == schema.Entities.FirstOrDefault()), 
                 Times.Once);
             mockExportView.VerifySet(x => x.SelectedEntity = schema.Entities.FirstOrDefault(), Times.Once);
         }

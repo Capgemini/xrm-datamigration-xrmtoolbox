@@ -1,9 +1,11 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using System;
-using System.Collections.Generic;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 {

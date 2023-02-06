@@ -1,7 +1,7 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
+﻿using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Forms;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Core
 {

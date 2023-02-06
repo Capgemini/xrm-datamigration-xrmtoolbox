@@ -17,7 +17,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Helpers
             }
             return true;
         }
-
+        
         public List<DataGridViewRow> GetMappingsFromViewWithEmptyRowsRemoved(List<DataGridViewRow> viewLookupMappings)
         {
             var filteredViewLookupMappings = new List<DataGridViewRow>();

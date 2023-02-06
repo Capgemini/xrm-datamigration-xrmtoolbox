@@ -1,13 +1,14 @@
-﻿using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using FluentAssertions;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk.Metadata;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
+using Microsoft.Xrm.Sdk.Metadata;
+using Capgemini.Xrm.CdsDataMigrator.Tests.Unit;
 using System.Reflection;
+using Moq;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Extensions.Tests
 {
