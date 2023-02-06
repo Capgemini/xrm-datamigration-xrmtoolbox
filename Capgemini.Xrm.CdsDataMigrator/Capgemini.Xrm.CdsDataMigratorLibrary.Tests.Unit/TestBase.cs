@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
@@ -9,6 +6,9 @@ using Capgemini.Xrm.DataMigration.Core;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit
 {

@@ -2,7 +2,6 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Presenters;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

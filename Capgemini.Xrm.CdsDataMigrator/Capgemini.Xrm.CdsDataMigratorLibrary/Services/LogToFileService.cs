@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+using System;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Services
 {

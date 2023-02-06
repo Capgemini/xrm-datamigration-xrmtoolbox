@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xrm.Sdk;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Core
 {

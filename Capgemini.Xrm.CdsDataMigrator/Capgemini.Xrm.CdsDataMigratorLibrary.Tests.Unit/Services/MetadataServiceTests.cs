@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,6 +6,8 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
+using System;
+using System.Collections.Generic;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Services.Tests
 {
