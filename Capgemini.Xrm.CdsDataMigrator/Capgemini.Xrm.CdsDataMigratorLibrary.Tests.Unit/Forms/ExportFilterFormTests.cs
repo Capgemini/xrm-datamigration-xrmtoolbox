@@ -5,12 +5,8 @@ using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.Model;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
 {
@@ -64,7 +60,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
 
                 systemUnderTest.As<IExportFilterFormView>().EntityList = new List<ListBoxItem<CrmEntity>>
                 {
-                    new ListBoxItem<CrmEntity> { DisplayName = "Entity", Item = value } 
+                    new ListBoxItem<CrmEntity> { DisplayName = "Entity", Item = value }
                 };
 
                 // Act
@@ -79,7 +75,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
         public void EntityFilters_GetSet()
         {
             // Arrange
-            var value = new Dictionary<string,string>();
+            var value = new Dictionary<string, string>();
             using (var systemUnderTest = new ExportFilterForm())
             {
                 // Act

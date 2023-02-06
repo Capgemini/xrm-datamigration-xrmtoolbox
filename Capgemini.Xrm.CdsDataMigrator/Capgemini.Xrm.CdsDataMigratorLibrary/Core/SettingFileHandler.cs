@@ -1,5 +1,4 @@
-﻿using System;
-using XrmToolBox.Extensibility;
+﻿using XrmToolBox.Extensibility;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Core
 {

@@ -15,12 +15,12 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 {
     public partial class ExportPage : UserControl, IExportPageView
     {
-        private ExportFilterForm exportFilterForm;
-        private ExportLookupMappings exportLookupMappingsForm;
+        private readonly ExportFilterForm exportFilterForm;
+        private readonly ExportLookupMappings exportLookupMappingsForm;
 
-        private ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
-        private ExportFilterFormPresenter exportFilterFormPresenter;
-        
+        private readonly ExportLookupMappingsFormPresenter exportLookupMappingsFormPresenter;
+        private readonly ExportFilterFormPresenter exportFilterFormPresenter;
+
         public event EventHandler LoadConfigClicked;
         public event EventHandler SaveConfigClicked;
         public event EventHandler RunConfigClicked;
@@ -123,7 +123,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
             get => exportFilterForm.SchemaConfiguration;
             set => exportFilterForm.SchemaConfiguration = value;
         }
-        
+
         List<DataGridViewRow> IExportPageView.LookupMappings
         {
             get => exportLookupMappingsForm.Mappings;

@@ -7,7 +7,6 @@ using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -33,7 +32,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
         public override async void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             if (detail != null)
-            {   
+            {
                 var logger = new LogToFileService(new LogManagerContainer(new LogManager(typeof(CdsMigratorPluginControl))));
                 var dataMigrationService = new DataMigrationService(logger, new CrmGenericMigratorFactory());
                 var metaDataService = new MetadataService();
@@ -46,8 +45,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary
                 this.exportPage1.SetServices(metaDataService, detail.ServiceClient, exceptionService, viewHelpers);
                 schemaGeneratorPresenter = new SchemaGeneratorPresenter(sgpManageSchema, detail.ServiceClient, new MetadataService(), new NotificationService(), new ExceptionService(), settings);
                 await schemaGeneratorPresenter.OnConnectionUpdated(detail.ServiceClient.ConnectedOrgId, detail.ServiceClient.ConnectedOrgFriendlyName);
-            }   
-                base.UpdateConnection(newService, detail, actionName, parameter);
+            }
+            base.UpdateConnection(newService, detail, actionName, parameter);
         }
 
         private void OnActionCompleted(object sender, EventArgs e)

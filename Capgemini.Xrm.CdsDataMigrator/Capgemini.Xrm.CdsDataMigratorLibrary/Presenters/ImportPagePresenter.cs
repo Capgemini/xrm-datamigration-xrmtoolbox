@@ -1,18 +1,18 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
-using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.DataMigration.Config;
 using Capgemini.Xrm.DataMigration.CrmStore.Config;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using NuGet.Packaging;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using NuGet;
-using Microsoft.Xrm.Sdk;
-using System.Linq;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {
@@ -114,7 +114,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 viewHelpers.ShowMessage(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-          
+
         public CrmSchemaConfiguration GetSchemaConfiguration()
         {
             if (string.IsNullOrWhiteSpace(view.CrmMigrationToolSchemaPath) || !File.Exists(view.CrmMigrationToolSchemaPath))
@@ -177,20 +177,20 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 
         private Dictionary<string, Dictionary<Guid, Guid>> GetUpdatedMappings(Guid sourceId, Guid targetId, string entity, Dictionary<string, Dictionary<Guid, Guid>> mappings, Dictionary<Guid, Guid> guidsDictionary)
         {
-                if (DoesRowContainDefaultGuids(sourceId, targetId))
-                {
-                    return mappings;
-                }
-                guidsDictionary.Add(sourceId, targetId);
-                if (DoesEntityMappingAlreadyExist(entity, mappings))
-                {
-                    mappings[entity].Add(sourceId, targetId);
-                }
-                else
-                {
-                    mappings.Add(entity, guidsDictionary);
-                }
+            if (DoesRowContainDefaultGuids(sourceId, targetId))
+            {
                 return mappings;
+            }
+            guidsDictionary.Add(sourceId, targetId);
+            if (DoesEntityMappingAlreadyExist(entity, mappings))
+            {
+                mappings[entity].Add(sourceId, targetId);
+            }
+            else
+            {
+                mappings.Add(entity, guidsDictionary);
+            }
+            return mappings;
         }
 
         private bool DoesRowContainDefaultGuids(Guid sourceId, Guid targetId)
@@ -250,7 +250,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
                 view.Mappings = mappingsLoadedFromConfigPlusAnyManuallyAdded;
             }
         }
-        
+
         [ExcludeFromCodeCoverage]
         private void SchemaConfigPathChanged(object sender, EventArgs args)
         {

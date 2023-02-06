@@ -16,7 +16,8 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls
 
         public event EventHandler OnChange;
 
-        public string Value { 
+        public string Value
+        {
             get => tbxInput.Text;
             set { tbxInput.Text = value; openFileDialog.FileName = value; }
         }
