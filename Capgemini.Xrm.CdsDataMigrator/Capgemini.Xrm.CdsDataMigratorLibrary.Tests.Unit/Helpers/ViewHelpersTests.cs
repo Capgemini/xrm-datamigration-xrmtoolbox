@@ -1,7 +1,8 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Helpers;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
 {
@@ -45,7 +46,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             lookUpMappings.Add(rowWithoutBlankCell);
             lookUpMappings.Add(rowWithBlankCell);
             var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
-            Assert.AreEqual(1, updatedLookupMappings.Count);
+            Assert.AreEqual(1, updatedLookupMappings.Count);  
         }
 
         [TestMethod]
@@ -59,7 +60,7 @@ namespace Capgemini.Xrm.DataMigration.XrmToolBox.Helpers.Tests
             var updatedLookupMappings = systemUnderTest.GetMappingsFromViewWithEmptyRowsRemoved(lookUpMappings);
             Assert.AreEqual(2, updatedLookupMappings.Count);
         }
-
+        
         private static DataGridViewRow GetRowWithoutBlankCell()
         {
             DataGridViewRow dataGridViewRow = new DataGridViewRow();

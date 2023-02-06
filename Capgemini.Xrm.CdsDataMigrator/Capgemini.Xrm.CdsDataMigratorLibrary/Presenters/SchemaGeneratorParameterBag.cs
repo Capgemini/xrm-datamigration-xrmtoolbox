@@ -1,6 +1,6 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
 {

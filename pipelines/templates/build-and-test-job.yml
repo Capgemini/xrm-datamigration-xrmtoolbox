@@ -29,9 +29,9 @@ jobs:
         displayName: Output SemVer
 
       - task: NuGetToolInstaller@0
-        displayName: 'Use NuGet'
+        displayName: 'Use NuGet 4.4.1'
         inputs:
-          versionSpec: 5.2
+          versionSpec: 4.4.1
 
       - task: NuGetCommand@2
         displayName: 'NuGet restore'
@@ -82,19 +82,22 @@ jobs:
         inputs:
           cwd: '$(Build.SourcesDirectory)'
         enabled: false
-          
-      - task: DotNetCoreCLI@2
+
+      - task: PublishSymbols@2
+        displayName: Publish symbols
+        inputs:
+          SearchPattern: '**\bin\**\*.pdb'
+          PublishSymbols: false
+        continueOnError: true
+
+      - task: NuGetCommand@2
         displayName: Pack NuGet package
         inputs:
           command: pack
-          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj
-          modifyOutputPath: true 
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.nuspec            
+          packDestination: '$(Build.ArtifactStagingDirectory)/out'
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2
-          includesymbols: false
-          nobuild: true
-          buildProperties: Configuration=$(buildConfiguration)
-          packDirectory: $(Build.ArtifactStagingDirectory)/out
 
       - publish: $(Build.ArtifactStagingDirectory)/out
         displayName: Publish NuGet artifact

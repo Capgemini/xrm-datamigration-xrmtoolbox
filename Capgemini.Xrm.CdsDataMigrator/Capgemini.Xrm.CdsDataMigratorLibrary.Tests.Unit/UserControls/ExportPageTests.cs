@@ -4,7 +4,12 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
 using Capgemini.Xrm.DataMigration.Config;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -18,7 +23,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
         {
             // Arrange
             var value = 1234;
-            using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
+            using (var systemUnderTest = new ExportPage() {  Parent = new PluginControlBase() })
             {
                 // Act
                 systemUnderTest.As<IExportPageView>().PageSize = value;
@@ -159,7 +164,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
             using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
             {
                 // Act
-                systemUnderTest.As<IExportPageView>().SeperateFilesPerEntity = value;
+                systemUnderTest.As<IExportPageView>().SeperateFilesPerEntity= value;
 
                 // Assert
                 systemUnderTest.As<IExportPageView>().SeperateFilesPerEntity.Should().Be(value);
@@ -185,7 +190,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
         public void CrmMigrationToolSchemaFilters_GetSet()
         {
             // Arrange
-            var value = new Dictionary<string, string> { { "entity", "<filter></filter>" } };
+            var value = new Dictionary<string, string> { { "entity", "<filter></filter>"} };
             using (var systemUnderTest = new ExportPage() { Parent = new PluginControlBase() })
             {
                 // Act

@@ -4,6 +4,7 @@ using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,7 +14,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
     public class ExportLookupMappingsFormPresenter : IDisposable
     {
         public readonly IExportLookupMappingsView view;
-
+        
         public ExportLookupMappingsFormPresenter(IExportLookupMappingsView view)
         {
             this.view = view;
@@ -36,7 +37,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
         public IViewHelpers ViewHelpers { get; set; }
 
         public void OnVisible(object sender, EventArgs e)
-        {
+        {   
             if (OrganizationService == null)
             {
                 ShowErrorMessage();
@@ -80,7 +81,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters
             view.Close();
             ViewHelpers.ShowMessage("Please make sure you are connected to an organisation", "No connection made", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-
+        
         [ExcludeFromCodeCoverage]
         public void Dispose()
         {

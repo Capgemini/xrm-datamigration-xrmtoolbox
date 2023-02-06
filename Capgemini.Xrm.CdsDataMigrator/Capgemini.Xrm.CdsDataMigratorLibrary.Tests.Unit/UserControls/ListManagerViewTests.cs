@@ -1,5 +1,12 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Capgemini.Xrm.CdsDataMigratorLibrary.UserControls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.UserControls.Tests
 {

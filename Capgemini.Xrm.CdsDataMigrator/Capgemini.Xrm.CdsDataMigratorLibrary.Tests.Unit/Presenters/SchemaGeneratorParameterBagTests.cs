@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FluentAssertions;
 
 namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 {

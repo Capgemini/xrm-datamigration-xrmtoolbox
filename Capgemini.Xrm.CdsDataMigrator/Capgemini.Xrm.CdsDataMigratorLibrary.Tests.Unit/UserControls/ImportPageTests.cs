@@ -170,5 +170,5 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.UserControls
                 systemUnderTest.As<IImportPageView>().Mappings.FirstOrDefault().Should().BeEquivalentTo(dataGridViewRow);
             }
         }
-    }
+    }  
 }

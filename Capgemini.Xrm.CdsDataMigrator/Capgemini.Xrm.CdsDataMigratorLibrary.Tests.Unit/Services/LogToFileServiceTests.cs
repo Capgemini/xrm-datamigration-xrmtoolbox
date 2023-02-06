@@ -1,12 +1,13 @@
-﻿using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
+﻿using System;
+using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Enums;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Mocks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Globalization;
-using System.Threading;
 
 namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 {
@@ -42,7 +43,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
         {
             var expectedMessage = $"- Error:{Message}";
 
-            systemUnderTest.LogLevel = LogLevel.Verbose;
+            systemUnderTest.LogLevel = LogLevel.Verbose; 
 
             FluentActions.Invoking(() =>
             systemUnderTest.LogError(Message))
@@ -66,7 +67,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             logManagerContainerMock
                 .Verify(x => x.WriteLine(
-                    It.Is<string>(s => s.Contains(expectedMessage) && s.Contains(expectedTimeStamp)),
+                    It.Is<string>(s => s.Contains(expectedMessage) && s.Contains(expectedTimeStamp)), 
                     LogLevel.Error));
         }
 
@@ -82,7 +83,7 @@ namespace Capgemini.Xrm.CdsDataMigrator.Tests.Unit.Services
 
             logManagerContainerMock
                 .Verify(x => x.WriteLine(
-                    It.Is<string>(s => s.Contains(expectedMessage) && s.Contains(expectedTimeStamp) && s.Contains(exception.Message)),
+                    It.Is<string>(s => s.Contains(expectedMessage) && s.Contains(expectedTimeStamp) && s.Contains(exception.Message)), 
                     LogLevel.Error));
         }
 

@@ -2,11 +2,13 @@
 using Capgemini.Xrm.CdsDataMigratorLibrary.Core;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Exceptions;
 using Capgemini.Xrm.CdsDataMigratorLibrary.Models;
+using Capgemini.Xrm.CdsDataMigratorLibrary.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Moq;
+using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -76,10 +78,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
                         view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
                         view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
 
-                        FluentActions
-                            .Awaiting(() => systemUnderTest.OnConnectionUpdated(new Guid(), connectedOrgFriendlyName))
-                            .Should()
-                            .NotThrow();
+                        FluentActions.Awaiting(() =>
+                                                    systemUnderTest.OnConnectionUpdated(new Guid(), connectedOrgFriendlyName)
+                                                )
+                                     .Should()
+                                     .NotThrow();
                     }
                 }
             }
@@ -111,10 +114,11 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
                         view.SetupGet(a => a.EntityAttributeList).Returns(entityAttributeList);
                         view.SetupGet(a => a.EntityRelationshipList).Returns(entityRelationshipList);
 
-                        FluentActions
-                            .Awaiting(() => systemUnderTest.OnConnectionUpdated(new Guid(), connectedOrgFriendlyName))
-                            .Should()
-                            .Throw<Exception>();
+                        FluentActions.Awaiting(() =>
+                                                    systemUnderTest.OnConnectionUpdated(new Guid(), connectedOrgFriendlyName)
+                                                )
+                                     .Should()
+                                     .Throw<Exception>();
                     }
                 }
             }
@@ -242,15 +246,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
             view.Setup(a => a.CloseInformationPanel());
             view.Setup(a => a.ShowInformationPanel(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
 
-            FluentActions
-                .Awaiting(() => systemUnderTest.LoadSchemaFile(
-                        schemaFilePath,
-                        working,
-                        NotificationServiceMock.Object,
-                        inputEntityAttributes,
-                        inputEntityRelationships))
-                .Should()
-                .NotThrow();
+            FluentActions.Awaiting(() =>
+            systemUnderTest.LoadSchemaFile(schemaFilePath, working, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
+                            .Should()
+                            .NotThrow();
 
             view.VerifyGet(a => a.SelectedEntities);
             view.Verify(a => a.CloseInformationPanel());
@@ -275,15 +274,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
                 .Throws(new Exception());
             NotificationServiceMock.Setup(a => a.DisplayFeedback(It.IsAny<string>()));
 
-            FluentActions
-                .Awaiting(() => systemUnderTest.LoadSchemaFile(
-                    schemaFilePath,
-                    working,
-                    NotificationServiceMock.Object,
-                    inputEntityAttributes,
-                    inputEntityRelationships))
-                .Should()
-                .NotThrow();
+            FluentActions.Awaiting(() =>
+            systemUnderTest.LoadSchemaFile(schemaFilePath, working, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
+                            .Should()
+                            .NotThrow();
 
             view.VerifyGet(a => a.SelectedEntities, Times.Never);
             view.Verify(a => a.CloseInformationPanel());
@@ -308,15 +302,10 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
                 .Throws(new Exception());
             NotificationServiceMock.Setup(a => a.DisplayFeedback(It.IsAny<string>()));
 
-            FluentActions
-                .Awaiting(() => systemUnderTest.LoadSchemaFile(
-                    schemaFilePath,
-                    working,
-                    NotificationServiceMock.Object,
-                    inputEntityAttributes,
-                    inputEntityRelationships))
-                .Should()
-                .NotThrow();
+            FluentActions.Awaiting(() =>
+            systemUnderTest.LoadSchemaFile(schemaFilePath, working, NotificationServiceMock.Object, inputEntityAttributes, inputEntityRelationships))
+                            .Should()
+                            .NotThrow();
 
             view.VerifyGet(a => a.SelectedEntities, Times.Never);
             view.Verify(a => a.CloseInformationPanel(), Times.Never);
@@ -327,7 +316,9 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
         [TestMethod]
         public void ClearAllListViews()
         {
-            FluentActions.Invoking(() => systemUnderTest.ClearAllListViews())
+            FluentActions.Invoking(() =>
+                systemUnderTest.ClearAllListViews()
+                )
                 .Should()
                 .NotThrow();
         }
@@ -342,13 +333,14 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Presenters.Tests
 
             view.SetupGet(a => a.SelectedEntities).Returns(selectedEntities);
 
-            FluentActions
-                .Awaiting(() => systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(
-                        inputEntityRelationships,
-                        entityLogicalName,
-                        inputSelectedEntity))
-                .Should()
-                .NotThrow();
+            FluentActions.Awaiting(() =>
+                                systemUnderTest.HandleListViewEntitiesSelectedIndexChanged(
+                                                inputEntityRelationships,
+                                                entityLogicalName,
+                                                inputSelectedEntity)
+                                    )
+                        .Should()
+                        .NotThrow();
 
             view.VerifyGet(a => a.SelectedEntities);
         }

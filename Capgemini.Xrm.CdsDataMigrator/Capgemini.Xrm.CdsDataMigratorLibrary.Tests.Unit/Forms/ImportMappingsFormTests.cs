@@ -50,7 +50,7 @@ namespace Capgemini.Xrm.CdsDataMigratorLibrary.Tests.Unit.Forms
             using (var systemUnderTest = new ImportMappingsForm())
             {
                 var isCalled = false;
-                systemUnderTest.OnVisible += (object sender, EventArgs e) => isCalled = true;
+                systemUnderTest.OnVisible += (object sender,EventArgs e) => isCalled = true;
 
                 // Act
                 systemUnderTest.Visible = false;
