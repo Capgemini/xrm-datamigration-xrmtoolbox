@@ -89,19 +89,15 @@ jobs:
           SearchPattern: '**\bin\**\*.pdb'
           PublishSymbols: false
         continueOnError: true
-          
-      - task: DotNetCoreCLI@2
+
+      - task: NuGetCommand@2
         displayName: Pack NuGet package
         inputs:
           command: pack
-          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj
-          modifyOutputPath: true 
+          packagesToPack: Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator/Capgemini.Xrm.CdsDataMigrator.csproj            
+          packDestination: '$(Build.ArtifactStagingDirectory)/out'
           versioningScheme: byEnvVar
           versionEnvVar: GitVersion.NuGetVersionV2
-          includesymbols: false
-          nobuild: true
-          buildProperties: Configuration=$(buildConfiguration)
-          packDirectory: $(Build.ArtifactStagingDirectory)/out
 
       - publish: $(Build.ArtifactStagingDirectory)/out
         displayName: Publish NuGet artifact
